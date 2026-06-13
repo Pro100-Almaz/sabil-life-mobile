@@ -270,4 +270,242 @@ class AppLocalizationsRu extends AppLocalizations {
   String perSession(String price) {
     return '$price QAR / занятие';
   }
+
+  @override
+  String get signIn => 'Войти';
+
+  @override
+  String get signOut => 'Выйти';
+
+  @override
+  String get createAccount => 'Создать аккаунт';
+
+  @override
+  String get register => 'Регистрация';
+
+  @override
+  String get login => 'Вход';
+
+  @override
+  String get email => 'Электронная почта';
+
+  @override
+  String get password => 'Пароль';
+
+  @override
+  String get fullName => 'Полное имя';
+
+  @override
+  String get roleFamily => 'Семья';
+
+  @override
+  String get roleProvider => 'Поставщик услуг';
+
+  @override
+  String get roleTutor => 'Центр репетиторства';
+
+  @override
+  String get roleMasterclass => 'Организатор мастер-классов';
+
+  @override
+  String get noAccountPrompt => 'Ещё нет аккаунта?';
+
+  @override
+  String get haveAccountPrompt => 'Уже есть аккаунт?';
+
+  @override
+  String get demoLoginHint =>
+      'Демо-аккаунты: family@demo · tutor@demo · mc@demo (пароль: demo1234)';
+
+  @override
+  String signedInAs(String name) {
+    return 'Вы вошли как $name';
+  }
+
+  @override
+  String get authSheetTitle => 'Войдите, чтобы продолжить';
+
+  @override
+  String get authSheetHint =>
+      'Войдите или создайте аккаунт, чтобы отправить запрос.';
+
+  @override
+  String get request => 'Отправить запрос';
+
+  @override
+  String get requestSent =>
+      'Запрос отправлен — поставщик скоро свяжется с вами.';
+
+  @override
+  String get inquiryComposerTitle => 'Отправить запрос';
+
+  @override
+  String get inquiryComposerHint =>
+      'Расскажите немного о ребёнке и о том, что вам нужно.';
+
+  @override
+  String get send => 'Отправить';
+
+  @override
+  String get myRequests => 'Мои запросы';
+
+  @override
+  String get noRequestsYet => 'Запросов пока нет';
+
+  @override
+  String get requestStatusPending => 'В ожидании';
+
+  @override
+  String get requestStatusAccepted => 'Принят';
+
+  @override
+  String get requestStatusDeclined => 'Отклонён';
+
+  @override
+  String get dashboard => 'Главная';
+
+  @override
+  String get myListings => 'Объявления';
+
+  @override
+  String get inquiries => 'Запросы';
+
+  @override
+  String get earnings => 'Доходы';
+
+  @override
+  String get providerSettings => 'Настройки';
+
+  @override
+  String welcomeBack(String name) {
+    return 'С возвращением, $name';
+  }
+
+  @override
+  String get underReviewBanner =>
+      'Ваш аккаунт на проверке — объявления остаются в черновиках до одобрения.';
+
+  @override
+  String get metricActiveListings => 'Активные объявления';
+
+  @override
+  String get metricNewInquiries => 'Новые запросы';
+
+  @override
+  String get metricPendingCommission => 'Комиссия к оплате';
+
+  @override
+  String get newListing => 'Новое объявление';
+
+  @override
+  String get editListing => 'Редактировать';
+
+  @override
+  String get submitForReview => 'Отправить на проверку';
+
+  @override
+  String get saveDraft => 'Сохранить черновик';
+
+  @override
+  String get draftCanOnlySubmitWhenVerified =>
+      'Подтвердите аккаунт, чтобы отправлять объявления на проверку.';
+
+  @override
+  String get statusDraft => 'Черновик';
+
+  @override
+  String get statusPending => 'На проверке';
+
+  @override
+  String get statusActive => 'Активно';
+
+  @override
+  String get statusRejected => 'Отклонено';
+
+  @override
+  String get fieldTitle => 'Название';
+
+  @override
+  String get fieldSubtitle => 'Подзаголовок';
+
+  @override
+  String get fieldNeighborhood => 'Район';
+
+  @override
+  String get fieldPrice => 'Цена (QAR, от)';
+
+  @override
+  String get fieldDescription => 'Описание';
+
+  @override
+  String get fieldHighlights => 'Особенности';
+
+  @override
+  String get fieldImageUrl => 'Ссылка на изображение';
+
+  @override
+  String get fieldAddImage => 'Добавить изображение';
+
+  @override
+  String get fieldAddHighlight => 'Добавить особенность';
+
+  @override
+  String get noListingsYet => 'У вас пока нет объявлений';
+
+  @override
+  String get createFirstListing => 'Создать первое объявление';
+
+  @override
+  String get accept => 'Принять';
+
+  @override
+  String get decline => 'Отклонить';
+
+  @override
+  String get noInquiriesYet => 'Пока нет запросов';
+
+  @override
+  String commissionApplies(int amount) {
+    return 'За принятого ученика взимается комиссия $amount QAR.';
+  }
+
+  @override
+  String contactRevealed(String email) {
+    return '$email — свяжитесь напрямую.';
+  }
+
+  @override
+  String get acceptedStudents => 'Принятые ученики';
+
+  @override
+  String get pendingCommission => 'К оплате';
+
+  @override
+  String get paidCommission => 'Оплачено';
+
+  @override
+  String get commissionListEmpty =>
+      'Принятые запросы будут отображаться здесь.';
+
+  @override
+  String get fillRequiredFields =>
+      'Пожалуйста, заполните все обязательные поля.';
+
+  @override
+  String minutesAgo(int count) {
+    return '$count мин назад';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '$count ч назад';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '$count дн назад';
+  }
+
+  @override
+  String get switchToFamily => 'Перейти в семейный режим';
 }

@@ -23,6 +23,7 @@ import '../../data/models/listing.dart';
 import '../../data/models/masterclass_info.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/star_rating.dart';
+import '../family/widgets/request_cta.dart';
 import '../tutoring/widgets/tutor_profile_sheet.dart';
 import 'widgets/image_carousel.dart';
 import 'widgets/info_tile.dart';
@@ -262,14 +263,18 @@ class ListingDetailScreen extends ConsumerWidget {
         child: SafeArea(
           child: Row(
             children: [
-              Expanded(
-                child: AppButton(
-                  label: isSaved ? l10n.saved : l10n.save,
-                  icon: isSaved ? Icons.favorite : Icons.favorite_border,
-                  onPressed: () =>
-                      ref.read(favoritesProvider.notifier).toggle(listing.id),
+              if (listing.category == CategoryType.tutoring ||
+                  listing.category == CategoryType.masterclasses)
+                Expanded(child: RequestCta(listingId: listing.id))
+              else
+                Expanded(
+                  child: AppButton(
+                    label: isSaved ? l10n.saved : l10n.save,
+                    icon: isSaved ? Icons.favorite : Icons.favorite_border,
+                    onPressed: () =>
+                        ref.read(favoritesProvider.notifier).toggle(listing.id),
+                  ),
                 ),
-              ),
               const SizedBox(width: AppSpacing.md),
               Expanded(
                 child: AppButton(

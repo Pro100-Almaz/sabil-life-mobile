@@ -270,4 +270,240 @@ class AppLocalizationsKk extends AppLocalizations {
   String perSession(String price) {
     return '$price QAR / сабақ';
   }
+
+  @override
+  String get signIn => 'Кіру';
+
+  @override
+  String get signOut => 'Шығу';
+
+  @override
+  String get createAccount => 'Аккаунт жасау';
+
+  @override
+  String get register => 'Тіркелу';
+
+  @override
+  String get login => 'Кіру';
+
+  @override
+  String get email => 'Электрондық пошта';
+
+  @override
+  String get password => 'Құпиясөз';
+
+  @override
+  String get fullName => 'Толық аты-жөні';
+
+  @override
+  String get roleFamily => 'Отбасы';
+
+  @override
+  String get roleProvider => 'Қызмет көрсетуші';
+
+  @override
+  String get roleTutor => 'Репетиторлық орталық';
+
+  @override
+  String get roleMasterclass => 'Шеберлік сыныбының ұйымдастырушысы';
+
+  @override
+  String get noAccountPrompt => 'Аккаунтыңыз жоқ па?';
+
+  @override
+  String get haveAccountPrompt => 'Аккаунтыңыз бар ма?';
+
+  @override
+  String get demoLoginHint =>
+      'Демо-аккаунттар: family@demo · tutor@demo · mc@demo (құпиясөз: demo1234)';
+
+  @override
+  String signedInAs(String name) {
+    return '$name ретінде кірдіңіз';
+  }
+
+  @override
+  String get authSheetTitle => 'Жалғастыру үшін кіріңіз';
+
+  @override
+  String get authSheetHint => 'Сұраныс жіберу үшін кіріңіз немесе тіркеліңіз.';
+
+  @override
+  String get request => 'Сұраныс жіберу';
+
+  @override
+  String get requestSent =>
+      'Сұраныс жіберілді — қызмет көрсетуші көп ұзамай хабарласады.';
+
+  @override
+  String get inquiryComposerTitle => 'Сұраныс жіберу';
+
+  @override
+  String get inquiryComposerHint =>
+      'Балаңыз және не іздеп жатқаныңыз туралы қысқаша айтыңыз.';
+
+  @override
+  String get send => 'Жіберу';
+
+  @override
+  String get myRequests => 'Менің сұраныстарым';
+
+  @override
+  String get noRequestsYet => 'Әзірге сұраныстар жоқ';
+
+  @override
+  String get requestStatusPending => 'Күтуде';
+
+  @override
+  String get requestStatusAccepted => 'Қабылданды';
+
+  @override
+  String get requestStatusDeclined => 'Қабылданбады';
+
+  @override
+  String get dashboard => 'Басты бет';
+
+  @override
+  String get myListings => 'Хабарландырулар';
+
+  @override
+  String get inquiries => 'Сұраныстар';
+
+  @override
+  String get earnings => 'Кірістер';
+
+  @override
+  String get providerSettings => 'Баптаулар';
+
+  @override
+  String welcomeBack(String name) {
+    return 'Қош келдіңіз, $name';
+  }
+
+  @override
+  String get underReviewBanner =>
+      'Аккаунтыңыз тексерілуде — хабарландырулар бекітілгенше нобай күйінде қалады.';
+
+  @override
+  String get metricActiveListings => 'Белсенді хабарландырулар';
+
+  @override
+  String get metricNewInquiries => 'Жаңа сұраныстар';
+
+  @override
+  String get metricPendingCommission => 'Төленбеген комиссия';
+
+  @override
+  String get newListing => 'Жаңа хабарландыру';
+
+  @override
+  String get editListing => 'Өңдеу';
+
+  @override
+  String get submitForReview => 'Тексеруге жіберу';
+
+  @override
+  String get saveDraft => 'Нобайды сақтау';
+
+  @override
+  String get draftCanOnlySubmitWhenVerified =>
+      'Тексеруге жіберу үшін аккаунтыңызды растаңыз.';
+
+  @override
+  String get statusDraft => 'Нобай';
+
+  @override
+  String get statusPending => 'Тексеруде';
+
+  @override
+  String get statusActive => 'Белсенді';
+
+  @override
+  String get statusRejected => 'Қабылданбады';
+
+  @override
+  String get fieldTitle => 'Атауы';
+
+  @override
+  String get fieldSubtitle => 'Қосалқы атау';
+
+  @override
+  String get fieldNeighborhood => 'Аудан';
+
+  @override
+  String get fieldPrice => 'Баға (QAR, бастап)';
+
+  @override
+  String get fieldDescription => 'Сипаттама';
+
+  @override
+  String get fieldHighlights => 'Ерекшеліктер';
+
+  @override
+  String get fieldImageUrl => 'Сурет сілтемесі';
+
+  @override
+  String get fieldAddImage => 'Сурет қосу';
+
+  @override
+  String get fieldAddHighlight => 'Ерекшелік қосу';
+
+  @override
+  String get noListingsYet => 'Сізде әлі хабарландырулар жоқ';
+
+  @override
+  String get createFirstListing => 'Бірінші хабарландыруды жасау';
+
+  @override
+  String get accept => 'Қабылдау';
+
+  @override
+  String get decline => 'Қабылдамау';
+
+  @override
+  String get noInquiriesYet => 'Әзірге сұраныстар жоқ';
+
+  @override
+  String commissionApplies(int amount) {
+    return 'Қабылданған оқушы үшін $amount QAR комиссия алынады.';
+  }
+
+  @override
+  String contactRevealed(String email) {
+    return '$email — тікелей хабарласыңыз.';
+  }
+
+  @override
+  String get acceptedStudents => 'Қабылданған оқушылар';
+
+  @override
+  String get pendingCommission => 'Төленбеген';
+
+  @override
+  String get paidCommission => 'Төленген';
+
+  @override
+  String get commissionListEmpty =>
+      'Қабылданған сұраныстар осында көрсетіледі.';
+
+  @override
+  String get fillRequiredFields => 'Барлық міндетті өрістерді толтырыңыз.';
+
+  @override
+  String minutesAgo(int count) {
+    return '$count мин бұрын';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '$count сағ бұрын';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '$count күн бұрын';
+  }
+
+  @override
+  String get switchToFamily => 'Отбасы режиміне өту';
 }

@@ -573,6 +573,438 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{price} QAR / session'**
   String perSession(String price);
+
+  /// No description provided for @signIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in'**
+  String get signIn;
+
+  /// No description provided for @signOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get signOut;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get createAccount;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get login;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get fullName;
+
+  /// No description provided for @roleFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get roleFamily;
+
+  /// No description provided for @roleProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get roleProvider;
+
+  /// No description provided for @roleTutor.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutoring centre'**
+  String get roleTutor;
+
+  /// No description provided for @roleMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Masterclass provider'**
+  String get roleMasterclass;
+
+  /// No description provided for @noAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'No account yet?'**
+  String get noAccountPrompt;
+
+  /// No description provided for @haveAccountPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get haveAccountPrompt;
+
+  /// No description provided for @demoLoginHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try the demo accounts: family@demo · tutor@demo · mc@demo (password: demo1234)'**
+  String get demoLoginHint;
+
+  /// No description provided for @signedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {name}'**
+  String signedInAs(String name);
+
+  /// No description provided for @authSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue'**
+  String get authSheetTitle;
+
+  /// No description provided for @authSheetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in or create an account to send your request.'**
+  String get authSheetHint;
+
+  /// No description provided for @request.
+  ///
+  /// In en, this message translates to:
+  /// **'Request'**
+  String get request;
+
+  /// No description provided for @requestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent — the provider will be in touch.'**
+  String get requestSent;
+
+  /// No description provided for @inquiryComposerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a request'**
+  String get inquiryComposerTitle;
+
+  /// No description provided for @inquiryComposerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell the provider a bit about your child and what you\'re looking for.'**
+  String get inquiryComposerHint;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @myRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'My requests'**
+  String get myRequests;
+
+  /// No description provided for @noRequestsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No requests yet'**
+  String get noRequestsYet;
+
+  /// No description provided for @requestStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get requestStatusPending;
+
+  /// No description provided for @requestStatusAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted'**
+  String get requestStatusAccepted;
+
+  /// No description provided for @requestStatusDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get requestStatusDeclined;
+
+  /// No description provided for @dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get dashboard;
+
+  /// No description provided for @myListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get myListings;
+
+  /// No description provided for @inquiries.
+  ///
+  /// In en, this message translates to:
+  /// **'Inquiries'**
+  String get inquiries;
+
+  /// No description provided for @earnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Earnings'**
+  String get earnings;
+
+  /// No description provided for @providerSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get providerSettings;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back, {name}'**
+  String welcomeBack(String name);
+
+  /// No description provided for @underReviewBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is under review — listings stay in draft until approved.'**
+  String get underReviewBanner;
+
+  /// No description provided for @metricActiveListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Active listings'**
+  String get metricActiveListings;
+
+  /// No description provided for @metricNewInquiries.
+  ///
+  /// In en, this message translates to:
+  /// **'New inquiries'**
+  String get metricNewInquiries;
+
+  /// No description provided for @metricPendingCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending commission'**
+  String get metricPendingCommission;
+
+  /// No description provided for @newListing.
+  ///
+  /// In en, this message translates to:
+  /// **'New listing'**
+  String get newListing;
+
+  /// No description provided for @editListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit listing'**
+  String get editListing;
+
+  /// No description provided for @submitForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit for review'**
+  String get submitForReview;
+
+  /// No description provided for @saveDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get saveDraft;
+
+  /// No description provided for @draftCanOnlySubmitWhenVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your account to submit listings for review.'**
+  String get draftCanOnlySubmitWhenVerified;
+
+  /// No description provided for @statusDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get statusDraft;
+
+  /// No description provided for @statusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending review'**
+  String get statusPending;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get statusActive;
+
+  /// No description provided for @statusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get statusRejected;
+
+  /// No description provided for @fieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get fieldTitle;
+
+  /// No description provided for @fieldSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtitle'**
+  String get fieldSubtitle;
+
+  /// No description provided for @fieldNeighborhood.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighborhood'**
+  String get fieldNeighborhood;
+
+  /// No description provided for @fieldPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (QAR, from)'**
+  String get fieldPrice;
+
+  /// No description provided for @fieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get fieldDescription;
+
+  /// No description provided for @fieldHighlights.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlights'**
+  String get fieldHighlights;
+
+  /// No description provided for @fieldImageUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get fieldImageUrl;
+
+  /// No description provided for @fieldAddImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get fieldAddImage;
+
+  /// No description provided for @fieldAddHighlight.
+  ///
+  /// In en, this message translates to:
+  /// **'Add highlight'**
+  String get fieldAddHighlight;
+
+  /// No description provided for @noListingsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t created any listings yet'**
+  String get noListingsYet;
+
+  /// No description provided for @createFirstListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first listing'**
+  String get createFirstListing;
+
+  /// No description provided for @accept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get accept;
+
+  /// No description provided for @decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get decline;
+
+  /// No description provided for @noInquiriesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No inquiries yet'**
+  String get noInquiriesYet;
+
+  /// No description provided for @commissionApplies.
+  ///
+  /// In en, this message translates to:
+  /// **'A {amount} QAR commission applies for this accepted student.'**
+  String commissionApplies(int amount);
+
+  /// No description provided for @contactRevealed.
+  ///
+  /// In en, this message translates to:
+  /// **'{email} — get in touch directly.'**
+  String contactRevealed(String email);
+
+  /// No description provided for @acceptedStudents.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted students'**
+  String get acceptedStudents;
+
+  /// No description provided for @pendingCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pendingCommission;
+
+  /// No description provided for @paidCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paidCommission;
+
+  /// No description provided for @commissionListEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepted student requests will appear here.'**
+  String get commissionListEmpty;
+
+  /// No description provided for @fillRequiredFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields.'**
+  String get fillRequiredFields;
+
+  /// No description provided for @minutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String minutesAgo(int count);
+
+  /// No description provided for @hoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgo(int count);
+
+  /// No description provided for @daysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}d ago'**
+  String daysAgo(int count);
+
+  /// No description provided for @switchToFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse as family'**
+  String get switchToFamily;
 }
 
 class _AppLocalizationsDelegate

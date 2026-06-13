@@ -270,4 +270,240 @@ class AppLocalizationsEn extends AppLocalizations {
   String perSession(String price) {
     return '$price QAR / session';
   }
+
+  @override
+  String get signIn => 'Sign in';
+
+  @override
+  String get signOut => 'Sign out';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get login => 'Log in';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get fullName => 'Full name';
+
+  @override
+  String get roleFamily => 'Family';
+
+  @override
+  String get roleProvider => 'Provider';
+
+  @override
+  String get roleTutor => 'Tutoring centre';
+
+  @override
+  String get roleMasterclass => 'Masterclass provider';
+
+  @override
+  String get noAccountPrompt => 'No account yet?';
+
+  @override
+  String get haveAccountPrompt => 'Already have an account?';
+
+  @override
+  String get demoLoginHint =>
+      'Try the demo accounts: family@demo · tutor@demo · mc@demo (password: demo1234)';
+
+  @override
+  String signedInAs(String name) {
+    return 'Signed in as $name';
+  }
+
+  @override
+  String get authSheetTitle => 'Sign in to continue';
+
+  @override
+  String get authSheetHint =>
+      'Sign in or create an account to send your request.';
+
+  @override
+  String get request => 'Request';
+
+  @override
+  String get requestSent => 'Request sent — the provider will be in touch.';
+
+  @override
+  String get inquiryComposerTitle => 'Send a request';
+
+  @override
+  String get inquiryComposerHint =>
+      'Tell the provider a bit about your child and what you\'re looking for.';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get myRequests => 'My requests';
+
+  @override
+  String get noRequestsYet => 'No requests yet';
+
+  @override
+  String get requestStatusPending => 'Pending';
+
+  @override
+  String get requestStatusAccepted => 'Accepted';
+
+  @override
+  String get requestStatusDeclined => 'Declined';
+
+  @override
+  String get dashboard => 'Dashboard';
+
+  @override
+  String get myListings => 'Listings';
+
+  @override
+  String get inquiries => 'Inquiries';
+
+  @override
+  String get earnings => 'Earnings';
+
+  @override
+  String get providerSettings => 'Settings';
+
+  @override
+  String welcomeBack(String name) {
+    return 'Welcome back, $name';
+  }
+
+  @override
+  String get underReviewBanner =>
+      'Your account is under review — listings stay in draft until approved.';
+
+  @override
+  String get metricActiveListings => 'Active listings';
+
+  @override
+  String get metricNewInquiries => 'New inquiries';
+
+  @override
+  String get metricPendingCommission => 'Pending commission';
+
+  @override
+  String get newListing => 'New listing';
+
+  @override
+  String get editListing => 'Edit listing';
+
+  @override
+  String get submitForReview => 'Submit for review';
+
+  @override
+  String get saveDraft => 'Save draft';
+
+  @override
+  String get draftCanOnlySubmitWhenVerified =>
+      'Verify your account to submit listings for review.';
+
+  @override
+  String get statusDraft => 'Draft';
+
+  @override
+  String get statusPending => 'Pending review';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusRejected => 'Rejected';
+
+  @override
+  String get fieldTitle => 'Title';
+
+  @override
+  String get fieldSubtitle => 'Subtitle';
+
+  @override
+  String get fieldNeighborhood => 'Neighborhood';
+
+  @override
+  String get fieldPrice => 'Price (QAR, from)';
+
+  @override
+  String get fieldDescription => 'Description';
+
+  @override
+  String get fieldHighlights => 'Highlights';
+
+  @override
+  String get fieldImageUrl => 'Image URL';
+
+  @override
+  String get fieldAddImage => 'Add image';
+
+  @override
+  String get fieldAddHighlight => 'Add highlight';
+
+  @override
+  String get noListingsYet => 'You haven\'t created any listings yet';
+
+  @override
+  String get createFirstListing => 'Create your first listing';
+
+  @override
+  String get accept => 'Accept';
+
+  @override
+  String get decline => 'Decline';
+
+  @override
+  String get noInquiriesYet => 'No inquiries yet';
+
+  @override
+  String commissionApplies(int amount) {
+    return 'A $amount QAR commission applies for this accepted student.';
+  }
+
+  @override
+  String contactRevealed(String email) {
+    return '$email — get in touch directly.';
+  }
+
+  @override
+  String get acceptedStudents => 'Accepted students';
+
+  @override
+  String get pendingCommission => 'Pending';
+
+  @override
+  String get paidCommission => 'Paid';
+
+  @override
+  String get commissionListEmpty =>
+      'Accepted student requests will appear here.';
+
+  @override
+  String get fillRequiredFields => 'Please fill in all required fields.';
+
+  @override
+  String minutesAgo(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String daysAgo(int count) {
+    return '${count}d ago';
+  }
+
+  @override
+  String get switchToFamily => 'Browse as family';
 }

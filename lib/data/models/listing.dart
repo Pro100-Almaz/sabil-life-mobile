@@ -8,6 +8,10 @@ enum CategoryType {
   partnerships,
 }
 
+/// Lifecycle a provider's own listing moves through. Non-provider listings
+/// (schools, partner offers seeded as platform content) stay [active].
+enum ListingStatus { draft, pending, active, rejected }
+
 class Listing {
   const Listing({
     required this.id,
@@ -25,6 +29,8 @@ class Listing {
     required this.isFeatured,
     required this.description,
     required this.highlights,
+    this.ownerId,
+    this.status = ListingStatus.active,
   });
 
   final String id;
@@ -45,6 +51,11 @@ class Listing {
   final String description;
   final List<String> highlights;
 
+  /// `AuthUser.id` of the provider that owns this listing. `null` = platform-
+  /// seeded content (schools, partner offers etc.) that no provider manages.
+  final String? ownerId;
+  final ListingStatus status;
+
   Listing copyWith({
     String? id,
     String? title,
@@ -61,6 +72,8 @@ class Listing {
     bool? isFeatured,
     String? description,
     List<String>? highlights,
+    String? Function()? ownerId,
+    ListingStatus? status,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -78,6 +91,8 @@ class Listing {
       isFeatured: isFeatured ?? this.isFeatured,
       description: description ?? this.description,
       highlights: highlights ?? this.highlights,
+      ownerId: ownerId != null ? ownerId() : this.ownerId,
+      status: status ?? this.status,
     );
   }
 }

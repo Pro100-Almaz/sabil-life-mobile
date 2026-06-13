@@ -1,4 +1,5 @@
 import '../models/listing.dart';
+import 'mock_users.dart';
 
 List<String> _images(String id) => [
   'https://picsum.photos/seed/$id-1/800/600',
@@ -387,6 +388,7 @@ final List<Listing> mockListings = [
   // ── Tutoring (3) ───────────────────────────────────────────────────────
   Listing(
     id: 'tutor-arabicroots',
+    ownerId: kDemoTutorId,
     title: 'Arabic Roots Tutoring',
     category: CategoryType.tutoring,
     subtitle: 'Arabic language · Ages 5–16',
@@ -410,6 +412,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'tutor-mathcraft',
+    ownerId: kDemoTutorId,
     title: 'MathCraft Learning Studio',
     category: CategoryType.tutoring,
     subtitle: 'Maths · Ages 6–18',
@@ -433,6 +436,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'tutor-summit',
+    ownerId: kDemoTutorId,
     title: 'Summit Exam Prep Centre',
     category: CategoryType.tutoring,
     subtitle: 'IGCSE, IB & SAT prep · Ages 13–18',
@@ -458,6 +462,7 @@ final List<Listing> mockListings = [
   // ── Masterclasses (3) ──────────────────────────────────────────────────
   Listing(
     id: 'master-canvas',
+    ownerId: kDemoMasterclassId,
     title: 'Canvas & Co. Painting Studio',
     category: CategoryType.masterclasses,
     subtitle: 'Painting masterclasses · Ages 5+',
@@ -481,6 +486,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'master-clayhouse',
+    ownerId: kDemoMasterclassId,
     title: 'Clay House Pottery Workshop',
     category: CategoryType.masterclasses,
     subtitle: 'Pottery & ceramics · Ages 6+',
@@ -504,6 +510,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'master-littlechefs',
+    ownerId: kDemoMasterclassId,
     title: 'Little Chefs Culinary Lab',
     category: CategoryType.masterclasses,
     subtitle: 'Cooking masterclasses · Ages 4–14',

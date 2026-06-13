@@ -21,7 +21,10 @@ end-to-end before the backend is wired in.
 | Design | Airbnb-inspired tokens · coral `#FF385C` · Manrope |
 | Languages | English · Русский · Қазақша (live switch) |
 
-The full build specification lives in [`SABIL_LIFE_IMPLEMENTATION.md`](./SABIL_LIFE_IMPLEMENTATION.md).
+The full build specifications live in
+[`SABIL_LIFE_IMPLEMENTATION.md`](./SABIL_LIFE_IMPLEMENTATION.md) (base directory
+app) and [`SABIL_PROVIDER_FRONTEND.md`](./SABIL_PROVIDER_FRONTEND.md)
+(auth + provider surface).
 
 ## What's in the app
 
@@ -38,7 +41,26 @@ The full build specification lives in [`SABIL_LIFE_IMPLEMENTATION.md`](./SABIL_L
   overlay, seats-left scarcity badge and a date-window filter (this weekend /
   next week); detail screen carries a "Pick a date" session picker.
 - **Saved** — favorites with live un-hearting.
-- **Settings** — instant en/ru/kk language switch.
+- **Settings** — sign-in / sign-out, "My requests" link when authenticated,
+  instant en/ru/kk language switch.
+- **Auth (mock)** — login / register / role-aware routing. Families browse
+  anonymously; auth is only requested when they tap **Request** on a
+  tutoring centre or masterclass (just-in-time).
+- **Provider surface** — separate 5-tab shell (Dashboard · Listings · Inquiries
+  · Earnings · Settings) for tutor centres and masterclass providers, with
+  category-locked listing editor, accept/decline inquiries, and a mock
+  commission ledger.
+
+### Demo accounts (mock)
+
+| Email | Role | Verified |
+|-------|------|----------|
+| `family@demo` | Family | yes |
+| `tutor@demo` | Tutoring centre | yes |
+| `mc@demo` | Masterclass provider | **no** (to demo the verification banner) |
+
+All three use password `demo1234`. Sessions persist across app restarts via
+`shared_preferences`.
 
 ## Getting started
 

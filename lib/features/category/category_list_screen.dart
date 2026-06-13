@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../core/l10n/app_localizations.dart';
+import '../../core/state/filter_provider.dart';
+import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_typography.dart';
+import '../../core/util/category_label.dart';
+import '../../data/models/listing.dart';
+import '../home/widgets/listing_card.dart';
+import 'widgets/filter_sheet.dart';
+import 'widgets/sort_menu.dart';
+
+class CategoryListScreen extends ConsumerStatefulWidget {
+  const CategoryListScreen({super.key, required this.category});
+
+  /// Null = "all categories" (e.g. an unknown route param).
+  final CategoryType? category;
+
+  @override
+  ConsumerState<CategoryListScreen> createState() => _CategoryListScreenState();
+}
+
+class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Make the shared filter state reflect this screen's category so the
+    // derived filteredListings provider (and the map) stay in sync.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref.read(filterProvider.notifier).setCategory(widget.category);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final listings = ref.watch(filteredListingsProvider);
+    final filter = ref.watch(filterProvider);
+
+    final title = widget.category == null
+        ? l10n.catAll
+        : widget.category!.label(l10n);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: AppTypography.h3),
+            Text(
+              l10n.resultsCount(listings.length),
+              style: AppTypography.small,
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.sm,
+            ),
+            child: Row(
+              children: [
+                _ToolbarButton(
+                  icon: Icons.tune,
+                  label: l10n.filters,
+                  highlighted: filter.hasActiveFilters,
+                  onTap: () => showFilterSheet(context),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _ToolbarButton(
+                  icon: Icons.swap_vert,
+                  label: l10n.sort,
+                  highlighted: filter.sortMode != SortMode.distance,
+                  onTap: () => showSortMenu(context),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          Expanded(
+            child: listings.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.search_off,
+                          size: 48,
+                          color: AppColors.textTertiary,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(l10n.noResults, style: AppTypography.h3),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(l10n.noResultsHint, style: AppTypography.caption),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    itemCount: listings.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: AppSpacing.xxl),
+                    itemBuilder: (context, index) =>
+                        ListingCard(listing: listings[index]),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ToolbarButton extends StatelessWidget {
+  const _ToolbarButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.highlighted = false,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool highlighted;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadius.chip),
+          border: Border.all(
+            color: highlighted ? AppColors.textPrimary : AppColors.border,
+            width: highlighted ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: AppColors.textPrimary),
+            const SizedBox(width: AppSpacing.xs),
+            Text(label, style: AppTypography.label),
+          ],
+        ),
+      ),
+    );
+  }
+}

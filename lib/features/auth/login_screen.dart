@@ -29,16 +29,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Future<void> _submit() async {
-    print("_submit called");
     if (!_formKey.currentState!.validate()) return;
-    print(ref.read(authProvider.notifier));
     final ok = await ref
         .read(authProvider.notifier)
         .login(_email.text, _password.text);
     if (!mounted) return;
-    print(ok);
     if (ok) {
-      print("_submit called4");
       // Router redirect handles provider users; families come back home.
       if (context.canPop()) {
         context.pop();

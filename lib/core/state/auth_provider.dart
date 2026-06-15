@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sabil_life/data/api/client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/auth_user.dart';
@@ -39,7 +40,7 @@ const String _kTokenPrefsKey = 'sabil.auth.token';
 /// Singleton repository — swap [MockAuthRepository] for an HTTP implementation
 /// in one line when the backend lands.
 final authRepositoryProvider = Provider<AuthRepository>(
-  (ref) => MockAuthRepository(),
+  (ref) => HttpAuthRepository(),
 );
 
 class AuthNotifier extends StateNotifier<AuthState> {
@@ -113,5 +114,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(ref.watch(authRepositoryProvider)),
+  (ref) { 
+    return AuthNotifier(ref.watch(authRepositoryProvider));
+  }
 );

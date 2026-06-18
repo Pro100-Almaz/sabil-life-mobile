@@ -60,8 +60,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       // Logged-in provider on auth pages → bounce to their dashboard.
-      if (auth.isAuthenticated && auth.isProvider && _isAuthArea(location)) {
-        return '/provider';
+      if (auth.isAuthenticated && _isAuthArea(location)) {
+        return auth.isProvider ? '/provider' : '/';
       }
 
       // Logged-in provider hitting the family root → land in provider area

@@ -76,33 +76,33 @@ class HttpProviderRepository implements ProviderRepository {
   }
 //   Do this after implementing inquiries
 
-//   @override
-//   Future<List<Inquiry>> incomingInquiries(String providerId) {
-//     throw UnimplementedError(
-//       'HttpProviderRepository.incomingInquiries is not implemented yet.',
-//     );
-//   }
+  @override
+  Future<List<Inquiry>> incomingInquiries(String providerId) {
+    throw UnimplementedError(
+      'HttpProviderRepository.incomingInquiries is not implemented yet.',
+    );
+  }
 
-//   @override
-//   Future<Commission> acceptInquiry(String inquiryId) {
-//     throw UnimplementedError(
-//       'HttpProviderRepository.acceptInquiry is not implemented yet.',
-//     );
-//   }
+  @override
+  Future<Commission> acceptInquiry(String inquiryId) {
+    throw UnimplementedError(
+      'HttpProviderRepository.acceptInquiry is not implemented yet.',
+    );
+  }
 
-//   @override
-//   Future<Inquiry> declineInquiry(String inquiryId) {
-//     throw UnimplementedError(
-//       'HttpProviderRepository.declineInquiry is not implemented yet.',
-//     );
-//   }
+  @override
+  Future<Inquiry> declineInquiry(String inquiryId) {
+    throw UnimplementedError(
+      'HttpProviderRepository.declineInquiry is not implemented yet.',
+    );
+  }
 
-//   @override
-//   Future<EarningsSummary> earnings(String providerId) {
-//     throw UnimplementedError(
-//       'HttpProviderRepository.earnings is not implemented yet.',
-//     );
-//   }
+  @override
+  Future<EarningsSummary> earnings(String providerId) {
+    throw UnimplementedError(
+      'HttpProviderRepository.earnings is not implemented yet.',
+    );
+  }
 
   Future<Options> _authorizedOptions() async {
     final prefs = await SharedPreferences.getInstance();
@@ -204,7 +204,7 @@ class HttpProviderRepository implements ProviderRepository {
     return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
-  bool (String id) {
+  bool _looksLikeBackendListingId(String id) {
     final uuid = RegExp(
       r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
     );

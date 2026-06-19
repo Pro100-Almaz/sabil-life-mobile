@@ -5,8 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app.dart';
 
 Future<void> main() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
     await dotenv.load(fileName: '.env');
-    runApp(const ProviderScope(child: SabilLifeApp()));
+  } catch (_) {
+    // .env is optional — api_config.dart falls back to localhost.
   }
-
+  runApp(const ProviderScope(child: SabilLifeApp()));
+}

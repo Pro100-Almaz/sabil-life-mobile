@@ -2,21 +2,13 @@ import 'package:dio/dio.dart';
 
 import '../models/auth_user.dart';
 import '../repositories/auth_repository.dart';
-import 'api_config.dart';
+import 'api_client.dart';
+import 'auth_token_store.dart';
 
 class HttpAuthRepository implements AuthRepository {
-  HttpAuthRepository()
-      : _dio = Dio(
-          BaseOptions(
-            baseUrl: apiBaseUrl,
-            connectTimeout: const Duration(seconds: 10),
-            receiveTimeout: const Duration(seconds: 10),
-            headers: {'Content-Type': 'application/json'},
-          ),
-        );
+  HttpAuthRepository();
 
-  final Dio _dio;
-  String? _token;
+  Dio get _dio => apiClient.dio;
 
   @override
   Future<AuthSession> login(String email, String password) async {
@@ -26,7 +18,7 @@ class HttpAuthRepository implements AuthRepository {
         data: {'email': email, 'password': password},
       );
       final session = _parseSession(response.data);
-      _token = session.token;
+      await authTokenStore.write(session.token);
       return session;
     } on DioException catch (e) {
       throw AuthException(_extractError(e));
@@ -51,7 +43,7 @@ class HttpAuthRepository implements AuthRepository {
         },
       );
       final session = _parseSession(response.data);
-      _token = session.token;
+      await authTokenStore.write(session.token);
       return session;
     } on DioException catch (e) {
       throw AuthException(_extractError(e));
@@ -61,6 +53,8 @@ class HttpAuthRepository implements AuthRepository {
   @override
   Future<AuthUser> me(String token) async {
     try {
+      // Pass token explicitly: restore() calls me() before the store is
+      // freshly written, so we cannot rely on the interceptor here.
       final response = await _dio.get(
         '/auth/me/',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
@@ -74,16 +68,11 @@ class HttpAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     try {
-      if (_token != null) {
-        await _dio.post(
-          '/auth/logout/',
-          options: Options(headers: {'Authorization': 'Bearer $_token'}),
-        );
-      }
+      await _dio.post('/auth/logout/');
     } on DioException {
-      // Best-effort; clear local state regardless.
+      // Best-effort; clear local token regardless.
     } finally {
-      _token = null;
+      await authTokenStore.clear();
     }
   }
 

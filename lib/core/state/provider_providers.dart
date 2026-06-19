@@ -6,7 +6,6 @@ import '../../data/models/listing.dart';
 import '../../data/repositories/inquiry_repository.dart';
 import '../../data/repositories/provider_repository.dart';
 
-
 final inquiryRepositoryProvider = Provider<InquiryRepository>(
   (ref) => MockInquiryRepository(),
 );

@@ -19,11 +19,19 @@ The pinned channel/version lives in `.fvmrc`. Run `fvm install` once after cloni
 
 ```bash
 cp .env.example .env
-# fill in API_BASE_URL when you have a backend to point at
 ```
 
-`.env` is gitignored. The app boots without it (mock-first) — only set it when wiring
-real endpoints.
+`.env` is gitignored. Pick the right `API_BASE_URL` for your runtime:
+
+| Runtime                          | URL                                         |
+| -------------------------------- | ------------------------------------------- |
+| iOS simulator / web / desktop    | `http://localhost:8000/api/v1`              |
+| Android emulator                 | `http://10.0.2.2:8000/api/v1`               |
+| Physical device on the same LAN  | `http://<your-host-LAN-IP>:8000/api/v1`     |
+
+The app falls back to `http://localhost:8000/api/v1` when `.env` is missing, so it boots
+even without one — but you'll only be able to call the backend from runtimes that can
+actually reach `localhost`.
 
 ## Branching & commits
 

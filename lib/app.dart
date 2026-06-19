@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,6 +10,7 @@ import 'core/state/locale_provider.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/app_typography.dart';
+import 'data/api/api_client.dart';
 
 class SabilLifeApp extends ConsumerStatefulWidget {
   const SabilLifeApp({super.key});
@@ -17,6 +20,8 @@ class SabilLifeApp extends ConsumerStatefulWidget {
 }
 
 class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
+  StreamSubscription<void>? _unauthorizedSub;
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +30,16 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => ref.read(authProvider.notifier).restore(),
     );
+    // Log the user out whenever the API layer receives a 401.
+    _unauthorizedSub = apiClient.onUnauthorized.listen((_) {
+      ref.read(authProvider.notifier).logout();
+    });
+  }
+
+  @override
+  void dispose() {
+    _unauthorizedSub?.cancel();
+    super.dispose();
   }
 
   @override

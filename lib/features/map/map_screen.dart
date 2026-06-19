@@ -5,11 +5,11 @@ import 'package:latlong2/latlong.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/filter_provider.dart';
+import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/util/category_label.dart';
 import '../../data/mock/mock_home.dart';
-import '../../data/mock/mock_listings.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/pill_chip.dart';
 import 'widgets/map_listing_preview.dart';
@@ -17,8 +17,6 @@ import 'widgets/map_listing_preview.dart';
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key, this.focusListingId});
 
-  /// When set (e.g. via "View on map" on a detail screen), the map opens
-  /// centered on this listing with its preview card shown.
   final String? focusListingId;
 
   @override
@@ -41,28 +39,45 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     if (widget.focusListingId != null &&
         widget.focusListingId != oldWidget.focusListingId) {
       _selectedId = widget.focusListingId;
-      final listing = listingById(widget.focusListingId!);
-      if (listing != null) {
-        _mapController.move(LatLng(listing.lat, listing.lng), 14);
+      // Attempt to move the map — the focused listing may not be loaded yet;
+      // the build will animate once catalogDetailProvider resolves.
+      final focused = ref
+          .read(catalogDetailProvider(widget.focusListingId!))
+          .valueOrNull;
+      if (focused != null) {
+        _mapController.move(LatLng(focused.lat, focused.lng), 14);
       }
     }
   }
 
-  Listing? get _selectedListing =>
-      _selectedId == null ? null : listingById(_selectedId!);
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final listings = ref.watch(filteredListingsProvider);
+    final asyncListings = ref.watch(filteredListingsProvider);
     final selectedCategory = ref.watch(
       filterProvider.select((f) => f.selectedCategory),
     );
 
-    final focused = _selectedListing;
+    // Resolve the focused listing from the catalog detail provider when set.
+    final focusedAsync = _selectedId != null
+        ? ref.watch(catalogDetailProvider(_selectedId!))
+        : null;
+    final focused = focusedAsync?.valueOrNull;
+
     final initialCenter = focused != null
         ? LatLng(focused.lat, focused.lng)
         : mockHome;
+
+    // When a focus listing loads for the first time, move the map.
+    if (focused != null && focusedAsync?.isLoading == false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.focusListingId == _selectedId) {
+          _mapController.move(LatLng(focused.lat, focused.lng), 14);
+        }
+      });
+    }
+
+    final listings = asyncListings.valueOrNull ?? const [];
 
     return Scaffold(
       body: Stack(
@@ -81,7 +96,6 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ),
               MarkerLayer(
                 markers: [
-                  // Distinct home marker.
                   Marker(
                     point: mockHome,
                     width: 40,
@@ -157,6 +171,23 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               ),
             ),
           ),
+          // Loading indicator overlay while listings are fetching.
+          if (asyncListings.isLoading)
+            const Positioned(
+              top: 72,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                    strokeWidth: 2,
+                  ),
+                ),
+              ),
+            ),
           if (focused != null)
             Positioned(
               left: AppSpacing.lg,

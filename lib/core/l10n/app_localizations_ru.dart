@@ -508,4 +508,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get switchToFamily => 'Перейти в семейный режим';
+
+  @override
+  String get genericLoadError => 'Что-то пошло не так. Попробуйте ещё раз.';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get loading => 'Загрузка…';
+
+  @override
+  String get listingNoLongerAvailable => 'Это объявление больше недоступно';
 }

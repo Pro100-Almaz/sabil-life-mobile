@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/filter_provider.dart';
+import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
@@ -26,8 +27,6 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   @override
   void initState() {
     super.initState();
-    // Make the shared filter state reflect this screen's category so the
-    // derived filteredListings provider (and the map) stay in sync.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       ref.read(filterProvider.notifier).setCategory(widget.category);
@@ -37,7 +36,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final listings = ref.watch(filteredListingsProvider);
+    final asyncListings = ref.watch(filteredListingsProvider);
     final filter = ref.watch(filterProvider);
 
     final title = widget.category == null
@@ -50,9 +49,13 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(title, style: AppTypography.h3),
-            Text(
-              l10n.resultsCount(listings.length),
-              style: AppTypography.small,
+            asyncListings.when(
+              loading: () => Text(l10n.loading, style: AppTypography.small),
+              error: (e, st) => const SizedBox.shrink(),
+              data: (list) => Text(
+                l10n.resultsCount(list.length),
+                style: AppTypography.small,
+              ),
             ),
           ],
         ),
@@ -84,31 +87,52 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           ),
           const Divider(),
           Expanded(
-            child: listings.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.search_off,
-                          size: 48,
-                          color: AppColors.textTertiary,
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(l10n.noResults, style: AppTypography.h3),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(l10n.noResultsHint, style: AppTypography.caption),
-                      ],
+            child: asyncListings.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
+              error: (e, _) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.genericLoadError, textAlign: TextAlign.center),
+                    const SizedBox(height: AppSpacing.md),
+                    TextButton(
+                      onPressed: () => ref.invalidate(catalogListingsProvider),
+                      child: Text(l10n.retry),
                     ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    itemCount: listings.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: AppSpacing.xxl),
-                    itemBuilder: (context, index) =>
-                        ListingCard(listing: listings[index]),
-                  ),
+                  ],
+                ),
+              ),
+              data: (listings) => listings.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: AppColors.textTertiary,
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          Text(l10n.noResults, style: AppTypography.h3),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            l10n.noResultsHint,
+                            style: AppTypography.caption,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      itemCount: listings.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: AppSpacing.xxl),
+                      itemBuilder: (context, index) =>
+                          ListingCard(listing: listings[index]),
+                    ),
+            ),
           ),
         ],
       ),

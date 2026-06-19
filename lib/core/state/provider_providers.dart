@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sabil_life/data/api/catalog.dart';
 import 'package:sabil_life/data/api/provider.dart';
+import 'package:sabil_life/data/repositories/catalog_repository.dart';
 
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
@@ -12,6 +14,10 @@ final inquiryRepositoryProvider = Provider<InquiryRepository>(
 
 final providerRepositoryProvider = Provider<ProviderRepository>(
   (ref) => HttpProviderRepository(),
+);
+
+final catalogRepositoryProvider = Provider<CatalogRepository>(
+  (ref) => HttpCatalogRepository(),
 );
 
 final myInquiriesProvider = FutureProvider.family
@@ -36,4 +42,31 @@ final earningsProvider = FutureProvider.family
     .autoDispose<EarningsSummary, String>(
       (ref, providerId) =>
           ref.watch(providerRepositoryProvider).earnings(providerId),
+    );
+
+final catalogListingsProvider = FutureProvider.family
+    .autoDispose<List<Listing>, ListingsFilter>(
+      (ref, filter) => ref
+          .watch(catalogRepositoryProvider)
+          .listings(
+            category: filter.category,
+            query: filter.query,
+            priceMax: filter.priceMax,
+            ageGroup: filter.ageGroup,
+            lat: filter.lat,
+            lng: filter.lng,
+            maxDistanceKm: filter.maxDistanceKm,
+            sort: filter.sort,
+            page: filter.page,
+          ),
+    );
+
+final catalogDetailProvider = FutureProvider.family
+    .autoDispose<Listing, String>(
+      (ref, id) => ref.watch(catalogRepositoryProvider).listing(id),
+    );
+
+final catalogCategoriesProvider =
+    FutureProvider.autoDispose<List<CategoryCount>>(
+      (ref) => ref.watch(catalogRepositoryProvider).categories(),
     );

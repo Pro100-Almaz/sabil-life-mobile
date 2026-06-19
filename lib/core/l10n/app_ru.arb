@@ -149,5 +149,9 @@
   "minutesAgo": "{count} мин назад",
   "hoursAgo": "{count} ч назад",
   "daysAgo": "{count} дн назад",
-  "switchToFamily": "Перейти в семейный режим"
+  "switchToFamily": "Перейти в семейный режим",
+  "genericLoadError": "Что-то пошло не так. Попробуйте ещё раз.",
+  "retry": "Повторить",
+  "loading": "Загрузка…",
+  "listingNoLongerAvailable": "Это объявление больше недоступно"
 }

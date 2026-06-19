@@ -506,4 +506,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get switchToFamily => 'Browse as family';
+
+  @override
+  String get genericLoadError => 'Something went wrong. Please try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get loading => 'Loading…';
+
+  @override
+  String get listingNoLongerAvailable => 'This listing is no longer available';
 }

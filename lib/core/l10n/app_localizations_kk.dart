@@ -506,4 +506,17 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get switchToFamily => 'Отбасы режиміне өту';
+
+  @override
+  String get genericLoadError => 'Бірдеңе дұрыс болмады. Қайталап көріңіз.';
+
+  @override
+  String get retry => 'Қайталау';
+
+  @override
+  String get loading => 'Жүктелуде…';
+
+  @override
+  String get listingNoLongerAvailable =>
+      'Бұл хабарландыру енді қол жетімді емес';
 }

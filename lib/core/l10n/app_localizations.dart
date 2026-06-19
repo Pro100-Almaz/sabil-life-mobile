@@ -1005,6 +1005,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse as family'**
   String get switchToFamily;
+
+  /// No description provided for @genericLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get genericLoadError;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loading;
+
+  /// No description provided for @listingNoLongerAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is no longer available'**
+  String get listingNoLongerAvailable;
 }
 
 class _AppLocalizationsDelegate

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/mock/mock_listings.dart';
 import '../../data/models/listing.dart';
-import '../util/distance.dart';
+import '../../data/repositories/catalog_repository.dart';
+import 'provider_providers.dart';
 
 enum SortMode { distance, rating, priceLow }
 
@@ -90,41 +90,29 @@ final filterProvider = StateNotifierProvider<FilterNotifier, FilterState>(
   (ref) => FilterNotifier(),
 );
 
-/// Synchronous, in-memory filtered + sorted view over [mockListings].
-final filteredListingsProvider = Provider<List<Listing>>((ref) {
+ListingSort _toListingSort(SortMode mode) => switch (mode) {
+  SortMode.distance => ListingSort.distance,
+  SortMode.rating => ListingSort.rating,
+  SortMode.priceLow => ListingSort.priceLow,
+};
+
+/// Async filtered + sorted view over the catalog (HTTP or mock depending on
+/// [catalogRepositoryProvider]).  Screens watch this and handle the three
+/// [AsyncValue] states: loading / error / data.
+final filteredListingsProvider = Provider<AsyncValue<List<Listing>>>((ref) {
   final filter = ref.watch(filterProvider);
-  final query = filter.query.trim().toLowerCase();
 
-  final result = mockListings.where((listing) {
-    if (filter.selectedCategory != null &&
-        listing.category != filter.selectedCategory) {
-      return false;
-    }
-    if (query.isNotEmpty) {
-      final haystack =
-          '${listing.title} ${listing.subtitle} '
-                  '${listing.neighborhood}'
-              .toLowerCase();
-      if (!haystack.contains(query)) return false;
-    }
-    if (listing.distanceFromHomeKm > filter.maxDistanceKm) return false;
-    if (listing.priceFromQar > filter.priceMax) return false;
-    if (filter.ageGroup != null &&
-        !listing.ageGroups.contains(filter.ageGroup)) {
-      return false;
-    }
-    return true;
-  }).toList();
+  final listingsFilter = ListingsFilter(
+    category: filter.selectedCategory,
+    query: filter.query.isEmpty ? null : filter.query,
+    priceMax: filter.priceMax < kPriceCeilingQar ? filter.priceMax : null,
+    ageGroup: filter.ageGroup,
+    maxDistanceKm: filter.maxDistanceKm < kMaxDistanceCeilingKm
+        ? filter.maxDistanceKm
+        : null,
+    sort: _toListingSort(filter.sortMode),
+    page: 1,
+  );
 
-  switch (filter.sortMode) {
-    case SortMode.distance:
-      result.sort(
-        (a, b) => a.distanceFromHomeKm.compareTo(b.distanceFromHomeKm),
-      );
-    case SortMode.rating:
-      result.sort((a, b) => b.rating.compareTo(a.rating));
-    case SortMode.priceLow:
-      result.sort((a, b) => a.priceFromQar.compareTo(b.priceFromQar));
-  }
-  return result;
+  return ref.watch(catalogListingsProvider(listingsFilter));
 });

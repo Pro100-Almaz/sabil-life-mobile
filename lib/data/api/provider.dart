@@ -5,6 +5,7 @@ import '../models/inquiry.dart';
 import '../models/listing.dart';
 import '../repositories/provider_repository.dart';
 import 'api_client.dart';
+import 'listing_parser.dart';
 
 class HttpProviderRepository implements ProviderRepository {
   HttpProviderRepository();
@@ -20,7 +21,9 @@ class HttpProviderRepository implements ProviderRepository {
       if (items is! List) return const [];
       return items
           .whereType<Map>()
-          .map((item) => _parseListing(Map<String, dynamic>.from(item)))
+          .map(
+            (item) => ListingParser.fromCard(Map<String, dynamic>.from(item)),
+          )
           .toList();
     } on DioException catch (e) {
       throw StateError(_extractError(e));
@@ -34,7 +37,9 @@ class HttpProviderRepository implements ProviderRepository {
       final response = _looksLikeBackendListingId(listing.id)
           ? await _dio.patch('/provider/listings/${listing.id}/', data: payload)
           : await _dio.post('/provider/listings/', data: payload);
-      return _parseListing(Map<String, dynamic>.from(response.data as Map));
+      return ListingParser.fromCard(
+        Map<String, dynamic>.from(response.data as Map),
+      );
     } on DioException catch (e) {
       throw StateError(_extractError(e));
     }
@@ -46,7 +51,9 @@ class HttpProviderRepository implements ProviderRepository {
     // separate submit endpoint. Re-fetch to return the server's current state.
     try {
       final response = await _dio.get('/provider/listings/$listingId/');
-      return _parseListing(Map<String, dynamic>.from(response.data as Map));
+      return ListingParser.fromCard(
+        Map<String, dynamic>.from(response.data as Map),
+      );
     } on DioException catch (e) {
       throw StateError(_extractError(e));
     }
@@ -80,32 +87,10 @@ class HttpProviderRepository implements ProviderRepository {
     );
   }
 
-  Listing _parseListing(Map<String, dynamic> data) {
-    return Listing(
-      id: data['id'].toString(),
-      title: (data['title'] ?? '') as String,
-      category: _parseCategory(data['category']?.toString()),
-      subtitle: (data['subtitle'] ?? '') as String,
-      neighborhood: (data['neighborhood'] ?? '') as String,
-      lat: _toDouble(data['lat']),
-      lng: _toDouble(data['lng']),
-      rating: _toDouble(data['rating']),
-      reviewCount: _toInt(data['review_count']),
-      priceFromQar: _toInt(data['price_from_qar']),
-      imageUrls: _toStringList(data['image_urls']),
-      ageGroups: _toStringList(data['age_groups']),
-      isFeatured: (data['is_featured'] ?? false) as bool,
-      description: (data['description'] ?? '') as String,
-      highlights: _toStringList(data['highlights']),
-      ownerId: data['owner_id']?.toString(),
-      status: _parseStatus(data['status']?.toString()),
-    );
-  }
-
   Map<String, dynamic> _serializeListing(Listing listing) {
     return {
       'title': listing.title,
-      'category': _serializeCategory(listing.category),
+      'category': ListingParser.serializeCategory(listing.category),
       'subtitle': listing.subtitle,
       'neighborhood': listing.neighborhood,
       'lat': listing.lat,
@@ -117,58 +102,6 @@ class HttpProviderRepository implements ProviderRepository {
       'highlights': listing.highlights,
       'is_featured': listing.isFeatured,
     };
-  }
-
-  CategoryType _parseCategory(String? raw) {
-    return switch (raw?.toUpperCase()) {
-      'SCHOOLS' => CategoryType.schools,
-      'NURSERIES' => CategoryType.nurseries,
-      'ACTIVITIES' => CategoryType.activities,
-      'ENTERTAINMENT' => CategoryType.entertainment,
-      'TUTORING' => CategoryType.tutoring,
-      'MASTERCLASSES' => CategoryType.masterclasses,
-      'PARTNERSHIPS' => CategoryType.partnerships,
-      _ => CategoryType.activities,
-    };
-  }
-
-  String _serializeCategory(CategoryType category) {
-    return switch (category) {
-      CategoryType.schools => 'SCHOOLS',
-      CategoryType.nurseries => 'NURSERIES',
-      CategoryType.activities => 'ACTIVITIES',
-      CategoryType.entertainment => 'ENTERTAINMENT',
-      CategoryType.tutoring => 'TUTORING',
-      CategoryType.masterclasses => 'MASTERCLASSES',
-      CategoryType.partnerships => 'PARTNERSHIPS',
-    };
-  }
-
-  ListingStatus _parseStatus(String? raw) {
-    return switch (raw?.toUpperCase()) {
-      'DRAFT' => ListingStatus.draft,
-      'PENDING' => ListingStatus.pending,
-      'ACTIVE' => ListingStatus.active,
-      'REJECTED' => ListingStatus.rejected,
-      _ => ListingStatus.active,
-    };
-  }
-
-  List<String> _toStringList(dynamic value) {
-    if (value is! List) return const [];
-    return value.map((item) => item.toString()).toList();
-  }
-
-  int _toInt(dynamic value) {
-    if (value is int) return value;
-    if (value is double) return value.round();
-    return int.tryParse(value?.toString() ?? '') ?? 0;
-  }
-
-  double _toDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
   bool _looksLikeBackendListingId(String id) {

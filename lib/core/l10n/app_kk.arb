@@ -149,5 +149,9 @@
   "minutesAgo": "{count} мин бұрын",
   "hoursAgo": "{count} сағ бұрын",
   "daysAgo": "{count} күн бұрын",
-  "switchToFamily": "Отбасы режиміне өту"
+  "switchToFamily": "Отбасы режиміне өту",
+  "genericLoadError": "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
+  "retry": "Қайталау",
+  "loading": "Жүктелуде…",
+  "listingNoLongerAvailable": "Бұл хабарландыру енді қол жетімді емес"
 }

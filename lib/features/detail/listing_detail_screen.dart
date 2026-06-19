@@ -10,12 +10,12 @@ import 'package:latlong2/latlong.dart';
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/favorites_provider.dart';
 import '../../core/state/masterclass_provider.dart';
+import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
-import '../../data/mock/mock_listings.dart';
 import '../../data/mock/mock_masterclasses.dart';
 import '../../data/mock/mock_reviews.dart';
 import '../../data/mock/mock_tutors.dart';
@@ -37,15 +37,45 @@ class ListingDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final listing = listingById(listingId);
+    final asyncListing = ref.watch(catalogDetailProvider(listingId));
 
-    if (listing == null) {
-      return Scaffold(
+    return asyncListing.when(
+      loading: () => Scaffold(
         appBar: AppBar(),
-        body: Center(child: Text(l10n.noResults)),
-      );
-    }
+        body: const Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
+        ),
+      ),
+      error: (e, _) => Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.genericLoadError, textAlign: TextAlign.center),
+              const SizedBox(height: AppSpacing.md),
+              TextButton(
+                onPressed: () =>
+                    ref.invalidate(catalogDetailProvider(listingId)),
+                child: Text(l10n.retry),
+              ),
+            ],
+          ),
+        ),
+      ),
+      data: (listing) => _DetailBody(listing: listing),
+    );
+  }
+}
 
+class _DetailBody extends ConsumerWidget {
+  const _DetailBody({required this.listing});
+
+  final Listing listing;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
     final reviews = reviewsForListing(listing.id);
 
@@ -299,8 +329,6 @@ class ListingDetailScreen extends ConsumerWidget {
   }
 }
 
-/// "Pick a date" — selectable session chips for a masterclass, with
-/// duration / participation meta and a seats-left indicator.
 class _SessionPicker extends ConsumerWidget {
   const _SessionPicker({required this.listingId, required this.info});
 
@@ -383,8 +411,6 @@ class _SessionPicker extends ConsumerWidget {
   }
 }
 
-/// "Our tutors" — horizontal rail of the individual tutors affiliated with
-/// this tutoring centre; tapping opens the tutor profile sheet.
 class _TutorsRail extends StatelessWidget {
   const _TutorsRail({required this.listingId});
 

@@ -150,6 +150,7 @@
   "hoursAgo": "{count} ч назад",
   "daysAgo": "{count} дн назад",
   "switchToFamily": "Перейти в семейный режим",
+  "switchToProvider": "Вернуться в кабинет провайдера",
   "genericLoadError": "Что-то пошло не так. Попробуйте ещё раз.",
   "retry": "Повторить",
   "loading": "Загрузка…",

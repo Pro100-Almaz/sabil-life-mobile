@@ -150,6 +150,7 @@
   "hoursAgo": "{count} сағ бұрын",
   "daysAgo": "{count} күн бұрын",
   "switchToFamily": "Отбасы режиміне өту",
+  "switchToProvider": "Провайдер кабинетіне қайту",
   "genericLoadError": "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
   "retry": "Қайталау",
   "loading": "Жүктелуде…",

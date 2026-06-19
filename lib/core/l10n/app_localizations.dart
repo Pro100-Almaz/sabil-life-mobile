@@ -1006,6 +1006,12 @@ abstract class AppLocalizations {
   /// **'Browse as family'**
   String get switchToFamily;
 
+  /// No description provided for @switchToProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to provider dashboard'**
+  String get switchToProvider;
+
   /// No description provided for @genericLoadError.
   ///
   /// In en, this message translates to:

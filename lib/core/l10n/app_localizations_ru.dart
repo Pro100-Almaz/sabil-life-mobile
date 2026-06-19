@@ -510,6 +510,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get switchToFamily => 'Перейти в семейный режим';
 
   @override
+  String get switchToProvider => 'Вернуться в кабинет провайдера';
+
+  @override
   String get genericLoadError => 'Что-то пошло не так. Попробуйте ещё раз.';
 
   @override

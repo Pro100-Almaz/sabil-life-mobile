@@ -508,6 +508,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get switchToFamily => 'Отбасы режиміне өту';
 
   @override
+  String get switchToProvider => 'Провайдер кабинетіне қайту';
+
+  @override
   String get genericLoadError => 'Бірдеңе дұрыс болмады. Қайталап көріңіз.';
 
   @override

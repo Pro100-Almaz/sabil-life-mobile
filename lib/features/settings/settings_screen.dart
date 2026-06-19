@@ -90,6 +90,22 @@ class SettingsScreen extends ConsumerWidget {
               ),
               onTap: () => context.push('/my-requests'),
             ),
+            if (auth.isProvider)
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                ),
+                leading: const Icon(
+                  Icons.dashboard_outlined,
+                  color: AppColors.textPrimary,
+                ),
+                title: Text(l10n.switchToProvider, style: AppTypography.body),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textSecondary,
+                ),
+                onTap: () => context.go('/provider'),
+              ),
             const Divider(),
           ],
           ListTile(

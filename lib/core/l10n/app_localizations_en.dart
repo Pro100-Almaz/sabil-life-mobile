@@ -508,6 +508,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchToFamily => 'Browse as family';
 
   @override
+  String get switchToProvider => 'Back to provider dashboard';
+
+  @override
   String get genericLoadError => 'Something went wrong. Please try again.';
 
   @override

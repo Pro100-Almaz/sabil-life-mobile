@@ -35,12 +35,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         .login(_email.text, _password.text);
     if (!mounted) return;
     if (ok) {
-      // Router redirect handles provider users; families come back home.
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
+      // Always reset navigation to the family root. The router's redirect
+      // bounces providers from `/` to `/provider`, so this works for both
+      // roles and avoids the pop-vs-redirect race that can re-show /login.
+      context.go('/');
     }
   }
 

@@ -45,11 +45,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         );
     if (!mounted) return;
     if (ok) {
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
+      // Match LoginScreen: always reset to family root and let the router
+      // redirect bounce providers to /provider. Pop-based nav races with
+      // the auth-state refresh listener and can re-show /login briefly.
+      context.go('/');
     }
   }
 

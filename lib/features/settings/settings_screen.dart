@@ -92,6 +92,22 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const Divider(),
           ],
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+            ),
+            leading: const Icon(
+              Icons.lightbulb_outline,
+              color: AppColors.textPrimary,
+            ),
+            title: Text(l10n.suggestService, style: AppTypography.body),
+            trailing: const Icon(
+              Icons.chevron_right,
+              color: AppColors.textSecondary,
+            ),
+            onTap: () =>
+                context.push(auth.isAuthenticated ? '/suggest' : '/login'),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(
               AppSpacing.lg,

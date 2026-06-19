@@ -3,7 +3,9 @@ import '../mock/mock_listings.dart';
 import '../models/inquiry.dart';
 
 abstract class InquiryRepository {
-  /// Inquiries the given family user has sent.
+  /// Inquiries the signed-in family user has sent.
+  /// [familyId] is accepted for interface compat but ignored by the HTTP impl
+  /// (backend reads family from the token).
   Future<List<Inquiry>> myInquiries(String familyId);
 
   /// Create a new inquiry from a family against a listing. Returns the saved
@@ -55,7 +57,7 @@ class MockInquiryRepository implements InquiryRepository {
       familyEmail: familyEmail,
       providerId: listing.ownerId!,
       message: message.trim(),
-      status: InquiryStatus.pending,
+      status: InquiryStatus.new_,
       createdAt: DateTime.now(),
       tutorIdHint: tutorIdHint,
     );

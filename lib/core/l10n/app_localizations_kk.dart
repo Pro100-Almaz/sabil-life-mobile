@@ -519,4 +519,108 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String get listingNoLongerAvailable =>
       'Бұл хабарландыру енді қол жетімді емес';
+
+  @override
+  String get providerUnverifiedBanner =>
+      'Аккаунтыңыз тексерілуде. Хабарландырулар әкімші бекіткенше НОБАЙ күйінде қалады.';
+
+  @override
+  String get providerEarningsBillingPending =>
+      'Есептеу жүйесі әлі іске қосылмаған. Комиссия мен төлемдер туралы мәліметтер осында пайда болады.';
+
+  @override
+  String get providerProfileSaved => 'Профиль сақталды';
+
+  @override
+  String get providerMarkContacted => 'Байланысты белгілеу';
+
+  @override
+  String get providerComplete => 'Аяқтау';
+
+  @override
+  String get providerContactNotRevealed =>
+      'Байланыс деректері қабылдағаннан кейін ашылады';
+
+  @override
+  String get providerContactRevealed => 'Байланыс ашылды';
+
+  @override
+  String get providerSubscribers => 'Жазылушылар';
+
+  @override
+  String get providerNoSubscribers => 'Әзірге жазылушылар жоқ';
+
+  @override
+  String get listingSubmittedForReview => 'Хабарландыру тексеруге жіберілді';
+
+  @override
+  String get statusContacted => 'Байланысты';
+
+  @override
+  String get statusCompleted => 'Аяқталды';
+
+  @override
+  String get filterAll => 'Барлығы';
+
+  @override
+  String get displayName => 'Көрсетілетін аты';
+
+  @override
+  String get bio => 'Өзім туралы';
+
+  @override
+  String get subjects => 'Пәндер (үтірмен бөліп)';
+
+  @override
+  String get hourlyRate => 'Сағаттық ставка (QAR)';
+
+  @override
+  String get availability => 'Қол жетімділік';
+
+  @override
+  String get suggestService => 'Қызмет ұсыну';
+
+  @override
+  String get suggestServiceHint =>
+      'Дохада жетіспейтін нәрсе бар ма? Бізге айтыңыз.';
+
+  @override
+  String get suggestionCategory => 'Санат (міндетті емес)';
+
+  @override
+  String get suggestionCategoryAny => 'Кез келген';
+
+  @override
+  String get suggestionNeighborhood => 'Аудан (міндетті емес)';
+
+  @override
+  String get suggestionMessage => 'Ұсынысыңыз';
+
+  @override
+  String get suggestionMessageHint =>
+      'Жақын маңда не табуды қалайтыныңызды сипаттаңыз…';
+
+  @override
+  String get suggestionSubmit => 'Жіберу';
+
+  @override
+  String get suggestionSubmitted => 'Рахмет! Ұсынысыңыз жіберілді.';
+
+  @override
+  String get mySuggestions => 'Менің ұсыныстарым';
+
+  @override
+  String get suggestionStatusNew => 'Жіберілді';
+
+  @override
+  String get suggestionStatusReviewed => 'Қарастырылуда';
+
+  @override
+  String get suggestionStatusActedOn => 'Іске асырылды';
+
+  @override
+  String get suggestionStatusDismissed => 'Қабылданбады';
+
+  @override
+  String get rateLimited => 'Сұраныс шегі асты. Кейінірек қайталаңыз.';
 }

@@ -518,4 +518,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listingNoLongerAvailable => 'This listing is no longer available';
+
+  @override
+  String get providerUnverifiedBanner =>
+      'Your account is awaiting verification. Listings will stay in DRAFT until an admin approves your account.';
+
+  @override
+  String get providerEarningsBillingPending =>
+      'Billing is not yet active. Commission statements and payouts will appear here once billing ships.';
+
+  @override
+  String get providerProfileSaved => 'Profile saved';
+
+  @override
+  String get providerMarkContacted => 'Mark contacted';
+
+  @override
+  String get providerComplete => 'Complete';
+
+  @override
+  String get providerContactNotRevealed =>
+      'Contact details unlocked after acceptance';
+
+  @override
+  String get providerContactRevealed => 'Contact revealed';
+
+  @override
+  String get providerSubscribers => 'Subscribers';
+
+  @override
+  String get providerNoSubscribers => 'No subscribers yet';
+
+  @override
+  String get listingSubmittedForReview => 'Listing submitted for review';
+
+  @override
+  String get statusContacted => 'Contacted';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get displayName => 'Display name';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get subjects => 'Subjects (comma-separated)';
+
+  @override
+  String get hourlyRate => 'Hourly rate (QAR)';
+
+  @override
+  String get availability => 'Availability';
+
+  @override
+  String get suggestService => 'Suggest a service';
+
+  @override
+  String get suggestServiceHint =>
+      'Missing something in Doha? Let us know what you\'d love to see.';
+
+  @override
+  String get suggestionCategory => 'Category (optional)';
+
+  @override
+  String get suggestionCategoryAny => 'Any';
+
+  @override
+  String get suggestionNeighborhood => 'Neighborhood (optional)';
+
+  @override
+  String get suggestionMessage => 'Your suggestion';
+
+  @override
+  String get suggestionMessageHint =>
+      'Describe what you\'d love to find near you…';
+
+  @override
+  String get suggestionSubmit => 'Submit';
+
+  @override
+  String get suggestionSubmitted =>
+      'Thanks! Your suggestion has been submitted.';
+
+  @override
+  String get mySuggestions => 'My suggestions';
+
+  @override
+  String get suggestionStatusNew => 'Submitted';
+
+  @override
+  String get suggestionStatusReviewed => 'Under review';
+
+  @override
+  String get suggestionStatusActedOn => 'Acted on';
+
+  @override
+  String get suggestionStatusDismissed => 'Dismissed';
+
+  @override
+  String get rateLimited => 'Rate limited. Please try again shortly.';
 }

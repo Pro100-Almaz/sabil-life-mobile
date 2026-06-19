@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 
-import '../models/commission.dart';
+import '../models/auth_user.dart';
 import '../models/inquiry.dart';
 import '../models/listing.dart';
+import '../models/provider_profile.dart';
+import '../models/subscription.dart';
 import '../repositories/provider_repository.dart';
 import 'api_client.dart';
 import 'listing_parser.dart';
@@ -11,6 +13,67 @@ class HttpProviderRepository implements ProviderRepository {
   HttpProviderRepository();
 
   Dio get _dio => apiClient.dio;
+
+  // ── Profile ────────────────────────────────────────────────────────────────
+
+  @override
+  Future<ProviderProfile> myProfile() async {
+    try {
+      final response = await _dio.get('/provider/profile/');
+      return _parseProfile(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<ProviderProfile> updateProfile({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+  }) async {
+    final payload = <String, dynamic>{};
+    if (displayName != null) payload['display_name'] = displayName;
+    if (bio != null) payload['bio'] = bio;
+    if (subjects != null) payload['subjects'] = subjects;
+    if (hourlyRateQar != null) payload['hourly_rate_qar'] = hourlyRateQar;
+    if (availability != null) payload['availability'] = availability;
+    try {
+      final response = await _dio.patch('/provider/profile/', data: payload);
+      return _parseProfile(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  ProviderProfile _parseProfile(Map<String, dynamic> d) {
+    return ProviderProfile(
+      userId: (d['user_id'] as num).toInt(),
+      email: d['email'] as String? ?? '',
+      fullName: d['full_name'] as String? ?? '',
+      role: _parseRole(d['role'] as String?),
+      isVerified: d['is_verified'] as bool? ?? false,
+      displayName: d['display_name'] as String? ?? '',
+      bio: d['bio'] as String? ?? '',
+      subjects: List<String>.from((d['subjects'] as List?) ?? []),
+      hourlyRateQar: d['hourly_rate_qar'] != null
+          ? (d['hourly_rate_qar'] as num).toInt()
+          : null,
+      availability: d['availability'] as String? ?? '',
+      createdAt: _parseDate(d['created_at']),
+      updatedAt: _parseDate(d['updated_at']),
+    );
+  }
+
+  UserRole _parseRole(String? raw) => switch (raw?.toUpperCase()) {
+    'TUTOR' => UserRole.tutor,
+    'MASTERCLASS' => UserRole.masterclass,
+    _ => UserRole.family,
+  };
+
+  // ── Listings ───────────────────────────────────────────────────────────────
 
   @override
   Future<List<Listing>> myListings(String providerId) async {
@@ -59,33 +122,137 @@ class HttpProviderRepository implements ProviderRepository {
     }
   }
 
+  // ── Inquiries ──────────────────────────────────────────────────────────────
+
   @override
-  Future<List<Inquiry>> incomingInquiries(String providerId) {
-    throw UnimplementedError(
-      'HttpProviderRepository.incomingInquiries is not implemented yet.',
-    );
+  Future<List<Inquiry>> incomingInquiries(String providerId) async {
+    try {
+      final response = await _dio.get('/provider/inquiries/');
+      final data = response.data;
+      final items = data is Map<String, dynamic> ? data['results'] : data;
+      if (items is! List) return const [];
+      return items
+          .whereType<Map>()
+          .map((item) => _parseInquiry(Map<String, dynamic>.from(item)))
+          .toList();
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
   }
 
   @override
-  Future<Commission> acceptInquiry(String inquiryId) {
-    throw UnimplementedError(
-      'HttpProviderRepository.acceptInquiry is not implemented yet.',
-    );
+  Future<Inquiry> markContacted(String inquiryId) async {
+    return _postTransition(inquiryId, 'contacted');
   }
 
   @override
-  Future<Inquiry> declineInquiry(String inquiryId) {
-    throw UnimplementedError(
-      'HttpProviderRepository.declineInquiry is not implemented yet.',
-    );
+  Future<Inquiry> acceptInquiry(String inquiryId) async {
+    return _postTransition(inquiryId, 'accept');
   }
 
   @override
-  Future<EarningsSummary> earnings(String providerId) {
-    throw UnimplementedError(
-      'HttpProviderRepository.earnings is not implemented yet.',
+  Future<Inquiry> declineInquiry(String inquiryId) async {
+    return _postTransition(inquiryId, 'decline');
+  }
+
+  @override
+  Future<Inquiry> completeInquiry(String inquiryId) async {
+    return _postTransition(inquiryId, 'complete');
+  }
+
+  Future<Inquiry> _postTransition(String inquiryId, String action) async {
+    try {
+      final response = await _dio.post(
+        '/provider/inquiries/$inquiryId/$action/',
+        data: null,
+      );
+      return _parseInquiry(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        final msg = _extractError(e);
+        throw StateError('409:$msg');
+      }
+      throw StateError(_extractError(e));
+    }
+  }
+
+  Inquiry _parseInquiry(Map<String, dynamic> d) {
+    final family = d['family'] as Map<String, dynamic>?;
+    return Inquiry(
+      id: d['id'] as String,
+      listingId: d['listing_id'] as String,
+      providerId: d['provider_id']?.toString() ?? '',
+      message: d['message'] as String? ?? '',
+      status: InquiryStatus.fromBackend(d['status'] as String?),
+      contactRevealed: d['contact_revealed'] as bool? ?? false,
+      createdAt: _parseDate(d['created_at']) ?? DateTime.now(),
+      updatedAt: _parseDate(d['updated_at']),
+      familyId: family?['id']?.toString(),
+      familyName: family?['full_name'] as String?,
+      familyEmail: family?['email'] as String?,
+      familyPhone: family?['phone'] as String?,
     );
   }
+
+  // ── Subscriptions (provider roster) ───────────────────────────────────────
+
+  @override
+  Future<List<Subscription>> incomingSubscriptions({
+    String? listingId,
+    SubscriptionStatus? status,
+  }) async {
+    final queryParams = <String, String>{};
+    if (listingId != null) queryParams['listing_id'] = listingId;
+    if (status != null) queryParams['status'] = status.toBackend();
+    try {
+      final response = await _dio.get(
+        '/provider/subscriptions/',
+        queryParameters: queryParams.isEmpty ? null : queryParams,
+      );
+      final data = response.data;
+      final items = data is Map<String, dynamic> ? data['results'] : data;
+      if (items is! List) return const [];
+      return items
+          .whereType<Map>()
+          .map(
+            (item) =>
+                _parseProviderSubscription(Map<String, dynamic>.from(item)),
+          )
+          .toList();
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  Subscription _parseProviderSubscription(Map<String, dynamic> d) {
+    final family = d['family'] as Map<String, dynamic>?;
+    return Subscription(
+      id: d['id'] as String,
+      listingId: d['listing_id'] as String,
+      providerId: d['provider_id']?.toString() ?? '',
+      status: SubscriptionStatus.fromBackend(d['status'] as String?),
+      createdAt: _parseDate(d['created_at']) ?? DateTime.now(),
+      cancelledAt: _parseDate(d['cancelled_at']),
+      listingTitle: d['listing_title'] as String?,
+      familyName: family?['full_name'] as String?,
+      familyId: family?['id']?.toString(),
+    );
+  }
+
+  // ── Earnings ───────────────────────────────────────────────────────────────
+
+  @override
+  Future<EarningsSummary> earnings(String providerId) async {
+    // Billing is Phase 6 — return empty summary.
+    return const EarningsSummary(
+      acceptedStudents: 0,
+      pendingQar: 0,
+      paidQar: 0,
+      commissions: [],
+    );
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
   Map<String, dynamic> _serializeListing(Listing listing) {
     return {
@@ -109,6 +276,15 @@ class HttpProviderRepository implements ProviderRepository {
       r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
     );
     return uuid.hasMatch(id);
+  }
+
+  DateTime? _parseDate(dynamic raw) {
+    if (raw == null) return null;
+    try {
+      return DateTime.parse(raw as String);
+    } catch (_) {
+      return null;
+    }
   }
 
   String _extractError(DioException e) {

@@ -1029,6 +1029,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This listing is no longer available'**
   String get listingNoLongerAvailable;
+
+  /// No description provided for @providerUnverifiedBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is awaiting verification. Listings will stay in DRAFT until an admin approves your account.'**
+  String get providerUnverifiedBanner;
+
+  /// No description provided for @providerEarningsBillingPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Billing is not yet active. Commission statements and payouts will appear here once billing ships.'**
+  String get providerEarningsBillingPending;
+
+  /// No description provided for @providerProfileSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile saved'**
+  String get providerProfileSaved;
+
+  /// No description provided for @providerMarkContacted.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark contacted'**
+  String get providerMarkContacted;
+
+  /// No description provided for @providerComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get providerComplete;
+
+  /// No description provided for @providerContactNotRevealed.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact details unlocked after acceptance'**
+  String get providerContactNotRevealed;
+
+  /// No description provided for @providerContactRevealed.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact revealed'**
+  String get providerContactRevealed;
+
+  /// No description provided for @providerSubscribers.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribers'**
+  String get providerSubscribers;
+
+  /// No description provided for @providerNoSubscribers.
+  ///
+  /// In en, this message translates to:
+  /// **'No subscribers yet'**
+  String get providerNoSubscribers;
+
+  /// No description provided for @listingSubmittedForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing submitted for review'**
+  String get listingSubmittedForReview;
+
+  /// No description provided for @statusContacted.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacted'**
+  String get statusContacted;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statusCompleted;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @displayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name'**
+  String get displayName;
+
+  /// No description provided for @bio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get bio;
+
+  /// No description provided for @subjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Subjects (comma-separated)'**
+  String get subjects;
+
+  /// No description provided for @hourlyRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hourly rate (QAR)'**
+  String get hourlyRate;
+
+  /// No description provided for @availability.
+  ///
+  /// In en, this message translates to:
+  /// **'Availability'**
+  String get availability;
+
+  /// No description provided for @suggestService.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a service'**
+  String get suggestService;
+
+  /// No description provided for @suggestServiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing something in Doha? Let us know what you\'d love to see.'**
+  String get suggestServiceHint;
+
+  /// No description provided for @suggestionCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category (optional)'**
+  String get suggestionCategory;
+
+  /// No description provided for @suggestionCategoryAny.
+  ///
+  /// In en, this message translates to:
+  /// **'Any'**
+  String get suggestionCategoryAny;
+
+  /// No description provided for @suggestionNeighborhood.
+  ///
+  /// In en, this message translates to:
+  /// **'Neighborhood (optional)'**
+  String get suggestionNeighborhood;
+
+  /// No description provided for @suggestionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your suggestion'**
+  String get suggestionMessage;
+
+  /// No description provided for @suggestionMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe what you\'d love to find near you…'**
+  String get suggestionMessageHint;
+
+  /// No description provided for @suggestionSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get suggestionSubmit;
+
+  /// No description provided for @suggestionSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks! Your suggestion has been submitted.'**
+  String get suggestionSubmitted;
+
+  /// No description provided for @mySuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'My suggestions'**
+  String get mySuggestions;
+
+  /// No description provided for @suggestionStatusNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get suggestionStatusNew;
+
+  /// No description provided for @suggestionStatusReviewed.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get suggestionStatusReviewed;
+
+  /// No description provided for @suggestionStatusActedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Acted on'**
+  String get suggestionStatusActedOn;
+
+  /// No description provided for @suggestionStatusDismissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismissed'**
+  String get suggestionStatusDismissed;
+
+  /// No description provided for @rateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate limited. Please try again shortly.'**
+  String get rateLimited;
 }
 
 class _AppLocalizationsDelegate

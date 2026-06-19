@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/l10n/app_localizations.dart';
+import '../../core/state/auth_provider.dart';
 import '../../core/state/favorites_provider.dart';
 import '../../core/state/masterclass_provider.dart';
 import '../../core/state/provider_providers.dart';
@@ -17,10 +18,11 @@ import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
 import '../../data/mock/mock_masterclasses.dart';
-import '../../data/mock/mock_reviews.dart';
 import '../../data/mock/mock_tutors.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/masterclass_info.dart';
+import '../../data/models/review.dart';
+import '../../data/repositories/review_repository.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/star_rating.dart';
 import '../family/widgets/request_cta.dart';
@@ -77,7 +79,8 @@ class _DetailBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
-    final reviews = reviewsForListing(listing.id);
+    final asyncReviews = ref.watch(listingReviewsProvider(listing.id));
+    final reviews = asyncReviews.valueOrNull ?? const <Review>[];
 
     return Scaffold(
       body: CustomScrollView(
@@ -241,39 +244,51 @@ class _DetailBody extends ConsumerWidget {
                     ],
                   ),
                   const SizedBox(height: AppSpacing.lg),
-                  for (final review in reviews) ...[
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: AppColors.surfaceAlt,
-                          child: Text(
-                            review.author.characters.first,
-                            style: AppTypography.label,
-                          ),
+                  if (asyncReviews.isLoading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(AppSpacing.lg),
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                          strokeWidth: 2,
                         ),
-                        const SizedBox(width: AppSpacing.md),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(review.author, style: AppTypography.label),
-                            Text(
-                              l10n.monthsAgo(review.monthsAgo),
-                              style: AppTypography.small,
+                      ),
+                    )
+                  else
+                    for (final review in reviews) ...[
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: AppColors.surfaceAlt,
+                            child: Text(
+                              review.author.characters.first,
+                              style: AppTypography.label,
                             ),
-                          ],
-                        ),
-                        const Spacer(),
-                        StarRating(rating: review.rating),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(
-                      review.text,
-                      style: AppTypography.body.copyWith(height: 1.4),
-                    ),
-                    const SizedBox(height: AppSpacing.xl),
-                  ],
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(review.author, style: AppTypography.label),
+                              Text(
+                                l10n.monthsAgo(review.monthsAgo),
+                                style: AppTypography.small,
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          StarRating(rating: review.rating.toDouble()),
+                        ],
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        review.text,
+                        style: AppTypography.body.copyWith(height: 1.4),
+                      ),
+                      const SizedBox(height: AppSpacing.xl),
+                    ],
+                  _WriteReviewCta(listingId: listing.id),
                   const SizedBox(height: 80),
                 ],
               ),
@@ -497,6 +512,166 @@ class _TutorsRail extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _WriteReviewCta extends ConsumerStatefulWidget {
+  const _WriteReviewCta({required this.listingId});
+
+  final String listingId;
+
+  @override
+  ConsumerState<_WriteReviewCta> createState() => _WriteReviewCtaState();
+}
+
+class _WriteReviewCtaState extends ConsumerState<_WriteReviewCta> {
+  int _rating = 5;
+  late final TextEditingController _text;
+  bool _submitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _text = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _text.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_text.text.trim().isEmpty) return;
+    setState(() => _submitting = true);
+    try {
+      await ref
+          .read(reviewRepositoryProvider)
+          .create(
+            listingId: widget.listingId,
+            rating: _rating,
+            text: _text.text.trim(),
+          );
+      ref.invalidate(listingReviewsProvider(widget.listingId));
+      ref.invalidate(catalogDetailProvider(widget.listingId));
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Review submitted'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } on ReviewException catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  void _showDialog(BuildContext ctx) {
+    showModalBottomSheet<void>(
+      context: ctx,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => StatefulBuilder(
+        builder: (context, setModalState) => Padding(
+          padding: EdgeInsets.only(
+            left: AppSpacing.xxl,
+            right: AppSpacing.xxl,
+            top: AppSpacing.xl,
+            bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.xxl,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Write a review', style: AppTypography.h2),
+              const SizedBox(height: AppSpacing.md),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (i) {
+                  final star = i + 1;
+                  return GestureDetector(
+                    onTap: () {
+                      setModalState(() => _rating = star);
+                      setState(() => _rating = star);
+                    },
+                    child: Icon(
+                      star <= _rating ? Icons.star : Icons.star_border,
+                      color: AppColors.star,
+                      size: 32,
+                    ),
+                  );
+                }),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              TextField(
+                controller: _text,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  hintText: 'Share your experience…',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              AppButton(
+                label: _submitting ? 'Submitting…' : 'Submit',
+                expanded: true,
+                onPressed: _submitting ? () {} : _submit,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
+
+    // Providers don't write reviews; anonymous users redirect to login.
+    if (auth.isProvider) return const SizedBox.shrink();
+
+    if (!auth.isAuthenticated) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+        child: AppButton(
+          label: 'Write a review',
+          variant: AppButtonVariant.outlined,
+          icon: Icons.rate_review_outlined,
+          expanded: true,
+          onPressed: () => context.push('/login'),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
+      child: AppButton(
+        label: 'Write a review',
+        variant: AppButtonVariant.outlined,
+        icon: Icons.rate_review_outlined,
+        expanded: true,
+        onPressed: () => _showDialog(context),
+      ),
     );
   }
 }

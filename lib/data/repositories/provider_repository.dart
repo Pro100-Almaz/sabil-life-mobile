@@ -3,6 +3,9 @@ import '../mock/mock_listings.dart';
 import '../models/commission.dart';
 import '../models/inquiry.dart';
 import '../models/listing.dart';
+import '../models/provider_profile.dart';
+import '../models/auth_user.dart';
+import '../models/subscription.dart';
 
 class EarningsSummary {
   const EarningsSummary({
@@ -25,19 +28,51 @@ abstract class ProviderRepository {
 
   Future<Listing> submitForReview(String listingId);
 
+  Future<ProviderProfile> myProfile();
+
+  Future<ProviderProfile> updateProfile({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+  });
+
   Future<List<Inquiry>> incomingInquiries(String providerId);
 
-  /// Accepting flips status, reveals the family's contact info and accrues a
-  /// commission. Returns the new commission.
-  Future<Commission> acceptInquiry(String inquiryId);
+  Future<Inquiry> markContacted(String inquiryId);
+
+  /// Accepting flips status and reveals family contact info.
+  /// Returns the updated Inquiry (no commission — billing is Phase 6).
+  Future<Inquiry> acceptInquiry(String inquiryId);
 
   Future<Inquiry> declineInquiry(String inquiryId);
+
+  Future<Inquiry> completeInquiry(String inquiryId);
+
+  Future<List<Subscription>> incomingSubscriptions({
+    String? listingId,
+    SubscriptionStatus? status,
+  });
 
   Future<EarningsSummary> earnings(String providerId);
 }
 
 class MockProviderRepository implements ProviderRepository {
   static const Duration _latency = Duration(milliseconds: 250);
+
+  ProviderProfile _profile = const ProviderProfile(
+    userId: 2,
+    email: 'tutor@demo',
+    fullName: 'Demo Tutor',
+    role: UserRole.tutor,
+    isVerified: true,
+    displayName: 'Demo Tutor',
+    bio: 'Experienced tutor covering Maths and Arabic.',
+    subjects: ['Maths', 'Arabic'],
+    hourlyRateQar: 120,
+    availability: 'Mon-Fri 4pm-8pm',
+  );
 
   @override
   Future<List<Listing>> myListings(String providerId) async {
@@ -68,6 +103,31 @@ class MockProviderRepository implements ProviderRepository {
   }
 
   @override
+  Future<ProviderProfile> myProfile() async {
+    await Future<void>.delayed(_latency);
+    return _profile;
+  }
+
+  @override
+  Future<ProviderProfile> updateProfile({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+  }) async {
+    await Future<void>.delayed(_latency);
+    _profile = _profile.copyWith(
+      displayName: displayName,
+      bio: bio,
+      subjects: subjects,
+      hourlyRateQar: hourlyRateQar != null ? () => hourlyRateQar : null,
+      availability: availability,
+    );
+    return _profile;
+  }
+
+  @override
   Future<List<Inquiry>> incomingInquiries(String providerId) async {
     await Future<void>.delayed(_latency);
     return seedInquiries.where((i) => i.providerId == providerId).toList()
@@ -75,7 +135,19 @@ class MockProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Commission> acceptInquiry(String inquiryId) async {
+  Future<Inquiry> markContacted(String inquiryId) async {
+    await Future<void>.delayed(_latency);
+    final index = seedInquiries.indexWhere((i) => i.id == inquiryId);
+    if (index < 0) throw StateError('Unknown inquiry: $inquiryId');
+    final updated = seedInquiries[index].copyWith(
+      status: InquiryStatus.contacted,
+    );
+    seedInquiries[index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<Inquiry> acceptInquiry(String inquiryId) async {
     await Future<void>.delayed(_latency);
     final index = seedInquiries.indexWhere((i) => i.id == inquiryId);
     if (index < 0) throw StateError('Unknown inquiry: $inquiryId');
@@ -83,17 +155,7 @@ class MockProviderRepository implements ProviderRepository {
       status: InquiryStatus.accepted,
     );
     seedInquiries[index] = accepted;
-
-    final commission = Commission(
-      id: 'cms-${DateTime.now().millisecondsSinceEpoch}',
-      inquiryId: accepted.id,
-      providerId: accepted.providerId,
-      amountQar: kInquiryCommissionQar,
-      status: CommissionStatus.pending,
-      createdAt: DateTime.now(),
-    );
-    seedCommissions.add(commission);
-    return commission;
+    return accepted;
   }
 
   @override
@@ -109,28 +171,36 @@ class MockProviderRepository implements ProviderRepository {
   }
 
   @override
+  Future<Inquiry> completeInquiry(String inquiryId) async {
+    await Future<void>.delayed(_latency);
+    final index = seedInquiries.indexWhere((i) => i.id == inquiryId);
+    if (index < 0) throw StateError('Unknown inquiry: $inquiryId');
+    final completed = seedInquiries[index].copyWith(
+      status: InquiryStatus.completed,
+    );
+    seedInquiries[index] = completed;
+    return completed;
+  }
+
+  @override
+  Future<List<Subscription>> incomingSubscriptions({
+    String? listingId,
+    SubscriptionStatus? status,
+  }) async {
+    await Future<void>.delayed(_latency);
+    // Mock returns empty — no seed subscriptions for provider side.
+    return const [];
+  }
+
+  @override
   Future<EarningsSummary> earnings(String providerId) async {
     await Future<void>.delayed(_latency);
-    final commissions =
-        seedCommissions.where((c) => c.providerId == providerId).toList()
-          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    final accepted = seedInquiries
-        .where(
-          (i) =>
-              i.providerId == providerId && i.status == InquiryStatus.accepted,
-        )
-        .length;
-    final pending = commissions
-        .where((c) => c.status == CommissionStatus.pending)
-        .fold<int>(0, (sum, c) => sum + c.amountQar);
-    final paid = commissions
-        .where((c) => c.status == CommissionStatus.paid)
-        .fold<int>(0, (sum, c) => sum + c.amountQar);
-    return EarningsSummary(
-      acceptedStudents: accepted,
-      pendingQar: pending,
-      paidQar: paid,
-      commissions: commissions,
+    // Billing is Phase 6 — return empty summary.
+    return const EarningsSummary(
+      acceptedStudents: 0,
+      pendingQar: 0,
+      paidQar: 0,
+      commissions: [],
     );
   }
 }

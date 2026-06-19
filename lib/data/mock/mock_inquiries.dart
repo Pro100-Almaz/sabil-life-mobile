@@ -19,7 +19,7 @@ final List<Inquiry> seedInquiries = [
     message:
         'Looking for weekly SAT maths sessions for my Year 11 daughter. '
         'Evenings work best.',
-    status: InquiryStatus.pending,
+    status: InquiryStatus.new_,
     createdAt: _ago(hours: 3),
     tutorIdHint: 'tutor-lina',
   ),
@@ -44,7 +44,7 @@ final List<Inquiry> seedInquiries = [
     message:
         "We'd like to attend the weekend painting class as a family of three. "
         'Is that possible?',
-    status: InquiryStatus.pending,
+    status: InquiryStatus.new_,
     createdAt: _ago(hours: 18),
   ),
 ];

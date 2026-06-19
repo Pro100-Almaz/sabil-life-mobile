@@ -9,6 +9,7 @@ import '../../features/category/category_list_screen.dart';
 import '../../features/detail/listing_detail_screen.dart';
 import '../../features/family/inquiry_composer_screen.dart';
 import '../../features/family/my_requests_screen.dart';
+import '../../features/family/suggestion_screen.dart';
 import '../../features/favorites/favorites_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
@@ -175,6 +176,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/my-requests',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const MyRequestsScreen(),
+      ),
+      GoRoute(
+        path: '/suggest',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const SuggestionScreen(),
       ),
 
       // ── Provider shell ───────────────────────────────────────────────────

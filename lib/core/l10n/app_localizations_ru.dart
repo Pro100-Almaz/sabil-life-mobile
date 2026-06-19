@@ -520,4 +520,106 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get listingNoLongerAvailable => 'Это объявление больше недоступно';
+
+  @override
+  String get providerUnverifiedBanner =>
+      'Ваш аккаунт ожидает верификации. Объявления останутся в статусе ЧЕРНОВИК до одобрения администратором.';
+
+  @override
+  String get providerEarningsBillingPending =>
+      'Биллинг ещё не активен. Данные о комиссиях и выплатах появятся здесь после запуска биллинга.';
+
+  @override
+  String get providerProfileSaved => 'Профиль сохранён';
+
+  @override
+  String get providerMarkContacted => 'Отметить как связался';
+
+  @override
+  String get providerComplete => 'Завершить';
+
+  @override
+  String get providerContactNotRevealed =>
+      'Контактные данные открываются после принятия';
+
+  @override
+  String get providerContactRevealed => 'Контакт открыт';
+
+  @override
+  String get providerSubscribers => 'Подписчики';
+
+  @override
+  String get providerNoSubscribers => 'Подписчиков пока нет';
+
+  @override
+  String get listingSubmittedForReview => 'Объявление отправлено на проверку';
+
+  @override
+  String get statusContacted => 'Связались';
+
+  @override
+  String get statusCompleted => 'Завершено';
+
+  @override
+  String get filterAll => 'Все';
+
+  @override
+  String get displayName => 'Отображаемое имя';
+
+  @override
+  String get bio => 'О себе';
+
+  @override
+  String get subjects => 'Предметы (через запятую)';
+
+  @override
+  String get hourlyRate => 'Почасовая ставка (QAR)';
+
+  @override
+  String get availability => 'Доступность';
+
+  @override
+  String get suggestService => 'Предложить услугу';
+
+  @override
+  String get suggestServiceHint => 'Чего не хватает в Дохе? Расскажите нам.';
+
+  @override
+  String get suggestionCategory => 'Категория (необязательно)';
+
+  @override
+  String get suggestionCategoryAny => 'Любая';
+
+  @override
+  String get suggestionNeighborhood => 'Район (необязательно)';
+
+  @override
+  String get suggestionMessage => 'Ваше предложение';
+
+  @override
+  String get suggestionMessageHint => 'Опишите, что вы хотели бы найти рядом…';
+
+  @override
+  String get suggestionSubmit => 'Отправить';
+
+  @override
+  String get suggestionSubmitted => 'Спасибо! Ваше предложение отправлено.';
+
+  @override
+  String get mySuggestions => 'Мои предложения';
+
+  @override
+  String get suggestionStatusNew => 'Отправлено';
+
+  @override
+  String get suggestionStatusReviewed => 'На рассмотрении';
+
+  @override
+  String get suggestionStatusActedOn => 'Принято к действию';
+
+  @override
+  String get suggestionStatusDismissed => 'Отклонено';
+
+  @override
+  String get rateLimited => 'Слишком много запросов. Попробуйте позже.';
 }

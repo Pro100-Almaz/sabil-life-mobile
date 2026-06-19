@@ -9,7 +9,6 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/relative_time.dart';
-import '../../data/mock/mock_listings.dart';
 import '../../data/models/inquiry.dart';
 
 class MyRequestsScreen extends ConsumerWidget {
@@ -22,7 +21,6 @@ class MyRequestsScreen extends ConsumerWidget {
     final user = auth.user;
 
     if (user == null) {
-      // Router redirect should normally prevent reaching this state.
       return Scaffold(
         appBar: AppBar(title: Text(l10n.myRequests)),
         body: Center(child: Text(l10n.signIn)),
@@ -60,7 +58,6 @@ class _RequestRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final listing = listingById(inquiry.listingId);
 
     return GestureDetector(
       onTap: () => context.push('/listing/${inquiry.listingId}'),
@@ -78,7 +75,7 @@ class _RequestRow extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    listing?.title ?? inquiry.listingId,
+                    inquiry.listingId,
                     style: AppTypography.h3.copyWith(fontSize: 16),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -115,11 +112,20 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final (label, color) = switch (status) {
+      InquiryStatus.new_ ||
       InquiryStatus.pending => (l10n.requestStatusPending, AppColors.primary),
+      InquiryStatus.contacted => (
+        l10n.requestStatusPending,
+        AppColors.textSecondary,
+      ),
       InquiryStatus.accepted => (l10n.requestStatusAccepted, AppColors.success),
       InquiryStatus.declined => (
         l10n.requestStatusDeclined,
         AppColors.textTertiary,
+      ),
+      InquiryStatus.completed => (
+        l10n.requestStatusAccepted,
+        AppColors.success,
       ),
     };
     return Container(

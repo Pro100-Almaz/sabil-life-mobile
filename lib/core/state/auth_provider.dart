@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/client.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../data/api/auth_token_store.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/repositories/auth_repository.dart';
 
@@ -35,8 +35,6 @@ class AuthState {
   bool get isProvider => user?.isProvider ?? false;
 }
 
-const String _kTokenPrefsKey = 'sabil.auth.token';
-
 /// Singleton repository — swap [MockAuthRepository] for an HTTP implementation
 /// in one line when the backend lands.
 final authRepositoryProvider = Provider<AuthRepository>(
@@ -49,8 +47,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _repo;
 
   Future<void> restore() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString(_kTokenPrefsKey);
+    final token = await authTokenStore.read();
     if (token == null) {
       state = const AuthState.unauthenticated();
       return;
@@ -59,7 +56,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final user = await _repo.me(token);
       state = AuthState.authenticated(user: user, token: token);
     } on AuthException {
-      await prefs.remove(_kTokenPrefsKey);
+      await authTokenStore.clear();
       state = const AuthState.unauthenticated();
     }
   }
@@ -102,14 +99,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> logout() async {
     await _repo.logout();
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_kTokenPrefsKey);
+    await authTokenStore.clear();
     state = const AuthState.unauthenticated();
   }
 
   Future<void> _persist(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kTokenPrefsKey, token);
+    await authTokenStore.write(token);
   }
 }
 

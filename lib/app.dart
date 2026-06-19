@@ -12,6 +12,8 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/app_typography.dart';
 import 'data/api/api_client.dart';
 
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
 class SabilLifeApp extends ConsumerStatefulWidget {
   const SabilLifeApp({super.key});
 
@@ -21,6 +23,7 @@ class SabilLifeApp extends ConsumerStatefulWidget {
 
 class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
   StreamSubscription<void>? _unauthorizedSub;
+  StreamSubscription<RateLimitedEvent>? _rateLimitedSub;
 
   @override
   void initState() {
@@ -34,11 +37,26 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
     _unauthorizedSub = apiClient.onUnauthorized.listen((_) {
       ref.read(authProvider.notifier).logout();
     });
+    // Show a SnackBar whenever the API layer receives a 429.
+    _rateLimitedSub = apiClient.onRateLimited.listen((_) {
+      final l10n = AppLocalizations.of(
+        scaffoldMessengerKey.currentContext ?? (throw StateError('no context')),
+      );
+      scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.rateLimited ?? 'Rate limited. Please try again shortly.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    });
   }
 
   @override
   void dispose() {
     _unauthorizedSub?.cancel();
+    _rateLimitedSub?.cancel();
     super.dispose();
   }
 
@@ -55,6 +73,7 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
         locale: locale,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        scaffoldMessengerKey: scaffoldMessengerKey,
         home: const _SplashScreen(),
       );
     }
@@ -66,6 +85,7 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       routerConfig: ref.watch(routerProvider),
     );
   }

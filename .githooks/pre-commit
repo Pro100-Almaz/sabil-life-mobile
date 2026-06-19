@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Sabil Life mobile pre-commit hook.
+# Install: `git config core.hooksPath .githooks && chmod +x .githooks/pre-commit`
+# Bypass once: `git commit --no-verify`
+
+set -euo pipefail
+
+# Only act on staged Dart files. Skip the hook entirely otherwise.
+staged_dart=$(git diff --cached --name-only --diff-filter=ACMR -- '*.dart' || true)
+if [ -z "$staged_dart" ]; then
+  exit 0
+fi
+
+if ! command -v fvm >/dev/null 2>&1; then
+  echo "pre-commit: fvm not found on PATH. Install fvm or use --no-verify." >&2
+  exit 1
+fi
+
+echo "pre-commit: formatting staged Dart files..."
+# shellcheck disable=SC2086
+fvm dart format $staged_dart
+
+# Re-stage anything format rewrote.
+# shellcheck disable=SC2086
+git add $staged_dart
+
+echo "pre-commit: running flutter analyze..."
+fvm flutter analyze --no-pub
+
+echo "pre-commit: ok"

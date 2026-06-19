@@ -1,16 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sabil_life/data/api/provider.dart';
 
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
 import '../../data/repositories/inquiry_repository.dart';
 import '../../data/repositories/provider_repository.dart';
 
+
 final inquiryRepositoryProvider = Provider<InquiryRepository>(
   (ref) => MockInquiryRepository(),
 );
 
 final providerRepositoryProvider = Provider<ProviderRepository>(
-  (ref) => MockProviderRepository(),
+  (ref) => HttpProviderRepository(),
 );
 
 final myInquiriesProvider = FutureProvider.family

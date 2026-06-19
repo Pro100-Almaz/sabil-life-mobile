@@ -41,7 +41,7 @@ app.*.map.json
 /android/app/release
 
 # Web generated
-lib/generated_plugin_registrant.dart
+lib/generated_plugin_registrant.dartL_HERE
 
 # iOS
 ios/Pods/
@@ -70,3 +70,7 @@ coverage/
 # Tooling caches kept out of the repo
 .claude/
 .omc/
+.codex/
+
+# Backend link 
+.env 

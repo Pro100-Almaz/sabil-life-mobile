@@ -99,7 +99,7 @@ class HttpAuthRepository implements AuthRepository {
       email: data['email'] as String,
       fullName: (data['full_name'] ?? data['fullName'] ?? '') as String,
       role: UserRole.values.firstWhere(
-        (r) => r.name == data['role'],
+        (r) => r.name.toUpperCase() == data['role'].toString().toUpperCase(),
         orElse: () => UserRole.family,
       ),
       isVerified: (data['is_verified'] ?? data['isVerified'] ?? false) as bool,

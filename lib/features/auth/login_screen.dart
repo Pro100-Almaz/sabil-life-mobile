@@ -35,12 +35,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         .login(_email.text, _password.text);
     if (!mounted) return;
     if (ok) {
+      final auth = ref.read(authProvider);
+      context.go(auth.isProvider ? '/provider' : '/');
       // Router redirect handles provider users; families come back home.
-      if (context.canPop()) {
-        context.pop();
-      } else {
-        context.go('/');
-      }
+      return;
     }
   }
 

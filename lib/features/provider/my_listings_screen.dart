@@ -80,7 +80,8 @@ class _ListingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
-      onTap: () => context.push('/provider/listings/edit/${listing.id}'),
+      onTap: () =>
+          context.push('/provider/listings/edit/${listing.id}', extra: listing),
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(

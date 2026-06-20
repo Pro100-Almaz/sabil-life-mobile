@@ -214,6 +214,9 @@ final routerProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => ListingEditorScreen(
                       listingId: state.pathParameters['id'],
+                      initialListing: state.extra is Listing
+                          ? state.extra as Listing
+                          : null,
                     ),
                   ),
                 ],

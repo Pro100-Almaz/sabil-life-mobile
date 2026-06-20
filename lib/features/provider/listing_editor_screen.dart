@@ -9,16 +9,20 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
-import '../../data/mock/mock_listings.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_button.dart';
 
 class ListingEditorScreen extends ConsumerStatefulWidget {
-  const ListingEditorScreen({super.key, required this.listingId});
+  const ListingEditorScreen({
+    super.key,
+    required this.listingId,
+    this.initialListing,
+  });
 
   /// Null = create a new listing.
   final String? listingId;
+  final Listing? initialListing;
 
   @override
   ConsumerState<ListingEditorScreen> createState() =>
@@ -41,23 +45,21 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.listingId != null) {
-      _existing = listingById(widget.listingId!);
-      final l = _existing;
-      if (l != null) {
-        _title.text = l.title;
-        _subtitle.text = l.subtitle;
-        _neighborhood.text = l.neighborhood;
-        _price.text = '${l.priceFromQar}';
-        _description.text = l.description;
-        for (final h in l.highlights) {
-          _highlights.add(TextEditingController(text: h));
-        }
-        for (final url in l.imageUrls) {
-          _images.add(TextEditingController(text: url));
-        }
-        _ageGroups.addAll(l.ageGroups);
+    _existing = widget.initialListing;
+    final l = _existing;
+    if (l != null) {
+      _title.text = l.title;
+      _subtitle.text = l.subtitle;
+      _neighborhood.text = l.neighborhood;
+      _price.text = '${l.priceFromQar}';
+      _description.text = l.description;
+      for (final h in l.highlights) {
+        _highlights.add(TextEditingController(text: h));
       }
+      for (final url in l.imageUrls) {
+        _images.add(TextEditingController(text: url));
+      }
+      _ageGroups.addAll(l.ageGroups);
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
     if (_images.isEmpty) _images.add(TextEditingController());
@@ -111,7 +113,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       final base =
           _existing ??
           Listing(
-            id: 'listing-${DateTime.now().millisecondsSinceEpoch}',
+            id:
+                widget.listingId ??
+                'listing-${DateTime.now().millisecondsSinceEpoch}',
             title: '',
             category: _categoryFor(user.role),
             subtitle: '',

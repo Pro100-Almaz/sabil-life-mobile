@@ -5,6 +5,7 @@ import 'package:sabil_life/data/api/provider.dart';
 import 'package:sabil_life/data/api/review.dart';
 import 'package:sabil_life/data/api/subscription.dart';
 import 'package:sabil_life/data/api/suggestion.dart';
+import 'package:sabil_life/data/api/tutor.dart';
 import 'package:sabil_life/data/repositories/catalog_repository.dart';
 
 import '../../data/models/inquiry.dart';
@@ -13,11 +14,13 @@ import '../../data/models/provider_profile.dart';
 import '../../data/models/review.dart';
 import '../../data/models/subscription.dart';
 import '../../data/models/suggestion.dart';
+import '../../data/models/tutor.dart';
 import '../../data/repositories/inquiry_repository.dart';
 import '../../data/repositories/provider_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../data/repositories/subscription_repository.dart';
 import '../../data/repositories/suggestion_repository.dart';
+import '../../data/repositories/tutor_repository.dart';
 
 final inquiryRepositoryProvider = Provider<InquiryRepository>(
   (ref) => HttpInquiryRepository(),
@@ -69,6 +72,10 @@ final earningsProvider = FutureProvider.family
 
 final providerProfileProvider = FutureProvider.autoDispose<ProviderProfile>(
   (ref) => ref.watch(providerRepositoryProvider).myProfile(),
+);
+
+final tutorDetailProvider = FutureProvider.autoDispose<ProviderProfile?>(
+  (ref) => ref.watch(providerRepositoryProvider).tutorDetail(),
 );
 
 /// Filter key for [incomingSubscriptionsProvider].
@@ -154,4 +161,18 @@ final suggestionRepositoryProvider = Provider<SuggestionRepository>(
 
 final mySuggestionsProvider = FutureProvider.autoDispose<List<Suggestion>>(
   (ref) => ref.watch(suggestionRepositoryProvider).mySuggestions(),
+);
+
+// ── Tutor providers ─────────────────────────────────────────────────────────
+
+final tutorRepositoryProvider = Provider<TutorRepository>(
+  (ref) => HttpTutorRepository(),
+);
+
+final allTutorsProvider = FutureProvider.autoDispose<List<Tutor>>(
+  (ref) => ref.watch(tutorRepositoryProvider).tutors(),
+);
+
+final availableSubjectsProvider = FutureProvider.autoDispose<List<String>>(
+  (ref) => ref.watch(tutorRepositoryProvider).subjects(),
 );

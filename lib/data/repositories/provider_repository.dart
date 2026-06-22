@@ -30,13 +30,40 @@ abstract class ProviderRepository {
 
   Future<ProviderProfile> myProfile();
 
-  Future<ProviderProfile> updateProfile({
+  /// Returns the existing tutor detail, or `null` if none created yet.
+  Future<ProviderProfile?> tutorDetail();
+
+  Future<ProviderProfile> createTutorDetail({
     String? displayName,
     String? bio,
     List<String>? subjects,
     int? hourlyRateQar,
     String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
   });
+
+  Future<ProviderProfile> updateTutorDetail({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  });
+
+  Future<String> uploadAvatar(String filePath);
 
   Future<List<Inquiry>> incomingInquiries(String providerId);
 
@@ -108,23 +135,114 @@ class MockProviderRepository implements ProviderRepository {
     return _profile;
   }
 
+  bool _tutorDetailCreated = true;
+
   @override
-  Future<ProviderProfile> updateProfile({
+  Future<ProviderProfile?> tutorDetail() async {
+    await Future<void>.delayed(_latency);
+    return _tutorDetailCreated ? _profile : null;
+  }
+
+  ProviderProfile _applyTutorFields({
     String? displayName,
     String? bio,
     List<String>? subjects,
     int? hourlyRateQar,
     String? availability,
-  }) async {
-    await Future<void>.delayed(_latency);
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) {
     _profile = _profile.copyWith(
       displayName: displayName,
       bio: bio,
       subjects: subjects,
       hourlyRateQar: hourlyRateQar != null ? () => hourlyRateQar : null,
       availability: availability,
+      formats: formats,
+      ageGroups: ageGroups,
+      languages: languages,
+      yearsExperience: yearsExperience,
+      credentials: credentials,
+      avatarUrl: avatarUrl,
+      trialAvailable: trialAvailable,
     );
     return _profile;
+  }
+
+  @override
+  Future<ProviderProfile> createTutorDetail({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) async {
+    await Future<void>.delayed(_latency);
+    _tutorDetailCreated = true;
+    return _applyTutorFields(
+      displayName: displayName,
+      bio: bio,
+      subjects: subjects,
+      hourlyRateQar: hourlyRateQar,
+      availability: availability,
+      formats: formats,
+      ageGroups: ageGroups,
+      languages: languages,
+      yearsExperience: yearsExperience,
+      credentials: credentials,
+      avatarUrl: avatarUrl,
+      trialAvailable: trialAvailable,
+    );
+  }
+
+  @override
+  Future<ProviderProfile> updateTutorDetail({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) async {
+    await Future<void>.delayed(_latency);
+    return _applyTutorFields(
+      displayName: displayName,
+      bio: bio,
+      subjects: subjects,
+      hourlyRateQar: hourlyRateQar,
+      availability: availability,
+      formats: formats,
+      ageGroups: ageGroups,
+      languages: languages,
+      yearsExperience: yearsExperience,
+      credentials: credentials,
+      avatarUrl: avatarUrl,
+      trialAvailable: trialAvailable,
+    );
+  }
+
+  @override
+  Future<String> uploadAvatar(String filePath) async {
+    await Future<void>.delayed(_latency);
+    return 'https://example.com/avatars/mock-avatar.jpg';
   }
 
   @override

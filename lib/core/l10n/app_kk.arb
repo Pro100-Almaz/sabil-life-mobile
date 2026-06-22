@@ -203,5 +203,20 @@
   "changePhoto": "Суретті өзгерту",
   "removePhoto": "Суретті жою",
   "photoFromGallery": "Галереядан таңдау",
-  "photoFromCamera": "Суретке түсіру"
+  "photoFromCamera": "Суретке түсіру",
+  "rateLimited": "Сұраныс шегі асты. Кейінірек қайталаңыз.",
+  "writeReview": "Пікір жазу",
+  "editReview": "Пікірді өңдеу",
+  "deleteReview": "Пікірді жою",
+  "deleteReviewConfirm": "Бұл пікірді жоюға сенімдісіз бе?",
+  "cancel": "Болдырмау",
+  "delete": "Жою",
+  "reviewSubmitted": "Пікір жіберілді",
+  "reviewUpdated": "Пікір жаңартылды",
+  "reviewDeleted": "Пікір жойылды",
+  "shareExperience": "Тәжірибеңізбен бөлісіңіз…",
+  "submitting": "Жіберілуде…",
+  "submit": "Жіберу",
+  "updating": "Жаңартылуда…",
+  "update": "Жаңарту"
 }

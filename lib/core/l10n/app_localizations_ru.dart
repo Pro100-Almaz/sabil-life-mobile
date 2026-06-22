@@ -673,4 +673,47 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get photoFromCamera => 'Сделать фото';
+
+  @override
+  String get writeReview => 'Написать отзыв';
+
+  @override
+  String get editReview => 'Редактировать отзыв';
+
+  @override
+  String get deleteReview => 'Удалить отзыв';
+
+  @override
+  String get deleteReviewConfirm =>
+      'Вы уверены, что хотите удалить этот отзыв?';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get delete => 'Удалить';
+
+  @override
+  String get reviewSubmitted => 'Отзыв отправлен';
+
+  @override
+  String get reviewUpdated => 'Отзыв обновлён';
+
+  @override
+  String get reviewDeleted => 'Отзыв удалён';
+
+  @override
+  String get shareExperience => 'Поделитесь впечатлениями…';
+
+  @override
+  String get submitting => 'Отправка…';
+
+  @override
+  String get submit => 'Отправить';
+
+  @override
+  String get updating => 'Обновление…';
+
+  @override
+  String get update => 'Обновить';
 }

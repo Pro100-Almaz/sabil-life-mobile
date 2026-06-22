@@ -256,36 +256,7 @@ class _DetailBody extends ConsumerWidget {
                     )
                   else
                     for (final review in reviews) ...[
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: AppColors.surfaceAlt,
-                            child: Text(
-                              review.author.characters.first,
-                              style: AppTypography.label,
-                            ),
-                          ),
-                          const SizedBox(width: AppSpacing.md),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(review.author, style: AppTypography.label),
-                              Text(
-                                l10n.monthsAgo(review.monthsAgo),
-                                style: AppTypography.small,
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          StarRating(rating: review.rating.toDouble()),
-                        ],
-                      ),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(
-                        review.text,
-                        style: AppTypography.body.copyWith(height: 1.4),
-                      ),
+                      _ReviewTile(review: review, listingId: listing.id),
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   _WriteReviewCta(listingId: listing.id),
@@ -516,105 +487,258 @@ class _TutorsRail extends StatelessWidget {
   }
 }
 
-class _WriteReviewCta extends ConsumerStatefulWidget {
-  const _WriteReviewCta({required this.listingId});
+class _ReviewTile extends ConsumerWidget {
+  const _ReviewTile({required this.review, required this.listingId});
 
+  final Review review;
   final String listingId;
 
-  @override
-  ConsumerState<_WriteReviewCta> createState() => _WriteReviewCtaState();
-}
-
-class _WriteReviewCtaState extends ConsumerState<_WriteReviewCta> {
-  int _rating = 5;
-  late final TextEditingController _text;
-  bool _submitting = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _text = TextEditingController();
+  bool _isOwner(AuthState auth) {
+    if (!auth.isAuthenticated) return false;
+    return review.authorId != null && review.authorId == auth.user!.id;
   }
 
-  @override
-  void dispose() {
-    _text.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    if (_text.text.trim().isEmpty) return;
-    setState(() => _submitting = true);
+  Future<void> _deleteReview(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.deleteReview),
+        content: Text(l10n.deleteReviewConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: AppColors.primary),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
     try {
-      await ref
-          .read(reviewRepositoryProvider)
-          .create(
-            listingId: widget.listingId,
-            rating: _rating,
-            text: _text.text.trim(),
-          );
-      ref.invalidate(listingReviewsProvider(widget.listingId));
-      ref.invalidate(catalogDetailProvider(widget.listingId));
-      if (!mounted) return;
-      Navigator.of(context).pop();
+      await ref.read(reviewRepositoryProvider).delete(review.id);
+      ref.invalidate(listingReviewsProvider(listingId));
+      ref.invalidate(catalogDetailProvider(listingId));
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Review submitted'),
+        SnackBar(
+          content: Text(l10n.reviewDeleted),
           behavior: SnackBarBehavior.floating,
         ),
       );
-    } on ReviewException catch (e) {
-      if (!mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
-      );
     } catch (e) {
-      if (!mounted) return;
-      Navigator.of(context).pop();
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString()),
           behavior: SnackBarBehavior.floating,
         ),
       );
-    } finally {
-      if (mounted) setState(() => _submitting = false);
     }
   }
 
-  void _showDialog(BuildContext ctx) {
-    showModalBottomSheet<void>(
-      context: ctx,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => StatefulBuilder(
-        builder: (context, setModalState) => Padding(
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final auth = ref.watch(authProvider);
+    final isOwner = _isOwner(auth);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: AppColors.surfaceAlt,
+              child: Text(
+                review.author.characters.first,
+                style: AppTypography.label,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(review.author, style: AppTypography.label),
+                  Text(
+                    l10n.monthsAgo(review.monthsAgo),
+                    style: AppTypography.small,
+                  ),
+                ],
+              ),
+            ),
+            StarRating(rating: review.rating.toDouble()),
+            if (isOwner)
+              PopupMenuButton<String>(
+                icon: const Icon(
+                  Icons.more_vert,
+                  size: 20,
+                  color: AppColors.textSecondary,
+                ),
+                padding: EdgeInsets.zero,
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    showReviewSheet(
+                      context: context,
+                      ref: ref,
+                      listingId: listingId,
+                      existingReview: review,
+                    );
+                  } else if (value == 'delete') {
+                    _deleteReview(context, ref);
+                  }
+                },
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.edit_outlined, size: 18),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(l10n.editReview),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.delete_outline,
+                          size: 18,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(
+                          l10n.deleteReview,
+                          style: const TextStyle(color: AppColors.primary),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Text(review.text, style: AppTypography.body.copyWith(height: 1.4)),
+      ],
+    );
+  }
+}
+
+void showReviewSheet({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String listingId,
+  Review? existingReview,
+}) {
+  final l10n = AppLocalizations.of(context)!;
+  var rating = existingReview?.rating ?? 5;
+  final textController = TextEditingController(
+    text: existingReview?.text ?? '',
+  );
+  var submitting = false;
+
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+    ),
+    builder: (_) => StatefulBuilder(
+      builder: (ctx, setModalState) {
+        Future<void> submit() async {
+          if (textController.text.trim().isEmpty) return;
+          setModalState(() => submitting = true);
+          try {
+            if (existingReview != null) {
+              await ref
+                  .read(reviewRepositoryProvider)
+                  .update(
+                    reviewId: existingReview.id,
+                    rating: rating,
+                    text: textController.text.trim(),
+                  );
+            } else {
+              await ref
+                  .read(reviewRepositoryProvider)
+                  .create(
+                    listingId: listingId,
+                    rating: rating,
+                    text: textController.text.trim(),
+                  );
+            }
+            ref.invalidate(listingReviewsProvider(listingId));
+            ref.invalidate(catalogDetailProvider(listingId));
+            if (!ctx.mounted) return;
+            Navigator.of(ctx).pop();
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                content: Text(
+                  existingReview != null
+                      ? l10n.reviewUpdated
+                      : l10n.reviewSubmitted,
+                ),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          } on ReviewException catch (e) {
+            if (!ctx.mounted) return;
+            Navigator.of(ctx).pop();
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                content: Text(e.message),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          } catch (e) {
+            if (!ctx.mounted) return;
+            Navigator.of(ctx).pop();
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                content: Text(e.toString()),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          } finally {
+            if (ctx.mounted) setModalState(() => submitting = false);
+          }
+        }
+
+        final isEditing = existingReview != null;
+        return Padding(
           padding: EdgeInsets.only(
             left: AppSpacing.xxl,
             right: AppSpacing.xxl,
             top: AppSpacing.xl,
-            bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.xxl,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + AppSpacing.xxl,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Write a review', style: AppTypography.h2),
+              Text(
+                isEditing ? l10n.editReview : l10n.writeReview,
+                style: AppTypography.h2,
+              ),
               const SizedBox(height: AppSpacing.md),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(5, (i) {
                   final star = i + 1;
                   return GestureDetector(
-                    onTap: () {
-                      setModalState(() => _rating = star);
-                      setState(() => _rating = star);
-                    },
+                    onTap: () => setModalState(() => rating = star),
                     child: Icon(
-                      star <= _rating ? Icons.star : Icons.star_border,
+                      star <= rating ? Icons.star : Icons.star_border,
                       color: AppColors.star,
                       size: 32,
                     ),
@@ -623,38 +747,46 @@ class _WriteReviewCtaState extends ConsumerState<_WriteReviewCta> {
               ),
               const SizedBox(height: AppSpacing.md),
               TextField(
-                controller: _text,
+                controller: textController,
                 maxLines: 4,
-                decoration: const InputDecoration(
-                  hintText: 'Share your experience…',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  hintText: l10n.shareExperience,
+                  border: const OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
               AppButton(
-                label: _submitting ? 'Submitting…' : 'Submit',
+                label: submitting
+                    ? (isEditing ? l10n.updating : l10n.submitting)
+                    : (isEditing ? l10n.update : l10n.submit),
                 expanded: true,
-                onPressed: _submitting ? () {} : _submit,
+                onPressed: submitting ? () {} : submit,
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
+        );
+      },
+    ),
+  );
+}
+
+class _WriteReviewCta extends ConsumerWidget {
+  const _WriteReviewCta({required this.listingId});
+
+  final String listingId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final auth = ref.watch(authProvider);
 
-    // Providers don't write reviews; anonymous users redirect to login.
     if (auth.isProvider) return const SizedBox.shrink();
 
     if (!auth.isAuthenticated) {
       return Padding(
         padding: const EdgeInsets.only(bottom: AppSpacing.lg),
         child: AppButton(
-          label: 'Write a review',
+          label: l10n.writeReview,
           variant: AppButtonVariant.outlined,
           icon: Icons.rate_review_outlined,
           expanded: true,
@@ -666,11 +798,12 @@ class _WriteReviewCtaState extends ConsumerState<_WriteReviewCta> {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.lg),
       child: AppButton(
-        label: 'Write a review',
+        label: l10n.writeReview,
         variant: AppButtonVariant.outlined,
         icon: Icons.rate_review_outlined,
         expanded: true,
-        onPressed: () => _showDialog(context),
+        onPressed: () =>
+            showReviewSheet(context: context, ref: ref, listingId: listingId),
       ),
     );
   }

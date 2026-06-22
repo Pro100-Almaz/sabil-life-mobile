@@ -79,3 +79,21 @@ void addMockReview(String listingId, Review review) {
     ...(_mockReviewsByListing[listingId] ?? []),
   ];
 }
+
+/// Replace a review in the in-memory store by id.
+void updateMockReview(Review updated) {
+  for (final entry in _mockReviewsByListing.entries) {
+    final idx = entry.value.indexWhere((r) => r.id == updated.id);
+    if (idx != -1) {
+      entry.value[idx] = updated;
+      return;
+    }
+  }
+}
+
+/// Remove a review from the in-memory store by id.
+void removeMockReview(String reviewId) {
+  for (final list in _mockReviewsByListing.values) {
+    list.removeWhere((r) => r.id == reviewId);
+  }
+}

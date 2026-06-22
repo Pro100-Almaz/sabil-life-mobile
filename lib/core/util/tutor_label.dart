@@ -1,21 +1,15 @@
 import '../../data/models/tutor.dart';
 import '../l10n/app_localizations.dart';
 
-extension TutorSubjectLabel on TutorSubject {
-  String label(AppLocalizations l10n) {
-    switch (this) {
-      case TutorSubject.math:
-        return l10n.subjectMath;
-      case TutorSubject.arabic:
-        return l10n.subjectArabic;
-      case TutorSubject.english:
-        return l10n.subjectEnglish;
-      case TutorSubject.science:
-        return l10n.subjectScience;
-      case TutorSubject.examPrep:
-        return l10n.subjectExamPrep;
-    }
-  }
+String subjectLabel(String backendKey, AppLocalizations l10n) {
+  return switch (backendKey.toUpperCase()) {
+    'MATH' => l10n.subjectMath,
+    'ARABIC' => l10n.subjectArabic,
+    'ENGLISH' => l10n.subjectEnglish,
+    'SCIENCE' => l10n.subjectScience,
+    'EXAM_PREP' => l10n.subjectExamPrep,
+    _ => backendKey,
+  };
 }
 
 extension TutorFormatLabel on TutorFormat {

@@ -513,6 +513,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get switchToProvider => 'Вернуться в кабинет провайдера';
 
   @override
+  String get switchToTutor => 'Перейти в кабинет репетитора';
+
+  @override
+  String get switchToMasterclass => 'Перейти в кабинет мастер-классов';
+
+  @override
   String get genericLoadError => 'Что-то пошло не так. Попробуйте ещё раз.';
 
   @override
@@ -570,16 +576,40 @@ class AppLocalizationsRu extends AppLocalizations {
   String get displayName => 'Отображаемое имя';
 
   @override
-  String get bio => 'О себе';
+  String get bio => 'О себе (необязательно)';
 
   @override
-  String get subjects => 'Предметы (через запятую)';
+  String get subjects => 'Предметы';
 
   @override
-  String get hourlyRate => 'Почасовая ставка (QAR)';
+  String get hourlyRate => 'Цена за час (QAR)';
 
   @override
   String get availability => 'Доступность';
+
+  @override
+  String get profileFormats => 'Форматы обучения';
+
+  @override
+  String get profileAgeGroups => 'Возрастные группы';
+
+  @override
+  String get profileLanguages => 'Языки';
+
+  @override
+  String get profileYearsExperience => 'Стаж (лет)';
+
+  @override
+  String get profileCredentials => 'Квалификация (необязательно)';
+
+  @override
+  String get profileAvatar => 'Фото профиля (необязательно)';
+
+  @override
+  String get profileTrialAvailable => 'Предлагать пробное занятие';
+
+  @override
+  String get profileSubmittedForReview => 'Профиль отправлен на проверку';
 
   @override
   String get suggestService => 'Предложить услугу';
@@ -625,4 +655,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get rateLimited => 'Слишком много запросов. Попробуйте позже.';
+
+  @override
+  String get other => 'Другое';
+
+  @override
+  String get addCustomSubject => 'Добавить свой предмет';
+
+  @override
+  String get changePhoto => 'Изменить фото';
+
+  @override
+  String get removePhoto => 'Удалить фото';
+
+  @override
+  String get photoFromGallery => 'Выбрать из галереи';
+
+  @override
+  String get photoFromCamera => 'Сделать фото';
 }

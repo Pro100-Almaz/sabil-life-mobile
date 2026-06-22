@@ -492,7 +492,7 @@ class _TutorsRail extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        tutor.subjects.first.label(l10n),
+                        subjectLabel(tutor.subjects.first, l10n),
                         style: AppTypography.small,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

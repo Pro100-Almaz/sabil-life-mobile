@@ -39,11 +39,7 @@ class CategoryStrip extends ConsumerWidget {
               selected: selected == category,
               onTap: () {
                 ref.read(filterProvider.notifier).setCategory(category);
-                context.push(switch (category) {
-                  CategoryType.tutoring => '/tutoring',
-                  CategoryType.masterclasses => '/masterclasses',
-                  _ => '/category/${category.name}',
-                });
+                context.push('/category/${category.name}');
               },
             ),
           ],

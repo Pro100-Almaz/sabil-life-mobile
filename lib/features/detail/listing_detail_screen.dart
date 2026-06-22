@@ -98,7 +98,7 @@ class _DetailBody extends ConsumerWidget {
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: ImageCarousel(
-                imageUrls: listing.imageUrls,
+                imageUrls: listing.imageUrlsOrEmpty,
                 listingId: listing.id,
               ),
             ),

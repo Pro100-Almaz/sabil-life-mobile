@@ -1,3 +1,16 @@
+const kListingFallbackAsset = 'assets/placeholder_1200x800.png';
+
+extension ListingImageFallback on Listing {
+  bool get hasImages => imageUrls.any((url) => url.trim().isNotEmpty);
+
+  String? get primaryImageUrl =>
+    hasImages ? imageUrls.firstWhere((url) => url.trim().isNotEmpty) : null;
+
+  List<String> get imageUrlsOrEmpty => 
+    imageUrls.where((url) => url.trim().isNotEmpty).toList();
+}
+
+
 enum CategoryType {
   schools,
   nurseries,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/heart_button.dart';
+import '../../../data/models/listing.dart';
 
 /// Swipeable PageView of listing photos with page dots and a heart overlay.
 class ImageCarousel extends StatefulWidget {
@@ -22,8 +23,37 @@ class ImageCarousel extends StatefulWidget {
 class _ImageCarouselState extends State<ImageCarousel> {
   int _page = 0;
 
+  List<String> get _validImageUrls =>
+    widget.imageUrls.where((url) => url.trim().isNotEmpty).toList();
+
+
   @override
   Widget build(BuildContext context) {
+    final imageUrls = _validImageUrls;
+
+    if (imageUrls.isEmpty){
+      return AspectRatio(
+        aspectRatio: 4 / 3,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                kListingFallbackAsset,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: SafeArea(
+                child: HeartButton(listingId: widget.listingId, size: 28),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    
     return AspectRatio(
       aspectRatio: 4 / 3,
       child: Stack(

@@ -27,21 +27,120 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<ProviderProfile> updateProfile({
+  Future<ProviderProfile?> tutorDetail() async {
+    try {
+      final response = await _dio.get('/provider/tutor-detail/');
+      return _parseProfile(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      throw StateError(_extractError(e));
+    }
+  }
+
+  Map<String, dynamic> _buildTutorPayload({
     String? displayName,
     String? bio,
     List<String>? subjects,
     int? hourlyRateQar,
     String? availability,
-  }) async {
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) {
     final payload = <String, dynamic>{};
     if (displayName != null) payload['display_name'] = displayName;
     if (bio != null) payload['bio'] = bio;
     if (subjects != null) payload['subjects'] = subjects;
-    if (hourlyRateQar != null) payload['hourly_rate_qar'] = hourlyRateQar;
+    if (hourlyRateQar != null) payload['price_per_hour_qar'] = hourlyRateQar;
     if (availability != null) payload['availability'] = availability;
+    if (formats != null) payload['formats'] = formats;
+    if (ageGroups != null) payload['age_groups'] = ageGroups;
+    if (languages != null) payload['languages'] = languages;
+    if (yearsExperience != null) payload['years_experience'] = yearsExperience;
+    if (credentials != null) payload['credentials'] = credentials;
+    if (avatarUrl != null) payload['avatar_url'] = avatarUrl;
+    if (trialAvailable != null) payload['trial_available'] = trialAvailable;
+    return payload;
+  }
+
+  @override
+  Future<ProviderProfile> createTutorDetail({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) async {
+    final payload = _buildTutorPayload(
+      displayName: displayName,
+      bio: bio,
+      subjects: subjects,
+      hourlyRateQar: hourlyRateQar,
+      availability: availability,
+      formats: formats,
+      ageGroups: ageGroups,
+      languages: languages,
+      yearsExperience: yearsExperience,
+      credentials: credentials,
+      avatarUrl: avatarUrl,
+      trialAvailable: trialAvailable,
+    );
     try {
-      final response = await _dio.patch('/provider/profile/', data: payload);
+      final response = await _dio.post(
+        '/provider/tutor-detail/',
+        data: payload,
+      );
+      return _parseProfile(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<ProviderProfile> updateTutorDetail({
+    String? displayName,
+    String? bio,
+    List<String>? subjects,
+    int? hourlyRateQar,
+    String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
+  }) async {
+    final payload = _buildTutorPayload(
+      displayName: displayName,
+      bio: bio,
+      subjects: subjects,
+      hourlyRateQar: hourlyRateQar,
+      availability: availability,
+      formats: formats,
+      ageGroups: ageGroups,
+      languages: languages,
+      yearsExperience: yearsExperience,
+      credentials: credentials,
+      avatarUrl: avatarUrl,
+      trialAvailable: trialAvailable,
+    );
+    try {
+      final response = await _dio.patch(
+        '/provider/tutor-detail/',
+        data: payload,
+      );
       return _parseProfile(Map<String, dynamic>.from(response.data as Map));
     } on DioException catch (e) {
       throw StateError(_extractError(e));
@@ -58,10 +157,17 @@ class HttpProviderRepository implements ProviderRepository {
       displayName: d['display_name'] as String? ?? '',
       bio: d['bio'] as String? ?? '',
       subjects: List<String>.from((d['subjects'] as List?) ?? []),
-      hourlyRateQar: d['hourly_rate_qar'] != null
-          ? (d['hourly_rate_qar'] as num).toInt()
+      hourlyRateQar: d['price_per_hour_qar'] != null
+          ? (d['price_per_hour_qar'] as num).toInt()
           : null,
       availability: d['availability'] as String? ?? '',
+      formats: List<String>.from((d['formats'] as List?) ?? []),
+      ageGroups: List<String>.from((d['age_groups'] as List?) ?? []),
+      languages: List<String>.from((d['languages'] as List?) ?? []),
+      yearsExperience: (d['years_experience'] as num?)?.toInt() ?? 0,
+      credentials: d['credentials'] as String? ?? '',
+      avatarUrl: d['avatar_url'] as String? ?? '',
+      trialAvailable: d['trial_available'] as bool? ?? false,
       createdAt: _parseDate(d['created_at']),
       updatedAt: _parseDate(d['updated_at']),
     );
@@ -72,6 +178,23 @@ class HttpProviderRepository implements ProviderRepository {
     'MASTERCLASS' => UserRole.masterclass,
     _ => UserRole.family,
   };
+
+  @override
+  Future<String> uploadAvatar(String filePath) async {
+    try {
+      final formData = FormData.fromMap({
+        'avatar': await MultipartFile.fromFile(filePath),
+      });
+      final response = await _dio.post('/provider/avatar/', data: formData);
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        return (data['avatar_url'] ?? data['url'] ?? '') as String;
+      }
+      return '';
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
 
   // ── Listings ───────────────────────────────────────────────────────────────
 

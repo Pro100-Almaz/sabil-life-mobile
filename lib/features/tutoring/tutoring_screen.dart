@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_localizations.dart';
+import '../../core/state/provider_providers.dart';
 import '../../core/state/tutor_filter_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -21,7 +22,8 @@ class TutoringScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final filter = ref.watch(tutorFilterProvider);
-    final tutors = ref.watch(filteredTutorsProvider);
+    final asyncTutors = ref.watch(filteredTutorsProvider);
+    final asyncSubjects = ref.watch(availableSubjectsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +31,14 @@ class TutoringScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(l10n.catTutoring, style: AppTypography.h3),
-            Text(l10n.resultsCount(tutors.length), style: AppTypography.small),
+            asyncTutors.when(
+              loading: () => Text(l10n.loading, style: AppTypography.small),
+              error: (_, _) => const SizedBox.shrink(),
+              data: (tutors) => Text(
+                l10n.resultsCount(tutors.length),
+                style: AppTypography.small,
+              ),
+            ),
           ],
         ),
       ),
@@ -37,27 +46,33 @@ class TutoringScreen extends ConsumerWidget {
         children: [
           SizedBox(
             height: 40,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              children: [
-                PillChip(
-                  label: l10n.catAll,
-                  selected: filter.subject == null,
-                  onTap: () =>
-                      ref.read(tutorFilterProvider.notifier).setSubject(null),
-                ),
-                for (final subject in TutorSubject.values) ...[
-                  const SizedBox(width: AppSpacing.sm),
+            child: asyncSubjects.when(
+              loading: () => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
+              data: (subjects) => ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                children: [
                   PillChip(
-                    label: subject.label(l10n),
-                    selected: filter.subject == subject,
-                    onTap: () => ref
-                        .read(tutorFilterProvider.notifier)
-                        .setSubject(filter.subject == subject ? null : subject),
+                    label: l10n.catAll,
+                    selected: filter.subject == null,
+                    onTap: () =>
+                        ref.read(tutorFilterProvider.notifier).setSubject(null),
                   ),
+                  for (final subject in subjects) ...[
+                    const SizedBox(width: AppSpacing.sm),
+                    PillChip(
+                      label: subjectLabel(subject, l10n),
+                      selected: filter.subject == subject,
+                      onTap: () => ref
+                          .read(tutorFilterProvider.notifier)
+                          .setSubject(
+                            filter.subject == subject ? null : subject,
+                          ),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
           Padding(
@@ -86,34 +101,55 @@ class TutoringScreen extends ConsumerWidget {
           ),
           const Divider(),
           Expanded(
-            child: tutors.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.search_off,
-                          size: 48,
-                          color: AppColors.textTertiary,
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(l10n.noResults, style: AppTypography.h3),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(l10n.noResultsHint, style: AppTypography.caption),
-                      ],
+            child: asyncTutors.when(
+              loading: () => const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
+              error: (e, _) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.genericLoadError, textAlign: TextAlign.center),
+                    const SizedBox(height: AppSpacing.md),
+                    TextButton(
+                      onPressed: () => ref.invalidate(allTutorsProvider),
+                      child: Text(l10n.retry),
                     ),
-                  )
-                : ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    itemCount: tutors.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: AppSpacing.md),
-                    itemBuilder: (context, index) => TutorCard(
-                      tutor: tutors[index],
-                      onTap: () =>
-                          showTutorProfileSheet(context, tutors[index]),
+                  ],
+                ),
+              ),
+              data: (tutors) => tutors.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: AppColors.textTertiary,
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          Text(l10n.noResults, style: AppTypography.h3),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            l10n.noResultsHint,
+                            style: AppTypography.caption,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      itemCount: tutors.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: AppSpacing.md),
+                      itemBuilder: (context, index) => TutorCard(
+                        tutor: tutors[index],
+                        onTap: () =>
+                            showTutorProfileSheet(context, tutors[index]),
+                      ),
                     ),
-                  ),
+            ),
           ),
         ],
       ),

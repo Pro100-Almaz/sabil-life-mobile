@@ -12,6 +12,13 @@ class ProviderProfile {
     required this.subjects,
     this.hourlyRateQar,
     required this.availability,
+    this.formats = const [],
+    this.ageGroups = const [],
+    this.languages = const [],
+    this.yearsExperience = 0,
+    this.credentials = '',
+    this.avatarUrl = '',
+    this.trialAvailable = false,
     this.createdAt,
     this.updatedAt,
   });
@@ -26,6 +33,13 @@ class ProviderProfile {
   final List<String> subjects;
   final int? hourlyRateQar;
   final String availability;
+  final List<String> formats;
+  final List<String> ageGroups;
+  final List<String> languages;
+  final int yearsExperience;
+  final String credentials;
+  final String avatarUrl;
+  final bool trialAvailable;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -40,6 +54,13 @@ class ProviderProfile {
     List<String>? subjects,
     int? Function()? hourlyRateQar,
     String? availability,
+    List<String>? formats,
+    List<String>? ageGroups,
+    List<String>? languages,
+    int? yearsExperience,
+    String? credentials,
+    String? avatarUrl,
+    bool? trialAvailable,
     DateTime? Function()? createdAt,
     DateTime? Function()? updatedAt,
   }) {
@@ -56,6 +77,13 @@ class ProviderProfile {
           ? hourlyRateQar()
           : this.hourlyRateQar,
       availability: availability ?? this.availability,
+      formats: formats ?? this.formats,
+      ageGroups: ageGroups ?? this.ageGroups,
+      languages: languages ?? this.languages,
+      yearsExperience: yearsExperience ?? this.yearsExperience,
+      credentials: credentials ?? this.credentials,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      trialAvailable: trialAvailable ?? this.trialAvailable,
       createdAt: createdAt != null ? createdAt() : this.createdAt,
       updatedAt: updatedAt != null ? updatedAt() : this.updatedAt,
     );

@@ -626,4 +626,46 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get rateLimited => 'Сұраныс шегі асты. Кейінірек қайталаңыз.';
+
+  @override
+  String get writeReview => 'Пікір жазу';
+
+  @override
+  String get editReview => 'Пікірді өңдеу';
+
+  @override
+  String get deleteReview => 'Пікірді жою';
+
+  @override
+  String get deleteReviewConfirm => 'Бұл пікірді жоюға сенімдісіз бе?';
+
+  @override
+  String get cancel => 'Болдырмау';
+
+  @override
+  String get delete => 'Жою';
+
+  @override
+  String get reviewSubmitted => 'Пікір жіберілді';
+
+  @override
+  String get reviewUpdated => 'Пікір жаңартылды';
+
+  @override
+  String get reviewDeleted => 'Пікір жойылды';
+
+  @override
+  String get shareExperience => 'Тәжірибеңізбен бөлісіңіз…';
+
+  @override
+  String get submitting => 'Жіберілуде…';
+
+  @override
+  String get submit => 'Жіберу';
+
+  @override
+  String get updating => 'Жаңартылуда…';
+
+  @override
+  String get update => 'Жаңарту';
 }

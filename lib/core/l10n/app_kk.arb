@@ -187,5 +187,19 @@
   "suggestionStatusReviewed": "Қарастырылуда",
   "suggestionStatusActedOn": "Іске асырылды",
   "suggestionStatusDismissed": "Қабылданбады",
-  "rateLimited": "Сұраныс шегі асты. Кейінірек қайталаңыз."
+  "rateLimited": "Сұраныс шегі асты. Кейінірек қайталаңыз.",
+  "writeReview": "Пікір жазу",
+  "editReview": "Пікірді өңдеу",
+  "deleteReview": "Пікірді жою",
+  "deleteReviewConfirm": "Бұл пікірді жоюға сенімдісіз бе?",
+  "cancel": "Болдырмау",
+  "delete": "Жою",
+  "reviewSubmitted": "Пікір жіберілді",
+  "reviewUpdated": "Пікір жаңартылды",
+  "reviewDeleted": "Пікір жойылды",
+  "shareExperience": "Тәжірибеңізбен бөлісіңіз…",
+  "submitting": "Жіберілуде…",
+  "submit": "Жіберу",
+  "updating": "Жаңартылуда…",
+  "update": "Жаңарту"
 }

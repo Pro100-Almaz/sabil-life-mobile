@@ -187,5 +187,19 @@
   "suggestionStatusReviewed": "На рассмотрении",
   "suggestionStatusActedOn": "Принято к действию",
   "suggestionStatusDismissed": "Отклонено",
-  "rateLimited": "Слишком много запросов. Попробуйте позже."
+  "rateLimited": "Слишком много запросов. Попробуйте позже.",
+  "writeReview": "Написать отзыв",
+  "editReview": "Редактировать отзыв",
+  "deleteReview": "Удалить отзыв",
+  "deleteReviewConfirm": "Вы уверены, что хотите удалить этот отзыв?",
+  "cancel": "Отмена",
+  "delete": "Удалить",
+  "reviewSubmitted": "Отзыв отправлен",
+  "reviewUpdated": "Отзыв обновлён",
+  "reviewDeleted": "Отзыв удалён",
+  "shareExperience": "Поделитесь впечатлениями…",
+  "submitting": "Отправка…",
+  "submit": "Отправить",
+  "updating": "Обновление…",
+  "update": "Обновить"
 }

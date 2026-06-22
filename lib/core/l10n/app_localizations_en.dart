@@ -626,4 +626,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateLimited => 'Rate limited. Please try again shortly.';
+
+  @override
+  String get writeReview => 'Write a review';
+
+  @override
+  String get editReview => 'Edit review';
+
+  @override
+  String get deleteReview => 'Delete review';
+
+  @override
+  String get deleteReviewConfirm =>
+      'Are you sure you want to delete this review?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get reviewSubmitted => 'Review submitted';
+
+  @override
+  String get reviewUpdated => 'Review updated';
+
+  @override
+  String get reviewDeleted => 'Review deleted';
+
+  @override
+  String get shareExperience => 'Share your experience…';
+
+  @override
+  String get submitting => 'Submitting…';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get updating => 'Updating…';
+
+  @override
+  String get update => 'Update';
 }

@@ -27,4 +27,13 @@ class Review {
     final diff = DateTime.now().difference(createdAt);
     return (diff.inDays / 30).floor().clamp(0, 999);
   }
+
+  Review copyWith({int? rating, String? text}) => Review(
+    id: id,
+    rating: rating ?? this.rating,
+    text: text ?? this.text,
+    authorName: authorName,
+    createdAt: createdAt,
+    authorId: authorId,
+  );
 }

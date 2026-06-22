@@ -207,5 +207,19 @@
   "suggestionStatusReviewed": "Under review",
   "suggestionStatusActedOn": "Acted on",
   "suggestionStatusDismissed": "Dismissed",
-  "rateLimited": "Rate limited. Please try again shortly."
+  "rateLimited": "Rate limited. Please try again shortly.",
+  "writeReview": "Write a review",
+  "editReview": "Edit review",
+  "deleteReview": "Delete review",
+  "deleteReviewConfirm": "Are you sure you want to delete this review?",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "reviewSubmitted": "Review submitted",
+  "reviewUpdated": "Review updated",
+  "reviewDeleted": "Review deleted",
+  "shareExperience": "Share your experience…",
+  "submitting": "Submitting…",
+  "submit": "Submit",
+  "updating": "Updating…",
+  "update": "Update"
 }

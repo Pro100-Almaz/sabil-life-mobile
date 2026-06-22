@@ -109,6 +109,7 @@ class HttpReviewRepository implements ReviewRepository {
       rating: _toInt(data['rating']),
       text: (data['text'] ?? '') as String,
       authorName: rawName.isEmpty ? 'Anonymous' : rawName,
+      authorId: data['author_id']?.toString(),
       createdAt:
           DateTime.tryParse(data['created_at']?.toString() ?? '') ??
           DateTime.now(),

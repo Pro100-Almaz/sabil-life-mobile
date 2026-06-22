@@ -203,7 +203,7 @@
   "changePhoto": "Суретті өзгерту",
   "removePhoto": "Суретті жою",
   "photoFromGallery": "Галереядан таңдау",
-  "photoFromCamera": "Суретке түсіру"
+  "photoFromCamera": "Суретке түсіру",
   "rateLimited": "Сұраныс шегі асты. Кейінірек қайталаңыз.",
   "writeReview": "Пікір жазу",
   "editReview": "Пікірді өңдеу",
@@ -218,5 +218,5 @@
   "submitting": "Жіберілуде…",
   "submit": "Жіберу",
   "updating": "Жаңартылуда…",
-  "update": "Жаңарту"
+  "update": "Жаңарту",
 }

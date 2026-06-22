@@ -223,7 +223,7 @@
   "changePhoto": "Change photo",
   "removePhoto": "Remove photo",
   "photoFromGallery": "Choose from gallery",
-  "photoFromCamera": "Take a photo"
+  "photoFromCamera": "Take a photo",
   "rateLimited": "Rate limited. Please try again shortly.",
   "writeReview": "Write a review",
   "editReview": "Edit review",
@@ -238,5 +238,5 @@
   "submitting": "Submitting…",
   "submit": "Submit",
   "updating": "Updating…",
-  "update": "Update"
+  "update": "Update",
 }

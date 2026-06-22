@@ -13,7 +13,6 @@ import '../../features/family/suggestion_screen.dart';
 import '../../features/favorites/favorites_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
-import '../../features/masterclasses/masterclasses_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
 import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
@@ -60,19 +59,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         if (!auth.isProvider) return '/';
       }
 
-      // Logged-in provider on auth pages → bounce to their dashboard.
+      // Logged-in user on auth pages → bounce to family home.
       if (auth.isAuthenticated && _isAuthArea(location)) {
-        return auth.isProvider ? '/provider' : '/';
-      }
-
-      // Logged-in provider hitting the family root → land in provider area
-      // unless they explicitly opted in via the "Browse as family" link
-      // (which uses query ?as=family).
-      if (auth.isAuthenticated &&
-          auth.isProvider &&
-          location == '/' &&
-          state.uri.queryParameters['as'] != 'family') {
-        return '/provider';
+        return '/';
       }
 
       return null;
@@ -133,28 +122,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
 
       GoRoute(
-        path: '/tutoring',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const TutoringScreen(),
-      ),
-      GoRoute(
-        path: '/masterclasses',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const MasterclassesScreen(),
-      ),
-      GoRoute(
         path: '/category/:type',
         parentNavigatorKey: _rootNavigatorKey,
-        redirect: (context, state) => switch (state.pathParameters['type']) {
-          'tutoring' => '/tutoring',
-          'masterclasses' => '/masterclasses',
-          _ => null,
-        },
         builder: (context, state) {
           final raw = state.pathParameters['type'] ?? '';
           final category = CategoryType.values
               .where((c) => c.name == raw)
               .firstOrNull;
+          if (category == CategoryType.tutoring) {
+            return const TutoringScreen();
+          }
           return CategoryListScreen(category: category);
         },
       ),

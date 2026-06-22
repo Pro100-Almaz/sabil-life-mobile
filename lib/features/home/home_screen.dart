@@ -48,98 +48,158 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _HomeContent extends StatelessWidget {
+class _HomeContent extends StatefulWidget {
   const _HomeContent({required this.listings});
 
   final List<Listing> listings;
 
   @override
+  State<_HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<_HomeContent> {
+  final _scrollController = ScrollController();
+  bool _showScrollToTop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final show = _scrollController.offset > 300;
+    if (show != _showScrollToTop) setState(() => _showScrollToTop = show);
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    final featured = listings.where((l) => l.isFeatured).toList();
-    final popular = List.of(listings)
+    final featured = widget.listings.where((l) => l.isFeatured).toList();
+    final popular = List.of(widget.listings)
       ..sort((a, b) => b.reviewCount.compareTo(a.reviewCount));
-    final nearYou = List.of(listings)
+    final nearYou = List.of(widget.listings)
       ..sort((a, b) => a.distanceFromHomeKm.compareTo(b.distanceFromHomeKm));
 
-    return ListView(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xxxl),
+    return Stack(
       children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(
-            AppSpacing.lg,
-            AppSpacing.md,
-            AppSpacing.lg,
-            AppSpacing.lg,
-          ),
-          child: SearchPill(),
+        ListView(
+          controller: _scrollController,
+          padding: const EdgeInsets.only(bottom: AppSpacing.xxxl),
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.lg,
+              ),
+              child: SearchPill(),
+            ),
+            const CategoryStrip(),
+            const SizedBox(height: AppSpacing.xxl),
+            if (featured.isNotEmpty) ...[
+              SectionHeader(title: l10n.featured),
+              const SizedBox(height: AppSpacing.md),
+              SizedBox(
+                height: 300,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  itemCount: featured.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: AppSpacing.lg),
+                  itemBuilder: (context, index) =>
+                      ListingCard(listing: featured[index], width: 280),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xxl),
+            ],
+            if (popular.isNotEmpty) ...[
+              SectionHeader(
+                title: l10n.popularInDoha,
+                actionLabel: l10n.seeAll,
+                onAction: () => context.push(
+                  '/category/${CategoryType.entertainment.name}',
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              SizedBox(
+                height: 300,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  itemCount: popular.length.clamp(0, 8),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: AppSpacing.lg),
+                  itemBuilder: (context, index) =>
+                      ListingCard(listing: popular[index], width: 280),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.xxl),
+            ],
+            SectionHeader(
+              title: l10n.nearYou,
+              actionLabel: l10n.seeAll,
+              onAction: () =>
+                  context.push('/category/${CategoryType.activities.name}'),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            if (nearYou.isEmpty)
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.xxxl),
+                child: Center(child: Text(l10n.noResults)),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                child: Column(
+                  children: [
+                    for (final listing in nearYou.take(10)) ...[
+                      ListingCard(listing: listing),
+                      const SizedBox(height: AppSpacing.xxl),
+                    ],
+                  ],
+                ),
+              ),
+          ],
         ),
-        const CategoryStrip(),
-        const SizedBox(height: AppSpacing.xxl),
-        if (featured.isNotEmpty) ...[
-          SectionHeader(title: l10n.featured),
-          const SizedBox(height: AppSpacing.md),
-          SizedBox(
-            height: 300,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              itemCount: featured.length,
-              separatorBuilder: (context, index) =>
-                  const SizedBox(width: AppSpacing.lg),
-              itemBuilder: (context, index) =>
-                  ListingCard(listing: featured[index], width: 280),
+        Positioned(
+          left: AppSpacing.lg,
+          bottom: AppSpacing.lg,
+          child: AnimatedScale(
+            scale: _showScrollToTop ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            child: FloatingActionButton.small(
+              heroTag: 'scroll_to_top',
+              backgroundColor: AppColors.surface,
+              foregroundColor: AppColors.textPrimary,
+              elevation: 2,
+              onPressed: _scrollToTop,
+              child: const Icon(Icons.arrow_upward, size: 20),
             ),
           ),
-          const SizedBox(height: AppSpacing.xxl),
-        ],
-        if (popular.isNotEmpty) ...[
-          SectionHeader(
-            title: l10n.popularInDoha,
-            actionLabel: l10n.seeAll,
-            onAction: () =>
-                context.push('/category/${CategoryType.entertainment.name}'),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          SizedBox(
-            height: 300,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              itemCount: popular.length.clamp(0, 8),
-              separatorBuilder: (context, index) =>
-                  const SizedBox(width: AppSpacing.lg),
-              itemBuilder: (context, index) =>
-                  ListingCard(listing: popular[index], width: 280),
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xxl),
-        ],
-        SectionHeader(
-          title: l10n.nearYou,
-          actionLabel: l10n.seeAll,
-          onAction: () =>
-              context.push('/category/${CategoryType.activities.name}'),
         ),
-        const SizedBox(height: AppSpacing.md),
-        if (nearYou.isEmpty)
-          Padding(
-            padding: const EdgeInsets.all(AppSpacing.xxxl),
-            child: Center(child: Text(l10n.noResults)),
-          )
-        else
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: Column(
-              children: [
-                for (final listing in nearYou.take(10)) ...[
-                  ListingCard(listing: listing),
-                  const SizedBox(height: AppSpacing.xxl),
-                ],
-              ],
-            ),
-          ),
       ],
     );
   }

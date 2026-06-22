@@ -21,8 +21,6 @@ class HttpAuthRepository implements AuthRepository {
       await authTokenStore.write(session.token);
       return session;
     } on DioException catch (e) {
-      print("Error:");
-      print(e);
       throw AuthException(_extractError(e));
     }
   }
@@ -48,8 +46,6 @@ class HttpAuthRepository implements AuthRepository {
       await authTokenStore.write(session.token);
       return session;
     } on DioException catch (e) {
-      print("Error:");
-      print(e);
       throw AuthException(_extractError(e));
     }
   }

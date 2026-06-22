@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
 import '../../core/state/locale_provider.dart';
+import '../../data/models/auth_user.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
@@ -90,16 +91,35 @@ class SettingsScreen extends ConsumerWidget {
               ),
               onTap: () => context.push('/my-requests'),
             ),
-            if (auth.isProvider)
+            if (user.role == UserRole.tutor)
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                 ),
                 leading: const Icon(
-                  Icons.dashboard_outlined,
+                  Icons.school_outlined,
                   color: AppColors.textPrimary,
                 ),
-                title: Text(l10n.switchToProvider, style: AppTypography.body),
+                title: Text(l10n.switchToTutor, style: AppTypography.body),
+                trailing: const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.textSecondary,
+                ),
+                onTap: () => context.go('/provider'),
+              ),
+            if (user.role == UserRole.masterclass)
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                ),
+                leading: const Icon(
+                  Icons.palette_outlined,
+                  color: AppColors.textPrimary,
+                ),
+                title: Text(
+                  l10n.switchToMasterclass,
+                  style: AppTypography.body,
+                ),
                 trailing: const Icon(
                   Icons.chevron_right,
                   color: AppColors.textSecondary,

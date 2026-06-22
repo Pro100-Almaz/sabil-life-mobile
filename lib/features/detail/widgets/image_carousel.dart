@@ -24,23 +24,19 @@ class _ImageCarouselState extends State<ImageCarousel> {
   int _page = 0;
 
   List<String> get _validImageUrls =>
-    widget.imageUrls.where((url) => url.trim().isNotEmpty).toList();
-
+      widget.imageUrls.where((url) => url.trim().isNotEmpty).toList();
 
   @override
   Widget build(BuildContext context) {
     final imageUrls = _validImageUrls;
 
-    if (imageUrls.isEmpty){
+    if (imageUrls.isEmpty) {
       return AspectRatio(
         aspectRatio: 4 / 3,
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                kListingFallbackAsset,
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset(kListingFallbackAsset, fit: BoxFit.cover),
             ),
             Positioned(
               top: 8,
@@ -53,7 +49,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
         ),
       );
     }
-    
+
     return AspectRatio(
       aspectRatio: 4 / 3,
       child: Stack(

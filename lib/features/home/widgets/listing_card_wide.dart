@@ -35,20 +35,20 @@ class ListingCardWide extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.image),
                   child: imageUrl != null
-                    ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(color: AppColors.surfaceAlt),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppColors.surfaceAlt,
-                        child: const Icon(
-                          Icons.photo_outlined,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    )
-                    : Image.asset(kListingFallbackAsset, fit: BoxFit.cover),
+                      ? CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Container(color: AppColors.surfaceAlt),
+                          errorWidget: (context, url, error) => Container(
+                            color: AppColors.surfaceAlt,
+                            child: const Icon(
+                              Icons.photo_outlined,
+                              color: AppColors.textTertiary,
+                            ),
+                          ),
+                        )
+                      : Image.asset(kListingFallbackAsset, fit: BoxFit.cover),
                 ),
               ),
               Positioned(

@@ -203,7 +203,7 @@
   "changePhoto": "Изменить фото",
   "removePhoto": "Удалить фото",
   "photoFromGallery": "Выбрать из галереи",
-  "photoFromCamera": "Сделать фото"
+  "photoFromCamera": "Сделать фото",
   "rateLimited": "Слишком много запросов. Попробуйте позже.",
   "writeReview": "Написать отзыв",
   "editReview": "Редактировать отзыв",

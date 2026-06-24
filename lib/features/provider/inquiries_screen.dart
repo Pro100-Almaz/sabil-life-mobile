@@ -10,6 +10,7 @@ import '../../core/theme/app_typography.dart';
 import '../../core/util/relative_time.dart';
 import '../../data/models/inquiry.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 
 class InquiriesScreen extends ConsumerStatefulWidget {
   const InquiriesScreen({super.key});
@@ -37,29 +38,34 @@ class _InquiriesScreenState extends ConsumerState<InquiriesScreen> {
             onSelected: (s) => setState(() => _filter = s),
           ),
           Expanded(
-            child: inquiriesAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(color: AppColors.primary),
-              ),
-              error: (e, _) => Center(child: Text(e.toString())),
-              data: (all) {
-                final items = _filter == null
-                    ? all
-                    : all.where((i) => i.status == _filter).toList();
-                if (items.isEmpty) {
-                  return Center(
-                    child: Text(l10n.noInquiriesYet, style: AppTypography.h3),
+            child: AppRefreshIndicator(
+              onRefresh: () =>
+                  ref.refresh(incomingInquiriesProvider(user.id).future),
+              child: inquiriesAsync.when(
+                loading: () => const RefreshableMessage(
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                ),
+                error: (e, _) => RefreshableMessage(child: Text(e.toString())),
+                data: (all) {
+                  final items = _filter == null
+                      ? all
+                      : all.where((i) => i.status == _filter).toList();
+                  if (items.isEmpty) {
+                    return RefreshableMessage(
+                      child: Text(l10n.noInquiriesYet, style: AppTypography.h3),
+                    );
+                  }
+                  return ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    itemCount: items.length,
+                    separatorBuilder: (context, _) =>
+                        const SizedBox(height: AppSpacing.md),
+                    itemBuilder: (_, i) =>
+                        _InquiryCard(inquiry: items[i], providerId: user.id),
                   );
-                }
-                return ListView.separated(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  itemCount: items.length,
-                  separatorBuilder: (context, _) =>
-                      const SizedBox(height: AppSpacing.md),
-                  itemBuilder: (_, i) =>
-                      _InquiryCard(inquiry: items[i], providerId: user.id),
-                );
-              },
+                },
+              ),
             ),
           ),
         ],

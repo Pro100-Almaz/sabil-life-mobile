@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/util/distance.dart';
 import '../../data/models/listing.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 import 'widgets/category_strip.dart';
 import 'widgets/listing_card.dart';
 import 'widgets/search_pill.dart';
@@ -24,24 +25,29 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: asyncListings.when(
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
+        child: AppRefreshIndicator(
+          onRefresh: () => ref.refresh(
+            catalogListingsProvider(ref.read(listingsFilterProvider)).future,
           ),
-          error: (e, _) => Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(l10n.genericLoadError, textAlign: TextAlign.center),
-                const SizedBox(height: AppSpacing.md),
-                TextButton(
-                  onPressed: () => ref.invalidate(catalogListingsProvider),
-                  child: Text(l10n.retry),
-                ),
-              ],
+          child: asyncListings.when(
+            loading: () => const RefreshableMessage(
+              child: CircularProgressIndicator(color: AppColors.primary),
             ),
+            error: (e, _) => RefreshableMessage(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(l10n.genericLoadError, textAlign: TextAlign.center),
+                  const SizedBox(height: AppSpacing.md),
+                  TextButton(
+                    onPressed: () => ref.invalidate(catalogListingsProvider),
+                    child: Text(l10n.retry),
+                  ),
+                ],
+              ),
+            ),
+            data: (listings) => _HomeContent(listings: listings),
           ),
-          data: (listings) => _HomeContent(listings: listings),
         ),
       ),
     );
@@ -101,6 +107,7 @@ class _HomeContentState extends State<_HomeContent> {
       children: [
         ListView(
           controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(bottom: AppSpacing.xxxl),
           children: [
             const Padding(

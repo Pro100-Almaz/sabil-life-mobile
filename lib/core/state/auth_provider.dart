@@ -1,11 +1,29 @@
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/client.dart';
 
 import '../../data/api/auth_token_store.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/repositories/auth_repository.dart';
+import 'provider_providers.dart';
 
 enum AuthStatus { unknown, authenticating, unauthenticated, authenticated }
+
+enum ActiveInterface { family, tutor, masterclass }
+
+extension ActiveInterfaceX on ActiveInterface {
+  /// Root location of this interface's shell. Each provider role has its own
+  /// route tree so the two interfaces stay structurally separate.
+  String get basePath => switch (this) {
+    ActiveInterface.tutor => '/provider/tutor',
+    ActiveInterface.masterclass => '/provider/masterclass',
+    ActiveInterface.family => '/',
+  };
+
+  bool get isProvider =>
+      this == ActiveInterface.tutor || this == ActiveInterface.masterclass;
+}
 
 class AuthState {
   const AuthState({
@@ -42,9 +60,10 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._repo) : super(const AuthState.unknown());
+  AuthNotifier(this._repo, {this.onLogout}) : super(const AuthState.unknown());
 
   final AuthRepository _repo;
+  final VoidCallback? onLogout;
 
   Future<void> restore() async {
     final token = await authTokenStore.read();
@@ -97,9 +116,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Re-fetches the signed-in user from the backend without disturbing the
+  /// session token. Used when the active interface changes so provider data is
+  /// always current. No-op when logged out; guarded so it never resurrects a
+  /// session that ended while the request was in flight.
+  Future<void> refreshUser() async {
+    final token = state.token;
+    if (token == null || !state.isAuthenticated) return;
+    try {
+      final user = await _repo.me(token);
+      if (!state.isAuthenticated || state.token != token) return;
+      state = AuthState.authenticated(user: user, token: token);
+    } on AuthException {
+      // Leave the current session untouched; a hard auth failure surfaces
+      // through the normal request paths.
+    }
+  }
+
   Future<void> logout() async {
     await _repo.logout();
     await authTokenStore.clear();
+    onLogout?.call();
     state = const AuthState.unauthenticated();
   }
 
@@ -109,5 +146,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(ref.watch(authRepositoryProvider));
+  final notifier = AuthNotifier(
+    ref.watch(authRepositoryProvider),
+    onLogout: () => ref.read(activeInterfaceProvider.notifier).state =
+        ActiveInterface.family,
+  );
+  // Switching interfaces refreshes the user and provider data from the backend.
+  ref.listen<ActiveInterface>(activeInterfaceProvider, (prev, next) {
+    if (prev == next) return;
+    notifier.refreshUser();
+    ref.invalidate(providerProfileProvider);
+    ref.invalidate(myVerificationsProvider);
+  });
+  return notifier;
 });
+
+final activeInterfaceProvider = StateProvider<ActiveInterface>(
+  (ref) => ActiveInterface.family,
+);

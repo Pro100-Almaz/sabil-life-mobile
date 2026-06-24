@@ -4,6 +4,7 @@ import '../models/commission.dart';
 import '../models/inquiry.dart';
 import '../models/listing.dart';
 import '../models/provider_profile.dart';
+import '../models/provider_verification.dart';
 import '../models/auth_user.dart';
 import '../models/subscription.dart';
 
@@ -31,7 +32,19 @@ abstract class ProviderRepository {
   Future<ProviderProfile> myProfile();
 
   /// Returns the existing tutor detail, or `null` if none created yet.
-  Future<ProviderProfile?> tutorDetail();
+  Future<ProviderProfile?> tutorDetail(String userId);
+
+  /// Returns the masterclass provider detail, or `null` if not requested yet.
+  Future<ProviderProfile?> masterclassDetail(String userId);
+
+  /// The caller's own verification records, one per provider type.
+  Future<List<ProviderVerification>> myVerifications();
+
+  /// Submit a verification request for [providerType] (`TUTOR`/`MASTERCLASS`).
+  Future<ProviderVerification> requestVerification(UserRole providerType);
+
+  /// Cancel a pending/rejected verification request for [providerType].
+  Future<ProviderVerification> cancelVerification(UserRole providerType);
 
   Future<ProviderProfile> createTutorDetail({
     String? displayName,
@@ -88,6 +101,35 @@ abstract class ProviderRepository {
 class MockProviderRepository implements ProviderRepository {
   static const Duration _latency = Duration(milliseconds: 250);
 
+  final Map<String, ProviderProfile> _tutorDetails = {
+    'user-tutor-demo': const ProviderProfile(
+      userId: 2,
+      email: 'tutor@demo',
+      fullName: 'MathCraft Centre',
+      role: UserRole.tutor,
+      isVerified: true,
+      displayName: 'MathCraft Centre',
+      bio: 'Experienced tutor covering Maths and Arabic.',
+      subjects: ['Maths', 'Arabic'],
+      hourlyRateQar: 120,
+      availability: 'Mon-Fri 4pm-8pm',
+    ),
+  };
+
+  final Map<String, ProviderProfile> _mcDetails = {
+    'user-mc-demo': const ProviderProfile(
+      userId: 3,
+      email: 'mc@demo',
+      fullName: 'Canvas & Co. Studio',
+      role: UserRole.masterclass,
+      isVerified: false,
+      displayName: 'Canvas & Co. Studio',
+      bio: 'Creative workshops for kids and adults.',
+      subjects: [],
+      availability: 'Weekends',
+    ),
+  };
+
   ProviderProfile _profile = const ProviderProfile(
     userId: 2,
     email: 'tutor@demo',
@@ -135,12 +177,71 @@ class MockProviderRepository implements ProviderRepository {
     return _profile;
   }
 
-  bool _tutorDetailCreated = true;
+  @override
+  Future<ProviderProfile?> tutorDetail(String userId) async {
+    await Future<void>.delayed(_latency);
+    return _tutorDetails[userId];
+  }
 
   @override
-  Future<ProviderProfile?> tutorDetail() async {
+  Future<ProviderProfile?> masterclassDetail(String userId) async {
     await Future<void>.delayed(_latency);
-    return _tutorDetailCreated ? _profile : null;
+    return _mcDetails[userId];
+  }
+
+  /// Mock verification store, keyed by provider type. Seeded to demo the
+  /// rejected-with-comment flow against a real status.
+  final Map<UserRole, ProviderVerification> _verifications = {
+    UserRole.tutor: const ProviderVerification(
+      id: 1,
+      providerType: UserRole.tutor,
+      status: VerificationStatus.approved,
+    ),
+    UserRole.masterclass: const ProviderVerification(
+      id: 2,
+      providerType: UserRole.masterclass,
+      status: VerificationStatus.rejected,
+      comment: 'Blurry credential documents — please re-upload.',
+    ),
+  };
+
+  @override
+  Future<List<ProviderVerification>> myVerifications() async {
+    await Future<void>.delayed(_latency);
+    return _verifications.values.toList();
+  }
+
+  @override
+  Future<ProviderVerification> requestVerification(
+    UserRole providerType,
+  ) async {
+    await Future<void>.delayed(_latency);
+    final updated = ProviderVerification(
+      id: _verifications[providerType]?.id,
+      providerType: providerType,
+      status: VerificationStatus.pending,
+    );
+    _verifications[providerType] = updated;
+    return updated;
+  }
+
+  @override
+  Future<ProviderVerification> cancelVerification(UserRole providerType) async {
+    await Future<void>.delayed(_latency);
+    final existing = _verifications[providerType];
+    if (existing == null) {
+      throw StateError('No verification to cancel.');
+    }
+    if (existing.status == VerificationStatus.approved) {
+      throw StateError('An approved verification cannot be cancelled.');
+    }
+    final updated = ProviderVerification(
+      id: existing.id,
+      providerType: providerType,
+      status: VerificationStatus.cancelled,
+    );
+    _verifications[providerType] = updated;
+    return updated;
   }
 
   ProviderProfile _applyTutorFields({
@@ -190,8 +291,7 @@ class MockProviderRepository implements ProviderRepository {
     bool? trialAvailable,
   }) async {
     await Future<void>.delayed(_latency);
-    _tutorDetailCreated = true;
-    return _applyTutorFields(
+    final result = _applyTutorFields(
       displayName: displayName,
       bio: bio,
       subjects: subjects,
@@ -205,6 +305,7 @@ class MockProviderRepository implements ProviderRepository {
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
     );
+    return result;
   }
 
   @override

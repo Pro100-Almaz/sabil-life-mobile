@@ -27,21 +27,19 @@ const _MockAccount _tutor = _MockAccount(
     id: 'user-tutor-demo',
     email: 'tutor@demo',
     fullName: 'MathCraft Centre',
-    role: UserRole.tutor,
+    role: UserRole.family,
     isVerified: true,
   ),
   password: _kDemoPassword,
 );
 
-/// Intentionally unverified so the dashboard verification banner has a real
-/// account to demo against.
 const _MockAccount _masterclass = _MockAccount(
   user: AuthUser(
     id: 'user-mc-demo',
     email: 'mc@demo',
     fullName: 'Canvas & Co. Studio',
-    role: UserRole.masterclass,
-    isVerified: false,
+    role: UserRole.family,
+    isVerified: true,
   ),
   password: _kDemoPassword,
 );

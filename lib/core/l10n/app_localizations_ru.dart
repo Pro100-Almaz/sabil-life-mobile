@@ -716,4 +716,71 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get update => 'Обновить';
+
+  @override
+  String get tutorAccountUnderReview =>
+      'Ваш аккаунт репетитора на проверке. Мы сообщим, когда он будет одобрен.';
+
+  @override
+  String get fillTutorProfile =>
+      'Заполните профиль репетитора, чтобы начать работу.';
+
+  @override
+  String get goBack => 'Назад';
+
+  @override
+  String get requestMasterclassProvider =>
+      'Подать заявку на организатора мастер-классов';
+
+  @override
+  String get masterclassRequestSent =>
+      'Ваша заявка отправлена. Мы рассмотрим её в ближайшее время.';
+
+  @override
+  String get masterclassAccountUnderReview =>
+      'Ваша заявка на организатора мастер-классов на рассмотрении.';
+
+  @override
+  String get becomeTutor => 'Стать репетитором';
+
+  @override
+  String get becomeMasterclassProvider => 'Стать организатором мастер-классов';
+
+  @override
+  String get editProfile => 'Редактировать профиль';
+
+  @override
+  String get verificationRejected => 'Ваша заявка не одобрена';
+
+  @override
+  String get verificationRejectedReason => 'Причина';
+
+  @override
+  String get requestAgain => 'Подать заявку снова';
+
+  @override
+  String get editAndResubmit => 'Изменить и отправить снова';
+
+  @override
+  String get resubmitTutorProfile =>
+      'Обновите профиль и отправьте его на проверку снова.';
+
+  @override
+  String get cancelRequest => 'Отменить заявку';
+
+  @override
+  String get cancelRequestTitle => 'Отменить заявку?';
+
+  @override
+  String get cancelRequestMessage =>
+      'Заявка на верификацию будет отозвана. Позже вы сможете подать новую.';
+
+  @override
+  String get cancelRequestConfirm => 'Да, отменить';
+
+  @override
+  String get keepRequest => 'Оставить заявку';
+
+  @override
+  String get requestCancelled => 'Ваша заявка отменена.';
 }

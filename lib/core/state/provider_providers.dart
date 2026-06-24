@@ -8,9 +8,11 @@ import 'package:sabil_life/data/api/suggestion.dart';
 import 'package:sabil_life/data/api/tutor.dart';
 import 'package:sabil_life/data/repositories/catalog_repository.dart';
 
+import '../../data/models/auth_user.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/provider_profile.dart';
+import '../../data/models/provider_verification.dart';
 import '../../data/models/review.dart';
 import '../../data/models/subscription.dart';
 import '../../data/models/suggestion.dart';
@@ -74,9 +76,34 @@ final providerProfileProvider = FutureProvider.autoDispose<ProviderProfile>(
   (ref) => ref.watch(providerRepositoryProvider).myProfile(),
 );
 
-final tutorDetailProvider = FutureProvider.autoDispose<ProviderProfile?>(
-  (ref) => ref.watch(providerRepositoryProvider).tutorDetail(),
-);
+final tutorDetailForUserProvider = FutureProvider.family
+    .autoDispose<ProviderProfile?, String>(
+      (ref, userId) =>
+          ref.watch(providerRepositoryProvider).tutorDetail(userId),
+    );
+
+final masterclassDetailForUserProvider = FutureProvider.family
+    .autoDispose<ProviderProfile?, String>(
+      (ref, userId) =>
+          ref.watch(providerRepositoryProvider).masterclassDetail(userId),
+    );
+
+/// The caller's own verification records, one per provider type.
+final myVerificationsProvider =
+    FutureProvider.autoDispose<List<ProviderVerification>>(
+      (ref) => ref.watch(providerRepositoryProvider).myVerifications(),
+    );
+
+/// The verification record for a single [UserRole], or a [VerificationStatus.none]
+/// placeholder when none exists yet.
+final verificationForTypeProvider = FutureProvider.family
+    .autoDispose<ProviderVerification, UserRole>((ref, type) async {
+      final all = await ref.watch(myVerificationsProvider.future);
+      for (final v in all) {
+        if (v.providerType == type) return v;
+      }
+      return ProviderVerification.none(type);
+    });
 
 /// Filter key for [incomingSubscriptionsProvider].
 class SubscriptionsFilter {

@@ -7,9 +7,7 @@ import '../../core/state/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
-import '../../data/models/auth_user.dart';
 import '../../shared/widgets/app_button.dart';
-import 'widgets/role_segmented.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -23,7 +21,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  UserRole _role = UserRole.family;
 
   @override
   void dispose() {
@@ -41,13 +38,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           email: _email.text,
           password: _password.text,
           fullName: _name.text,
-          role: _role,
         );
     if (!mounted) return;
     if (ok) {
-      // Match LoginScreen: always reset to family root and let the router
-      // redirect bounce providers to /provider. Pop-based nav races with
-      // the auth-state refresh listener and can re-show /login briefly.
       context.go('/');
     }
   }
@@ -69,11 +62,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(l10n.createAccount, style: AppTypography.display),
-                const SizedBox(height: AppSpacing.xl),
-                RoleSegmented(
-                  selected: _role,
-                  onChanged: (role) => setState(() => _role = role),
-                ),
                 const SizedBox(height: AppSpacing.xl),
                 TextFormField(
                   controller: _name,

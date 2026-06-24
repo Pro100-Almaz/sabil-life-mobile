@@ -10,10 +10,13 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 import 'widgets/listing_status_chip.dart';
 
 class MyListingsScreen extends ConsumerWidget {
-  const MyListingsScreen({super.key});
+  const MyListingsScreen({super.key, required this.interface});
+
+  final ActiveInterface interface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,59 +32,68 @@ class MyListingsScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => context.push('/provider/listings/new'),
+            onPressed: () => context.push('${interface.basePath}/listings/new'),
           ),
         ],
       ),
-      body: listingsAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
-        error: (e, _) => Center(child: Text(e.toString())),
-        data: (items) => items.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(
-                      Icons.inbox_outlined,
-                      size: 48,
-                      color: AppColors.textTertiary,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(l10n.noListingsYet, style: AppTypography.h3),
-                    const SizedBox(height: AppSpacing.lg),
-                    AppButton(
-                      label: l10n.createFirstListing,
-                      icon: Icons.add,
-                      onPressed: () => context.push('/provider/listings/new'),
-                    ),
-                  ],
+      body: AppRefreshIndicator(
+        onRefresh: () => ref.refresh(myListingsProvider(user.id).future),
+        child: listingsAsync.when(
+          loading: () => const RefreshableMessage(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+          error: (e, _) => RefreshableMessage(child: Text(e.toString())),
+          data: (items) => items.isEmpty
+              ? RefreshableMessage(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.inbox_outlined,
+                        size: 48,
+                        color: AppColors.textTertiary,
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      Text(l10n.noListingsYet, style: AppTypography.h3),
+                      const SizedBox(height: AppSpacing.lg),
+                      AppButton(
+                        label: l10n.createFirstListing,
+                        icon: Icons.add,
+                        onPressed: () =>
+                            context.push('${interface.basePath}/listings/new'),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppSpacing.md),
+                  itemBuilder: (context, i) =>
+                      _ListingRow(listing: items[i], interface: interface),
                 ),
-              )
-            : ListView.separated(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                itemCount: items.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: AppSpacing.md),
-                itemBuilder: (context, i) => _ListingRow(listing: items[i]),
-              ),
+        ),
       ),
     );
   }
 }
 
 class _ListingRow extends StatelessWidget {
-  const _ListingRow({required this.listing});
+  const _ListingRow({required this.listing, required this.interface});
 
   final Listing listing;
+  final ActiveInterface interface;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
-      onTap: () =>
-          context.push('/provider/listings/edit/${listing.id}', extra: listing),
+      onTap: () => context.push(
+        '${interface.basePath}/listings/edit/${listing.id}',
+        extra: listing,
+      ),
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(

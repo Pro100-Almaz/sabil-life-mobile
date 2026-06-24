@@ -10,6 +10,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/relative_time.dart';
 import '../../data/models/inquiry.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 
 class MyRequestsScreen extends ConsumerWidget {
   const MyRequestsScreen({super.key});
@@ -31,20 +32,27 @@ class MyRequestsScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.myRequests)),
-      body: inquiries.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
+      body: AppRefreshIndicator(
+        onRefresh: () => ref.refresh(myInquiriesProvider(user.id).future),
+        child: inquiries.when(
+          loading: () => const RefreshableMessage(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
+          error: (error, _) =>
+              RefreshableMessage(child: Text(error.toString())),
+          data: (items) => items.isEmpty
+              ? RefreshableMessage(
+                  child: Text(l10n.noRequestsYet, style: AppTypography.h3),
+                )
+              : ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppSpacing.md),
+                  itemBuilder: (context, i) => _RequestRow(inquiry: items[i]),
+                ),
         ),
-        error: (error, _) => Center(child: Text(error.toString())),
-        data: (items) => items.isEmpty
-            ? Center(child: Text(l10n.noRequestsYet, style: AppTypography.h3))
-            : ListView.separated(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                itemCount: items.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: AppSpacing.md),
-                itemBuilder: (context, i) => _RequestRow(inquiry: items[i]),
-              ),
       ),
     );
   }

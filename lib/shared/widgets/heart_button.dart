@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/state/favorites_provider.dart';
 import '../../core/theme/app_colors.dart';
+import '../../data/repositories/favorites_repository.dart';
 
 /// Animated save toggle wired to [favoritesProvider].
 class HeartButton extends ConsumerStatefulWidget {
@@ -31,11 +32,19 @@ class _HeartButtonState extends ConsumerState<HeartButton>
     super.dispose();
   }
 
-  void _toggle() {
-    ref.read(favoritesProvider.notifier).toggle(widget.listingId);
-    _controller
-      ..value = _controller.lowerBound
-      ..animateTo(_controller.upperBound, curve: Curves.elasticOut);
+  Future<void> _toggle() async {
+    try {
+      await ref.read(favoritesProvider.notifier).toggle(widget.listingId);
+      if (!mounted) return;
+      _controller
+        ..value = _controller.lowerBound
+        ..animateTo(_controller.upperBound, curve: Curves.elasticOut);
+    } on FavoritesException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
+      );
+    }
   }
 
   @override

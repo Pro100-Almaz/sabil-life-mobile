@@ -22,6 +22,7 @@ import '../../data/mock/mock_tutors.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/masterclass_info.dart';
 import '../../data/models/review.dart';
+import '../../data/repositories/favorites_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/star_rating.dart';
@@ -316,8 +317,21 @@ class _DetailBody extends ConsumerWidget {
                   child: AppButton(
                     label: isSaved ? l10n.saved : l10n.save,
                     icon: isSaved ? Icons.favorite : Icons.favorite_border,
-                    onPressed: () =>
-                        ref.read(favoritesProvider.notifier).toggle(listing.id),
+                    onPressed: () async {
+                      try {
+                        await ref
+                            .read(favoritesProvider.notifier)
+                            .toggle(listing.id);
+                      } on FavoritesException catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.message),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               const SizedBox(width: AppSpacing.md),

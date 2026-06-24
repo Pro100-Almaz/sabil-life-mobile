@@ -99,10 +99,12 @@ ListingSort _toListingSort(SortMode mode) => switch (mode) {
 /// Async filtered + sorted view over the catalog (HTTP or mock depending on
 /// [catalogRepositoryProvider]).  Screens watch this and handle the three
 /// [AsyncValue] states: loading / error / data.
-final filteredListingsProvider = Provider<AsyncValue<List<Listing>>>((ref) {
+/// The [ListingsFilter] derived from the current [filterProvider] state. Exposed
+/// so screens can await a real refresh of `catalogListingsProvider(thisFilter)`.
+final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   final filter = ref.watch(filterProvider);
 
-  final listingsFilter = ListingsFilter(
+  return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,
     priceMax: filter.priceMax < kPriceCeilingQar ? filter.priceMax : null,
@@ -113,6 +115,8 @@ final filteredListingsProvider = Provider<AsyncValue<List<Listing>>>((ref) {
     sort: _toListingSort(filter.sortMode),
     page: 1,
   );
+});
 
-  return ref.watch(catalogListingsProvider(listingsFilter));
+final filteredListingsProvider = Provider<AsyncValue<List<Listing>>>((ref) {
+  return ref.watch(catalogListingsProvider(ref.watch(listingsFilterProvider)));
 });

@@ -716,4 +716,72 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get update => 'Жаңарту';
+
+  @override
+  String get tutorAccountUnderReview =>
+      'Репетитор аккаунтыңыз тексерілуде. Бекітілгенде хабарлаймыз.';
+
+  @override
+  String get fillTutorProfile =>
+      'Репетитор ретінде бастау үшін профиліңізді толтырыңыз.';
+
+  @override
+  String get goBack => 'Артқа';
+
+  @override
+  String get requestMasterclassProvider =>
+      'Шеберлік сыныбы ұйымдастырушысы болуға өтініш беру';
+
+  @override
+  String get masterclassRequestSent =>
+      'Өтінішіңіз жіберілді. Жақын арада қарастырамыз.';
+
+  @override
+  String get masterclassAccountUnderReview =>
+      'Шеберлік сыныбы ұйымдастырушысына өтінішіңіз қарастырылуда.';
+
+  @override
+  String get becomeTutor => 'Репетитор болу';
+
+  @override
+  String get becomeMasterclassProvider =>
+      'Шеберлік сыныбы ұйымдастырушысы болу';
+
+  @override
+  String get editProfile => 'Профильді өңдеу';
+
+  @override
+  String get verificationRejected => 'Өтінішіңіз мақұлданбады';
+
+  @override
+  String get verificationRejectedReason => 'Себебі';
+
+  @override
+  String get requestAgain => 'Қайта өтініш беру';
+
+  @override
+  String get editAndResubmit => 'Өзгертіп, қайта жіберу';
+
+  @override
+  String get resubmitTutorProfile =>
+      'Профиліңізді жаңартып, тексеруге қайта жіберіңіз.';
+
+  @override
+  String get cancelRequest => 'Өтінішті болдырмау';
+
+  @override
+  String get cancelRequestTitle => 'Өтінішті болдырмайсыз ба?';
+
+  @override
+  String get cancelRequestMessage =>
+      'Бұл верификация өтінішіңізді кері қайтарады. Кейін жаңасын жібере аласыз.';
+
+  @override
+  String get cancelRequestConfirm => 'Иә, болдырмау';
+
+  @override
+  String get keepRequest => 'Өтінішті қалдыру';
+
+  @override
+  String get requestCancelled => 'Өтінішіңіз болдырылмады.';
 }

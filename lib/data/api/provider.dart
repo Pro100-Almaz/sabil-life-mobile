@@ -4,6 +4,7 @@ import '../models/auth_user.dart';
 import '../models/inquiry.dart';
 import '../models/listing.dart';
 import '../models/provider_profile.dart';
+import '../models/provider_verification.dart';
 import '../models/subscription.dart';
 import '../repositories/provider_repository.dart';
 import 'api_client.dart';
@@ -27,7 +28,7 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<ProviderProfile?> tutorDetail() async {
+  Future<ProviderProfile?> tutorDetail(String userId) async {
     try {
       final response = await _dio.get('/provider/tutor-detail/');
       return _parseProfile(Map<String, dynamic>.from(response.data as Map));
@@ -35,6 +36,83 @@ class HttpProviderRepository implements ProviderRepository {
       if (e.response?.statusCode == 404) return null;
       throw StateError(_extractError(e));
     }
+  }
+
+  @override
+  Future<ProviderProfile?> masterclassDetail(String userId) async {
+    try {
+      final response = await _dio.get('/provider/masterclass-detail/');
+      return _parseProfile(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) return null;
+      throw StateError(_extractError(e));
+    }
+  }
+
+  // ── Verification ─────────────────────────────────────────────────────────
+
+  @override
+  Future<List<ProviderVerification>> myVerifications() async {
+    try {
+      final response = await _dio.get('/provider/verify/');
+      final data = response.data;
+      // Pagination is disabled on this view — the body is a bare array.
+      final items = data is Map<String, dynamic> ? data['results'] : data;
+      if (items is! List) return const [];
+      return items
+          .whereType<Map>()
+          .map((item) => _parseVerification(Map<String, dynamic>.from(item)))
+          .toList();
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<ProviderVerification> requestVerification(
+    UserRole providerType,
+  ) async {
+    try {
+      final response = await _dio.post(
+        '/provider/verify/',
+        data: {'provider_type': providerType.verifyPathSegment},
+      );
+      return _parseVerification(
+        Map<String, dynamic>.from(response.data as Map),
+      );
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<ProviderVerification> cancelVerification(UserRole providerType) async {
+    try {
+      await _dio.delete(
+        '/provider/verify/${providerType.verifyPathSegment}/',
+        data: null,
+      );
+      return ProviderVerification(
+        providerType: providerType,
+        status: VerificationStatus.cancelled,
+      );
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  ProviderVerification _parseVerification(Map<String, dynamic> d) {
+    return ProviderVerification(
+      id: (d['id'] as num?)?.toInt(),
+      userId: (d['user_id'] as num?)?.toInt(),
+      email: d['email'] as String? ?? '',
+      fullName: d['full_name'] as String? ?? '',
+      providerType: _parseRole(d['provider_type'] as String?),
+      status: VerificationStatusX.fromBackend(d['status'] as String?),
+      comment: d['comment'] as String? ?? '',
+      createdAt: _parseDate(d['created_at']),
+      updatedAt: _parseDate(d['updated_at']),
+    );
   }
 
   Map<String, dynamic> _buildTutorPayload({

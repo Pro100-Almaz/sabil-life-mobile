@@ -717,4 +717,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get tutorAccountUnderReview =>
+      'Your tutor account is being reviewed. We\'ll notify you once it\'s approved.';
+
+  @override
+  String get fillTutorProfile =>
+      'Fill in your tutor profile to get started as a tutor.';
+
+  @override
+  String get goBack => 'Go back';
+
+  @override
+  String get requestMasterclassProvider =>
+      'Request to become a masterclass provider';
+
+  @override
+  String get masterclassRequestSent =>
+      'Your request has been submitted. We\'ll review it shortly.';
+
+  @override
+  String get masterclassAccountUnderReview =>
+      'Your masterclass provider request is being reviewed.';
+
+  @override
+  String get becomeTutor => 'Become a tutor';
+
+  @override
+  String get becomeMasterclassProvider => 'Become a masterclass provider';
+
+  @override
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get verificationRejected => 'Your application wasn\'t approved';
+
+  @override
+  String get verificationRejectedReason => 'Reason';
+
+  @override
+  String get requestAgain => 'Request again';
+
+  @override
+  String get editAndResubmit => 'Edit & resubmit';
+
+  @override
+  String get resubmitTutorProfile =>
+      'Update your profile and resubmit it for review.';
+
+  @override
+  String get cancelRequest => 'Cancel request';
+
+  @override
+  String get cancelRequestTitle => 'Cancel request?';
+
+  @override
+  String get cancelRequestMessage =>
+      'This withdraws your verification request. You can submit a new one later.';
+
+  @override
+  String get cancelRequestConfirm => 'Yes, cancel';
+
+  @override
+  String get keepRequest => 'Keep request';
+
+  @override
+  String get requestCancelled => 'Your request has been cancelled.';
 }

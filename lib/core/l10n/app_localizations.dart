@@ -1413,6 +1413,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update'**
   String get update;
+
+  /// No description provided for @tutorAccountUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tutor account is being reviewed. We\'ll notify you once it\'s approved.'**
+  String get tutorAccountUnderReview;
+
+  /// No description provided for @fillTutorProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in your tutor profile to get started as a tutor.'**
+  String get fillTutorProfile;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBack;
+
+  /// No description provided for @requestMasterclassProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Request to become a masterclass provider'**
+  String get requestMasterclassProvider;
+
+  /// No description provided for @masterclassRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request has been submitted. We\'ll review it shortly.'**
+  String get masterclassRequestSent;
+
+  /// No description provided for @masterclassAccountUnderReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Your masterclass provider request is being reviewed.'**
+  String get masterclassAccountUnderReview;
+
+  /// No description provided for @becomeTutor.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a tutor'**
+  String get becomeTutor;
+
+  /// No description provided for @becomeMasterclassProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a masterclass provider'**
+  String get becomeMasterclassProvider;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get editProfile;
+
+  /// No description provided for @verificationRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application wasn\'t approved'**
+  String get verificationRejected;
+
+  /// No description provided for @verificationRejectedReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get verificationRejectedReason;
+
+  /// No description provided for @requestAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Request again'**
+  String get requestAgain;
+
+  /// No description provided for @editAndResubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit & resubmit'**
+  String get editAndResubmit;
+
+  /// No description provided for @resubmitTutorProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Update your profile and resubmit it for review.'**
+  String get resubmitTutorProfile;
+
+  /// No description provided for @cancelRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get cancelRequest;
+
+  /// No description provided for @cancelRequestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request?'**
+  String get cancelRequestTitle;
+
+  /// No description provided for @cancelRequestMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdraws your verification request. You can submit a new one later.'**
+  String get cancelRequestMessage;
+
+  /// No description provided for @cancelRequestConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, cancel'**
+  String get cancelRequestConfirm;
+
+  /// No description provided for @keepRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep request'**
+  String get keepRequest;
+
+  /// No description provided for @requestCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Your request has been cancelled.'**
+  String get requestCancelled;
 }
 
 class _AppLocalizationsDelegate

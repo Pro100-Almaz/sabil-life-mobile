@@ -12,9 +12,12 @@ import '../../core/theme/app_typography.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/subscription.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 
 class DashboardScreen extends ConsumerWidget {
-  const DashboardScreen({super.key});
+  const DashboardScreen({super.key, required this.interface});
+
+  final ActiveInterface interface;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,6 +26,7 @@ class DashboardScreen extends ConsumerWidget {
     final user = auth.user;
     if (user == null) return const SizedBox.shrink();
 
+    final profileAsync = ref.watch(providerProfileProvider);
     final listingsAsync = ref.watch(myListingsProvider(user.id));
     final inquiriesAsync = ref.watch(incomingInquiriesProvider(user.id));
     final subscribersAsync = ref.watch(
@@ -59,57 +63,83 @@ class DashboardScreen extends ConsumerWidget {
         title: Text(l10n.welcomeBack(user.fullName)),
         toolbarHeight: 72,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        children: [
-          if (!user.isVerified) ...[
-            _UnverifiedBanner(message: l10n.providerUnverifiedBanner),
+      body: AppRefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(providerProfileProvider);
+          await Future.wait([
+            ref.refresh(myListingsProvider(user.id).future),
+            ref.refresh(incomingInquiriesProvider(user.id).future),
+            ref.refresh(
+              incomingSubscriptionsProvider(const SubscriptionsFilter()).future,
+            ),
+          ]);
+        },
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          children: [
+            if (profileAsync.maybeWhen(
+              data: (p) => !p.isVerified,
+              orElse: () => false,
+            )) ...[
+              _UnverifiedBanner(message: l10n.providerUnverifiedBanner),
+              const SizedBox(height: AppSpacing.lg),
+            ],
+            // Listings live only on the masterclass interface.
+            if (interface == ActiveInterface.masterclass) ...[
+              _MetricCard(
+                label: l10n.metricActiveListings,
+                value: '$activeListings / $totalListings',
+                icon: Icons.list_alt_outlined,
+                onTap: () => context.go('${interface.basePath}/listings'),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            // Inquiries live only on the tutor interface.
+            if (interface == ActiveInterface.tutor) ...[
+              _MetricCard(
+                label: l10n.metricNewInquiries,
+                value: '$newInquiries',
+                icon: Icons.inbox_outlined,
+                onTap: () => context.go('${interface.basePath}/inquiries'),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            _MetricCard(
+              label: l10n.providerSubscribers,
+              value: '$subscriberCount',
+              icon: Icons.people_outline,
+              onTap: () => context.go(
+                interface == ActiveInterface.tutor
+                    ? '${interface.basePath}/inquiries'
+                    : '${interface.basePath}/listings',
+              ),
+            ),
             const SizedBox(height: AppSpacing.lg),
-          ],
-          _MetricCard(
-            label: l10n.metricActiveListings,
-            value: '$activeListings / $totalListings',
-            icon: Icons.list_alt_outlined,
-            onTap: () => context.go('/provider/listings'),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          _MetricCard(
-            label: l10n.metricNewInquiries,
-            value: '$newInquiries',
-            icon: Icons.inbox_outlined,
-            onTap: () => context.go('/provider/inquiries'),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          _MetricCard(
-            label: l10n.providerSubscribers,
-            value: '$subscriberCount',
-            icon: Icons.people_outline,
-            onTap: () => context.go('/provider/inquiries'),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          // Subscribers mini-roster
-          subscribersAsync.when(
-            loading: () => const SizedBox.shrink(),
-            error: (e, _) => const SizedBox.shrink(),
-            data: (subs) {
-              final confirmed = subs
-                  .where((s) => s.status == SubscriptionStatus.confirmed)
-                  .toList();
-              if (confirmed.isEmpty) return const SizedBox.shrink();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.providerSubscribers, style: AppTypography.h3),
-                  const SizedBox(height: AppSpacing.sm),
-                  for (final sub in confirmed.take(3)) ...[
-                    _SubscriberRow(subscription: sub),
+            // Subscribers mini-roster
+            subscribersAsync.when(
+              loading: () => const SizedBox.shrink(),
+              error: (e, _) => const SizedBox.shrink(),
+              data: (subs) {
+                final confirmed = subs
+                    .where((s) => s.status == SubscriptionStatus.confirmed)
+                    .toList();
+                if (confirmed.isEmpty) return const SizedBox.shrink();
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.providerSubscribers, style: AppTypography.h3),
                     const SizedBox(height: AppSpacing.sm),
+                    for (final sub in confirmed.take(3)) ...[
+                      _SubscriberRow(subscription: sub),
+                      const SizedBox(height: AppSpacing.sm),
+                    ],
                   ],
-                ],
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -9,6 +9,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/category_label.dart';
 import '../../data/models/listing.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 import '../home/widgets/listing_card.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
@@ -87,51 +88,60 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           ),
           const Divider(),
           Expanded(
-            child: asyncListings.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(color: AppColors.primary),
+            child: AppRefreshIndicator(
+              onRefresh: () => ref.refresh(
+                catalogListingsProvider(
+                  ref.read(listingsFilterProvider),
+                ).future,
               ),
-              error: (e, _) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n.genericLoadError, textAlign: TextAlign.center),
-                    const SizedBox(height: AppSpacing.md),
-                    TextButton(
-                      onPressed: () => ref.invalidate(catalogListingsProvider),
-                      child: Text(l10n.retry),
-                    ),
-                  ],
+              child: asyncListings.when(
+                loading: () => const RefreshableMessage(
+                  child: CircularProgressIndicator(color: AppColors.primary),
                 ),
-              ),
-              data: (listings) => listings.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.search_off,
-                            size: 48,
-                            color: AppColors.textTertiary,
-                          ),
-                          const SizedBox(height: AppSpacing.md),
-                          Text(l10n.noResults, style: AppTypography.h3),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            l10n.noResultsHint,
-                            style: AppTypography.caption,
-                          ),
-                        ],
+                error: (e, _) => RefreshableMessage(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(l10n.genericLoadError, textAlign: TextAlign.center),
+                      const SizedBox(height: AppSpacing.md),
+                      TextButton(
+                        onPressed: () =>
+                            ref.invalidate(catalogListingsProvider),
+                        child: Text(l10n.retry),
                       ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      itemCount: listings.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: AppSpacing.xxl),
-                      itemBuilder: (context, index) =>
-                          ListingCard(listing: listings[index]),
-                    ),
+                    ],
+                  ),
+                ),
+                data: (listings) => listings.isEmpty
+                    ? RefreshableMessage(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: AppColors.textTertiary,
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(l10n.noResults, style: AppTypography.h3),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              l10n.noResultsHint,
+                              style: AppTypography.caption,
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
+                        itemCount: listings.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: AppSpacing.xxl),
+                        itemBuilder: (context, index) =>
+                            ListingCard(listing: listings[index]),
+                      ),
+              ),
             ),
           ),
         ],

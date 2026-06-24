@@ -17,9 +17,12 @@ import '../../features/provider/dashboard_screen.dart';
 import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_editor_screen.dart';
+import '../../features/provider/masterclass_gate_screen.dart';
 import '../../features/provider/my_listings_screen.dart';
 import '../../features/provider/provider_settings_screen.dart';
 import '../../features/provider/provider_shell.dart';
+import '../../features/provider/tutor_gate_screen.dart';
+import '../../features/provider/tutor_profile_edit_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/shell/shell_screen.dart';
 import '../../features/tutoring/tutoring_screen.dart';
@@ -28,7 +31,107 @@ import 'router_refresh.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _familyShellKey = GlobalKey<NavigatorState>();
-final _providerShellKey = GlobalKey<NavigatorState>();
+final _tutorShellKey = GlobalKey<NavigatorState>();
+final _masterclassShellKey = GlobalKey<NavigatorState>();
+
+/// Builds a provider shell route tree for [interface]. Each provider role gets
+/// its own tree (`/provider/tutor/*`, `/provider/masterclass/*`) so the two
+/// interfaces keep separate navigation state and can diverge later.
+StatefulShellRoute _providerShellRoute({
+  required ActiveInterface interface,
+  required GlobalKey<NavigatorState> rootBranchKey,
+}) {
+  final base = interface.basePath;
+
+  final dashboardBranch = StatefulShellBranch(
+    navigatorKey: rootBranchKey,
+    routes: [
+      GoRoute(
+        path: base,
+        builder: (context, state) => DashboardScreen(interface: interface),
+      ),
+    ],
+  );
+
+  // Listings are tutor-less: only the masterclass interface manages listings.
+  final listingsBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/listings',
+        builder: (context, state) => MyListingsScreen(interface: interface),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) =>
+                const ListingEditorScreen(listingId: null),
+          ),
+          GoRoute(
+            path: 'edit/:id',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ListingEditorScreen(
+              listingId: state.pathParameters['id'],
+              initialListing: state.extra is Listing
+                  ? state.extra as Listing
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+
+  // Inquiries are only surfaced on the tutor interface.
+  final inquiriesBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/inquiries',
+        builder: (context, state) => const InquiriesScreen(),
+      ),
+    ],
+  );
+
+  final earningsBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/earnings',
+        builder: (context, state) => const EarningsScreen(),
+      ),
+    ],
+  );
+
+  final settingsBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/settings',
+        builder: (context, state) =>
+            ProviderSettingsScreen(interface: interface),
+        routes: [
+          GoRoute(
+            path: 'edit-profile',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => const TutorProfileEditScreen(),
+          ),
+        ],
+      ),
+    ],
+  );
+
+  // Branch order must match the nav items in ProviderShell.
+  final branches = <StatefulShellBranch>[
+    dashboardBranch,
+    if (interface == ActiveInterface.masterclass) listingsBranch,
+    if (interface == ActiveInterface.tutor) inquiriesBranch,
+    earningsBranch,
+    settingsBranch,
+  ];
+
+  return StatefulShellRoute.indexedStack(
+    builder: (context, state, navigationShell) =>
+        ProviderShell(navigationShell: navigationShell, interface: interface),
+    branches: branches,
+  );
+}
 
 bool _isProviderArea(String location) => location.startsWith('/provider');
 bool _isAuthArea(String location) =>
@@ -37,6 +140,9 @@ bool _isAuthArea(String location) =>
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = RouterRefreshListenable();
   ref.listen<AuthState>(authProvider, (prev, next) => refresh.notify());
+  ref.listen<ActiveInterface>(activeInterfaceProvider, (prev, next) {
+    refresh.notify();
+  });
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -45,21 +151,23 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: refresh,
     redirect: (context, state) {
       final auth = ref.read(authProvider);
+      final activeInterface = ref.read(activeInterfaceProvider);
       final location = state.matchedLocation;
 
-      // Don't redirect while a session restore / login is in flight.
       if (auth.status == AuthStatus.unknown ||
           auth.status == AuthStatus.authenticating) {
         return null;
       }
 
-      // Provider tried to visit /provider/... → must be signed in as provider.
       if (_isProviderArea(location)) {
         if (!auth.isAuthenticated) return '/login';
-        if (!auth.isProvider) return '/';
+        if (!activeInterface.isProvider) return '/';
+        // Keep the location on the active interface's own tree.
+        if (!location.startsWith(activeInterface.basePath)) {
+          return activeInterface.basePath;
+        }
       }
 
-      // Logged-in user on auth pages → bounce to family home.
       if (auth.isAuthenticated && _isAuthArea(location)) {
         return '/';
       }
@@ -159,72 +267,30 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const SuggestionScreen(),
       ),
+      GoRoute(
+        path: '/switch-to-tutor',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const TutorGateScreen(),
+      ),
+      GoRoute(
+        path: '/switch-to-masterclass',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const MasterclassGateScreen(),
+      ),
+      GoRoute(
+        path: '/tutor-profile-edit',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const TutorProfileEditScreen(),
+      ),
 
-      // ── Provider shell ───────────────────────────────────────────────────
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            ProviderShell(navigationShell: navigationShell),
-        branches: [
-          StatefulShellBranch(
-            navigatorKey: _providerShellKey,
-            routes: [
-              GoRoute(
-                path: '/provider',
-                builder: (context, state) => const DashboardScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/provider/listings',
-                builder: (context, state) => const MyListingsScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'new',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) =>
-                        const ListingEditorScreen(listingId: null),
-                  ),
-                  GoRoute(
-                    path: 'edit/:id',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) => ListingEditorScreen(
-                      listingId: state.pathParameters['id'],
-                      initialListing: state.extra is Listing
-                          ? state.extra as Listing
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/provider/inquiries',
-                builder: (context, state) => const InquiriesScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/provider/earnings',
-                builder: (context, state) => const EarningsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/provider/settings',
-                builder: (context, state) => const ProviderSettingsScreen(),
-              ),
-            ],
-          ),
-        ],
+      // ── Provider shells (one tree per interface) ─────────────────────────
+      _providerShellRoute(
+        interface: ActiveInterface.tutor,
+        rootBranchKey: _tutorShellKey,
+      ),
+      _providerShellRoute(
+        interface: ActiveInterface.masterclass,
+        rootBranchKey: _masterclassShellKey,
       ),
     ],
   );

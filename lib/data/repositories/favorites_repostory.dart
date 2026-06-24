@@ -1,7 +1,7 @@
-impor '../models/listing.dart'
+import '../models/listing.dart';
 
-abstract class FavortiesRepository{
-    Future<List<Listing>> my_favorites(required userId);
-    Future<bool> add_favorite(required String listingId);
-    Future<bool> delete_favorite(required String listingId);
-} 
+abstract class FavortiesRepository {
+  Future<List<Listing>> myFavorites(String userId);
+  Future<bool> addFavorite(String listingId);
+  Future<bool> deleteFavorite(String listingId);
+}

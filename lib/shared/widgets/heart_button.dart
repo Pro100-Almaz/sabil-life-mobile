@@ -42,10 +42,7 @@ class _HeartButtonState extends ConsumerState<HeartButton>
     } on FavoritesException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.message),
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
       );
     }
   }

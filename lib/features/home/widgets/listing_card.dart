@@ -23,7 +23,7 @@ class ListingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
+    final imageUrl = listing.primaryImageUrl;
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
       child: SizedBox(
@@ -37,19 +37,21 @@ class ListingCard extends StatelessWidget {
                   aspectRatio: 16 / 10,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadius.image),
-                    child: CachedNetworkImage(
-                      imageUrl: listing.imageUrls.first,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) =>
-                          Container(color: AppColors.surfaceAlt),
-                      errorWidget: (context, url, error) => Container(
-                        color: AppColors.surfaceAlt,
-                        child: const Icon(
-                          Icons.photo_outlined,
-                          color: AppColors.textTertiary,
-                        ),
-                      ),
-                    ),
+                    child: imageUrl != null
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                Container(color: AppColors.surfaceAlt),
+                            errorWidget: (context, url, error) => Container(
+                              color: AppColors.surfaceAlt,
+                              child: const Icon(
+                                Icons.photo_outlined,
+                                color: AppColors.textTertiary,
+                              ),
+                            ),
+                          )
+                        : Image.asset(kListingFallbackAsset, fit: BoxFit.cover),
                   ),
                 ),
                 Positioned(

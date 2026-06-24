@@ -511,6 +511,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchToProvider => 'Back to provider dashboard';
 
   @override
+  String get switchToTutor => 'Switch to Tutor dashboard';
+
+  @override
+  String get switchToMasterclass => 'Switch to Masterclass dashboard';
+
+  @override
   String get genericLoadError => 'Something went wrong. Please try again.';
 
   @override
@@ -568,16 +574,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get displayName => 'Display name';
 
   @override
-  String get bio => 'Bio';
+  String get bio => 'Bio (optional)';
 
   @override
-  String get subjects => 'Subjects (comma-separated)';
+  String get subjects => 'Subjects';
 
   @override
-  String get hourlyRate => 'Hourly rate (QAR)';
+  String get hourlyRate => 'Price per hour (QAR)';
 
   @override
   String get availability => 'Availability';
+
+  @override
+  String get profileFormats => 'Teaching formats';
+
+  @override
+  String get profileAgeGroups => 'Age groups';
+
+  @override
+  String get profileLanguages => 'Languages';
+
+  @override
+  String get profileYearsExperience => 'Years of experience';
+
+  @override
+  String get profileCredentials => 'Credentials (optional)';
+
+  @override
+  String get profileAvatar => 'Profile photo (optional)';
+
+  @override
+  String get profileTrialAvailable => 'Offer trial lesson';
+
+  @override
+  String get profileSubmittedForReview => 'Profile submitted for review';
 
   @override
   String get suggestService => 'Suggest a service';
@@ -626,4 +656,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateLimited => 'Rate limited. Please try again shortly.';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get addCustomSubject => 'Add custom subject';
+
+  @override
+  String get changePhoto => 'Change photo';
+
+  @override
+  String get removePhoto => 'Remove photo';
+
+  @override
+  String get photoFromGallery => 'Choose from gallery';
+
+  @override
+  String get photoFromCamera => 'Take a photo';
+
+  @override
+  String get writeReview => 'Write a review';
+
+  @override
+  String get editReview => 'Edit review';
+
+  @override
+  String get deleteReview => 'Delete review';
+
+  @override
+  String get deleteReviewConfirm =>
+      'Are you sure you want to delete this review?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get reviewSubmitted => 'Review submitted';
+
+  @override
+  String get reviewUpdated => 'Review updated';
+
+  @override
+  String get reviewDeleted => 'Review deleted';
+
+  @override
+  String get shareExperience => 'Share your experience…';
+
+  @override
+  String get submitting => 'Submitting…';
+
+  @override
+  String get submit => 'Submit';
+
+  @override
+  String get updating => 'Updating…';
+
+  @override
+  String get update => 'Update';
 }

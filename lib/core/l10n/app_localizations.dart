@@ -1012,6 +1012,18 @@ abstract class AppLocalizations {
   /// **'Back to provider dashboard'**
   String get switchToProvider;
 
+  /// No description provided for @switchToTutor.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Tutor dashboard'**
+  String get switchToTutor;
+
+  /// No description provided for @switchToMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to Masterclass dashboard'**
+  String get switchToMasterclass;
+
   /// No description provided for @genericLoadError.
   ///
   /// In en, this message translates to:
@@ -1123,19 +1135,19 @@ abstract class AppLocalizations {
   /// No description provided for @bio.
   ///
   /// In en, this message translates to:
-  /// **'Bio'**
+  /// **'Bio (optional)'**
   String get bio;
 
   /// No description provided for @subjects.
   ///
   /// In en, this message translates to:
-  /// **'Subjects (comma-separated)'**
+  /// **'Subjects'**
   String get subjects;
 
   /// No description provided for @hourlyRate.
   ///
   /// In en, this message translates to:
-  /// **'Hourly rate (QAR)'**
+  /// **'Price per hour (QAR)'**
   String get hourlyRate;
 
   /// No description provided for @availability.
@@ -1143,6 +1155,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Availability'**
   String get availability;
+
+  /// No description provided for @profileFormats.
+  ///
+  /// In en, this message translates to:
+  /// **'Teaching formats'**
+  String get profileFormats;
+
+  /// No description provided for @profileAgeGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Age groups'**
+  String get profileAgeGroups;
+
+  /// No description provided for @profileLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get profileLanguages;
+
+  /// No description provided for @profileYearsExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Years of experience'**
+  String get profileYearsExperience;
+
+  /// No description provided for @profileCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Credentials (optional)'**
+  String get profileCredentials;
+
+  /// No description provided for @profileAvatar.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo (optional)'**
+  String get profileAvatar;
+
+  /// No description provided for @profileTrialAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Offer trial lesson'**
+  String get profileTrialAvailable;
+
+  /// No description provided for @profileSubmittedForReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile submitted for review'**
+  String get profileSubmittedForReview;
 
   /// No description provided for @suggestService.
   ///
@@ -1233,6 +1293,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rate limited. Please try again shortly.'**
   String get rateLimited;
+
+  /// No description provided for @other.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get other;
+
+  /// No description provided for @addCustomSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add custom subject'**
+  String get addCustomSubject;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get changePhoto;
+
+  /// No description provided for @removePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove photo'**
+  String get removePhoto;
+
+  /// No description provided for @photoFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get photoFromGallery;
+
+  /// No description provided for @photoFromCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get photoFromCamera;
+
+  /// No description provided for @writeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a review'**
+  String get writeReview;
+
+  /// No description provided for @editReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit review'**
+  String get editReview;
+
+  /// No description provided for @deleteReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete review'**
+  String get deleteReview;
+
+  /// No description provided for @deleteReviewConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this review?'**
+  String get deleteReviewConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted'**
+  String get reviewSubmitted;
+
+  /// No description provided for @reviewUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Review updated'**
+  String get reviewUpdated;
+
+  /// No description provided for @reviewDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review deleted'**
+  String get reviewDeleted;
+
+  /// No description provided for @shareExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience…'**
+  String get shareExperience;
+
+  /// No description provided for @submitting.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting…'**
+  String get submitting;
+
+  /// No description provided for @submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get submit;
+
+  /// No description provided for @updating.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating…'**
+  String get updating;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
 }
 
 class _AppLocalizationsDelegate

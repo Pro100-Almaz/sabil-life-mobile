@@ -1,5 +1,3 @@
-enum TutorSubject { math, arabic, english, science, examPrep }
-
 enum TutorFormat { oneOnOne, smallGroup, atCentre, online }
 
 /// An individual tutor. Tutors are person-centric (unlike venue [Listing]s)
@@ -29,7 +27,7 @@ class Tutor {
 
   /// Id of the tutoring-centre [Listing] this tutor teaches at.
   final String affiliationListingId;
-  final List<TutorSubject> subjects;
+  final List<String> subjects;
   final List<TutorFormat> formats;
   final List<String> ageGroups;
   final int pricePerHourQar;

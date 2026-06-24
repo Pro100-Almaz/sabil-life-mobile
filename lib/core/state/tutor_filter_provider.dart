@@ -1,19 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/mock/mock_tutors.dart';
 import '../../data/models/tutor.dart';
+import 'provider_providers.dart';
 
 class TutorFilterState {
   const TutorFilterState({this.subject, this.formats = const {}});
 
   /// null = all subjects.
-  final TutorSubject? subject;
+  final String? subject;
 
   /// Empty = any format. Multiple selected formats must ALL be offered.
   final Set<TutorFormat> formats;
 
   TutorFilterState copyWith({
-    TutorSubject? Function()? subject,
+    String? Function()? subject,
     Set<TutorFormat>? formats,
   }) {
     return TutorFilterState(
@@ -26,7 +26,7 @@ class TutorFilterState {
 class TutorFilterNotifier extends StateNotifier<TutorFilterState> {
   TutorFilterNotifier() : super(const TutorFilterState());
 
-  void setSubject(TutorSubject? subject) =>
+  void setSubject(String? subject) =>
       state = state.copyWith(subject: () => subject);
 
   void toggleFormat(TutorFormat format) {
@@ -44,18 +44,21 @@ final tutorFilterProvider =
     );
 
 /// Tutors matching the active subject/format filters, top-rated first.
-final filteredTutorsProvider = Provider<List<Tutor>>((ref) {
+final filteredTutorsProvider = Provider<AsyncValue<List<Tutor>>>((ref) {
   final filter = ref.watch(tutorFilterProvider);
+  final asyncTutors = ref.watch(allTutorsProvider);
 
-  final result = mockTutors.where((tutor) {
-    if (filter.subject != null && !tutor.subjects.contains(filter.subject)) {
-      return false;
-    }
-    for (final format in filter.formats) {
-      if (!tutor.formats.contains(format)) return false;
-    }
-    return true;
-  }).toList()..sort((a, b) => b.rating.compareTo(a.rating));
+  return asyncTutors.whenData((tutors) {
+    final result = tutors.where((tutor) {
+      if (filter.subject != null && !tutor.subjects.contains(filter.subject)) {
+        return false;
+      }
+      for (final format in filter.formats) {
+        if (!tutor.formats.contains(format)) return false;
+      }
+      return true;
+    }).toList()..sort((a, b) => b.rating.compareTo(a.rating));
 
-  return result;
+    return result;
+  });
 });

@@ -102,7 +102,7 @@ class TutorProfileSheet extends StatelessWidget {
               runSpacing: AppSpacing.sm,
               children: [
                 for (final subject in tutor.subjects)
-                  _Tag(label: subject.label(l10n), filled: true),
+                  _Tag(label: subjectLabel(subject, l10n), filled: true),
                 for (final format in tutor.formats)
                   _Tag(label: format.label(l10n)),
               ],

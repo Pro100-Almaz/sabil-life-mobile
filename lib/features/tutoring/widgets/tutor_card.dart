@@ -20,7 +20,9 @@ class TutorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final subjects = tutor.subjects.map((s) => s.label(l10n)).join(' · ');
+    final subjects = tutor.subjects
+        .map((s) => subjectLabel(s, l10n))
+        .join(' · ');
 
     return GestureDetector(
       onTap: onTap,

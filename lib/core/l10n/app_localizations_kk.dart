@@ -511,6 +511,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get switchToProvider => 'Провайдер кабинетіне қайту';
 
   @override
+  String get switchToTutor => 'Репетитор кабинетіне өту';
+
+  @override
+  String get switchToMasterclass => 'Шеберлік сыныбы кабинетіне өту';
+
+  @override
   String get genericLoadError => 'Бірдеңе дұрыс болмады. Қайталап көріңіз.';
 
   @override
@@ -569,16 +575,40 @@ class AppLocalizationsKk extends AppLocalizations {
   String get displayName => 'Көрсетілетін аты';
 
   @override
-  String get bio => 'Өзім туралы';
+  String get bio => 'Өзім туралы (міндетті емес)';
 
   @override
-  String get subjects => 'Пәндер (үтірмен бөліп)';
+  String get subjects => 'Пәндер';
 
   @override
-  String get hourlyRate => 'Сағаттық ставка (QAR)';
+  String get hourlyRate => 'Сағатына бағасы (QAR)';
 
   @override
   String get availability => 'Қол жетімділік';
+
+  @override
+  String get profileFormats => 'Оқыту форматтары';
+
+  @override
+  String get profileAgeGroups => 'Жас топтары';
+
+  @override
+  String get profileLanguages => 'Тілдер';
+
+  @override
+  String get profileYearsExperience => 'Тәжірибе (жыл)';
+
+  @override
+  String get profileCredentials => 'Біліктілігі (міндетті емес)';
+
+  @override
+  String get profileAvatar => 'Профиль суреті (міндетті емес)';
+
+  @override
+  String get profileTrialAvailable => 'Сынақ сабағын ұсыну';
+
+  @override
+  String get profileSubmittedForReview => 'Профиль тексеруге жіберілді';
 
   @override
   String get suggestService => 'Қызмет ұсыну';
@@ -626,4 +656,64 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get rateLimited => 'Сұраныс шегі асты. Кейінірек қайталаңыз.';
+
+  @override
+  String get other => 'Басқа';
+
+  @override
+  String get addCustomSubject => 'Өз пәніңізді қосыңыз';
+
+  @override
+  String get changePhoto => 'Суретті өзгерту';
+
+  @override
+  String get removePhoto => 'Суретті жою';
+
+  @override
+  String get photoFromGallery => 'Галереядан таңдау';
+
+  @override
+  String get photoFromCamera => 'Суретке түсіру';
+
+  @override
+  String get writeReview => 'Пікір жазу';
+
+  @override
+  String get editReview => 'Пікірді өңдеу';
+
+  @override
+  String get deleteReview => 'Пікірді жою';
+
+  @override
+  String get deleteReviewConfirm => 'Бұл пікірді жоюға сенімдісіз бе?';
+
+  @override
+  String get cancel => 'Болдырмау';
+
+  @override
+  String get delete => 'Жою';
+
+  @override
+  String get reviewSubmitted => 'Пікір жіберілді';
+
+  @override
+  String get reviewUpdated => 'Пікір жаңартылды';
+
+  @override
+  String get reviewDeleted => 'Пікір жойылды';
+
+  @override
+  String get shareExperience => 'Тәжірибеңізбен бөлісіңіз…';
+
+  @override
+  String get submitting => 'Жіберілуде…';
+
+  @override
+  String get submit => 'Жіберу';
+
+  @override
+  String get updating => 'Жаңартылуда…';
+
+  @override
+  String get update => 'Жаңарту';
 }

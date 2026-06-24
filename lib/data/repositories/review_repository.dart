@@ -25,6 +25,14 @@ abstract class ReviewRepository {
 class MockReviewRepository implements ReviewRepository {
   static const Duration _latency = Duration(milliseconds: 300);
 
+  String? _currentUserId;
+  String? _currentUserName;
+
+  void setCurrentUser({required String id, required String name}) {
+    _currentUserId = id;
+    _currentUserName = name;
+  }
+
   final List<Review> _mine = [];
 
   @override
@@ -48,7 +56,8 @@ class MockReviewRepository implements ReviewRepository {
     await Future<void>.delayed(_latency);
     final review = Review(
       id: 'rev-${DateTime.now().millisecondsSinceEpoch}',
-      authorName: 'You',
+      authorName: _currentUserName ?? 'You',
+      authorId: _currentUserId,
       rating: rating,
       text: text,
       createdAt: DateTime.now(),
@@ -67,15 +76,9 @@ class MockReviewRepository implements ReviewRepository {
     await Future<void>.delayed(_latency);
     final idx = _mine.indexWhere((r) => r.id == reviewId);
     if (idx == -1) throw StateError('Review not found: $reviewId');
-    final old = _mine[idx];
-    final updated = Review(
-      id: old.id,
-      authorName: old.authorName,
-      rating: rating ?? old.rating,
-      text: text ?? old.text,
-      createdAt: old.createdAt,
-    );
+    final updated = _mine[idx].copyWith(rating: rating, text: text);
     _mine[idx] = updated;
+    updateMockReview(updated);
     return updated;
   }
 
@@ -83,5 +86,6 @@ class MockReviewRepository implements ReviewRepository {
   Future<void> delete(String reviewId) async {
     await Future<void>.delayed(_latency);
     _mine.removeWhere((r) => r.id == reviewId);
+    removeMockReview(reviewId);
   }
 }

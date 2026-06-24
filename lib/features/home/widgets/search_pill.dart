@@ -52,7 +52,6 @@ class _SearchPillState extends ConsumerState<SearchPill> {
         onSubmitted: (value) {
           ref.read(filterProvider.notifier).setQuery(value);
         },
-
         style: AppTypography.body,
         decoration: InputDecoration(
           filled: false,

@@ -490,6 +490,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fillRequiredFields => 'Please fill in all required fields.';
 
   @override
+  String get fieldRequired => 'Required';
+
+  @override
   String minutesAgo(int count) {
     return '${count}m ago';
   }

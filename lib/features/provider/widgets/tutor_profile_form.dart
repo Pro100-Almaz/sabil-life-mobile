@@ -75,6 +75,12 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
   File? _pickedAvatarFile;
 
   bool _saving = false;
+  bool _showErrors = false;
+
+  /// Rebuild so inline errors clear as the user fills required fields.
+  void _onRequiredChanged() {
+    if (_showErrors) setState(() {});
+  }
 
   @override
   void initState() {
@@ -86,6 +92,8 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     _credentialsCtrl = TextEditingController();
     _yearsCtrl = TextEditingController();
     _customSubjectCtrl = TextEditingController();
+    _rateCtrl.addListener(_onRequiredChanged);
+    _yearsCtrl.addListener(_onRequiredChanged);
 
     final p = widget.existingProfile;
     if (p != null) _prefill(p);
@@ -214,6 +222,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         _rateCtrl.text.trim().isEmpty ||
         _yearsCtrl.text.trim().isEmpty ||
         _selectedLanguages.isEmpty) {
+      setState(() => _showErrors = true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
@@ -267,10 +276,39 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     }
   }
 
+  /// Section header for a chip group; turns coral when the group is required
+  /// but empty after a failed submit.
+  Widget _sectionLabel(String text, {required bool hasError}) {
+    return Text(
+      text,
+      style: AppTypography.caption.copyWith(
+        color: hasError ? AppColors.primary : null,
+      ),
+    );
+  }
+
+  /// Inline "Required" message shown under an unfilled mandatory chip group.
+  Widget _requiredError({required bool hasError}) {
+    if (!hasError) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacing.xs),
+      child: Text(
+        l10n.fieldRequired,
+        style: AppTypography.small.copyWith(color: AppColors.primary),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final asyncSubjects = ref.watch(availableSubjectsProvider);
+
+    final subjectsError = _showErrors && _selectedSubjects.isEmpty;
+    final formatsError = _showErrors && _selectedFormats.isEmpty;
+    final ageGroupsError = _showErrors && _selectedAgeGroups.isEmpty;
+    final languagesError = _showErrors && _selectedLanguages.isEmpty;
 
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
@@ -326,7 +364,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.lg),
 
         // Subjects
-        Text(l10n.subjects, style: AppTypography.caption),
+        _sectionLabel(l10n.subjects, hasError: subjectsError),
         const SizedBox(height: AppSpacing.xs),
         asyncSubjects.when(
           loading: () => const Padding(
@@ -420,10 +458,11 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
             );
           },
         ),
+        _requiredError(hasError: subjectsError),
         const SizedBox(height: AppSpacing.lg),
 
         // Formats
-        Text(l10n.profileFormats, style: AppTypography.caption),
+        _sectionLabel(l10n.profileFormats, hasError: formatsError),
         const SizedBox(height: AppSpacing.xs),
         Wrap(
           spacing: AppSpacing.sm,
@@ -441,10 +480,11 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
               ),
           ],
         ),
+        _requiredError(hasError: formatsError),
         const SizedBox(height: AppSpacing.lg),
 
         // Age groups
-        Text(l10n.profileAgeGroups, style: AppTypography.caption),
+        _sectionLabel(l10n.profileAgeGroups, hasError: ageGroupsError),
         const SizedBox(height: AppSpacing.xs),
         Wrap(
           spacing: AppSpacing.sm,
@@ -462,6 +502,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
               ),
           ],
         ),
+        _requiredError(hasError: ageGroupsError),
         const SizedBox(height: AppSpacing.lg),
 
         // Price per hour
@@ -469,6 +510,9 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           label: l10n.hourlyRate,
           controller: _rateCtrl,
           keyboardType: TextInputType.number,
+          errorText: _showErrors && _rateCtrl.text.trim().isEmpty
+              ? l10n.fieldRequired
+              : null,
         ),
         const SizedBox(height: AppSpacing.md),
 
@@ -477,11 +521,14 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           label: l10n.profileYearsExperience,
           controller: _yearsCtrl,
           keyboardType: TextInputType.number,
+          errorText: _showErrors && _yearsCtrl.text.trim().isEmpty
+              ? l10n.fieldRequired
+              : null,
         ),
         const SizedBox(height: AppSpacing.lg),
 
         // Languages
-        Text(l10n.profileLanguages, style: AppTypography.caption),
+        _sectionLabel(l10n.profileLanguages, hasError: languagesError),
         const SizedBox(height: AppSpacing.xs),
         Wrap(
           spacing: AppSpacing.sm,
@@ -499,6 +546,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
               ),
           ],
         ),
+        _requiredError(hasError: languagesError),
         const SizedBox(height: AppSpacing.lg),
 
         // Credentials
@@ -602,19 +650,28 @@ class _Field extends StatelessWidget {
     required this.controller,
     this.maxLines = 1,
     this.keyboardType,
+    this.errorText,
   });
 
   final String label;
   final TextEditingController controller;
   final int maxLines;
   final TextInputType? keyboardType;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
+    final hasError = errorText != null;
+    final borderColor = hasError ? AppColors.primary : AppColors.border;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTypography.caption),
+        Text(
+          label,
+          style: AppTypography.caption.copyWith(
+            color: hasError ? AppColors.primary : null,
+          ),
+        ),
         const SizedBox(height: AppSpacing.xs),
         TextField(
           controller: controller,
@@ -622,17 +679,27 @@ class _Field extends StatelessWidget {
           keyboardType: keyboardType,
           style: AppTypography.body,
           decoration: InputDecoration(
+            errorText: errorText,
+            errorStyle: AppTypography.small.copyWith(color: AppColors.primary),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.card),
-              borderSide: const BorderSide(color: AppColors.border),
+              borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(AppRadius.card),
-              borderSide: const BorderSide(color: AppColors.border),
+              borderSide: BorderSide(color: borderColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              borderSide: const BorderSide(color: AppColors.primary),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card),
+              borderSide: const BorderSide(color: AppColors.primary),
             ),
           ),
         ),

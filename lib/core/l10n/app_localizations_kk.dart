@@ -490,6 +490,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get fillRequiredFields => 'Барлық міндетті өрістерді толтырыңыз.';
 
   @override
+  String get fieldRequired => 'Міндетті';
+
+  @override
   String minutesAgo(int count) {
     return '$count мин бұрын';
   }

@@ -118,6 +118,20 @@ abstract final class AppTheme {
           borderRadius: BorderRadius.circular(AppRadius.card),
           borderSide: BorderSide.none,
         ),
+        errorStyle: GoogleFonts.manrope(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.primary,
+          height: 1.3,
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
       ),
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppColors.primary,

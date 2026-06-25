@@ -146,6 +146,7 @@
   "paidCommission": "Оплачено",
   "commissionListEmpty": "Принятые запросы будут отображаться здесь.",
   "fillRequiredFields": "Пожалуйста, заполните все обязательные поля.",
+  "fieldRequired": "Обязательно",
   "minutesAgo": "{count} мин назад",
   "hoursAgo": "{count} ч назад",
   "daysAgo": "{count} дн назад",

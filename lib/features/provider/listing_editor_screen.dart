@@ -39,13 +39,21 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _images = <TextEditingController>[];
   final Set<String> _ageGroups = {};
   bool _saving = false;
+  bool _showErrors = false;
 
   Listing? _existing;
+
+  /// Rebuild so inline errors clear as the user fills required fields.
+  void _onRequiredChanged() {
+    if (_showErrors) setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     _existing = widget.initialListing;
+    _title.addListener(_onRequiredChanged);
+    _subtitle.addListener(_onRequiredChanged);
     final l = _existing;
     if (l != null) {
       _title.text = l.title;
@@ -90,6 +98,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     if (user == null) return;
     if (_title.text.trim().isEmpty || _subtitle.text.trim().isEmpty) {
       final l10n = AppLocalizations.of(context)!;
+      setState(() => _showErrors = true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
@@ -177,12 +186,22 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
           children: [
             TextField(
               controller: _title,
-              decoration: InputDecoration(labelText: l10n.fieldTitle),
+              decoration: InputDecoration(
+                labelText: l10n.fieldTitle,
+                errorText: _showErrors && _title.text.trim().isEmpty
+                    ? l10n.fieldRequired
+                    : null,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             TextField(
               controller: _subtitle,
-              decoration: InputDecoration(labelText: l10n.fieldSubtitle),
+              decoration: InputDecoration(
+                labelText: l10n.fieldSubtitle,
+                errorText: _showErrors && _subtitle.text.trim().isEmpty
+                    ? l10n.fieldRequired
+                    : null,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             TextField(

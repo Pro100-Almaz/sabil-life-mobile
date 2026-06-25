@@ -982,6 +982,12 @@ abstract class AppLocalizations {
   /// **'Please fill in all required fields.'**
   String get fillRequiredFields;
 
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get fieldRequired;
+
   /// No description provided for @minutesAgo.
   ///
   /// In en, this message translates to:

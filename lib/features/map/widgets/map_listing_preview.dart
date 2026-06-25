@@ -46,7 +46,7 @@ class MapListingPreview extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AppRadius.image),
                     child: CachedNetworkImage(
-                      imageUrl: listing.imageUrls.first,
+                      imageUrl: listing.primaryImageUrl ?? '',
                       fit: BoxFit.cover,
                       placeholder: (context, url) =>
                           Container(color: AppColors.surfaceAlt),

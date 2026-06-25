@@ -10,3 +10,21 @@ String get apiBaseUrl {
   }
   return value;
 }
+
+String resolveMediaUrl(String url) {
+  final trimmed = url.trim();
+  if (trimmed.isEmpty) return trimmed;
+
+  final parsed = Uri.tryParse(trimmed);
+  if (parsed == null || !parsed.hasScheme) {
+    return trimmed;
+  }
+
+  final host = parsed.host.toLowerCase();
+  const proxyHosts = {'localhost', '127.0.0.1', '10.0.2.2', 'minio'};
+  if (!proxyHosts.contains(host)) {
+    return trimmed;
+  }
+
+  return '$apiBaseUrl/core/media/?url=${Uri.encodeQueryComponent(trimmed)}';
+}

@@ -8,6 +8,7 @@ import '../../../core/state/masterclass_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 
@@ -54,7 +55,7 @@ class EventCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppRadius.image),
                   child: CachedNetworkImage(
-                    imageUrl: listing.imageUrls.first,
+                    imageUrl: listing.primaryImageUrl ?? '',
                     fit: BoxFit.cover,
                     placeholder: (context, url) =>
                         Container(color: AppColors.surfaceAlt),

@@ -41,6 +41,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _highlights = <TextEditingController>[];
   final Set<String> _ageGroups = {};
   final _pickedImages = <XFile>[];
+  final _existingImageUrls = <String>[];
   bool _saving = false;
   bool _showErrors = false;
 
@@ -68,6 +69,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         _highlights.add(TextEditingController(text: h));
       }
       _ageGroups.addAll(l.ageGroups);
+      _existingImageUrls.addAll(l.imageUrlsOrEmpty);
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -152,7 +154,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         priceFromQar: price,
         description: _description.text.trim(),
         highlights: highlights,
-        imageUrls: _existing?.imageUrls ?? const [],
+        imageUrls: List<String>.from(_existingImageUrls),
         ageGroups: _ageGroups.toList(),
         status: ListingStatus.draft,
       );
@@ -262,9 +264,12 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
             _ImageUploadSection(
               title: l10n.fieldAddImage,
               buttonLabel: l10n.fieldAddImage,
-              existingImageUrls: _existing?.imageUrlsOrEmpty ?? const [],
+              existingImageUrls: _existingImageUrls,
               pickedImages: _pickedImages,
               onPick: _pickImages,
+              onRemoveExisting: (index) => setState(() {
+                _existingImageUrls.removeAt(index);
+              }),
               onRemovePicked: (index) => setState(() {
                 _pickedImages.removeAt(index);
               }),
@@ -329,6 +334,7 @@ class _ImageUploadSection extends StatelessWidget {
     required this.existingImageUrls,
     required this.pickedImages,
     required this.onPick,
+    required this.onRemoveExisting,
     required this.onRemovePicked,
   });
 
@@ -337,6 +343,7 @@ class _ImageUploadSection extends StatelessWidget {
   final List<String> existingImageUrls;
   final List<XFile> pickedImages;
   final Future<void> Function() onPick;
+  final ValueChanged<int> onRemoveExisting;
   final ValueChanged<int> onRemovePicked;
 
   @override
@@ -357,16 +364,17 @@ class _ImageUploadSection extends StatelessWidget {
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final url in existingImageUrls)
+              for (var i = 0; i < existingImageUrls.length; i++)
                 _ImageThumb(
                   image: Image.network(
-                    url,
+                    existingImageUrls[i],
                     fit: BoxFit.cover,
                     errorBuilder: (_, _, _) => const ColoredBox(
                       color: AppColors.surfaceAlt,
                       child: SizedBox.expand(),
                     ),
                   ),
+                  onRemove: () => onRemoveExisting(i),
                 ),
             ],
           ),

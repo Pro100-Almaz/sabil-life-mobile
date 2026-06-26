@@ -261,5 +261,12 @@
   "rejectEnrollmentTitle": "Отклонить запись",
   "commentOptionalHint": "Добавьте примечание для семьи (необязательно).",
   "commentRequiredHint": "Укажите причину — для отклонения нужно примечание.",
-  "commentHint": "Напишите примечание…"
+  "commentHint": "Напишите примечание…",
+  "inquire": "Отправить запрос",
+  "statusCancelled": "Отменён",
+  "cancelInquiry": "Отменить запрос",
+  "cancelInquiryTitle": "Отменить запрос?",
+  "cancelInquiryMessage": "Ваш запрос этому репетитору будет отозван. Позже вы сможете отправить новый.",
+  "keepInquiry": "Оставить запрос",
+  "inquiryCancelled": "Ваш запрос отменён."
 }

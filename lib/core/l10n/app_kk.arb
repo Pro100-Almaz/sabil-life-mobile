@@ -261,5 +261,12 @@
   "rejectEnrollmentTitle": "Жазылуды қабылдамау",
   "commentOptionalHint": "Отбасына ескертпе қосыңыз (міндетті емес).",
   "commentRequiredHint": "Себебін жазыңыз — қабылдамау үшін ескертпе қажет.",
-  "commentHint": "Ескертпе жазыңыз…"
+  "commentHint": "Ескертпе жазыңыз…",
+  "inquire": "Сұрау жіберу",
+  "statusCancelled": "Болдырылмады",
+  "cancelInquiry": "Сұрауды болдырмау",
+  "cancelInquiryTitle": "Сұрауды болдырмау ма?",
+  "cancelInquiryMessage": "Бұл репетиторға жіберген сұрауыңыз кері қайтарылады. Кейін жаңасын жібере аласыз.",
+  "keepInquiry": "Сұрауды қалдыру",
+  "inquiryCancelled": "Сұрауыңыз болдырылмады."
 }

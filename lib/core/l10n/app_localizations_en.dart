@@ -856,4 +856,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commentHint => 'Write a note…';
+
+  @override
+  String get inquire => 'Inquire';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get cancelInquiry => 'Cancel inquiry';
+
+  @override
+  String get cancelInquiryTitle => 'Cancel inquiry?';
+
+  @override
+  String get cancelInquiryMessage =>
+      'This withdraws your inquiry to this tutor. You can send a new one later.';
+
+  @override
+  String get keepInquiry => 'Keep inquiry';
+
+  @override
+  String get inquiryCancelled => 'Your inquiry has been cancelled.';
 }

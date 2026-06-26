@@ -857,4 +857,26 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get commentHint => 'Ескертпе жазыңыз…';
+
+  @override
+  String get inquire => 'Сұрау жіберу';
+
+  @override
+  String get statusCancelled => 'Болдырылмады';
+
+  @override
+  String get cancelInquiry => 'Сұрауды болдырмау';
+
+  @override
+  String get cancelInquiryTitle => 'Сұрауды болдырмау ма?';
+
+  @override
+  String get cancelInquiryMessage =>
+      'Бұл репетиторға жіберген сұрауыңыз кері қайтарылады. Кейін жаңасын жібере аласыз.';
+
+  @override
+  String get keepInquiry => 'Сұрауды қалдыру';
+
+  @override
+  String get inquiryCancelled => 'Сұрауыңыз болдырылмады.';
 }

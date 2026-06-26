@@ -4,6 +4,7 @@ enum InquiryStatus {
   accepted,
   declined,
   completed,
+  cancelled,
   // Legacy mock alias — treated as new_ on backend.
   pending;
 
@@ -13,6 +14,7 @@ enum InquiryStatus {
     InquiryStatus.accepted => 'ACCEPTED',
     InquiryStatus.declined => 'DECLINED',
     InquiryStatus.completed => 'COMPLETED',
+    InquiryStatus.cancelled => 'CANCELLED',
     InquiryStatus.pending => 'NEW',
   };
 
@@ -22,35 +24,70 @@ enum InquiryStatus {
     'ACCEPTED' => InquiryStatus.accepted,
     'DECLINED' => InquiryStatus.declined,
     'COMPLETED' => InquiryStatus.completed,
+    'CANCELLED' => InquiryStatus.cancelled,
     _ => InquiryStatus.new_,
   };
+
+  /// The family may cancel only while the inquiry is still live; the backend
+  /// returns 409 for terminal states (declined / completed / cancelled).
+  bool get isCancellable =>
+      this == InquiryStatus.new_ ||
+      this == InquiryStatus.contacted ||
+      this == InquiryStatus.accepted ||
+      this == InquiryStatus.pending;
 }
 
-/// A family's request to engage with a tutoring centre or masterclass
-/// provider. Fields mirror the backend FamilyInquiry contract.
+/// Lightweight tutor summary embedded in a family-side inquiry response
+/// (`tutor` block of the backend contract).
+class InquiryTutor {
+  const InquiryTutor({
+    required this.id,
+    required this.fullName,
+    this.subjects = const [],
+    this.isVerified = false,
+  });
+
+  factory InquiryTutor.fromJson(Map<String, dynamic> json) => InquiryTutor(
+    id: json['id']?.toString() ?? '',
+    fullName: (json['full_name'] ?? '') as String,
+    subjects:
+        (json['subjects'] as List?)?.map((e) => e.toString()).toList() ??
+        const [],
+    isVerified: (json['is_verified'] ?? false) as bool,
+  );
+
+  final String id;
+  final String fullName;
+  final List<String> subjects;
+  final bool isVerified;
+}
+
+/// A family's request to engage with a tutor. Fields mirror the backend
+/// tutor-based Inquiry contract.
 class Inquiry {
   const Inquiry({
     required this.id,
-    required this.listingId,
-    required this.providerId,
     required this.message,
     required this.status,
     required this.createdAt,
+    this.tutorId,
+    this.tutor,
     this.familyId,
     this.familyName,
     this.familyEmail,
     this.familyPhone,
     this.contactRevealed = false,
     this.updatedAt,
-    this.tutorIdHint,
   });
 
   final String id;
-  final String listingId;
-  final String providerId;
   final String message;
   final InquiryStatus status;
   final DateTime createdAt;
+
+  /// The tutor this inquiry targets (tutor-based contract).
+  final String? tutorId;
+  final InquiryTutor? tutor;
 
   // Nullable — not present in family-side backend responses.
   final String? familyId;
@@ -63,23 +100,18 @@ class Inquiry {
   final bool contactRevealed;
   final DateTime? updatedAt;
 
-  /// Optional pointer to an individual tutor the family had in mind.
-  /// Mock-only metadata — ignored on the wire.
-  final String? tutorIdHint;
-
   Inquiry copyWith({InquiryStatus? status}) => Inquiry(
     id: id,
-    listingId: listingId,
-    providerId: providerId,
     message: message,
     status: status ?? this.status,
     createdAt: createdAt,
+    tutorId: tutorId,
+    tutor: tutor,
     familyId: familyId,
     familyName: familyName,
     familyEmail: familyEmail,
     familyPhone: familyPhone,
     contactRevealed: contactRevealed,
     updatedAt: updatedAt,
-    tutorIdHint: tutorIdHint,
   );
 }

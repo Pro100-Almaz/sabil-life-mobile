@@ -336,7 +336,7 @@ class HttpProviderRepository implements ProviderRepository {
   @override
   Future<List<Inquiry>> incomingInquiries(String providerId) async {
     try {
-      final response = await _dio.get('/provider/inquiries/');
+      final response = await _dio.get('/tutor/inquiries/');
       final data = response.data;
       final items = data is Map<String, dynamic> ? data['results'] : data;
       if (items is! List) return const [];
@@ -350,32 +350,32 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Inquiry> markContacted(String inquiryId) async {
-    return _postTransition(inquiryId, 'contacted');
+  Future<void> markContacted(String inquiryId) async {
+    return _patchTransition(inquiryId, InquiryStatus.contacted);
   }
 
   @override
-  Future<Inquiry> acceptInquiry(String inquiryId) async {
-    return _postTransition(inquiryId, 'accept');
+  Future<void> acceptInquiry(String inquiryId) async {
+    return _patchTransition(inquiryId, InquiryStatus.accepted);
   }
 
   @override
-  Future<Inquiry> declineInquiry(String inquiryId) async {
-    return _postTransition(inquiryId, 'decline');
+  Future<void> declineInquiry(String inquiryId) async {
+    return _patchTransition(inquiryId, InquiryStatus.declined);
   }
 
   @override
-  Future<Inquiry> completeInquiry(String inquiryId) async {
-    return _postTransition(inquiryId, 'complete');
+  Future<void> completeInquiry(String inquiryId) async {
+    return _patchTransition(inquiryId, InquiryStatus.completed);
   }
 
-  Future<Inquiry> _postTransition(String inquiryId, String action) async {
+  Future<void> _patchTransition(String inquiryId, InquiryStatus status) async {
     try {
-      final response = await _dio.post(
-        '/provider/inquiries/$inquiryId/$action/',
-        data: null,
+      await _dio.patch(
+        '/tutor/inquiries/$inquiryId/',
+        data: {'status': status.toBackend()},
       );
-      return _parseInquiry(Map<String, dynamic>.from(response.data as Map));
+      return;
     } on DioException catch (e) {
       if (e.response?.statusCode == 409) {
         final msg = _extractError(e);
@@ -387,10 +387,13 @@ class HttpProviderRepository implements ProviderRepository {
 
   Inquiry _parseInquiry(Map<String, dynamic> d) {
     final family = d['family'] as Map<String, dynamic>?;
+    final tutor = d['tutor'];
     return Inquiry(
-      id: d['id'] as String,
-      listingId: d['listing_id'] as String,
-      providerId: d['provider_id']?.toString() ?? '',
+      id: d['id'].toString(),
+      tutorId: d['tutor_id']?.toString(),
+      tutor: tutor is Map
+          ? InquiryTutor.fromJson(Map<String, dynamic>.from(tutor))
+          : null,
       message: d['message'] as String? ?? '',
       status: InquiryStatus.fromBackend(d['status'] as String?),
       contactRevealed: d['contact_revealed'] as bool? ?? false,

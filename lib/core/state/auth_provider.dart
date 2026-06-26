@@ -148,8 +148,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final notifier = AuthNotifier(
     ref.watch(authRepositoryProvider),
-    onLogout: () => ref.read(activeInterfaceProvider.notifier).state =
-        ActiveInterface.family,
+    onLogout: () {
+      ref.read(activeInterfaceProvider.notifier).state = ActiveInterface.family;
+      // Drop the cached family enrollments so the next user starts clean.
+      ref.invalidate(myListingEnrollmentsProvider);
+    },
   );
   // Switching interfaces refreshes the user and provider data from the backend.
   ref.listen<ActiveInterface>(activeInterfaceProvider, (prev, next) {

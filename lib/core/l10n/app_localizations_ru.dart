@@ -228,6 +228,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get viewCentre => 'Открыть центр';
 
   @override
+  String get qualifications => 'Квалификация';
+
+  @override
+  String get centre => 'Центр';
+
+  @override
   String get ourTutors => 'Наши репетиторы';
 
   @override
@@ -783,4 +789,67 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get requestCancelled => 'Ваша заявка отменена.';
+
+  @override
+  String get myRequestsTabListings => 'Записи';
+
+  @override
+  String get myRequestsTabTutors => 'Репетиторы';
+
+  @override
+  String get enroll => 'Записаться';
+
+  @override
+  String get enrolled => 'Вы записаны';
+
+  @override
+  String get enrollmentSubmitted => 'Вы записаны — провайдер свяжется с вами.';
+
+  @override
+  String get enrollmentCancelled => 'Ваша запись отменена.';
+
+  @override
+  String get cancelEnrollment => 'Отменить запись';
+
+  @override
+  String get keepEnrollment => 'Оставить запись';
+
+  @override
+  String get noEnrollmentsYet => 'Пока нет записей';
+
+  @override
+  String get cancelListingEnrollmentTitle => 'Отменить запись?';
+
+  @override
+  String get cancelListingEnrollmentMessage =>
+      'Это отменит вашу запись на это занятие. Позже вы сможете записаться снова.';
+
+  @override
+  String get clients => 'Клиенты';
+
+  @override
+  String get viewClients => 'Посмотреть клиентов';
+
+  @override
+  String get noClientsYet => 'Пока нет клиентов';
+
+  @override
+  String get clientStatusUpdated => 'Статус обновлён.';
+
+  @override
+  String get acceptEnrollmentTitle => 'Принять запись';
+
+  @override
+  String get rejectEnrollmentTitle => 'Отклонить запись';
+
+  @override
+  String get commentOptionalHint =>
+      'Добавьте примечание для семьи (необязательно).';
+
+  @override
+  String get commentRequiredHint =>
+      'Укажите причину — для отклонения нужно примечание.';
+
+  @override
+  String get commentHint => 'Напишите примечание…';
 }

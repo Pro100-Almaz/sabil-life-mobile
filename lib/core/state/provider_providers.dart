@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/catalog.dart';
 import 'package:sabil_life/data/api/inquiry.dart';
+import 'package:sabil_life/data/api/listing_enroll.dart';
 import 'package:sabil_life/data/api/provider.dart';
 import 'package:sabil_life/data/api/review.dart';
 import 'package:sabil_life/data/api/subscription.dart';
@@ -11,6 +12,7 @@ import 'package:sabil_life/data/repositories/catalog_repository.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
+import '../../data/models/listing_enroll.dart';
 import '../../data/models/provider_profile.dart';
 import '../../data/models/provider_verification.dart';
 import '../../data/models/review.dart';
@@ -18,6 +20,7 @@ import '../../data/models/subscription.dart';
 import '../../data/models/suggestion.dart';
 import '../../data/models/tutor.dart';
 import '../../data/repositories/inquiry_repository.dart';
+import '../../data/repositories/listing_enroll_repository.dart';
 import '../../data/repositories/provider_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../data/repositories/subscription_repository.dart';
@@ -50,6 +53,32 @@ final myInquiriesProvider = FutureProvider.family
     .autoDispose<List<Inquiry>, String>(
       (ref, familyId) =>
           ref.watch(inquiryRepositoryProvider).myInquiries(familyId),
+    );
+
+// ── Listing request providers ────────────────────────────────────────────────
+
+final listingEnrollmentRepositoryProvider =
+    Provider<ListingEnrollmentRepository>(
+      (ref) => HttpListingEnrollmentRepository(),
+    );
+
+/// The signed-in family's own listing enrollments (newest-first).
+///
+/// Deliberately **not** `autoDispose`: it's cached for the session so re-opening
+/// a listing shows the enrolled state instantly instead of re-fetching and
+/// briefly flashing the "Enroll" button. It's prefetched in the family shell and
+/// invalidated on logout ([AuthNotifier.logout]) so it never leaks across users.
+final myListingEnrollmentsProvider = FutureProvider<List<ListingEnrollment>>(
+  (ref) => ref.watch(listingEnrollmentRepositoryProvider).myEnrollments(),
+);
+
+/// Clients who requested a given listing (or all of the owner's listings when
+/// [listingId] is null).
+final listingClientsProvider = FutureProvider.family
+    .autoDispose<List<ListingClient>, String?>(
+      (ref, listingId) => ref
+          .watch(listingEnrollmentRepositoryProvider)
+          .clients(listingId: listingId),
     );
 
 // ── Provider providers ───────────────────────────────────────────────────────

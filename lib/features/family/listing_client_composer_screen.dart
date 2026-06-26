@@ -56,15 +56,8 @@ class _InquiryComposerScreenState extends ConsumerState<InquiryComposerScreen> {
     });
     try {
       await ref
-          .read(inquiryRepositoryProvider)
-          .create(
-            listingId: widget.listingId,
-            familyId: user.id,
-            familyName: user.fullName,
-            familyEmail: user.email,
-            message: _message.text,
-            tutorIdHint: widget.tutorIdHint,
-          );
+          .read(listingEnrollmentRepositoryProvider)
+          .enroll(widget.listingId);
       ref.invalidate(myInquiriesProvider(user.id));
       if (!mounted) return;
       final l10n = AppLocalizations.of(context)!;

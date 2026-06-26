@@ -96,10 +96,6 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     });
   }
 
-  CategoryType _categoryFor(UserRole role) => role == UserRole.masterclass
-      ? CategoryType.masterclasses
-      : CategoryType.tutoring;
-
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     if (user == null) return;

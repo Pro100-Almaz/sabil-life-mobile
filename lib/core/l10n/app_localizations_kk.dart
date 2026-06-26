@@ -228,6 +228,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get viewCentre => 'Орталықты ашу';
 
   @override
+  String get qualifications => 'Біліктілігі';
+
+  @override
+  String get centre => 'Орталық';
+
+  @override
   String get ourTutors => 'Біздің репетиторлар';
 
   @override
@@ -787,4 +793,68 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get requestCancelled => 'Өтінішіңіз болдырылмады.';
+
+  @override
+  String get myRequestsTabListings => 'Жазылулар';
+
+  @override
+  String get myRequestsTabTutors => 'Тәрбиешілер';
+
+  @override
+  String get enroll => 'Жазылу';
+
+  @override
+  String get enrolled => 'Жазылдыңыз';
+
+  @override
+  String get enrollmentSubmitted =>
+      'Сіз жазылдыңыз — провайдер сізбен хабарласады.';
+
+  @override
+  String get enrollmentCancelled => 'Жазылуыңыз болдырылмады.';
+
+  @override
+  String get cancelEnrollment => 'Жазылуды болдырмау';
+
+  @override
+  String get keepEnrollment => 'Жазылуды қалдыру';
+
+  @override
+  String get noEnrollmentsYet => 'Әзірге жазылу жоқ';
+
+  @override
+  String get cancelListingEnrollmentTitle => 'Жазылуды болдырмайсыз ба?';
+
+  @override
+  String get cancelListingEnrollmentMessage =>
+      'Бұл осы сабаққа жазылуыңызды кері қайтарады. Кейін қайта жазыла аласыз.';
+
+  @override
+  String get clients => 'Клиенттер';
+
+  @override
+  String get viewClients => 'Клиенттерді көру';
+
+  @override
+  String get noClientsYet => 'Әзірге клиент жоқ';
+
+  @override
+  String get clientStatusUpdated => 'Күй жаңартылды.';
+
+  @override
+  String get acceptEnrollmentTitle => 'Жазылуды қабылдау';
+
+  @override
+  String get rejectEnrollmentTitle => 'Жазылуды қабылдамау';
+
+  @override
+  String get commentOptionalHint =>
+      'Отбасына ескертпе қосыңыз (міндетті емес).';
+
+  @override
+  String get commentRequiredHint =>
+      'Себебін жазыңыз — қабылдамау үшін ескертпе қажет.';
+
+  @override
+  String get commentHint => 'Ескертпе жазыңыз…';
 }

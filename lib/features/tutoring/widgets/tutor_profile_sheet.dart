@@ -38,13 +38,36 @@ class TutorProfileSheet extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final centre = listingById(tutor.affiliationListingId);
 
+    final hasTags = tutor.subjects.isNotEmpty || tutor.formats.isNotEmpty;
+    final hasCredentials = tutor.credentials.trim().isNotEmpty;
+    final hasLanguages = tutor.languages.isNotEmpty;
+    final hasBio = tutor.bio.trim().isNotEmpty;
+    final hasFacts = hasCredentials || hasLanguages || centre != null;
+
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.xxl),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xxl,
+          AppSpacing.md,
+          AppSpacing.xxl,
+          AppSpacing.xxl,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Drag handle.
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+                decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
             Row(
               children: [
                 ClipOval(
@@ -53,20 +76,9 @@ class TutorProfileSheet extends StatelessWidget {
                     width: 72,
                     height: 72,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      width: 72,
-                      height: 72,
-                      color: AppColors.surfaceAlt,
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      width: 72,
-                      height: 72,
-                      color: AppColors.surfaceAlt,
-                      child: const Icon(
-                        Icons.person_outline,
-                        color: AppColors.textTertiary,
-                      ),
-                    ),
+                    placeholder: (context, url) => const _AvatarFallback(),
+                    errorWidget: (context, url, error) =>
+                        const _AvatarFallback(),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.lg),
@@ -75,45 +87,70 @@ class TutorProfileSheet extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(tutor.name, style: AppTypography.h2),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 4),
                       StarRating(
                         rating: tutor.rating,
                         suffix: l10n.reviews(tutor.reviewCount),
                       ),
-                      const SizedBox(height: 2),
-                      Text(
-                        l10n.yearsExperience(tutor.yearsExperience),
-                        style: AppTypography.caption,
-                      ),
+                      if (tutor.yearsExperience > 0) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          l10n.yearsExperience(tutor.yearsExperience),
+                          style: AppTypography.caption,
+                        ),
+                      ],
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(tutor.credentials, style: AppTypography.label),
-            if (centre != null) ...[
-              const SizedBox(height: 2),
-              Text(centre.title, style: AppTypography.caption),
+
+            // Subjects + formats chips.
+            if (hasTags) ...[
+              const SizedBox(height: AppSpacing.lg),
+              Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  for (final subject in tutor.subjects)
+                    _Tag(label: subjectLabel(subject, l10n), filled: true),
+                  for (final format in tutor.formats)
+                    _Tag(label: format.label(l10n)),
+                ],
+              ),
             ],
-            const SizedBox(height: AppSpacing.lg),
-            Wrap(
-              spacing: AppSpacing.sm,
-              runSpacing: AppSpacing.sm,
-              children: [
-                for (final subject in tutor.subjects)
-                  _Tag(label: subjectLabel(subject, l10n), filled: true),
-                for (final format in tutor.formats)
-                  _Tag(label: format.label(l10n)),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              '${l10n.languagesLabel}: ${tutor.languages.join(", ")}',
-              style: AppTypography.caption,
-            ),
-            const SizedBox(height: AppSpacing.md),
-            Text(tutor.bio, style: AppTypography.body.copyWith(height: 1.5)),
+
+            // Facts (only the ones we actually have).
+            if (hasFacts) ...[
+              const SizedBox(height: AppSpacing.lg),
+              if (hasCredentials)
+                _InfoRow(
+                  icon: Icons.school_outlined,
+                  label: l10n.qualifications,
+                  value: tutor.credentials,
+                ),
+              if (hasLanguages)
+                _InfoRow(
+                  icon: Icons.language_outlined,
+                  label: l10n.languagesLabel,
+                  value: tutor.languages.join(', '),
+                ),
+              if (centre != null)
+                _InfoRow(
+                  icon: Icons.business_outlined,
+                  label: l10n.centre,
+                  value: centre.title,
+                ),
+            ],
+
+            // About / bio.
+            if (hasBio) ...[
+              const SizedBox(height: AppSpacing.xl),
+              Text(l10n.about, style: AppTypography.h3),
+              const SizedBox(height: AppSpacing.sm),
+              Text(tutor.bio, style: AppTypography.body.copyWith(height: 1.5)),
+            ],
+
             const SizedBox(height: AppSpacing.xl),
             Row(
               children: [
@@ -123,16 +160,26 @@ class TutorProfileSheet extends StatelessWidget {
                 ),
                 const Spacer(),
                 if (tutor.trialAvailable)
-                  Text(
-                    l10n.trialLesson,
-                    style: AppTypography.label.copyWith(
-                      color: AppColors.primary,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md,
+                      vertical: AppSpacing.xs,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppRadius.chip),
+                    ),
+                    child: Text(
+                      l10n.trialLesson,
+                      style: AppTypography.label.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
                   ),
               ],
             ),
-            const SizedBox(height: AppSpacing.lg),
-            if (centre != null)
+            if (centre != null) ...[
+              const SizedBox(height: AppSpacing.lg),
               AppButton(
                 label: l10n.viewCentre,
                 expanded: true,
@@ -141,8 +188,61 @@ class TutorProfileSheet extends StatelessWidget {
                   context.push('/listing/${centre.id}');
                 },
               ),
+            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _AvatarFallback extends StatelessWidget {
+  const _AvatarFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 72,
+      height: 72,
+      color: AppColors.surfaceAlt,
+      child: const Icon(Icons.person_outline, color: AppColors.textTertiary),
+    );
+  }
+}
+
+/// A labelled fact row: leading icon, a small grey label, and the value beneath.
+/// Only rendered by the caller when the value is present.
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.md),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 20, color: AppColors.textSecondary),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: AppTypography.small),
+                const SizedBox(height: 1),
+                Text(value, style: AppTypography.label),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

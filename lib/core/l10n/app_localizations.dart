@@ -502,6 +502,18 @@ abstract class AppLocalizations {
   /// **'View centre'**
   String get viewCentre;
 
+  /// No description provided for @qualifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Qualifications'**
+  String get qualifications;
+
+  /// No description provided for @centre.
+  ///
+  /// In en, this message translates to:
+  /// **'Centre'**
+  String get centre;
+
   /// No description provided for @ourTutors.
   ///
   /// In en, this message translates to:
@@ -1539,6 +1551,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your request has been cancelled.'**
   String get requestCancelled;
+
+  /// No description provided for @myRequestsTabListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Enrollments'**
+  String get myRequestsTabListings;
+
+  /// No description provided for @myRequestsTabTutors.
+  ///
+  /// In en, this message translates to:
+  /// **'Tutors'**
+  String get myRequestsTabTutors;
+
+  /// No description provided for @enroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll'**
+  String get enroll;
+
+  /// No description provided for @enrolled.
+  ///
+  /// In en, this message translates to:
+  /// **'Enrolled'**
+  String get enrolled;
+
+  /// No description provided for @enrollmentSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re enrolled — the provider will be in touch.'**
+  String get enrollmentSubmitted;
+
+  /// No description provided for @enrollmentCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Your enrollment has been cancelled.'**
+  String get enrollmentCancelled;
+
+  /// No description provided for @cancelEnrollment.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel enrollment'**
+  String get cancelEnrollment;
+
+  /// No description provided for @keepEnrollment.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep enrollment'**
+  String get keepEnrollment;
+
+  /// No description provided for @noEnrollmentsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No enrollments yet'**
+  String get noEnrollmentsYet;
+
+  /// No description provided for @cancelListingEnrollmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel enrollment?'**
+  String get cancelListingEnrollmentTitle;
+
+  /// No description provided for @cancelListingEnrollmentMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdraws your enrollment for this listing. You can enroll again later.'**
+  String get cancelListingEnrollmentMessage;
+
+  /// No description provided for @clients.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients'**
+  String get clients;
+
+  /// No description provided for @viewClients.
+  ///
+  /// In en, this message translates to:
+  /// **'View clients'**
+  String get viewClients;
+
+  /// No description provided for @noClientsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No clients yet'**
+  String get noClientsYet;
+
+  /// No description provided for @clientStatusUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Status updated.'**
+  String get clientStatusUpdated;
+
+  /// No description provided for @acceptEnrollmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept enrollment'**
+  String get acceptEnrollmentTitle;
+
+  /// No description provided for @rejectEnrollmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject enrollment'**
+  String get rejectEnrollmentTitle;
+
+  /// No description provided for @commentOptionalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note for the family (optional).'**
+  String get commentOptionalHint;
+
+  /// No description provided for @commentRequiredHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Let the family know why — a note is required to reject.'**
+  String get commentRequiredHint;
+
+  /// No description provided for @commentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a note…'**
+  String get commentHint;
 }
 
 class _AppLocalizationsDelegate

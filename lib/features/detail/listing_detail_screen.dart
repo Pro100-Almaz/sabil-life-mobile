@@ -26,6 +26,7 @@ import '../../data/repositories/favorites_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/star_rating.dart';
+import '../family/widgets/listing_enroll_cta.dart';
 import '../family/widgets/request_cta.dart';
 import '../tutoring/widgets/tutor_profile_sheet.dart';
 import 'widgets/image_carousel.dart';
@@ -280,9 +281,10 @@ class _DetailBody extends ConsumerWidget {
         child: SafeArea(
           child: Row(
             children: [
-              if (listing.category == CategoryType.tutoring ||
-                  listing.category == CategoryType.masterclasses)
+              if (listing.category == CategoryType.tutoring)
                 Expanded(child: RequestCta(listingId: listing.id))
+              else if (listing.category == CategoryType.masterclasses)
+                Expanded(child: ListingEnrollmentCta(listingId: listing.id))
               else
                 Expanded(
                   child: AppButton(

@@ -49,7 +49,9 @@ class _SearchPillState extends ConsumerState<SearchPill> {
       ),
       child: TextField(
         controller: _controller,
-        onChanged: (value) => ref.read(filterProvider.notifier).setQuery(value),
+        onSubmitted: (value) {
+          ref.read(filterProvider.notifier).setQuery(value);
+        },
         style: AppTypography.body,
         decoration: InputDecoration(
           filled: false,

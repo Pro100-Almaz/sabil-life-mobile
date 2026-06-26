@@ -498,6 +498,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Пожалуйста, заполните все обязательные поля.';
 
   @override
+  String get fieldRequired => 'Обязательно';
+
+  @override
   String minutesAgo(int count) {
     return '$count мин назад';
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../models/auth_user.dart';
@@ -295,12 +297,18 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Listing> upsertListing(Listing listing) async {
+  Future<Listing> upsertListing(
+    Listing listing, {
+    List<String> imagePaths = const [],
+  }) async {
     final payload = _serializeListing(listing);
     try {
+      final data = imagePaths.isEmpty
+          ? payload
+          : await _buildListingMultipartData(payload, imagePaths);
       final response = _looksLikeBackendListingId(listing.id)
-          ? await _dio.patch('/provider/listings/${listing.id}/', data: payload)
-          : await _dio.post('/provider/listings/', data: payload);
+          ? await _dio.patch('/provider/listings/${listing.id}/', data: data)
+          : await _dio.post('/provider/listings/', data: data);
       return ListingParser.fromCard(
         Map<String, dynamic>.from(response.data as Map),
       );
@@ -454,6 +462,31 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
+
+  Future<FormData> _buildListingMultipartData(
+    Map<String, dynamic> payload,
+    List<String> imagePaths,
+  ) async {
+    return FormData.fromMap({
+      'title': payload['title'],
+      'category': payload['category'],
+      'subtitle': payload['subtitle'],
+      'neighborhood': payload['neighborhood'],
+      'lat': payload['lat']?.toString(),
+      'lng': payload['lng']?.toString(),
+      'price_from_qar': payload['price_from_qar']?.toString(),
+      'image_urls': jsonEncode(payload['image_urls'] ?? const []),
+      'age_groups': jsonEncode(payload['age_groups'] ?? const []),
+      'description': payload['description'],
+      'highlights': jsonEncode(payload['highlights'] ?? const []),
+      'is_featured': (payload['is_featured'] as bool?) == true
+          ? 'true'
+          : 'false',
+      'images': [
+        for (final path in imagePaths) await MultipartFile.fromFile(path),
+      ],
+    });
+  }
 
   Map<String, dynamic> _serializeListing(Listing listing) {
     return {

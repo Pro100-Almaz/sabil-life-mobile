@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -35,16 +38,24 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _price = TextEditingController(text: '0');
   final _description = TextEditingController();
   final _highlights = <TextEditingController>[];
-  final _images = <TextEditingController>[];
   final Set<String> _ageGroups = {};
+  final _pickedImages = <XFile>[];
   bool _saving = false;
+  bool _showErrors = false;
 
   Listing? _existing;
+
+  /// Rebuild so inline errors clear as the user fills required fields.
+  void _onRequiredChanged() {
+    if (_showErrors) setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     _existing = widget.initialListing;
+    _title.addListener(_onRequiredChanged);
+    _subtitle.addListener(_onRequiredChanged);
     final l = _existing;
     if (l != null) {
       _title.text = l.title;
@@ -55,13 +66,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       for (final h in l.highlights) {
         _highlights.add(TextEditingController(text: h));
       }
-      for (final url in l.imageUrls) {
-        _images.add(TextEditingController(text: url));
-      }
       _ageGroups.addAll(l.ageGroups);
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
-    if (_images.isEmpty) _images.add(TextEditingController());
   }
 
   @override
@@ -74,17 +81,31 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     for (final c in _highlights) {
       c.dispose();
     }
-    for (final c in _images) {
-      c.dispose();
-    }
     super.dispose();
   }
+
+  Future<void> _pickImages() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickMultiImage(
+      maxWidth: 1600,
+      imageQuality: 90,
+    );
+    if (!mounted || picked.isEmpty) return;
+    setState(() {
+      _pickedImages.addAll(picked);
+    });
+  }
+
+  CategoryType _categoryFor(UserRole role) => role == UserRole.masterclass
+      ? CategoryType.masterclasses
+      : CategoryType.tutoring;
 
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     if (user == null) return;
     if (_title.text.trim().isEmpty || _subtitle.text.trim().isEmpty) {
       final l10n = AppLocalizations.of(context)!;
+      setState(() => _showErrors = true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
@@ -98,12 +119,6 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
           .map((c) => c.text.trim())
           .where((h) => h.isNotEmpty)
           .toList();
-      final images = _images
-          .map((c) => c.text.trim())
-          .where((u) => u.isNotEmpty)
-          .toList();
-      final fallbackImage =
-          'https://picsum.photos/seed/${user.id}-${DateTime.now().millisecondsSinceEpoch}/800/600';
 
       final base =
           _existing ??
@@ -136,14 +151,17 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         priceFromQar: price,
         description: _description.text.trim(),
         highlights: highlights,
-        imageUrls: images.isEmpty ? [fallbackImage] : images,
+        imageUrls: _existing?.imageUrls ?? const [],
         ageGroups: _ageGroups.toList(),
         status: ListingStatus.draft,
       );
 
       final saved = await ref
           .read(providerRepositoryProvider)
-          .upsertListing(draft);
+          .upsertListing(
+            draft,
+            imagePaths: [for (final image in _pickedImages) image.path],
+          );
       if (submitForReview && user.isVerified) {
         await ref.read(providerRepositoryProvider).submitForReview(saved.id);
       }
@@ -172,12 +190,22 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
           children: [
             TextField(
               controller: _title,
-              decoration: InputDecoration(labelText: l10n.fieldTitle),
+              decoration: InputDecoration(
+                labelText: l10n.fieldTitle,
+                errorText: _showErrors && _title.text.trim().isEmpty
+                    ? l10n.fieldRequired
+                    : null,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             TextField(
               controller: _subtitle,
-              decoration: InputDecoration(labelText: l10n.fieldSubtitle),
+              decoration: InputDecoration(
+                labelText: l10n.fieldSubtitle,
+                errorText: _showErrors && _subtitle.text.trim().isEmpty
+                    ? l10n.fieldRequired
+                    : null,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
             TextField(
@@ -230,14 +258,14 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
               }),
             ),
             const SizedBox(height: AppSpacing.lg),
-            _RepeatableSection(
-              title: l10n.fieldImageUrl,
-              addLabel: l10n.fieldAddImage,
-              controllers: _images,
-              onAdd: () => setState(() => _images.add(TextEditingController())),
-              onRemove: (i) => setState(() {
-                final c = _images.removeAt(i);
-                c.dispose();
+            _ImageUploadSection(
+              title: l10n.fieldAddImage,
+              buttonLabel: l10n.fieldAddImage,
+              existingImageUrls: _existing?.imageUrlsOrEmpty ?? const [],
+              pickedImages: _pickedImages,
+              onPick: _pickImages,
+              onRemovePicked: (index) => setState(() {
+                _pickedImages.removeAt(index);
               }),
             ),
             const SizedBox(height: AppSpacing.xxl),
@@ -289,6 +317,112 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ImageUploadSection extends StatelessWidget {
+  const _ImageUploadSection({
+    required this.title,
+    required this.buttonLabel,
+    required this.existingImageUrls,
+    required this.pickedImages,
+    required this.onPick,
+    required this.onRemovePicked,
+  });
+
+  final String title;
+  final String buttonLabel;
+  final List<String> existingImageUrls;
+  final List<XFile> pickedImages;
+  final Future<void> Function() onPick;
+  final ValueChanged<int> onRemovePicked;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(title, style: AppTypography.label),
+        const SizedBox(height: AppSpacing.sm),
+        OutlinedButton.icon(
+          onPressed: onPick,
+          icon: const Icon(Icons.photo_library_outlined),
+          label: Text(buttonLabel),
+        ),
+        if (existingImageUrls.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final url in existingImageUrls)
+                _ImageThumb(
+                  image: Image.network(
+                    url,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => const ColoredBox(
+                      color: AppColors.surfaceAlt,
+                      child: SizedBox.expand(),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+        if (pickedImages.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (var i = 0; i < pickedImages.length; i++)
+                _ImageThumb(
+                  image: Image.file(
+                    File(pickedImages[i].path),
+                    fit: BoxFit.cover,
+                  ),
+                  onRemove: () => onRemovePicked(i),
+                ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _ImageThumb extends StatelessWidget {
+  const _ImageThumb({required this.image, this.onRemove});
+
+  final Widget image;
+  final VoidCallback? onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          child: SizedBox(width: 92, height: 92, child: image),
+        ),
+        if (onRemove != null)
+          Positioned(
+            top: 4,
+            right: 4,
+            child: InkWell(
+              onTap: onRemove,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.black54,
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(4),
+                child: const Icon(Icons.close, size: 16, color: Colors.white),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

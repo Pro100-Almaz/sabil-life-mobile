@@ -165,6 +165,7 @@
   "paidCommission": "Paid",
   "commissionListEmpty": "Accepted student requests will appear here.",
   "fillRequiredFields": "Please fill in all required fields.",
+  "fieldRequired": "Required",
   "minutesAgo": "{count}m ago",
   "@minutesAgo": { "placeholders": { "count": { "type": "int" } } },
   "hoursAgo": "{count}h ago",

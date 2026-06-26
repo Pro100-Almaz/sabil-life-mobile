@@ -1,13 +1,18 @@
+import '../api/api_config.dart';
+
 const kListingFallbackAsset = 'assets/placeholder_1200x800.png';
 
 extension ListingImageFallback on Listing {
   bool get hasImages => imageUrls.any((url) => url.trim().isNotEmpty);
 
-  String? get primaryImageUrl =>
-      hasImages ? imageUrls.firstWhere((url) => url.trim().isNotEmpty) : null;
+  String? get primaryImageUrl => hasImages
+      ? resolveMediaUrl(imageUrls.firstWhere((url) => url.trim().isNotEmpty))
+      : null;
 
-  List<String> get imageUrlsOrEmpty =>
-      imageUrls.where((url) => url.trim().isNotEmpty).toList();
+  List<String> get imageUrlsOrEmpty => imageUrls
+      .where((url) => url.trim().isNotEmpty)
+      .map(resolveMediaUrl)
+      .toList();
 }
 
 enum CategoryType {

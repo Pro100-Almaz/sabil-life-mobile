@@ -25,7 +25,10 @@ class EarningsSummary {
 abstract class ProviderRepository {
   Future<List<Listing>> myListings(String providerId);
 
-  Future<Listing> upsertListing(Listing listing);
+  Future<Listing> upsertListing(
+    Listing listing, {
+    List<String> imagePaths = const [],
+  });
 
   Future<Listing> submitForReview(String listingId);
 
@@ -150,7 +153,10 @@ class MockProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Listing> upsertListing(Listing listing) async {
+  Future<Listing> upsertListing(
+    Listing listing, {
+    List<String> imagePaths = const [],
+  }) async {
     await Future<void>.delayed(_latency);
     final index = mockListings.indexWhere((l) => l.id == listing.id);
     if (index >= 0) {

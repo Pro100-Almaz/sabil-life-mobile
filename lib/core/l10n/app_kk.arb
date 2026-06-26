@@ -148,6 +148,7 @@
   "paidCommission": "Төленген",
   "commissionListEmpty": "Қабылданған сұраныстар осында көрсетіледі.",
   "fillRequiredFields": "Барлық міндетті өрістерді толтырыңыз.",
+  "fieldRequired": "Міндетті",
   "minutesAgo": "{count} мин бұрын",
   "hoursAgo": "{count} сағ бұрын",
   "daysAgo": "{count} күн бұрын",

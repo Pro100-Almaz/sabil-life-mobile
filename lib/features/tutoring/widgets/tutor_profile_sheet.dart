@@ -11,6 +11,7 @@ import '../../../data/mock/mock_listings.dart';
 import '../../../data/models/tutor.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/star_rating.dart';
+import 'tutor_inquire_cta.dart';
 
 Future<void> showTutorProfileSheet(BuildContext context, Tutor tutor) {
   return showModalBottomSheet<void>(
@@ -178,10 +179,13 @@ class TutorProfileSheet extends StatelessWidget {
                   ),
               ],
             ),
+            const SizedBox(height: AppSpacing.lg),
+            TutorInquireCta(tutor: tutor),
             if (centre != null) ...[
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.sm),
               AppButton(
                 label: l10n.viewCentre,
+                variant: AppButtonVariant.outlined,
                 expanded: true,
                 onPressed: () {
                   Navigator.of(context).pop();

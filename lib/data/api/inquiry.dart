@@ -29,18 +29,30 @@ class HttpInquiryRepository implements InquiryRepository {
 
   @override
   Future<Inquiry> create({
-    required String listingId,
-    required String familyId,
-    required String familyName,
-    required String familyEmail,
+    required String tutorId,
     required String message,
-    String? tutorIdHint,
   }) async {
-    // Only listing_id + message go on the wire; family identity comes from token.
+    // Only tutor_id + message go on the wire; family identity comes from token.
     try {
       final response = await _dio.post(
         '/inquiries/',
-        data: {'listing_id': listingId, 'message': message},
+        data: {
+          'tutor_id': int.tryParse(tutorId) ?? tutorId,
+          'message': message,
+        },
+      );
+      return _parseInquiry(Map<String, dynamic>.from(response.data as Map));
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<Inquiry> cancel(String inquiryId) async {
+    try {
+      final response = await _dio.post(
+        '/inquiries/$inquiryId/cancel/',
+        data: null,
       );
       return _parseInquiry(Map<String, dynamic>.from(response.data as Map));
     } on DioException catch (e) {
@@ -49,10 +61,13 @@ class HttpInquiryRepository implements InquiryRepository {
   }
 
   static Inquiry _parseInquiry(Map<String, dynamic> data) {
+    final tutor = data['tutor'];
     return Inquiry(
       id: data['id'].toString(),
-      listingId: data['listing_id']?.toString() ?? '',
-      providerId: data['provider_id']?.toString() ?? '',
+      tutorId: data['tutor_id']?.toString(),
+      tutor: tutor is Map
+          ? InquiryTutor.fromJson(Map<String, dynamic>.from(tutor))
+          : null,
       message: (data['message'] ?? '') as String,
       status: InquiryStatus.fromBackend(data['status']?.toString()),
       contactRevealed: (data['contact_revealed'] ?? false) as bool,

@@ -855,4 +855,26 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get commentHint => 'Напишите примечание…';
+
+  @override
+  String get inquire => 'Отправить запрос';
+
+  @override
+  String get statusCancelled => 'Отменён';
+
+  @override
+  String get cancelInquiry => 'Отменить запрос';
+
+  @override
+  String get cancelInquiryTitle => 'Отменить запрос?';
+
+  @override
+  String get cancelInquiryMessage =>
+      'Ваш запрос этому репетитору будет отозван. Позже вы сможете отправить новый.';
+
+  @override
+  String get keepInquiry => 'Оставить запрос';
+
+  @override
+  String get inquiryCancelled => 'Ваш запрос отменён.';
 }

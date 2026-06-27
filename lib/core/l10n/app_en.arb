@@ -281,5 +281,12 @@
   "rejectEnrollmentTitle": "Reject enrollment",
   "commentOptionalHint": "Add a note for the family (optional).",
   "commentRequiredHint": "Let the family know why — a note is required to reject.",
-  "commentHint": "Write a note…"
+  "commentHint": "Write a note…",
+  "inquire": "Inquire",
+  "statusCancelled": "Cancelled",
+  "cancelInquiry": "Cancel inquiry",
+  "cancelInquiryTitle": "Cancel inquiry?",
+  "cancelInquiryMessage": "This withdraws your inquiry to this tutor. You can send a new one later.",
+  "keepInquiry": "Keep inquiry",
+  "inquiryCancelled": "Your inquiry has been cancelled."
 }

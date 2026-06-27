@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/relative_time.dart';
+import '../../core/util/tutor_label.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing_enroll.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
@@ -284,61 +285,155 @@ class _TutorsTab extends ConsumerWidget {
                 itemCount: items.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: AppSpacing.md),
-                itemBuilder: (context, i) => _InquiryRow(inquiry: items[i]),
+                itemBuilder: (context, i) =>
+                    _InquiryRow(inquiry: items[i], familyId: familyId),
               ),
       ),
     );
   }
 }
 
-class _InquiryRow extends StatelessWidget {
-  const _InquiryRow({required this.inquiry});
+class _InquiryRow extends ConsumerStatefulWidget {
+  const _InquiryRow({required this.inquiry, required this.familyId});
 
   final Inquiry inquiry;
+  final String familyId;
+
+  @override
+  ConsumerState<_InquiryRow> createState() => _InquiryRowState();
+}
+
+class _InquiryRowState extends ConsumerState<_InquiryRow> {
+  bool _busy = false;
+
+  Future<void> _cancel() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.cancelInquiryTitle),
+        content: Text(l10n.cancelInquiryMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.keepInquiry),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              l10n.cancelRequestConfirm,
+              style: const TextStyle(color: AppColors.primary),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    setState(() => _busy = true);
+    try {
+      await ref.read(inquiryRepositoryProvider).cancel(widget.inquiry.id);
+      ref.invalidate(myInquiriesProvider(widget.familyId));
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.inquiryCancelled),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e is StateError ? e.message : e.toString()),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final inquiry = widget.inquiry;
+    final tutor = inquiry.tutor;
+    final title = tutor?.fullName.isNotEmpty == true
+        ? tutor!.fullName
+        : (inquiry.tutorId ?? '—');
+    final subjects = tutor?.subjects ?? const [];
 
-    return GestureDetector(
-      onTap: () => context.push('/listing/${inquiry.listingId}'),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: AppColors.divider),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    inquiry.listingId,
-                    style: AppTypography.h3.copyWith(fontSize: 16),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTypography.h3.copyWith(fontSize: 16),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                _InquiryStatusChip(status: inquiry.status),
-              ],
-            ),
-            const SizedBox(height: 4),
+              ),
+              _InquiryStatusChip(status: inquiry.status),
+            ],
+          ),
+          if (subjects.isNotEmpty) ...[
+            const SizedBox(height: 2),
             Text(
-              formatRelative(inquiry.createdAt, l10n),
-              style: AppTypography.small,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              inquiry.message,
+              subjects.map((s) => subjectLabel(s, l10n)).join(' · '),
               style: AppTypography.caption,
-              maxLines: 3,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ],
-        ),
+          const SizedBox(height: 4),
+          Text(
+            formatRelative(inquiry.createdAt, l10n),
+            style: AppTypography.small,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            inquiry.message,
+            style: AppTypography.caption,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (inquiry.status.isCancellable) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Align(
+              alignment: Alignment.centerRight,
+              child: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : TextButton.icon(
+                      onPressed: _cancel,
+                      icon: const Icon(Icons.close, size: 16),
+                      label: Text(l10n.cancelInquiry),
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppColors.primary,
+                        padding: EdgeInsets.zero,
+                        minimumSize: const Size(0, 0),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -356,7 +451,7 @@ class _InquiryStatusChip extends StatelessWidget {
       InquiryStatus.new_ ||
       InquiryStatus.pending => (l10n.requestStatusPending, AppColors.primary),
       InquiryStatus.contacted => (
-        l10n.requestStatusPending,
+        l10n.statusContacted,
         AppColors.textSecondary,
       ),
       InquiryStatus.accepted => (l10n.requestStatusAccepted, AppColors.success),
@@ -364,10 +459,8 @@ class _InquiryStatusChip extends StatelessWidget {
         l10n.requestStatusDeclined,
         AppColors.textTertiary,
       ),
-      InquiryStatus.completed => (
-        l10n.requestStatusAccepted,
-        AppColors.success,
-      ),
+      InquiryStatus.completed => (l10n.statusCompleted, AppColors.success),
+      InquiryStatus.cancelled => (l10n.statusCancelled, AppColors.textTertiary),
     };
     return _Chip(label: label, color: color);
   }

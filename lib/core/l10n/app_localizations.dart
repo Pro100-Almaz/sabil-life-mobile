@@ -1671,6 +1671,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Write a note…'**
   String get commentHint;
+
+  /// No description provided for @inquire.
+  ///
+  /// In en, this message translates to:
+  /// **'Inquire'**
+  String get inquire;
+
+  /// No description provided for @statusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get statusCancelled;
+
+  /// No description provided for @cancelInquiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel inquiry'**
+  String get cancelInquiry;
+
+  /// No description provided for @cancelInquiryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel inquiry?'**
+  String get cancelInquiryTitle;
+
+  /// No description provided for @cancelInquiryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdraws your inquiry to this tutor. You can send a new one later.'**
+  String get cancelInquiryMessage;
+
+  /// No description provided for @keepInquiry.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep inquiry'**
+  String get keepInquiry;
+
+  /// No description provided for @inquiryCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Your inquiry has been cancelled.'**
+  String get inquiryCancelled;
 }
 
 class _AppLocalizationsDelegate

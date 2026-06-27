@@ -163,7 +163,7 @@ class _InquiryCard extends ConsumerStatefulWidget {
 class _InquiryCardState extends ConsumerState<_InquiryCard> {
   bool _busy = false;
 
-  Future<void> _runAction(Future<Inquiry> Function() action) async {
+  Future<void> _runAction(Future<void> Function() action) async {
     setState(() => _busy = true);
     try {
       await action();
@@ -207,8 +207,6 @@ class _InquiryCardState extends ConsumerState<_InquiryCard> {
                       inq.familyName ?? '—',
                       style: AppTypography.h3.copyWith(fontSize: 16),
                     ),
-                    const SizedBox(height: 2),
-                    Text(inq.listingId, style: AppTypography.caption),
                   ],
                 ),
               ),
@@ -352,7 +350,8 @@ class _ActionButtons extends StatelessWidget {
         onPressed: onComplete,
       ),
       InquiryStatus.declined ||
-      InquiryStatus.completed => const SizedBox.shrink(),
+      InquiryStatus.completed ||
+      InquiryStatus.cancelled => const SizedBox.shrink(),
     };
   }
 }
@@ -378,6 +377,7 @@ class _StatusChip extends StatelessWidget {
         AppColors.textTertiary,
       ),
       InquiryStatus.completed => (l10n.statusCompleted, AppColors.success),
+      InquiryStatus.cancelled => (l10n.statusCancelled, AppColors.textTertiary),
     };
     return Container(
       padding: const EdgeInsets.symmetric(

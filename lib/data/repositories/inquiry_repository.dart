@@ -1,5 +1,6 @@
 import '../mock/mock_inquiries.dart';
-import '../mock/mock_listings.dart';
+import '../mock/mock_tutors.dart';
+import '../mock/mock_users.dart';
 import '../models/inquiry.dart';
 
 abstract class InquiryRepository {
@@ -8,16 +9,13 @@ abstract class InquiryRepository {
   /// (backend reads family from the token).
   Future<List<Inquiry>> myInquiries(String familyId);
 
-  /// Create a new inquiry from a family against a listing. Returns the saved
-  /// inquiry (with id + createdAt populated).
-  Future<Inquiry> create({
-    required String listingId,
-    required String familyId,
-    required String familyName,
-    required String familyEmail,
-    required String message,
-    String? tutorIdHint,
-  });
+  /// Create a new inquiry from the signed-in family to a tutor. Only
+  /// [tutorId] + [message] go on the wire; family identity comes from the token.
+  Future<Inquiry> create({required String tutorId, required String message});
+
+  /// Cancel one of the family's own inquiries (→ CANCELLED). Returns the
+  /// updated inquiry.
+  Future<Inquiry> cancel(String inquiryId);
 }
 
 class MockInquiryRepository implements InquiryRepository {
@@ -32,36 +30,46 @@ class MockInquiryRepository implements InquiryRepository {
 
   @override
   Future<Inquiry> create({
-    required String listingId,
-    required String familyId,
-    required String familyName,
-    required String familyEmail,
+    required String tutorId,
     required String message,
-    String? tutorIdHint,
   }) async {
     await Future<void>.delayed(_latency);
-    final listing = listingById(listingId);
-    if (listing == null) {
-      throw StateError('Unknown listing: $listingId');
+    final matches = mockTutors.where((t) => t.id == tutorId);
+    if (matches.isEmpty) {
+      throw StateError('Unknown tutor: $tutorId');
     }
-    if (listing.ownerId == null) {
-      throw StateError(
-        'Listing $listingId has no owner; cannot create an inquiry',
-      );
-    }
+    final tutor = matches.first;
     final inquiry = Inquiry(
       id: 'inq-${DateTime.now().millisecondsSinceEpoch}',
-      listingId: listingId,
-      familyId: familyId,
-      familyName: familyName,
-      familyEmail: familyEmail,
-      providerId: listing.ownerId!,
+      tutorId: tutor.id,
+      tutor: InquiryTutor(
+        id: tutor.id,
+        fullName: tutor.name,
+        subjects: tutor.subjects,
+        isVerified: true,
+      ),
+      familyId: kDemoFamilyId,
       message: message.trim(),
       status: InquiryStatus.new_,
       createdAt: DateTime.now(),
-      tutorIdHint: tutorIdHint,
     );
     seedInquiries.add(inquiry);
     return inquiry;
+  }
+
+  @override
+  Future<Inquiry> cancel(String inquiryId) async {
+    await Future<void>.delayed(_latency);
+    final index = seedInquiries.indexWhere((i) => i.id == inquiryId);
+    if (index < 0) {
+      throw StateError('Unknown inquiry: $inquiryId');
+    }
+    final current = seedInquiries[index];
+    if (!current.status.isCancellable) {
+      throw StateError('This inquiry can no longer be cancelled.');
+    }
+    final updated = current.copyWith(status: InquiryStatus.cancelled);
+    seedInquiries[index] = updated;
+    return updated;
   }
 }

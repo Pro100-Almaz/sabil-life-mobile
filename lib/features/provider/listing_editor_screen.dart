@@ -12,7 +12,6 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
-import '../../data/models/auth_user.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_button.dart';
 
@@ -100,10 +99,6 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     });
   }
 
-  CategoryType _categoryFor(UserRole role) => role == UserRole.masterclass
-      ? CategoryType.masterclasses
-      : CategoryType.tutoring;
-
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     if (user == null) return;
@@ -131,7 +126,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
                 widget.listingId ??
                 'listing-${DateTime.now().millisecondsSinceEpoch}',
             title: '',
-            category: _categoryFor(user.role),
+            category: CategoryType.masterclasses,
             subtitle: '',
             neighborhood: '',
             lat: 25.3690,

@@ -3,19 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/listing.dart';
+import '../../data/models/tutor.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/category/category_list_screen.dart';
 import '../../features/detail/listing_detail_screen.dart';
-import '../../features/family/inquiry_composer_screen.dart';
-import '../../features/family/my_requests_screen.dart';
+import '../../features/family/listing_client_composer_screen.dart';
+import '../../features/family/my_enrollments_screen.dart';
 import '../../features/family/suggestion_screen.dart';
+import '../../features/family/tutor_inquiry_composer_screen.dart';
 import '../../features/favorites/favorites_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
 import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
+import '../../features/provider/listing_clients_screen.dart';
 import '../../features/provider/listing_editor_screen.dart';
 import '../../features/provider/masterclass_gate_screen.dart';
 import '../../features/provider/my_listings_screen.dart';
@@ -73,6 +76,16 @@ StatefulShellRoute _providerShellRoute({
               listingId: state.pathParameters['id'],
               initialListing: state.extra is Listing
                   ? state.extra as Listing
+                  : null,
+            ),
+          ),
+          GoRoute(
+            path: 'clients/:id',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ListingClientsScreen(
+              listingId: state.pathParameters['id'] ?? '',
+              listingTitle: state.extra is Listing
+                  ? (state.extra as Listing).title
                   : null,
             ),
           ),
@@ -255,6 +268,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => InquiryComposerScreen(
           listingId: state.pathParameters['listingId'] ?? '',
           tutorIdHint: state.uri.queryParameters['tutor'],
+        ),
+      ),
+      GoRoute(
+        path: '/inquire/tutor/:tutorId',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => TutorInquiryComposerScreen(
+          tutorId: state.pathParameters['tutorId'] ?? '',
+          tutor: state.extra is Tutor ? state.extra as Tutor : null,
         ),
       ),
       GoRoute(

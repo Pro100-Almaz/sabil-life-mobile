@@ -40,6 +40,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _highlights = <TextEditingController>[];
   final Set<String> _ageGroups = {};
   final _pickedImages = <XFile>[];
+  final _existingImages = <ListingImage>[];
+  final _removedImageIds = <String>{};
   bool _saving = false;
   bool _showErrors = false;
 
@@ -67,6 +69,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         _highlights.add(TextEditingController(text: h));
       }
       _ageGroups.addAll(l.ageGroups);
+      _existingImages.addAll(l.images);
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -147,19 +150,29 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         priceFromQar: price,
         description: _description.text.trim(),
         highlights: highlights,
-        imageUrls: _existing?.imageUrls ?? const [],
         ageGroups: _ageGroups.toList(),
         status: ListingStatus.draft,
       );
 
-      final saved = await ref
-          .read(providerRepositoryProvider)
-          .upsertListing(
-            draft,
-            imagePaths: [for (final image in _pickedImages) image.path],
-          );
+      // 1. Save the listing fields (images are managed separately). Create
+      //    first so a new listing has a server id before we attach images.
+      final repo = ref.read(providerRepositoryProvider);
+      final saved = await repo.upsertListing(draft);
+
+      // 2. Upload newly picked images to the saved listing.
+      if (_pickedImages.isNotEmpty) {
+        await repo.uploadListingImages(saved.id, [
+          for (final image in _pickedImages) image.path,
+        ]);
+      }
+
+      // 3. Delete the existing images the user removed, by id.
+      for (final imageId in _removedImageIds) {
+        await repo.deleteListingImage(saved.id, imageId);
+      }
+
       if (submitForReview && user.isVerified) {
-        await ref.read(providerRepositoryProvider).submitForReview(saved.id);
+        await repo.submitForReview(saved.id);
       }
 
       ref.invalidate(myListingsProvider(user.id));
@@ -257,9 +270,13 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
             _ImageUploadSection(
               title: l10n.fieldAddImage,
               buttonLabel: l10n.fieldAddImage,
-              existingImageUrls: _existing?.imageUrlsOrEmpty ?? const [],
+              existingImages: _existingImages,
               pickedImages: _pickedImages,
               onPick: _pickImages,
+              onRemoveExisting: (index) => setState(() {
+                _removedImageIds.add(_existingImages[index].id);
+                _existingImages.removeAt(index);
+              }),
               onRemovePicked: (index) => setState(() {
                 _pickedImages.removeAt(index);
               }),
@@ -321,17 +338,19 @@ class _ImageUploadSection extends StatelessWidget {
   const _ImageUploadSection({
     required this.title,
     required this.buttonLabel,
-    required this.existingImageUrls,
+    required this.existingImages,
     required this.pickedImages,
     required this.onPick,
+    required this.onRemoveExisting,
     required this.onRemovePicked,
   });
 
   final String title;
   final String buttonLabel;
-  final List<String> existingImageUrls;
+  final List<ListingImage> existingImages;
   final List<XFile> pickedImages;
   final Future<void> Function() onPick;
+  final ValueChanged<int> onRemoveExisting;
   final ValueChanged<int> onRemovePicked;
 
   @override
@@ -346,22 +365,23 @@ class _ImageUploadSection extends StatelessWidget {
           icon: const Icon(Icons.photo_library_outlined),
           label: Text(buttonLabel),
         ),
-        if (existingImageUrls.isNotEmpty) ...[
+        if (existingImages.isNotEmpty) ...[
           const SizedBox(height: AppSpacing.md),
           Wrap(
             spacing: AppSpacing.sm,
             runSpacing: AppSpacing.sm,
             children: [
-              for (final url in existingImageUrls)
+              for (var i = 0; i < existingImages.length; i++)
                 _ImageThumb(
                   image: Image.network(
-                    url,
+                    existingImages[i].displayUrl,
                     fit: BoxFit.cover,
                     errorBuilder: (_, _, _) => const ColoredBox(
                       color: AppColors.surfaceAlt,
                       child: SizedBox.expand(),
                     ),
                   ),
+                  onRemove: () => onRemoveExisting(i),
                 ),
             ],
           ),

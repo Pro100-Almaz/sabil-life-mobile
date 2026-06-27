@@ -43,10 +43,27 @@ class ListingParser {
       imageUrls: toStringList(data['image_urls']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
+      images: parseImages(data['images']),
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
+    );
+  }
+
+  static List<ListingImage> parseImages(dynamic value) {
+    if (value is! List) return const [];
+    return value
+        .whereType<Map>()
+        .map((m) => parseImage(Map<String, dynamic>.from(m)))
+        .toList();
+  }
+
+  static ListingImage parseImage(Map<String, dynamic> data) {
+    return ListingImage(
+      id: data['id'].toString(),
+      url: (data['url'] ?? '') as String,
+      position: toInt(data['position']),
     );
   }
 

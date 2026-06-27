@@ -25,10 +25,16 @@ class EarningsSummary {
 abstract class ProviderRepository {
   Future<List<Listing>> myListings(String providerId);
 
-  Future<Listing> upsertListing(
-    Listing listing, {
-    List<String> imagePaths = const [],
-  });
+  Future<Listing> upsertListing(Listing listing);
+
+  /// Upload one or more image files to a listing. Returns the created images.
+  Future<List<ListingImage>> uploadListingImages(
+    String listingId,
+    List<String> paths,
+  );
+
+  /// Delete a single image from a listing by its server id.
+  Future<void> deleteListingImage(String listingId, String imageId);
 
   Future<Listing> submitForReview(String listingId);
 
@@ -153,10 +159,7 @@ class MockProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Listing> upsertListing(
-    Listing listing, {
-    List<String> imagePaths = const [],
-  }) async {
+  Future<Listing> upsertListing(Listing listing) async {
     await Future<void>.delayed(_latency);
     final index = mockListings.indexWhere((l) => l.id == listing.id);
     if (index >= 0) {
@@ -165,6 +168,43 @@ class MockProviderRepository implements ProviderRepository {
       mockListings.add(listing);
     }
     return listing;
+  }
+
+  @override
+  Future<List<ListingImage>> uploadListingImages(
+    String listingId,
+    List<String> paths,
+  ) async {
+    await Future<void>.delayed(_latency);
+    // Mock: synthesise image rows from the local file paths.
+    final index = mockListings.indexWhere((l) => l.id == listingId);
+    final start = index >= 0 ? mockListings[index].images.length : 0;
+    final created = [
+      for (var i = 0; i < paths.length; i++)
+        ListingImage(
+          id: 'img-${DateTime.now().millisecondsSinceEpoch}-$i',
+          url: paths[i],
+          position: start + i,
+        ),
+    ];
+    if (index >= 0) {
+      mockListings[index] = mockListings[index].copyWith(
+        images: [...mockListings[index].images, ...created],
+      );
+    }
+    return created;
+  }
+
+  @override
+  Future<void> deleteListingImage(String listingId, String imageId) async {
+    await Future<void>.delayed(_latency);
+    final index = mockListings.indexWhere((l) => l.id == listingId);
+    if (index < 0) return;
+    mockListings[index] = mockListings[index].copyWith(
+      images: mockListings[index].images
+          .where((img) => img.id != imageId)
+          .toList(),
+    );
   }
 
   @override

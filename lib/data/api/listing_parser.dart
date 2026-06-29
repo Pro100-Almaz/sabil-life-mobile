@@ -92,6 +92,15 @@ class ListingParser {
     };
   }
 
+  static String serializeStatus(ListingStatus status){
+    return switch (status) {
+      ListingStatus.draft => 'DRAFT',
+      ListingStatus.pending => 'PENDING',
+      ListingStatus.active => 'ACTIVE',
+      ListingStatus.rejected => 'REJECTED',
+    };
+  }
+
   static ListingStatus parseStatus(String? raw) {
     return switch (raw?.toUpperCase()) {
       'DRAFT' => ListingStatus.draft,

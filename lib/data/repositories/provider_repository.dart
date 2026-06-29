@@ -23,7 +23,7 @@ class EarningsSummary {
 abstract class ProviderRepository {
   Future<List<Listing>> myListings(String providerId);
 
-  Future<Listing> upsertListing(Listing listing);
+  Future<Listing> upsertListing(Listing listing, {required ListingStatus status});
 
   /// Upload one or more image files to a listing. Returns the created images.
   Future<List<ListingImage>> uploadListingImages(
@@ -33,8 +33,6 @@ abstract class ProviderRepository {
 
   /// Delete a single image from a listing by its server id.
   Future<void> deleteListingImage(String listingId, String imageId);
-
-  Future<Listing> submitForReview(String listingId);
 
   Future<ProviderProfile> myProfile();
 

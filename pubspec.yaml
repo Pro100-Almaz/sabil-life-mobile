@@ -35,3 +35,4 @@ flutter:
   assets:
     - .env
     - assets/placeholder_1200x800.png
+    - assets/data/qatar_cities.json

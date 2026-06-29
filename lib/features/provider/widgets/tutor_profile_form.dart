@@ -12,9 +12,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/tutor_label.dart';
+import '../../../data/models/city.dart';
 import '../../../data/models/provider_profile.dart';
 import '../../../data/models/tutor.dart';
 import '../../../shared/widgets/app_button.dart';
+import '../../../shared/widgets/city_autocomplete_field.dart';
 
 const _tutorLanguages = [
   'EN',
@@ -71,6 +73,10 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
   bool _trialAvailable = false;
   bool _showOtherSubjectField = false;
 
+  /// Selected city — only a value chosen from the list ever reaches the backend.
+  City? _selectedCity;
+  String _initialCityValue = '';
+
   String _avatarUrl = '';
   File? _pickedAvatarFile;
 
@@ -80,6 +86,16 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
   /// Rebuild so inline errors clear as the user fills required fields.
   void _onRequiredChanged() {
     if (_showErrors) setState(() {});
+  }
+
+  /// City is required unless the tutor teaches online-only: if no format is
+  /// chosen, or any selected format is in-person (anything but online), a city
+  /// is needed. Only `{online}` makes it optional.
+  bool get _cityRequired {
+    final onlineOnly =
+        _selectedFormats.length == 1 &&
+        _selectedFormats.contains(TutorFormat.online);
+    return !onlineOnly;
   }
 
   @override
@@ -115,6 +131,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         .toSet();
     _selectedAgeGroups = p.ageGroups.toSet();
     _selectedLanguages = p.languages.toSet();
+    _initialCityValue = p.city;
   }
 
   @override
@@ -221,7 +238,8 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         _selectedAgeGroups.isEmpty ||
         _rateCtrl.text.trim().isEmpty ||
         _yearsCtrl.text.trim().isEmpty ||
-        _selectedLanguages.isEmpty) {
+        _selectedLanguages.isEmpty ||
+        (_cityRequired && _selectedCity == null)) {
       setState(() => _showErrors = true);
       ScaffoldMessenger.of(
         context,
@@ -256,6 +274,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         credentials: _credentialsCtrl.text.trim(),
         avatarUrl: avatarUrl,
         trialAvailable: _trialAvailable,
+        city: _selectedCity?.backendValue ?? '',
       );
 
       ref.invalidate(tutorDetailForUserProvider(widget.userId));
@@ -522,6 +541,16 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           controller: _yearsCtrl,
           keyboardType: TextInputType.number,
           errorText: _showErrors && _yearsCtrl.text.trim().isEmpty
+              ? l10n.fieldRequired
+              : null,
+        ),
+        const SizedBox(height: AppSpacing.lg),
+
+        // City
+        CityAutocompleteField(
+          initialBackendValue: _initialCityValue,
+          onChanged: (city) => setState(() => _selectedCity = city),
+          errorText: _showErrors && _cityRequired && _selectedCity == null
               ? l10n.fieldRequired
               : null,
         ),

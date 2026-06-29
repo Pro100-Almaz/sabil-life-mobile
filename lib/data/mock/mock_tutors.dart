@@ -28,6 +28,7 @@ final List<Tutor> mockTutors = [
         'Lina specialises in building number confidence in primary and middle '
         'schoolers. Her sessions mix visual methods with exam-style practice, '
         'and she sends parents a short progress note after every lesson.',
+    city: 'Doha, QA',
   ),
   Tutor(
     id: 'tutor-omar',
@@ -48,6 +49,7 @@ final List<Tutor> mockTutors = [
         'Omar tutors physics and advanced maths for IGCSE and IB students. '
         'He focuses on past-paper technique and runs convenient evening '
         'sessions online.',
+    city: 'Doha, QA',
   ),
   Tutor(
     id: 'tutor-mariam',
@@ -68,6 +70,7 @@ final List<Tutor> mockTutors = [
         'Mariam makes science hands-on with small home-safe experiments and '
         'clear visual summaries. Popular with families preparing for school '
         'entrance assessments.',
+    city: 'Al Rayyan, QA',
   ),
   Tutor(
     id: 'tutor-aisha',
@@ -92,6 +95,7 @@ final List<Tutor> mockTutors = [
         'Aisha teaches Arabic to non-native young learners through stories, '
         'songs and games. Many of her students arrive with zero Arabic and '
         'leave reading confidently.',
+    city: 'Doha, QA',
   ),
   Tutor(
     id: 'tutor-yusuf',
@@ -112,6 +116,7 @@ final List<Tutor> mockTutors = [
         'Yusuf supports school Arabic curricula and conversation practice. '
         'Flexible online slots make him a favourite for busy after-school '
         'schedules.',
+    city: 'Al Wakrah, QA',
   ),
   Tutor(
     id: 'tutor-elena',
@@ -132,6 +137,7 @@ final List<Tutor> mockTutors = [
         'Elena prepares teens for IELTS, IGCSE English and university '
         'applications. Russian-speaking families value her bilingual '
         'feedback to parents.',
+    city: 'Lusail, QA',
   ),
   Tutor(
     id: 'tutor-david',
@@ -152,6 +158,7 @@ final List<Tutor> mockTutors = [
         'David runs intensive SAT maths batches with weekly timed mocks. '
         'His small groups are capped at six and fill up at the start of '
         'every season.',
+    city: 'Doha, QA',
   ),
 ];
 

@@ -60,6 +60,7 @@ abstract class ProviderRepository {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
   });
 
   Future<ProviderProfile> updateTutorDetail({
@@ -75,6 +76,7 @@ abstract class ProviderRepository {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
   });
 
   Future<String> uploadAvatar(String filePath);

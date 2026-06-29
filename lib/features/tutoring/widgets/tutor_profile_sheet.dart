@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
+import '../../../core/state/city_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
@@ -29,21 +31,33 @@ Future<void> showTutorProfileSheet(BuildContext context, Tutor tutor) {
 
 /// Light tutor detail: profile sheet with credentials, formats, languages
 /// and a link to the tutor's centre listing.
-class TutorProfileSheet extends StatelessWidget {
+class TutorProfileSheet extends ConsumerWidget {
   const TutorProfileSheet({super.key, required this.tutor});
 
   final Tutor tutor;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final centre = listingById(tutor.affiliationListingId);
 
     final hasTags = tutor.subjects.isNotEmpty || tutor.formats.isNotEmpty;
     final hasCredentials = tutor.credentials.trim().isNotEmpty;
     final hasLanguages = tutor.languages.isNotEmpty;
+    final hasCity = tutor.city.trim().isNotEmpty;
     final hasBio = tutor.bio.trim().isNotEmpty;
-    final hasFacts = hasCredentials || hasLanguages || centre != null;
+    final hasFacts =
+        hasCredentials || hasLanguages || hasCity || centre != null;
+
+    // Resolve the canonical city value (e.g. "Doha, QA") to its name in the
+    // current app language, falling back to the raw value if not in the list.
+    String cityDisplay = tutor.city;
+    if (hasCity) {
+      final cities = ref.watch(allCitiesProvider).value ?? const [];
+      final lang = Localizations.localeOf(context).languageCode;
+      final matches = cities.where((c) => c.backendValue == tutor.city);
+      if (matches.isNotEmpty) cityDisplay = matches.first.localizedName(lang);
+    }
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -135,6 +149,12 @@ class TutorProfileSheet extends StatelessWidget {
                   icon: Icons.language_outlined,
                   label: l10n.languagesLabel,
                   value: tutor.languages.join(', '),
+                ),
+              if (hasCity)
+                _InfoRow(
+                  icon: Icons.location_on_outlined,
+                  label: l10n.cityLabel,
+                  value: cityDisplay,
                 ),
               if (centre != null)
                 _InfoRow(

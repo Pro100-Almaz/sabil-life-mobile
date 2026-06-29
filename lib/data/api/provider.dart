@@ -328,13 +328,18 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Listing> upsertListing(Listing listing, {required ListingStatus status}) async {
+  Future<Listing> upsertListing(
+    Listing listing, {
+    required ListingStatus status,
+  }) async {
     try {
       final response = _looksLikeBackendListingId(listing.id)
           ? await _dio.patch(
               '/provider/listings/${listing.id}/',
               data: _serializeListing(listing),
-              queryParameters: {'status': ListingParser.serializeStatus(status)}
+              queryParameters: {
+                'status': ListingParser.serializeStatus(status),
+              },
             )
           : await _dio.post(
               '/provider/listings/',

@@ -157,7 +157,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       // 1. Save the listing fields (images are managed separately). Create
       //    first so a new listing has a server id before we attach images.
 
-      final targetStatus = submitForReview && user.isVerified ? ListingStatus.pending : ListingStatus.draft;
+      final targetStatus = submitForReview && user.isVerified
+          ? ListingStatus.pending
+          : ListingStatus.draft;
       final repo = ref.read(providerRepositoryProvider);
       final saved = await repo.upsertListing(draft, status: targetStatus);
 

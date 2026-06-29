@@ -92,7 +92,7 @@ class ListingParser {
     };
   }
 
-  static String serializeStatus(ListingStatus status){
+  static String serializeStatus(ListingStatus status) {
     return switch (status) {
       ListingStatus.draft => 'DRAFT',
       ListingStatus.pending => 'PENDING',

@@ -23,7 +23,10 @@ class EarningsSummary {
 abstract class ProviderRepository {
   Future<List<Listing>> myListings(String providerId);
 
-  Future<Listing> upsertListing(Listing listing, {required ListingStatus status});
+  Future<Listing> upsertListing(
+    Listing listing, {
+    required ListingStatus status,
+  });
 
   /// Upload one or more image files to a listing. Returns the created images.
   Future<List<ListingImage>> uploadListingImages(

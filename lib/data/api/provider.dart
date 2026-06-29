@@ -344,6 +344,9 @@ class HttpProviderRepository implements ProviderRepository {
           : await _dio.post(
               '/provider/listings/',
               data: _serializeListing(listing),
+              queryParameters: {
+                'status': ListingParser.serializeStatus(status),
+              },
             );
       return ListingParser.fromCard(
         Map<String, dynamic>.from(response.data as Map),

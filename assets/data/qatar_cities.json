@@ -1,0 +1,14 @@
+[
+  { "country": "QA", "names": { "en": "Doha", "ru": "Доха", "kk": "Доха" } },
+  { "country": "QA", "names": { "en": "Al Rayyan", "ru": "Эр-Райян", "kk": "Әр-Райян" } },
+  { "country": "QA", "names": { "en": "Al Wakrah", "ru": "Эль-Вакра", "kk": "Әл-Уақра" } },
+  { "country": "QA", "names": { "en": "Al Khor", "ru": "Эль-Хор", "kk": "Әл-Хор" } },
+  { "country": "QA", "names": { "en": "Lusail", "ru": "Лусаил", "kk": "Лусейл" } },
+  { "country": "QA", "names": { "en": "Umm Salal", "ru": "Умм-Салаль", "kk": "Умм-Салаль" } },
+  { "country": "QA", "names": { "en": "Al Daayen", "ru": "Эд-Даайен", "kk": "Әд-Дайен" } },
+  { "country": "QA", "names": { "en": "Dukhan", "ru": "Духан", "kk": "Духан" } },
+  { "country": "QA", "names": { "en": "Mesaieed", "ru": "Месайид", "kk": "Месайид" } },
+  { "country": "QA", "names": { "en": "Madinat ash Shamal", "ru": "Мадинат-эш-Шамаль", "kk": "Мадинат-аш-Шамал" } },
+  { "country": "QA", "names": { "en": "Al Shahaniya", "ru": "Эш-Шаханийя", "kk": "Әш-Шаханийя" } },
+  { "country": "QA", "names": { "en": "Ras Laffan", "ru": "Рас-Лаффан", "kk": "Рас-Лаффан" } }
+]

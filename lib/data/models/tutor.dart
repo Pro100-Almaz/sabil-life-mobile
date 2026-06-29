@@ -1,4 +1,17 @@
-enum TutorFormat { oneOnOne, smallGroup, atCentre, online }
+enum TutorFormat {
+  oneOnOne,
+  smallGroup,
+  atCentre,
+  online;
+
+  /// The code the backend uses in the `formats` query parameter / payload.
+  String get backendKey => switch (this) {
+    TutorFormat.oneOnOne => 'ONE_ON_ONE',
+    TutorFormat.smallGroup => 'SMALL_GROUP',
+    TutorFormat.atCentre => 'AT_CENTRE',
+    TutorFormat.online => 'ONLINE',
+  };
+}
 
 /// An individual tutor. Tutors are person-centric (unlike venue [Listing]s)
 /// and are affiliated with one of the tutoring-centre listings.
@@ -19,6 +32,7 @@ class Tutor {
     required this.languages,
     required this.trialAvailable,
     required this.bio,
+    this.city = '',
   });
 
   final String id;
@@ -42,4 +56,8 @@ class Tutor {
   final List<String> languages;
   final bool trialAvailable;
   final String bio;
+
+  /// Canonical city value, e.g. `"Doha, QA"` (English name + country code).
+  /// Empty when the tutor has no city (e.g. online-only).
+  final String city;
 }

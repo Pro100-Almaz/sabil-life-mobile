@@ -27,6 +27,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get searchHint => 'Мектептер, сабақтар іздеу…';
 
   @override
+  String get searchTutorsHint => 'Репетиторлар, пәндер іздеу…';
+
+  @override
   String get nearYou => 'Жақын маңда';
 
   @override
@@ -104,6 +107,24 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get sortPriceLow => 'Баға: өсу бойынша';
+
+  @override
+  String get sortPriceHigh => 'Баға: кему бойынша';
+
+  @override
+  String get sortNewest => 'Алдымен жаңалары';
+
+  @override
+  String get sortExperience => 'Ең тәжірибелі';
+
+  @override
+  String get priceMin => 'Бағасы (QAR-дан)';
+
+  @override
+  String get priceMax => 'Бағасы (QAR-ға дейін)';
+
+  @override
+  String get filterTrialOnly => 'Сынақ сабағы бар';
 
   @override
   String get save => 'Сақтау';
@@ -591,6 +612,15 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get hourlyRate => 'Сағатына бағасы (QAR)';
+
+  @override
+  String get cityLabel => 'Қала';
+
+  @override
+  String get citySearchHint => 'Қаланы теруді бастаңыз…';
+
+  @override
+  String get cityNoResults => 'Қалалар табылмады';
 
   @override
   String get availability => 'Қол жетімділік';

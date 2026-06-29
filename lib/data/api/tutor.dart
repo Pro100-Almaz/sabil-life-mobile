@@ -11,9 +11,36 @@ class HttpTutorRepository implements TutorRepository {
   Dio get _dio => apiClient.dio;
 
   @override
-  Future<List<Tutor>> tutors() async {
+  Future<List<Tutor>> tutors({
+    String? search,
+    String? subject,
+    Set<TutorFormat> formats = const {},
+    Set<String> ageGroups = const {},
+    Set<String> languages = const {},
+    int? priceMin,
+    int? priceMax,
+    bool trialOnly = false,
+    String? city,
+    TutorSort sort = TutorSort.rating,
+  }) async {
     try {
-      final response = await _dio.get('/tutors/');
+      final params = <String, dynamic>{'ordering': sort.backendKey};
+      final trimmed = search?.trim();
+      if (trimmed != null && trimmed.isNotEmpty) {
+        params['search'] = trimmed;
+      }
+      if (subject != null) params['subject'] = subject;
+      if (formats.isNotEmpty) {
+        params['formats'] = formats.map((f) => f.backendKey).join(',');
+      }
+      if (ageGroups.isNotEmpty) params['age_groups'] = ageGroups.join(',');
+      if (languages.isNotEmpty) params['languages'] = languages.join(',');
+      if (priceMin != null) params['price_min'] = priceMin;
+      if (priceMax != null) params['price_max'] = priceMax;
+      if (trialOnly) params['trial_available'] = true;
+      if (city != null && city.isNotEmpty) params['city'] = city;
+
+      final response = await _dio.get('/tutors/', queryParameters: params);
       final data = response.data;
       final items = data is Map<String, dynamic>
           ? (data['results'] as List?)
@@ -72,6 +99,7 @@ class HttpTutorRepository implements TutorRepository {
       languages: ListingParser.toStringList(data['languages']),
       trialAvailable: (data['trial_available'] ?? false) as bool,
       bio: (data['bio'] ?? '') as String,
+      city: (data['city'] ?? '') as String,
     );
   }
 

@@ -687,6 +687,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get writeReview => 'Написать отзыв';
 
   @override
+  String get rateThisTutor => 'Оцените репетитора';
+
+  @override
   String get editReview => 'Редактировать отзыв';
 
   @override

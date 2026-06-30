@@ -35,6 +35,14 @@ enum InquiryStatus {
       this == InquiryStatus.contacted ||
       this == InquiryStatus.accepted ||
       this == InquiryStatus.pending;
+
+  /// The family may review the tutor only once the engagement has actually
+  /// started. Mirrors the backend engagement-gate: a review is accepted only
+  /// while the inquiry is CONTACTED / ACCEPTED / COMPLETED.
+  bool get isReviewable =>
+      this == InquiryStatus.contacted ||
+      this == InquiryStatus.accepted ||
+      this == InquiryStatus.completed;
 }
 
 /// Lightweight tutor summary embedded in a family-side inquiry response
@@ -62,6 +70,27 @@ class InquiryTutor {
   final bool isVerified;
 }
 
+/// The family's own review of the tutor, embedded in each inquiry response
+/// (`review` block — `{}` when the family hasn't reviewed yet). Lightweight by
+/// design: only the fields the inquiry card needs to render + edit/delete.
+class InquiryReview {
+  const InquiryReview({
+    required this.id,
+    required this.rating,
+    required this.text,
+  });
+
+  factory InquiryReview.fromJson(Map<String, dynamic> json) => InquiryReview(
+    id: json['id'].toString(),
+    rating: (json['rating'] as num?)?.toInt() ?? 0,
+    text: (json['text'] ?? '') as String,
+  );
+
+  final String id;
+  final int rating;
+  final String text;
+}
+
 /// A family's request to engage with a tutor. Fields mirror the backend
 /// tutor-based Inquiry contract.
 class Inquiry {
@@ -78,6 +107,7 @@ class Inquiry {
     this.familyPhone,
     this.contactRevealed = false,
     this.updatedAt,
+    this.review,
   });
 
   final String id;
@@ -100,7 +130,10 @@ class Inquiry {
   final bool contactRevealed;
   final DateTime? updatedAt;
 
-  Inquiry copyWith({InquiryStatus? status}) => Inquiry(
+  /// The signed-in family's own review of this tutor, or null if none.
+  final InquiryReview? review;
+
+  Inquiry copyWith({InquiryStatus? status, InquiryReview? review}) => Inquiry(
     id: id,
     message: message,
     status: status ?? this.status,
@@ -113,5 +146,6 @@ class Inquiry {
     familyPhone: familyPhone,
     contactRevealed: contactRevealed,
     updatedAt: updatedAt,
+    review: review ?? this.review,
   );
 }

@@ -1354,6 +1354,12 @@ abstract class AppLocalizations {
   /// **'Write a review'**
   String get writeReview;
 
+  /// No description provided for @rateThisTutor.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate this tutor'**
+  String get rateThisTutor;
+
   /// No description provided for @editReview.
   ///
   /// In en, this message translates to:

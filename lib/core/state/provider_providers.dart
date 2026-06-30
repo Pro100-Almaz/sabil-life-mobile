@@ -4,6 +4,7 @@ import 'package:sabil_life/data/api/inquiry.dart';
 import 'package:sabil_life/data/api/listing_enroll.dart';
 import 'package:sabil_life/data/api/provider.dart';
 import 'package:sabil_life/data/api/review.dart';
+import 'package:sabil_life/data/api/tutor_review.dart';
 import 'package:sabil_life/data/api/subscription.dart';
 import 'package:sabil_life/data/api/suggestion.dart';
 import 'package:sabil_life/data/api/tutor.dart';
@@ -26,6 +27,7 @@ import '../../data/repositories/review_repository.dart';
 import '../../data/repositories/subscription_repository.dart';
 import '../../data/repositories/suggestion_repository.dart';
 import '../../data/repositories/tutor_repository.dart';
+import '../../data/repositories/tutor_review_repository.dart';
 
 final inquiryRepositoryProvider = Provider<InquiryRepository>(
   (ref) => HttpInquiryRepository(),
@@ -45,6 +47,10 @@ final subscriptionRepositoryProvider = Provider<SubscriptionRepository>(
 
 final reviewRepositoryProvider = Provider<ReviewRepository>(
   (ref) => HttpReviewRepository(),
+);
+
+final tutorReviewRepositoryProvider = Provider<TutorReviewRepository>(
+  (ref) => HttpTutorReviewRepository(),
 );
 
 // ── Inquiry providers ────────────────────────────────────────────────────────
@@ -207,6 +213,12 @@ final listingReviewsProvider = FutureProvider.family
     .autoDispose<List<Review>, String>(
       (ref, listingId) =>
           ref.watch(reviewRepositoryProvider).forListing(listingId),
+    );
+
+final tutorReviewsProvider = FutureProvider.family
+    .autoDispose<List<Review>, String>(
+      (ref, tutorId) =>
+          ref.watch(tutorReviewRepositoryProvider).forTutor(tutorId),
     );
 
 // ── Suggestion providers ─────────────────────────────────────────────────────

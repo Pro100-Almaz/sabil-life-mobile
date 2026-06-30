@@ -62,6 +62,7 @@ class HttpInquiryRepository implements InquiryRepository {
 
   static Inquiry _parseInquiry(Map<String, dynamic> data) {
     final tutor = data['tutor'];
+    final review = data['review'];
     return Inquiry(
       id: data['id'].toString(),
       tutorId: data['tutor_id']?.toString(),
@@ -73,6 +74,10 @@ class HttpInquiryRepository implements InquiryRepository {
       contactRevealed: (data['contact_revealed'] ?? false) as bool,
       createdAt: _parseDate(data['created_at']) ?? DateTime.now(),
       updatedAt: _parseDate(data['updated_at']),
+      // `review` is `{}` (no review yet) or `{id, rating, text}`.
+      review: review is Map && review['id'] != null
+          ? InquiryReview.fromJson(Map<String, dynamic>.from(review))
+          : null,
     );
   }
 

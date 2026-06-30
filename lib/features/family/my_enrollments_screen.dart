@@ -13,6 +13,7 @@ import '../../core/util/tutor_label.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing_enroll.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
+import 'widgets/tutor_review_sheet.dart';
 
 class MyRequestsScreen extends ConsumerWidget {
   const MyRequestsScreen({super.key});
@@ -362,6 +363,7 @@ class _InquiryRowState extends ConsumerState<_InquiryRow> {
         ? tutor!.fullName
         : (inquiry.tutorId ?? '—');
     final subjects = tutor?.subjects ?? const [];
+    final myReview = inquiry.review;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -432,6 +434,52 @@ class _InquiryRowState extends ConsumerState<_InquiryRow> {
                       ),
                     ),
             ),
+          ],
+          if (inquiry.status.isReviewable && tutor != null) ...[
+            const SizedBox(height: AppSpacing.sm),
+            const Divider(height: 1, color: AppColors.divider),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              myReview != null ? l10n.editReview : l10n.rateThisTutor,
+              style: AppTypography.label,
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Row(
+              children: List.generate(5, (i) {
+                final star = i + 1;
+                final filled = myReview != null && star <= myReview.rating;
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => showTutorReviewSheet(
+                    context: context,
+                    ref: ref,
+                    tutorId: tutor.id,
+                    tutorName: title,
+                    familyId: widget.familyId,
+                    initialRating: star,
+                    existingReviewId: myReview?.id,
+                    initialText: myReview?.text ?? '',
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: AppSpacing.xs),
+                    child: Icon(
+                      filled ? Icons.star : Icons.star_border,
+                      color: AppColors.star,
+                      size: 28,
+                    ),
+                  ),
+                );
+              }),
+            ),
+            if (myReview != null && myReview.text.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                myReview.text,
+                style: AppTypography.caption,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ],
         ],
       ),

@@ -688,6 +688,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get writeReview => 'Пікір жазу';
 
   @override
+  String get rateThisTutor => 'Ұстазды бағалаңыз';
+
+  @override
   String get editReview => 'Пікірді өңдеу';
 
   @override

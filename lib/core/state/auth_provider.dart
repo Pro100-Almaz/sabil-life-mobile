@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/client.dart';
+import 'package:sabil_life/data/api/push_notifications.dart';
 
 import '../../data/api/auth_token_store.dart';
 import '../../data/models/auth_user.dart';
@@ -60,10 +62,13 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._repo, {this.onLogout}) : super(const AuthState.unknown());
+  AuthNotifier(this._repo, {required PushNotifications push, this.onLogout})
+    : _push = push,
+      super(const AuthState.unknown());
 
   final AuthRepository _repo;
   final VoidCallback? onLogout;
+  final PushNotifications _push;
 
   Future<void> restore() async {
     final token = await authTokenStore.read();
@@ -74,6 +79,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final user = await _repo.me(token);
       state = AuthState.authenticated(user: user, token: token);
+      unawaited(_push.registerForUser());
     } on AuthException {
       await authTokenStore.clear();
       state = const AuthState.unauthenticated();
@@ -85,6 +91,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final session = await _repo.login(email, password);
       await _persist(session.token);
+      unawaited(_push.registerForUser());
       state = AuthState.authenticated(user: session.user, token: session.token);
       return true;
     } on AuthException catch (e) {
@@ -108,6 +115,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         role: role,
       );
       await _persist(session.token);
+      unawaited(_push.registerForUser());
       state = AuthState.authenticated(user: session.user, token: session.token);
       return true;
     } on AuthException catch (e) {
@@ -134,6 +142,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    await _push.unregister();
     await _repo.logout();
     await authTokenStore.clear();
     onLogout?.call();
@@ -148,6 +157,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final notifier = AuthNotifier(
     ref.watch(authRepositoryProvider),
+    push: ref.watch(pushNotificationsProvider),
     onLogout: () => ref.read(activeInterfaceProvider.notifier).state =
         ActiveInterface.family,
   );

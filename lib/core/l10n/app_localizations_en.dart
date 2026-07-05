@@ -228,6 +228,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewCentre => 'View centre';
 
   @override
+  String get qualifications => 'Qualifications';
+
+  @override
+  String get centre => 'Centre';
+
+  @override
   String get ourTutors => 'Our tutors';
 
   @override
@@ -787,4 +793,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestCancelled => 'Your request has been cancelled.';
+
+  @override
+  String get myRequestsTabListings => 'Enrollments';
+
+  @override
+  String get myRequestsTabTutors => 'Tutors';
+
+  @override
+  String get enroll => 'Enroll';
+
+  @override
+  String get enrolled => 'Enrolled';
+
+  @override
+  String get enrollmentSubmitted =>
+      'You\'re enrolled — the provider will be in touch.';
+
+  @override
+  String get enrollmentCancelled => 'Your enrollment has been cancelled.';
+
+  @override
+  String get cancelEnrollment => 'Cancel enrollment';
+
+  @override
+  String get keepEnrollment => 'Keep enrollment';
+
+  @override
+  String get noEnrollmentsYet => 'No enrollments yet';
+
+  @override
+  String get cancelListingEnrollmentTitle => 'Cancel enrollment?';
+
+  @override
+  String get cancelListingEnrollmentMessage =>
+      'This withdraws your enrollment for this listing. You can enroll again later.';
+
+  @override
+  String get clients => 'Clients';
+
+  @override
+  String get viewClients => 'View clients';
+
+  @override
+  String get noClientsYet => 'No clients yet';
+
+  @override
+  String get clientStatusUpdated => 'Status updated.';
+
+  @override
+  String get acceptEnrollmentTitle => 'Accept enrollment';
+
+  @override
+  String get rejectEnrollmentTitle => 'Reject enrollment';
+
+  @override
+  String get commentOptionalHint => 'Add a note for the family (optional).';
+
+  @override
+  String get commentRequiredHint =>
+      'Let the family know why — a note is required to reject.';
+
+  @override
+  String get commentHint => 'Write a note…';
+
+  @override
+  String get inquire => 'Inquire';
+
+  @override
+  String get statusCancelled => 'Cancelled';
+
+  @override
+  String get cancelInquiry => 'Cancel inquiry';
+
+  @override
+  String get cancelInquiryTitle => 'Cancel inquiry?';
+
+  @override
+  String get cancelInquiryMessage =>
+      'This withdraws your inquiry to this tutor. You can send a new one later.';
+
+  @override
+  String get keepInquiry => 'Keep inquiry';
+
+  @override
+  String get inquiryCancelled => 'Your inquiry has been cancelled.';
 }

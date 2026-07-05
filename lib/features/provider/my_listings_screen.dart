@@ -130,9 +130,24 @@ class _ListingRow extends StatelessWidget {
                 Expanded(
                   child: Text(listing.neighborhood, style: AppTypography.small),
                 ),
+                GestureDetector(
+                  onTap: () => context.push(
+                    '${interface.basePath}/listings/clients/${listing.id}',
+                    extra: listing,
+                  ),
+                  child: Text(
+                    l10n.viewClients,
+                    style: AppTypography.label.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.lg),
                 Text(
                   l10n.editListing,
-                  style: AppTypography.label.copyWith(color: AppColors.primary),
+                  style: AppTypography.label.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ],
             ),

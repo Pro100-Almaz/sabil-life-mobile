@@ -16,20 +16,22 @@ class PushNotifications {
   Stream<Map<String, dynamic>> get onNotificationTap => _tapController.stream;
 
   static const _channel = AndroidNotificationChannel(
-    'default_channel', 'Notifications',
+    'default_channel',
+    'Notifications',
     importance: Importance.high,
   );
 
   String get _platform => Platform.isIOS ? "IOS" : "ANDROID";
 
   //call for authenticated user
-  Future<void> registerForUser() async{
+  Future<void> registerForUser() async {
     final settings = await _messaging.requestPermission();
-    if(settings.authorizationStatus == AuthorizationStatus.denied) return;
+    if (settings.authorizationStatus == AuthorizationStatus.denied) return;
 
     await _local
-        .resolvePlatformSpecificImplementation
-        <AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.createNotificationChannel(_channel);
     await _local.initialize(
       settings: const InitializationSettings(
@@ -43,16 +45,16 @@ class PushNotifications {
 
     final token = await _messaging.getToken();
 
-    if (token != null){
+    if (token != null) {
       _devices.register(fcmToken: token, platform: _platform);
     }
     _messaging.onTokenRefresh.listen(
-        (t) => _devices.register(fcmToken: t, platform: _platform)
+      (t) => _devices.register(fcmToken: t, platform: _platform),
     );
     //foreground notifications
     FirebaseMessaging.onMessage.listen((m) {
       final n = m.notification;
-      if (n != null){
+      if (n != null) {
         _local.show(
           id: n.hashCode,
           title: n.title,
@@ -67,17 +69,18 @@ class PushNotifications {
 
     //when notification is tapped background -> foreground
     FirebaseMessaging.onMessageOpenedApp.listen(
-        (m) => _tapController.add(m.data)
+      (m) => _tapController.add(m.data),
     );
 
     //cold launch from tapped notification
     final initial = await _messaging.getInitialMessage();
-    if (initial != null){
+    if (initial != null) {
       _tapController.add(initial.data);
     }
   }
+
   //Call on logout
-  Future<void> unregister() async{
+  Future<void> unregister() async {
     final token = await _messaging.getToken();
     if (token != null) _devices.unregister(token);
     await _messaging.deleteToken();

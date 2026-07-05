@@ -10,7 +10,6 @@ import 'package:sabil_life/data/repositories/catalog_repository.dart';
 import 'package:sabil_life/data/api/device.dart';
 import 'package:sabil_life/data/api/push_notifications.dart';
 
-
 import 'package:sabil_life/data/repositories/device_repository.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/models/inquiry.dart';
@@ -28,13 +27,12 @@ import '../../data/repositories/subscription_repository.dart';
 import '../../data/repositories/suggestion_repository.dart';
 import '../../data/repositories/tutor_repository.dart';
 
-
 final deviceRepositoryProvider = Provider<DeviceRepository>(
-    (ref) => HttpDeviceRepository(),
+  (ref) => HttpDeviceRepository(),
 );
 
 final pushNotificationsProvider = Provider<PushNotifications>(
-    (ref) => PushNotifications(ref.watch(deviceRepositoryProvider))
+  (ref) => PushNotifications(ref.watch(deviceRepositoryProvider)),
 );
 
 final inquiryRepositoryProvider = Provider<InquiryRepository>(

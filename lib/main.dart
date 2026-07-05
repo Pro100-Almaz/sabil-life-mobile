@@ -26,9 +26,7 @@ Future<void> main() async {
   } catch (_) {
     // .env is optional — api_config.dart falls back to localhost.
   }
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
 
   runApp(const ProviderScope(child: SabilLifeApp()));

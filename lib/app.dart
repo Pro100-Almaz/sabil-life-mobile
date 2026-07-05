@@ -54,11 +54,13 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
         ),
       );
     });
-    _tapSub = ref.read(pushNotificationsProvider).onNotificationTap.listen((data) {
+    _tapSub = ref.read(pushNotificationsProvider).onNotificationTap.listen((
+      data,
+    ) {
       final router = ref.read(routerProvider);
-      if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED'){
+      if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED') {
         router.go('/provider/tutor/settings');
-      } else{
+      } else {
         router.go('/notifications');
       }
     });

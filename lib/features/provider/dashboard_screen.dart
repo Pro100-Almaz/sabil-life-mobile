@@ -282,10 +282,9 @@ class _NotificationBell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Unread count is best-effort chrome — any error just hides the badge.
-    final unread = ref.watch(unreadCountProvider).maybeWhen(
-      data: (n) => n,
-      orElse: () => 0,
-    );
+    final unread = ref
+        .watch(unreadCountProvider)
+        .maybeWhen(data: (n) => n, orElse: () => 0);
     return Badge.count(
       count: unread,
       isLabelVisible: unread > 0,

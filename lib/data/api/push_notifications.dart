@@ -34,11 +34,11 @@ class PushNotifications {
     await _local.initialize(
       settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-        iOS: DarwinInitializationSettings()
+        iOS: DarwinInitializationSettings(),
       ),
-      onDidReceiveNotificationResponse: (resp){
-
-      }
+      onDidReceiveNotificationResponse: (resp) {
+        // Tap on a locally-shown (foreground) notification.
+      },
     );
 
     final token = await _messaging.getToken();
@@ -57,11 +57,10 @@ class PushNotifications {
           id: n.hashCode,
           title: n.title,
           body: n.body,
-          notificationDetails:
-            NotificationDetails(
-              android: AndroidNotificationDetails(_channel.id, _channel.name),
-              iOS: DarwinNotificationDetails(),
-            )
+          notificationDetails: NotificationDetails(
+            android: AndroidNotificationDetails(_channel.id, _channel.name),
+            iOS: const DarwinNotificationDetails(),
+          ),
         );
       }
     });

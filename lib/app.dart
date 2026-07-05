@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sabil_life/core/state/provider_providers.dart';
+import 'package:sabil_life/data/api/push_notifications.dart';
 
 import 'core/l10n/app_localizations.dart';
 import 'core/router/app_router.dart';
@@ -24,6 +26,7 @@ class SabilLifeApp extends ConsumerStatefulWidget {
 class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
   StreamSubscription<void>? _unauthorizedSub;
   StreamSubscription<RateLimitedEvent>? _rateLimitedSub;
+  StreamSubscription<void>? _tapSub;
 
   @override
   void initState() {
@@ -51,12 +54,21 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
         ),
       );
     });
+    _tapSub = ref.read(pushNotificationsProvider).onNotificationTap.listen((data) {
+      final router = ref.read(routerProvider);
+      if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED'){
+        router.go('/provider/tutor/settings');
+      } else{
+        router.go('/notifications');
+      }
+    });
   }
 
   @override
   void dispose() {
     _unauthorizedSub?.cancel();
     _rateLimitedSub?.cancel();
+    _tapSub?.cancel();
     super.dispose();
   }
 

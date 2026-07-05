@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/core/state/provider_providers.dart';
-import 'package:sabil_life/data/api/push_notifications.dart';
 
 import 'core/l10n/app_localizations.dart';
 import 'core/router/app_router.dart';

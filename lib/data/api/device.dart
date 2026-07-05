@@ -17,7 +17,9 @@ class HttpDeviceRepository extends DeviceRepository {
         "/notifications/devices/",
         data: {'fcm_token': fcmToken, 'platform': platform},
       );
-    } on DioException {}
+    } on DioException catch (e){
+      throw StateError(_extractError(e));
+    }
   }
 
   @override
@@ -27,6 +29,25 @@ class HttpDeviceRepository extends DeviceRepository {
         "/notifications/devices/unregister/",
         data: {'fcm_token': fcmToken},
       );
-    } on DioException {}
+    } on DioException catch (e){
+      throw StateError(_extractError(e));
+    }
+  }
+  String _extractError(DioException e) {
+    final data = e.response?.data;
+    if (data is Map) {
+      if (data.containsKey('detail')) return data['detail'].toString();
+      if (data.containsKey('message')) return data['message'].toString();
+      if (data.isNotEmpty) {
+        final first = data.values.first;
+        if (first is List && first.isNotEmpty) return first.first.toString();
+        return first.toString();
+      }
+    }
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout) {
+      return 'Connection timed out. Please try again.';
+    }
+    return 'Something went wrong. Please try again.';
   }
 }

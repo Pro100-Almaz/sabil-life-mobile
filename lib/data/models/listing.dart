@@ -25,6 +25,20 @@ enum CategoryType {
   partnerships,
 }
 
+/// A single image attached to a listing, managed as a first-class sub-resource
+/// (Option C). [id] is the server identity used to delete it; [url] is the raw
+/// storage URL — always render through [displayUrl] so the media proxy applies.
+class ListingImage {
+  const ListingImage({required this.id, required this.url, this.position = 0});
+
+  final String id;
+  final String url;
+  final int position;
+
+  /// Proxy-resolved URL for display. Never store or send this back.
+  String get displayUrl => resolveMediaUrl(url);
+}
+
 /// Lifecycle a provider's own listing moves through. Non-provider listings
 /// (schools, partner offers seeded as platform content) stay [active].
 enum ListingStatus { draft, pending, active, rejected }
@@ -46,6 +60,7 @@ class Listing {
     required this.isFeatured,
     required this.description,
     required this.highlights,
+    this.images = const [],
     this.ownerId,
     this.status = ListingStatus.active,
   });
@@ -68,6 +83,10 @@ class Listing {
   final String description;
   final List<String> highlights;
 
+  /// Images as first-class objects (id + url + position). Empty on public
+  /// card payloads; populated on detail and provider-owned listings.
+  final List<ListingImage> images;
+
   /// `AuthUser.id` of the provider that owns this listing. `null` = platform-
   /// seeded content (schools, partner offers etc.) that no provider manages.
   final String? ownerId;
@@ -89,6 +108,7 @@ class Listing {
     bool? isFeatured,
     String? description,
     List<String>? highlights,
+    List<ListingImage>? images,
     String? Function()? ownerId,
     ListingStatus? status,
   }) {
@@ -108,6 +128,7 @@ class Listing {
       isFeatured: isFeatured ?? this.isFeatured,
       description: description ?? this.description,
       highlights: highlights ?? this.highlights,
+      images: images ?? this.images,
       ownerId: ownerId != null ? ownerId() : this.ownerId,
       status: status ?? this.status,
     );

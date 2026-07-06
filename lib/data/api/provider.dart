@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
 import '../models/auth_user.dart';
@@ -296,19 +294,51 @@ class HttpProviderRepository implements ProviderRepository {
     }
   }
 
+  // POST /provider/listings/<listing_id>/images/
   @override
-  Future<Listing> upsertListing(
-    Listing listing, {
-    List<String> imagePaths = const [],
-  }) async {
-    final payload = _serializeListing(listing);
+  Future<List<ListingImage>> uploadListingImages(
+    String listingId,
+    List<String> paths,
+  ) async {
+    if (paths.isEmpty) return const [];
     try {
-      final data = imagePaths.isEmpty
-          ? payload
-          : await _buildListingMultipartData(payload, imagePaths);
+      final form = FormData.fromMap({
+        'images': [for (final p in paths) await MultipartFile.fromFile(p)],
+      });
+      final response = await _dio.post(
+        '/provider/listings/$listingId/images/',
+        data: form,
+      );
+      return (response.data as List)
+          .map((m) => ListingParser.parseImage(Map<String, dynamic>.from(m)))
+          .toList();
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  // DELETE /provider/listings/<listing_id>/images/<image_id>/
+  @override
+  Future<void> deleteListingImage(String listingId, String imageId) async {
+    try {
+      await _dio.delete('/provider/listings/$listingId/images/$imageId/');
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<Listing> upsertListing(Listing listing) async {
+    try {
       final response = _looksLikeBackendListingId(listing.id)
-          ? await _dio.patch('/provider/listings/${listing.id}/', data: data)
-          : await _dio.post('/provider/listings/', data: data);
+          ? await _dio.patch(
+              '/provider/listings/${listing.id}/',
+              data: _serializeListing(listing),
+            )
+          : await _dio.post(
+              '/provider/listings/',
+              data: _serializeListing(listing),
+            );
       return ListingParser.fromCard(
         Map<String, dynamic>.from(response.data as Map),
       );
@@ -466,31 +496,6 @@ class HttpProviderRepository implements ProviderRepository {
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
-  Future<FormData> _buildListingMultipartData(
-    Map<String, dynamic> payload,
-    List<String> imagePaths,
-  ) async {
-    return FormData.fromMap({
-      'title': payload['title'],
-      'category': payload['category'],
-      'subtitle': payload['subtitle'],
-      'neighborhood': payload['neighborhood'],
-      'lat': payload['lat']?.toString(),
-      'lng': payload['lng']?.toString(),
-      'price_from_qar': payload['price_from_qar']?.toString(),
-      'image_urls': jsonEncode(payload['image_urls'] ?? const []),
-      'age_groups': jsonEncode(payload['age_groups'] ?? const []),
-      'description': payload['description'],
-      'highlights': jsonEncode(payload['highlights'] ?? const []),
-      'is_featured': (payload['is_featured'] as bool?) == true
-          ? 'true'
-          : 'false',
-      'images': [
-        for (final path in imagePaths) await MultipartFile.fromFile(path),
-      ],
-    });
-  }
-
   Map<String, dynamic> _serializeListing(Listing listing) {
     return {
       'title': listing.title,
@@ -500,7 +505,6 @@ class HttpProviderRepository implements ProviderRepository {
       'lat': listing.lat,
       'lng': listing.lng,
       'price_from_qar': listing.priceFromQar,
-      'image_urls': listing.imageUrls,
       'age_groups': listing.ageGroups,
       'description': listing.description,
       'highlights': listing.highlights,

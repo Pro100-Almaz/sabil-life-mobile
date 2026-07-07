@@ -688,6 +688,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get writeReview => 'Write a review';
 
   @override
+  String get rateThisTutor => 'Rate this tutor';
+
+  @override
   String get editReview => 'Edit review';
 
   @override

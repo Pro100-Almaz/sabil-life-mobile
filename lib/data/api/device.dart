@@ -17,7 +17,7 @@ class HttpDeviceRepository extends DeviceRepository {
         "/notifications/devices/",
         data: {'fcm_token': fcmToken, 'platform': platform},
       );
-    } on DioException catch (e){
+    } on DioException catch (e) {
       throw StateError(_extractError(e));
     }
   }
@@ -29,10 +29,11 @@ class HttpDeviceRepository extends DeviceRepository {
         "/notifications/devices/unregister/",
         data: {'fcm_token': fcmToken},
       );
-    } on DioException catch (e){
+    } on DioException catch (e) {
       throw StateError(_extractError(e));
     }
   }
+
   String _extractError(DioException e) {
     final data = e.response?.data;
     if (data is Map) {

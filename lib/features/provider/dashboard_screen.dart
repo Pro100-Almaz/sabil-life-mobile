@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
+import '../../core/state/notifications_provider.dart';
 import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -62,6 +63,7 @@ class DashboardScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.welcomeBack(user.fullName)),
         toolbarHeight: 72,
+        actions: const [_NotificationBell()],
       ),
       body: AppRefreshIndicator(
         onRefresh: () async {
@@ -268,6 +270,27 @@ class _MetricCard extends StatelessWidget {
             const Icon(Icons.chevron_right, color: AppColors.textSecondary),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// App-bar bell that shows the unread notification count and opens the feed.
+class _NotificationBell extends ConsumerWidget {
+  const _NotificationBell();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Unread count is best-effort chrome — any error just hides the badge.
+    final unread = ref
+        .watch(unreadCountProvider)
+        .maybeWhen(data: (n) => n, orElse: () => 0);
+    return Badge.count(
+      count: unread,
+      isLabelVisible: unread > 0,
+      child: IconButton(
+        icon: const Icon(Icons.notifications_none),
+        onPressed: () => context.push('/notifications'),
       ),
     );
   }

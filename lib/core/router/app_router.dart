@@ -15,6 +15,7 @@ import '../../features/family/tutor_inquiry_composer_screen.dart';
 import '../../features/favorites/favorites_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
+import '../../features/notifications/notifications_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
 import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
@@ -197,6 +198,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const NotificaionsScreen(),
       ),
 
       // ── Family shell ─────────────────────────────────────────────────────

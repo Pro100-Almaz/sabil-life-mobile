@@ -19,6 +19,7 @@ class ProviderProfile {
     this.credentials = '',
     this.avatarUrl = '',
     this.trialAvailable = false,
+    this.city = '',
     this.createdAt,
     this.updatedAt,
   });
@@ -40,6 +41,9 @@ class ProviderProfile {
   final String credentials;
   final String avatarUrl;
   final bool trialAvailable;
+
+  /// Canonical city value, e.g. `"Doha, QA"` (English name + country code).
+  final String city;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -61,6 +65,7 @@ class ProviderProfile {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
     DateTime? Function()? createdAt,
     DateTime? Function()? updatedAt,
   }) {
@@ -84,6 +89,7 @@ class ProviderProfile {
       credentials: credentials ?? this.credentials,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       trialAvailable: trialAvailable ?? this.trialAvailable,
+      city: city ?? this.city,
       createdAt: createdAt != null ? createdAt() : this.createdAt,
       updatedAt: updatedAt != null ? updatedAt() : this.updatedAt,
     );

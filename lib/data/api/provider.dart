@@ -128,6 +128,7 @@ class HttpProviderRepository implements ProviderRepository {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
   }) {
     final payload = <String, dynamic>{};
     if (displayName != null) payload['display_name'] = displayName;
@@ -142,6 +143,7 @@ class HttpProviderRepository implements ProviderRepository {
     if (credentials != null) payload['credentials'] = credentials;
     if (avatarUrl != null) payload['avatar_url'] = avatarUrl;
     if (trialAvailable != null) payload['trial_available'] = trialAvailable;
+    if (city != null) payload['city'] = city;
     return payload;
   }
 
@@ -159,6 +161,7 @@ class HttpProviderRepository implements ProviderRepository {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
   }) async {
     final payload = _buildTutorPayload(
       displayName: displayName,
@@ -173,6 +176,7 @@ class HttpProviderRepository implements ProviderRepository {
       credentials: credentials,
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
+      city: city,
     );
     try {
       final response = await _dio.post(
@@ -199,6 +203,7 @@ class HttpProviderRepository implements ProviderRepository {
     String? credentials,
     String? avatarUrl,
     bool? trialAvailable,
+    String? city,
   }) async {
     final payload = _buildTutorPayload(
       displayName: displayName,
@@ -213,6 +218,7 @@ class HttpProviderRepository implements ProviderRepository {
       credentials: credentials,
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
+      city: city,
     );
     try {
       final response = await _dio.patch(
@@ -246,6 +252,7 @@ class HttpProviderRepository implements ProviderRepository {
       credentials: d['credentials'] as String? ?? '',
       avatarUrl: d['avatar_url'] as String? ?? '',
       trialAvailable: d['trial_available'] as bool? ?? false,
+      city: d['city'] as String? ?? '',
       createdAt: _parseDate(d['created_at']),
       updatedAt: _parseDate(d['updated_at']),
     );

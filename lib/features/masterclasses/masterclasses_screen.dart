@@ -6,6 +6,7 @@ import '../../core/state/masterclass_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 import '../../shared/widgets/pill_chip.dart';
 import 'widgets/event_card.dart';
 
@@ -87,38 +88,47 @@ class MasterclassesScreen extends ConsumerWidget {
           const SizedBox(height: AppSpacing.sm),
           const Divider(),
           Expanded(
-            child: entries.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+            child: AppRefreshIndicator(
+              onRefresh: () async => ref.invalidate(masterclassEntriesProvider),
+              child: entries.isEmpty
+                  ? RefreshableMessage(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.event_busy,
+                            size: 48,
+                            color: AppColors.textTertiary,
+                          ),
+                          const SizedBox(height: AppSpacing.md),
+                          Text(l10n.noResults, style: AppTypography.h3),
+                          const SizedBox(height: AppSpacing.xs),
+                          Text(
+                            l10n.noResultsHint,
+                            style: AppTypography.caption,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(AppSpacing.lg),
                       children: [
-                        const Icon(
-                          Icons.event_busy,
-                          size: 48,
-                          color: AppColors.textTertiary,
-                        ),
-                        const SizedBox(height: AppSpacing.md),
-                        Text(l10n.noResults, style: AppTypography.h3),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(l10n.noResultsHint, style: AppTypography.caption),
-                      ],
-                    ),
-                  )
-                : ListView(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    children: [
-                      for (final w in orderedGroups) ...[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                          child: Text(groupTitle(w), style: AppTypography.h2),
-                        ),
-                        for (final entry in groups[w]!) ...[
-                          EventCard(entry: entry, window: window),
-                          const SizedBox(height: AppSpacing.xxl),
+                        for (final w in orderedGroups) ...[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: AppSpacing.md,
+                            ),
+                            child: Text(groupTitle(w), style: AppTypography.h2),
+                          ),
+                          for (final entry in groups[w]!) ...[
+                            EventCard(entry: entry, window: window),
+                            const SizedBox(height: AppSpacing.xxl),
+                          ],
                         ],
                       ],
-                    ],
-                  ),
+                    ),
+            ),
           ),
         ],
       ),

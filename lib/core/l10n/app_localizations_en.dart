@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchHint => 'Search schools, activities…';
 
   @override
+  String get searchTutorsHint => 'Search tutors, subjects…';
+
+  @override
   String get nearYou => 'Near you';
 
   @override
@@ -104,6 +107,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sortPriceLow => 'Price: low to high';
+
+  @override
+  String get sortPriceHigh => 'Price: high to low';
+
+  @override
+  String get sortNewest => 'Newest first';
+
+  @override
+  String get sortExperience => 'Most experienced';
+
+  @override
+  String get priceMin => 'Min price (QAR)';
+
+  @override
+  String get priceMax => 'Max price (QAR)';
+
+  @override
+  String get filterTrialOnly => 'Offers a trial lesson';
 
   @override
   String get save => 'Save';
@@ -590,6 +611,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hourlyRate => 'Price per hour (QAR)';
+
+  @override
+  String get cityLabel => 'City';
+
+  @override
+  String get citySearchHint => 'Start typing a city…';
+
+  @override
+  String get cityNoResults => 'No cities found';
 
   @override
   String get availability => 'Availability';

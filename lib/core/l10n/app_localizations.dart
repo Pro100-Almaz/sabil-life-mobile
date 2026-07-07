@@ -136,6 +136,12 @@ abstract class AppLocalizations {
   /// **'Search schools, activities…'**
   String get searchHint;
 
+  /// No description provided for @searchTutorsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search tutors, subjects…'**
+  String get searchTutorsHint;
+
   /// No description provided for @nearYou.
   ///
   /// In en, this message translates to:
@@ -285,6 +291,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Price: low to high'**
   String get sortPriceLow;
+
+  /// No description provided for @sortPriceHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Price: high to low'**
+  String get sortPriceHigh;
+
+  /// No description provided for @sortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get sortNewest;
+
+  /// No description provided for @sortExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Most experienced'**
+  String get sortExperience;
+
+  /// No description provided for @priceMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Min price (QAR)'**
+  String get priceMin;
+
+  /// No description provided for @priceMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Max price (QAR)'**
+  String get priceMax;
+
+  /// No description provided for @filterTrialOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers a trial lesson'**
+  String get filterTrialOnly;
 
   /// No description provided for @save.
   ///
@@ -1167,6 +1209,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Price per hour (QAR)'**
   String get hourlyRate;
+
+  /// No description provided for @cityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get cityLabel;
+
+  /// No description provided for @citySearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Start typing a city…'**
+  String get citySearchHint;
+
+  /// No description provided for @cityNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No cities found'**
+  String get cityNoResults;
 
   /// No description provided for @availability.
   ///

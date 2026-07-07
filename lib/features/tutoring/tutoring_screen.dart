@@ -8,10 +8,14 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/tutor_label.dart';
-import '../../data/models/tutor.dart';
+import '../../data/repositories/tutor_repository.dart';
+import '../../shared/widgets/app_refresh_indicator.dart';
 import '../../shared/widgets/pill_chip.dart';
 import 'widgets/tutor_card.dart';
+import 'widgets/tutor_filter_sheet.dart';
 import 'widgets/tutor_profile_sheet.dart';
+import 'widgets/tutor_search_pill.dart';
+import 'widgets/tutor_sort_menu.dart';
 
 /// Dedicated, person-forward Tutoring page: subject rail, format filters
 /// and tutor cards (instead of the generic venue directory).
@@ -44,6 +48,15 @@ class TutoringScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.md,
+            ),
+            child: TutorSearchPill(),
+          ),
           SizedBox(
             height: 40,
             child: asyncSubjects.when(
@@ -80,75 +93,82 @@ class TutoringScreen extends ConsumerWidget {
               horizontal: AppSpacing.lg,
               vertical: AppSpacing.sm,
             ),
-            child: SizedBox(
-              height: 36,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (final format in TutorFormat.values) ...[
-                    _FormatChip(
-                      label: format.label(l10n),
-                      selected: filter.formats.contains(format),
-                      onTap: () => ref
-                          .read(tutorFilterProvider.notifier)
-                          .toggleFormat(format),
-                    ),
-                    const SizedBox(width: AppSpacing.sm),
-                  ],
-                ],
-              ),
+            child: Row(
+              children: [
+                _ToolbarButton(
+                  icon: Icons.tune,
+                  label: l10n.filters,
+                  highlighted: filter.hasActiveFilters,
+                  onTap: () => showTutorFilterSheet(context),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _ToolbarButton(
+                  icon: Icons.swap_vert,
+                  label: l10n.sort,
+                  highlighted: filter.sort != TutorSort.rating,
+                  onTap: () => showTutorSortMenu(context),
+                ),
+              ],
             ),
           ),
           const Divider(),
           Expanded(
-            child: asyncTutors.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(color: AppColors.primary),
+            child: AppRefreshIndicator(
+              onRefresh: () => ref.refresh(
+                tutorListProvider(ref.read(tutorsFilterProvider)).future,
               ),
-              error: (e, _) => Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n.genericLoadError, textAlign: TextAlign.center),
-                    const SizedBox(height: AppSpacing.md),
-                    TextButton(
-                      onPressed: () => ref.invalidate(allTutorsProvider),
-                      child: Text(l10n.retry),
-                    ),
-                  ],
+              child: asyncTutors.when(
+                loading: () => const RefreshableMessage(
+                  child: CircularProgressIndicator(color: AppColors.primary),
                 ),
+                error: (e, _) => RefreshableMessage(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(l10n.genericLoadError, textAlign: TextAlign.center),
+                      const SizedBox(height: AppSpacing.md),
+                      TextButton(
+                        onPressed: () => ref.invalidate(
+                          tutorListProvider(ref.read(tutorsFilterProvider)),
+                        ),
+                        child: Text(l10n.retry),
+                      ),
+                    ],
+                  ),
+                ),
+                data: (tutors) => tutors.isEmpty
+                    ? RefreshableMessage(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: AppColors.textTertiary,
+                            ),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(l10n.noResults, style: AppTypography.h3),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              l10n.noResultsHint,
+                              style: AppTypography.caption,
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
+                        itemCount: tutors.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: AppSpacing.md),
+                        itemBuilder: (context, index) => TutorCard(
+                          tutor: tutors[index],
+                          onTap: () =>
+                              showTutorProfileSheet(context, tutors[index]),
+                        ),
+                      ),
               ),
-              data: (tutors) => tutors.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.search_off,
-                            size: 48,
-                            color: AppColors.textTertiary,
-                          ),
-                          const SizedBox(height: AppSpacing.md),
-                          Text(l10n.noResults, style: AppTypography.h3),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            l10n.noResultsHint,
-                            style: AppTypography.caption,
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.all(AppSpacing.lg),
-                      itemCount: tutors.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: AppSpacing.md),
-                      itemBuilder: (context, index) => TutorCard(
-                        tutor: tutors[index],
-                        onTap: () =>
-                            showTutorProfileSheet(context, tutors[index]),
-                      ),
-                    ),
             ),
           ),
         ],
@@ -157,44 +177,43 @@ class TutoringScreen extends ConsumerWidget {
   }
 }
 
-/// Outlined multi-select toggle (distinct from the single-select PillChip).
-class _FormatChip extends StatelessWidget {
-  const _FormatChip({
+/// Filters / Sort toolbar button (mirrors the category list toolbar).
+class _ToolbarButton extends StatelessWidget {
+  const _ToolbarButton({
+    required this.icon,
     required this.label,
-    required this.selected,
     required this.onTap,
+    this.highlighted = false,
   });
 
+  final IconData icon;
   final String label;
-  final bool selected;
   final VoidCallback onTap;
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+      child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.xs + 2,
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(AppRadius.chip),
           border: Border.all(
-            color: selected ? AppColors.textPrimary : AppColors.border,
-            width: selected ? 1.5 : 1,
+            color: highlighted ? AppColors.textPrimary : AppColors.border,
+            width: highlighted ? 1.5 : 1,
           ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (selected) ...[
-              const Icon(Icons.check, size: 14),
-              const SizedBox(width: AppSpacing.xs),
-            ],
-            Text(label, style: AppTypography.small),
+            Icon(icon, size: 16, color: AppColors.textPrimary),
+            const SizedBox(width: AppSpacing.xs),
+            Text(label, style: AppTypography.label),
           ],
         ),
       ),

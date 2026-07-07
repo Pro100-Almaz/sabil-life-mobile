@@ -248,9 +248,26 @@ final tutorRepositoryProvider = Provider<TutorRepository>(
   (ref) => HttpTutorRepository(),
 );
 
-final allTutorsProvider = FutureProvider.autoDispose<List<Tutor>>(
-  (ref) => ref.watch(tutorRepositoryProvider).tutors(),
-);
+/// Backend-filtered tutor list. The [TutorsFilter] family key maps directly to
+/// the `GET /tutors/` query params (search / subject / formats / ordering), so
+/// search, filtering and ordering all run server-side — mirroring the catalog.
+final tutorListProvider = FutureProvider.family
+    .autoDispose<List<Tutor>, TutorsFilter>(
+      (ref, filter) => ref
+          .watch(tutorRepositoryProvider)
+          .tutors(
+            search: filter.search,
+            subject: filter.subject,
+            formats: filter.formats,
+            ageGroups: filter.ageGroups,
+            languages: filter.languages,
+            priceMin: filter.priceMin,
+            priceMax: filter.priceMax,
+            trialOnly: filter.trialOnly,
+            city: filter.city,
+            sort: filter.sort,
+          ),
+    );
 
 final availableSubjectsProvider = FutureProvider.autoDispose<List<String>>(
   (ref) => ref.watch(tutorRepositoryProvider).subjects(),

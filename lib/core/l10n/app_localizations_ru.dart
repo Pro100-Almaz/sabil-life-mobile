@@ -27,6 +27,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get searchHint => 'Поиск школ, занятий…';
 
   @override
+  String get searchTutorsHint => 'Поиск репетиторов, предметов…';
+
+  @override
   String get nearYou => 'Рядом с вами';
 
   @override
@@ -104,6 +107,24 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sortPriceLow => 'Цена: по возрастанию';
+
+  @override
+  String get sortPriceHigh => 'Цена: по убыванию';
+
+  @override
+  String get sortNewest => 'Сначала новые';
+
+  @override
+  String get sortExperience => 'Самые опытные';
+
+  @override
+  String get priceMin => 'Цена от (QAR)';
+
+  @override
+  String get priceMax => 'Цена до (QAR)';
+
+  @override
+  String get filterTrialOnly => 'Есть пробное занятие';
 
   @override
   String get save => 'Сохранить';
@@ -592,6 +613,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get hourlyRate => 'Цена за час (QAR)';
+
+  @override
+  String get cityLabel => 'Город';
+
+  @override
+  String get citySearchHint => 'Начните вводить город…';
+
+  @override
+  String get cityNoResults => 'Города не найдены';
 
   @override
   String get availability => 'Доступность';

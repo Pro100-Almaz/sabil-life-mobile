@@ -328,31 +328,26 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<Listing> upsertListing(Listing listing) async {
+  Future<Listing> upsertListing(
+    Listing listing, {
+    required ListingStatus status,
+  }) async {
     try {
       final response = _looksLikeBackendListingId(listing.id)
           ? await _dio.patch(
               '/provider/listings/${listing.id}/',
               data: _serializeListing(listing),
+              queryParameters: {
+                'status': ListingParser.serializeStatus(status),
+              },
             )
           : await _dio.post(
               '/provider/listings/',
               data: _serializeListing(listing),
+              queryParameters: {
+                'status': ListingParser.serializeStatus(status),
+              },
             );
-      return ListingParser.fromCard(
-        Map<String, dynamic>.from(response.data as Map),
-      );
-    } on DioException catch (e) {
-      throw StateError(_extractError(e));
-    }
-  }
-
-  @override
-  Future<Listing> submitForReview(String listingId) async {
-    // The backend automatically re-enters PENDING on any save; there is no
-    // separate submit endpoint. Re-fetch to return the server's current state.
-    try {
-      final response = await _dio.get('/provider/listings/$listingId/');
       return ListingParser.fromCard(
         Map<String, dynamic>.from(response.data as Map),
       );

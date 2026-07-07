@@ -156,8 +156,12 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
 
       // 1. Save the listing fields (images are managed separately). Create
       //    first so a new listing has a server id before we attach images.
+
+      final targetStatus = submitForReview && user.isVerified
+          ? ListingStatus.pending
+          : ListingStatus.draft;
       final repo = ref.read(providerRepositoryProvider);
-      final saved = await repo.upsertListing(draft);
+      final saved = await repo.upsertListing(draft, status: targetStatus);
 
       // 2. Upload newly picked images to the saved listing.
       if (_pickedImages.isNotEmpty) {
@@ -169,10 +173,6 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       // 3. Delete the existing images the user removed, by id.
       for (final imageId in _removedImageIds) {
         await repo.deleteListingImage(saved.id, imageId);
-      }
-
-      if (submitForReview && user.isVerified) {
-        await repo.submitForReview(saved.id);
       }
 
       ref.invalidate(myListingsProvider(user.id));

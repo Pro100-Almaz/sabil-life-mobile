@@ -73,5 +73,6 @@ coverage/
 .omc/
 .codex/
 
-# Backend link 
-.env 
+# Backend link — per-developer local API URL (see config/local.example.json)
+config/local.json
+.env

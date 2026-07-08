@@ -1,0 +1,7 @@
+{
+  "//": "Copy to config/local.json (gitignored) and set the URL for YOUR machine.",
+  "//localhost": "Host machine, iOS simulator, web:   http://localhost:8000/api/v1",
+  "//android-emulator": "Android emulator (reaches host via 10.0.2.2):   http://10.0.2.2:8000/api/v1",
+  "//physical-device": "Physical device on the same LAN:   http://<your-host-LAN-IP>:8000/api/v1",
+  "API_BASE_URL": "https://nondepreciative-darcy-cowardly.ngrok-free.dev/api/v1"
+}

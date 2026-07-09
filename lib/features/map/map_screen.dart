@@ -95,6 +95,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 userAgentPackageName: 'io.sabil.sabil_life',
               ),
               MarkerLayer(
+                rotate: true,
                 markers: [
                   Marker(
                     point: mockHome,
@@ -113,6 +114,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ),
                     ),
                   ),
+                  //listing markers
                   for (final listing in listings)
                     Marker(
                       point: LatLng(listing.lat, listing.lng),
@@ -155,6 +157,8 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                           ref.read(filterProvider.notifier).setCategory(null),
                     ),
                   ),
+                  //list of categories
+
                   for (final category in CategoryType.values) ...[
                     const SizedBox(width: AppSpacing.sm),
                     _shadowed(

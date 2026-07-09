@@ -26,11 +26,20 @@ class MapScreen extends ConsumerStatefulWidget {
 class _MapScreenState extends ConsumerState<MapScreen> {
   final MapController _mapController = MapController();
   String? _selectedId;
+  bool _showCategory = false;
+  bool _showBurger = true;
 
   @override
   void initState() {
     super.initState();
     _selectedId = widget.focusListingId;
+  }
+
+  void _burgerPressed(){
+    setState(() {
+      _showBurger = !_showBurger;
+      _showCategory = !_showBurger;
+    });
   }
 
   @override
@@ -52,6 +61,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     final l10n = AppLocalizations.of(context)!;
     final asyncListings = ref.watch(filteredListingsProvider);
     final selectedCategory = ref.watch(
@@ -142,38 +152,57 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             ],
           ),
           SafeArea(
-            child: Container(
-              height: 56,
-              alignment: Alignment.centerLeft,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                children: [
-                  _shadowed(
-                    PillChip(
-                      label: l10n.catAll,
-                      selected: selectedCategory == null,
-                      onTap: () =>
-                          ref.read(filterProvider.notifier).setCategory(null),
-                    ),
-                  ),
-                  //list of categories
-
-                  for (final category in CategoryType.values) ...[
-                    const SizedBox(width: AppSpacing.sm),
-                    _shadowed(
-                      PillChip(
-                        label: category.label(l10n),
-                        selected: selectedCategory == category,
-                        onTap: () => ref
-                            .read(filterProvider.notifier)
-                            .setCategory(category),
+              child: AnimatedSlide(
+                offset: _showCategory ? Offset.zero : Offset(0, -3),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
+                child: Container(
+                  height: 40,
+                  alignment: Alignment.centerLeft,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                    children: [
+                      _shadowed(
+                        PillChip(
+                          label: l10n.catAll,
+                          selected: selectedCategory == null,
+                          onTap: () =>
+                              ref.read(filterProvider.notifier).setCategory(null),
+                        ),
                       ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
+                      for (final category in CategoryType.values) ...[
+                        const SizedBox(width: AppSpacing.sm),
+                        _shadowed(
+                          PillChip(
+                            label: category.label(l10n),
+                            selected: selectedCategory == category,
+                            onTap: () => ref
+                                .read(filterProvider.notifier)
+                                .setCategory(category),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              )
+          ),
+          Positioned(
+              top: AppSpacing.xl,
+              left: AppSpacing.lg,
+              child: AnimatedSlide(
+                offset: _showBurger ? Offset.zero : Offset(0, 1.0),
+                duration: const Duration(milliseconds: 200),
+                child: FloatingActionButton.small(
+                  onPressed: _burgerPressed,
+                  heroTag: 'map_burger',
+                  backgroundColor: _showBurger ? AppColors.surface : AppColors.primary,
+                  foregroundColor: _showBurger ? AppColors.primaryPressed : AppColors.surface,
+                  elevation: 2,
+                  child: _showBurger ? const Icon(Icons.menu, size: 20) : const Icon(Icons.arrow_upward, size: 20),
+                ),
+              )
           ),
           // Loading indicator overlay while listings are fetching.
           if (asyncListings.isLoading)
@@ -204,6 +233,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                 ),
               ),
             ),
+
         ],
       ),
     );

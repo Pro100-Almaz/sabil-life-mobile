@@ -23,8 +23,11 @@ class MapScreen extends ConsumerStatefulWidget {
   ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends ConsumerState<MapScreen> {
+class _MapScreenState extends ConsumerState<MapScreen>
+  with TickerProviderStateMixin {
+
   final MapController _mapController = MapController();
+
   String? _selectedId;
   bool _showCategory = false;
   bool _showBurger = true;
@@ -40,6 +43,28 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       _showBurger = !_showBurger;
       _showCategory = !_showBurger;
     });
+  }
+
+  void _mapRotationReset(){
+    final currentRotation = _mapController.camera.rotation;
+    if  (currentRotation == 0) return ;
+
+    final controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    final animation = Tween<double>(begin: currentRotation, end: 0.0).animate(
+      CurvedAnimation(parent: controller, curve: Curves.easeInOut)
+    );
+
+    animation.addListener(() => _mapController.rotate(animation.value));
+
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) controller.dispose();
+    });
+
+    controller.forward();
   }
 
   @override
@@ -203,6 +228,18 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   child: _showBurger ? const Icon(Icons.menu, size: 20) : const Icon(Icons.arrow_upward, size: 20),
                 ),
               )
+          ),
+          Positioned(
+            bottom: AppSpacing.lg,
+            right: AppSpacing.lg,
+            child: FloatingActionButton(
+              onPressed: _mapRotationReset,
+              heroTag: 'rotation_reset',
+              backgroundColor: AppColors.surface,
+              foregroundColor: AppColors.primaryPressed,
+              elevation: 2,
+              child: const Icon(Icons.compass_calibration, size: 20),
+            )
           ),
           // Loading indicator overlay while listings are fetching.
           if (asyncListings.isLoading)

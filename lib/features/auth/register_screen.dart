@@ -30,6 +30,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  void _goBack() {
+    if (context.canPop()){
+      context.pop();
+    }else {
+      context.go('/');
+    }
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final ok = await ref
@@ -54,80 +62,96 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.register)),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.xxl),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(l10n.createAccount, style: AppTypography.display),
-                const SizedBox(height: AppSpacing.xl),
-                TextFormField(
-                  controller: _name,
-                  textInputAction: TextInputAction.next,
-                  enabled: !isBusy,
-                  decoration: InputDecoration(labelText: l10n.fullName),
-                  validator: (v) =>
-                      (v == null || v.trim().isEmpty) ? l10n.fullName : null,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                TextFormField(
-                  controller: _email,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  enabled: !isBusy,
-                  decoration: InputDecoration(labelText: l10n.email),
-                  validator: (v) =>
-                      (v == null || !v.contains('@')) ? l10n.email : null,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                TextFormField(
-                  controller: _password,
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  enabled: !isBusy,
-                  onFieldSubmitted: (_) => _submit(),
-                  decoration: InputDecoration(labelText: l10n.password),
-                  validator: (v) =>
-                      (v == null || v.length < 6) ? l10n.password : null,
-                ),
-                if (auth.errorMessage != null) ...[
-                  const SizedBox(height: AppSpacing.md),
-                  Text(
-                    auth.errorMessage!,
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: AppSpacing.xl),
-                isBusy
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : AppButton(
-                        label: l10n.createAccount,
-                        onPressed: _submit,
-                        expanded: true,
-                      ),
-                const SizedBox(height: AppSpacing.lg),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          children: [
+            Positioned(
+              top: AppSpacing.lg,
+              left: AppSpacing.lg,
+              child: FloatingActionButton(
+                heroTag: 'go_back',
+                backgroundColor: AppColors.surface,
+                foregroundColor: AppColors.textPrimary,
+                elevation: 2,
+                onPressed: _goBack,
+                child: const Icon(Icons.arrow_back_ios, size: 20),
+              ),
+            ),
+            SingleChildScrollView(
+              padding: const EdgeInsets.all(AppSpacing.xxl),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(l10n.haveAccountPrompt, style: AppTypography.caption),
-                    TextButton(
-                      onPressed: isBusy ? null : () => context.go('/login'),
-                      child: Text(l10n.signIn),
+                    Text(l10n.createAccount, style: AppTypography.display),
+                    const SizedBox(height: AppSpacing.xl),
+                    TextFormField(
+                      controller: _name,
+                      textInputAction: TextInputAction.next,
+                      enabled: !isBusy,
+                      decoration: InputDecoration(labelText: l10n.fullName),
+                      validator: (v) =>
+                          (v == null || v.trim().isEmpty) ? l10n.fullName : null,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    TextFormField(
+                      controller: _email,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      enabled: !isBusy,
+                      decoration: InputDecoration(labelText: l10n.email),
+                      validator: (v) =>
+                          (v == null || !v.contains('@')) ? l10n.email : null,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    TextFormField(
+                      controller: _password,
+                      obscureText: true,
+                      textInputAction: TextInputAction.done,
+                      enabled: !isBusy,
+                      onFieldSubmitted: (_) => _submit(),
+                      decoration: InputDecoration(labelText: l10n.password),
+                      validator: (v) =>
+                          (v == null || v.length < 6) ? l10n.password : null,
+                    ),
+                    if (auth.errorMessage != null) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      Text(
+                        auth.errorMessage!,
+                        style: AppTypography.caption.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: AppSpacing.xl),
+                    isBusy
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : AppButton(
+                            label: l10n.createAccount,
+                            onPressed: _submit,
+                            expanded: true,
+                          ),
+                    const SizedBox(height: AppSpacing.lg),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(l10n.haveAccountPrompt, style: AppTypography.caption),
+                        TextButton(
+                          onPressed: isBusy ? null : () => context.go('/login'),
+                          child: Text(l10n.signIn),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ]
         ),
       ),
     );

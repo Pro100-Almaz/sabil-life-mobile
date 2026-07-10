@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/filter_provider.dart';
@@ -27,6 +28,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
   with TickerProviderStateMixin {
 
   final MapController _mapController = MapController();
+  LatLng userLocation = mockHome;
 
   String? _selectedId;
   bool _showCategory = false;
@@ -67,6 +69,86 @@ class _MapScreenState extends ConsumerState<MapScreen>
     controller.forward();
   }
 
+  Future<LatLng?> _lastKnownLocation() async{
+    Position? position = await Geolocator.getLastKnownPosition();
+
+    if (position != null) {
+      return LatLng(position.latitude, position.longitude);
+    }
+    else {
+      return null;
+    }
+  }
+
+  Future<bool> _checkGeolocationEnabled() async{
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error("Geolocation disabled");
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error("Permission for geolocation denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error("Permission for geolocation denied");
+    }
+
+    return true;
+  }
+
+  Future <LatLng> _getUserLocation() async{
+    LatLng position;
+    if (await _checkGeolocationEnabled()){
+      final LocationSettings locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 100,
+      );
+
+      Position positionValue = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
+      position = LatLng(positionValue.latitude, positionValue.longitude);
+    }
+    else {
+      LatLng? lastLocation = await _lastKnownLocation();
+      if (lastLocation != null){
+        position = lastLocation;
+      }
+      else {
+        position = mockHome;
+      }
+    }
+    return position;
+  }
+
+  Future<void> _goToUserLocation() async{
+    try{
+      final position = await _getUserLocation();
+      if (!mounted) return;
+      setState(() => userLocation = position);
+      _mapController.move(userLocation, 14);
+    }
+    catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not get your location')),
+      );
+    }
+  }
   @override
   void didUpdateWidget(covariant MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -86,7 +168,6 @@ class _MapScreenState extends ConsumerState<MapScreen>
 
   @override
   Widget build(BuildContext context) {
-
     final l10n = AppLocalizations.of(context)!;
     final asyncListings = ref.watch(filteredListingsProvider);
     final selectedCategory = ref.watch(
@@ -111,7 +192,6 @@ class _MapScreenState extends ConsumerState<MapScreen>
         }
       });
     }
-
     final listings = asyncListings.valueOrNull ?? const [];
 
     return Scaffold(
@@ -144,6 +224,23 @@ class _MapScreenState extends ConsumerState<MapScreen>
                       ),
                       child: const Icon(
                         Icons.home,
+                        size: 22,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  Marker(
+                    point: userLocation,
+                    width: 40,
+                    height: 40,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.textPrimary,
+                        shape: BoxShape.circle,
+                        boxShadow: AppShadow.soft,
+                      ),
+                      child: const Icon(
+                        Icons.beenhere_rounded,
                         size: 22,
                         color: Colors.white,
                       ),
@@ -229,17 +326,37 @@ class _MapScreenState extends ConsumerState<MapScreen>
                 ),
               )
           ),
-          Positioned(
-            bottom: AppSpacing.lg,
+          AnimatedPositioned(
             right: AppSpacing.lg,
-            child: FloatingActionButton(
-              onPressed: _mapRotationReset,
-              heroTag: 'rotation_reset',
-              backgroundColor: AppColors.surface,
-              foregroundColor: AppColors.primaryPressed,
-              elevation: 2,
-              child: const Icon(Icons.compass_calibration, size: 20),
-            )
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            bottom: focused != null ?
+              AppSpacing.lg +
+              112 +
+              MediaQuery.of(context).padding.bottom +
+              AppSpacing.md
+              : AppSpacing.lg,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  onPressed: _mapRotationReset,
+                  heroTag: 'rotation_reset',
+                  backgroundColor: AppColors.surface,
+                  foregroundColor: AppColors.primaryPressed,
+                  elevation: 2,
+                  child: const Icon(Icons.compass_calibration, size: 20),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                FloatingActionButton(
+                  onPressed: _goToUserLocation,
+                  heroTag: 'user_location',
+                  backgroundColor: AppColors.surface,
+                  foregroundColor: AppColors. primaryPressed,
+                  child: const Icon(Icons.my_location, size: 20),
+                ),
+              ],
+            ),
           ),
           // Loading indicator overlay while listings are fetching.
           if (asyncListings.isLoading)

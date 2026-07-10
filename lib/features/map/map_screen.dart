@@ -25,8 +25,7 @@ class MapScreen extends ConsumerStatefulWidget {
 }
 
 class _MapScreenState extends ConsumerState<MapScreen>
-  with TickerProviderStateMixin {
-
+    with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
 
@@ -40,25 +39,26 @@ class _MapScreenState extends ConsumerState<MapScreen>
     _selectedId = widget.focusListingId;
   }
 
-  void _burgerPressed(){
+  void _burgerPressed() {
     setState(() {
       _showBurger = !_showBurger;
       _showCategory = !_showBurger;
     });
   }
 
-  void _mapRotationReset(){
+  void _mapRotationReset() {
     final currentRotation = _mapController.camera.rotation;
-    if  (currentRotation == 0) return ;
+    if (currentRotation == 0) return;
 
     final controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
 
-    final animation = Tween<double>(begin: currentRotation, end: 0.0).animate(
-      CurvedAnimation(parent: controller, curve: Curves.easeInOut)
-    );
+    final animation = Tween<double>(
+      begin: currentRotation,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     animation.addListener(() => _mapController.rotate(animation.value));
 
@@ -69,18 +69,17 @@ class _MapScreenState extends ConsumerState<MapScreen>
     controller.forward();
   }
 
-  Future<LatLng?> _lastKnownLocation() async{
+  Future<LatLng?> _lastKnownLocation() async {
     Position? position = await Geolocator.getLastKnownPosition();
 
     if (position != null) {
       return LatLng(position.latitude, position.longitude);
-    }
-    else {
+    } else {
       return null;
     }
   }
 
-  Future<bool> _checkGeolocationEnabled() async{
+  Future<bool> _checkGeolocationEnabled() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -113,42 +112,42 @@ class _MapScreenState extends ConsumerState<MapScreen>
     return true;
   }
 
-  Future <LatLng> _getUserLocation() async{
+  Future<LatLng> _getUserLocation() async {
     LatLng position;
-    if (await _checkGeolocationEnabled()){
+    if (await _checkGeolocationEnabled()) {
       final LocationSettings locationSettings = LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 100,
       );
 
-      Position positionValue = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
+      Position positionValue = await Geolocator.getCurrentPosition(
+        locationSettings: locationSettings,
+      );
       position = LatLng(positionValue.latitude, positionValue.longitude);
-    }
-    else {
+    } else {
       LatLng? lastLocation = await _lastKnownLocation();
-      if (lastLocation != null){
+      if (lastLocation != null) {
         position = lastLocation;
-      }
-      else {
+      } else {
         position = mockHome;
       }
     }
     return position;
   }
 
-  Future<void> _goToUserLocation() async{
-    try{
+  Future<void> _goToUserLocation() async {
+    try {
       final position = await _getUserLocation();
       if (!mounted) return;
       setState(() => userLocation = position);
       _mapController.move(userLocation, 14);
-    }
-    catch (e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not get your location')),
       );
     }
   }
+
   @override
   void didUpdateWidget(covariant MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -274,68 +273,76 @@ class _MapScreenState extends ConsumerState<MapScreen>
             ],
           ),
           SafeArea(
-              child: AnimatedSlide(
-                offset: _showCategory ? Offset.zero : Offset(0, -3),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOut,
-                child: Container(
-                  height: 40,
-                  alignment: Alignment.centerLeft,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                    children: [
+            child: AnimatedSlide(
+              offset: _showCategory ? Offset.zero : Offset(0, -3),
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+              child: Container(
+                height: 40,
+                alignment: Alignment.centerLeft,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                  ),
+                  children: [
+                    _shadowed(
+                      PillChip(
+                        label: l10n.catAll,
+                        selected: selectedCategory == null,
+                        onTap: () =>
+                            ref.read(filterProvider.notifier).setCategory(null),
+                      ),
+                    ),
+                    for (final category in CategoryType.values) ...[
+                      const SizedBox(width: AppSpacing.sm),
                       _shadowed(
                         PillChip(
-                          label: l10n.catAll,
-                          selected: selectedCategory == null,
-                          onTap: () =>
-                              ref.read(filterProvider.notifier).setCategory(null),
+                          label: category.label(l10n),
+                          selected: selectedCategory == category,
+                          onTap: () => ref
+                              .read(filterProvider.notifier)
+                              .setCategory(category),
                         ),
                       ),
-                      for (final category in CategoryType.values) ...[
-                        const SizedBox(width: AppSpacing.sm),
-                        _shadowed(
-                          PillChip(
-                            label: category.label(l10n),
-                            selected: selectedCategory == category,
-                            onTap: () => ref
-                                .read(filterProvider.notifier)
-                                .setCategory(category),
-                          ),
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
-              )
+              ),
+            ),
           ),
           Positioned(
-              top: AppSpacing.xl,
-              left: AppSpacing.lg,
-              child: AnimatedSlide(
-                offset: _showBurger ? Offset.zero : Offset(0, 1.0),
-                duration: const Duration(milliseconds: 200),
-                child: FloatingActionButton.small(
-                  onPressed: _burgerPressed,
-                  heroTag: 'map_burger',
-                  backgroundColor: _showBurger ? AppColors.surface : AppColors.primary,
-                  foregroundColor: _showBurger ? AppColors.primaryPressed : AppColors.surface,
-                  elevation: 2,
-                  child: _showBurger ? const Icon(Icons.menu, size: 20) : const Icon(Icons.arrow_upward, size: 20),
-                ),
-              )
+            top: AppSpacing.xl,
+            left: AppSpacing.lg,
+            child: AnimatedSlide(
+              offset: _showBurger ? Offset.zero : Offset(0, 1.0),
+              duration: const Duration(milliseconds: 200),
+              child: FloatingActionButton.small(
+                onPressed: _burgerPressed,
+                heroTag: 'map_burger',
+                backgroundColor: _showBurger
+                    ? AppColors.surface
+                    : AppColors.primary,
+                foregroundColor: _showBurger
+                    ? AppColors.primaryPressed
+                    : AppColors.surface,
+                elevation: 2,
+                child: _showBurger
+                    ? const Icon(Icons.menu, size: 20)
+                    : const Icon(Icons.arrow_upward, size: 20),
+              ),
+            ),
           ),
           AnimatedPositioned(
             right: AppSpacing.lg,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeOut,
-            bottom: focused != null ?
-              AppSpacing.lg +
-              112 +
-              MediaQuery.of(context).padding.bottom +
-              AppSpacing.md
-              : AppSpacing.lg,
+            bottom: focused != null
+                ? AppSpacing.lg +
+                      112 +
+                      MediaQuery.of(context).padding.bottom +
+                      AppSpacing.md
+                : AppSpacing.lg,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -352,7 +359,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
                   onPressed: _goToUserLocation,
                   heroTag: 'user_location',
                   backgroundColor: AppColors.surface,
-                  foregroundColor: AppColors. primaryPressed,
+                  foregroundColor: AppColors.primaryPressed,
                   child: const Icon(Icons.my_location, size: 20),
                 ),
               ],
@@ -387,7 +394,6 @@ class _MapScreenState extends ConsumerState<MapScreen>
                 ),
               ),
             ),
-
         ],
       ),
     );

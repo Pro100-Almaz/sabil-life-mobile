@@ -145,7 +145,7 @@ class _HomeContentState extends State<_HomeContent> {
                 title: l10n.popularInDoha,
                 actionLabel: l10n.seeAll,
                 onAction: () => context.push(
-                  '/category/${CategoryType.entertainment.name}',//popular in doha to entertainment
+                  '/category/${CategoryType.entertainment.name}', //popular in doha to entertainment
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -168,8 +168,9 @@ class _HomeContentState extends State<_HomeContent> {
             SectionHeader(
               title: l10n.nearYou,
               actionLabel: l10n.seeAll,
-              onAction: () =>
-                  context.push('/category/${CategoryType.activities.name}'), //near you to activities
+              onAction: () => context.push(
+                '/category/${CategoryType.activities.name}',
+              ), //near you to activities
             ),
             const SizedBox(height: AppSpacing.md),
             if (nearYou.isEmpty)

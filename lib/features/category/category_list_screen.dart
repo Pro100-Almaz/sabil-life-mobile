@@ -36,9 +36,8 @@ class CategoryListScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
-  
   late final FilterNotifier _filter;
-  
+
   @override
   void initState() {
     super.initState();

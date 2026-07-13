@@ -36,22 +36,35 @@ class CategoryListScreen extends ConsumerStatefulWidget {
 }
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
+  
+  late final FilterNotifier _filter;
+  
   @override
   void initState() {
     super.initState();
+    _filter = ref.read(filterProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final notifier = ref.read(filterProvider.notifier);
-      notifier.setCategory(widget.category);
-
-      notifier.resetFilters();
-      notifier.setSortMode(widget.initialSort ?? SortMode.distance);
-      notifier.applyFilters(
+      _filter.setCategory(widget.category);
+      _filter.resetFilters();
+      _filter.setSortMode(widget.initialSort ?? SortMode.distance);
+      _filter.applyFilters(
         maxDistanceKm: widget.initialMaxDistance ?? 30,
-        priceMax: widget.initialPriceMax ?? 30,
+        priceMax: widget.initialPriceMax ?? 50000,
         ageGroup: widget.initialAgeGroup,
       );
     });
+  }
+
+  @override
+  void dispose() {
+    final filter = _filter;
+    Future.microtask(() {
+      filter.setCategory(null);
+      filter.resetFilters();
+      filter.setSortMode(SortMode.distance);
+    });
+    super.dispose();
   }
 
   @override

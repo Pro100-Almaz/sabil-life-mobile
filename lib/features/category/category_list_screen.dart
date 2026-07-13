@@ -15,10 +15,21 @@ import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
 
 class CategoryListScreen extends ConsumerStatefulWidget {
-  const CategoryListScreen({super.key, required this.category});
+  const CategoryListScreen({
+    super.key,
+    required this.category,
+    this.initialAgeGroup,
+    this.initialMaxDistance,
+    this.initialPriceMax,
+    this.initialSort,
+  });
 
   /// Null = "all categories" (e.g. an unknown route param).
   final CategoryType? category;
+  final SortMode? initialSort;
+  final String? initialAgeGroup;
+  final int? initialPriceMax;
+  final double? initialMaxDistance;
 
   @override
   ConsumerState<CategoryListScreen> createState() => _CategoryListScreenState();
@@ -30,7 +41,16 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ref.read(filterProvider.notifier).setCategory(widget.category);
+      final notifier = ref.read(filterProvider.notifier);
+      notifier.setCategory(widget.category);
+
+      notifier.resetFilters();
+      notifier.setSortMode(widget.initialSort ?? SortMode.distance);
+      notifier.applyFilters(
+          maxDistanceKm: widget.initialMaxDistance ?? 30,
+          priceMax: widget.initialPriceMax ?? 30,
+          ageGroup: widget.initialAgeGroup,
+      );
     });
   }
 

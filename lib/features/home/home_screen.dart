@@ -93,6 +93,17 @@ class _HomeContentState extends State<_HomeContent> {
     );
   }
 
+  void _applyfilters(FilterState state){
+    final sortMode = switch(state.sortMode){
+      SortMode.priceLow => 'priceLow',
+      SortMode.distance => 'distance',
+      SortMode.rating => 'rating',
+    };
+    context.push(
+      '/category/${state.selectedCategory}?sort=${sortMode}&maxDistanceKm=${state.maxDistanceKm}&ageGroup=${state.ageGroup}&priceMax=${state.priceMax}', //popular in doha to entertainment
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -144,9 +155,15 @@ class _HomeContentState extends State<_HomeContent> {
               SectionHeader(
                 title: l10n.popularInDoha,
                 actionLabel: l10n.seeAll,
-                onAction: () => context.push(
-                  '/category/${CategoryType.entertainment.name}', //popular in doha to entertainment
-                ),
+                onAction: () => _applyfilters(
+                  FilterState(
+                    selectedCategory: null,
+                    sortMode: SortMode.rating,
+                    maxDistanceKm: 10,
+                    ageGroup: null,
+                    priceMax: 50000,
+                  ),
+                )
               ),
               const SizedBox(height: AppSpacing.md),
               SizedBox(
@@ -168,9 +185,15 @@ class _HomeContentState extends State<_HomeContent> {
             SectionHeader(
               title: l10n.nearYou,
               actionLabel: l10n.seeAll,
-              onAction: () => context.push(
-                '/category/${CategoryType.activities.name}',
-              ), //near you to activities
+                onAction: () => _applyfilters(
+                  FilterState(
+                    selectedCategory: null,
+                    sortMode: SortMode.distance,
+                    maxDistanceKm: 10,
+                    ageGroup: null,
+                    priceMax: 50000,
+                  ),
+                ) //near you to activities
             ),
             const SizedBox(height: AppSpacing.md),
             if (nearYou.isEmpty)

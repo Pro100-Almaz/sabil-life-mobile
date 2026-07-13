@@ -160,6 +160,120 @@ final List<Tutor> mockTutors = [
         'every season.',
     city: 'Doha, QA',
   ),
+  Tutor(
+    id: 'tutor-sara',
+    name: 'Sara Mansour',
+    avatarUrl: _avatar('tutor-sara'),
+    affiliationListingId: 'tutor-mathcraft',
+    subjects: ['MATH'],
+    formats: [
+      TutorFormat.oneOnOne,
+      TutorFormat.smallGroup,
+      TutorFormat.online,
+    ],
+    ageGroups: ['3-5', '6-11'],
+    pricePerHourQar: 145,
+    rating: 4.8,
+    reviewCount: 33,
+    yearsExperience: 7,
+    credentials: 'BEd Primary Mathematics, University College London',
+    languages: ['EN', 'AR'],
+    trialAvailable: true,
+    bio:
+        'Sara turns early maths into play, using manipulatives and games to '
+        'build strong foundations. She keeps parents in the loop with short '
+        'weekly voice notes on progress.',
+    city: 'Doha, QA',
+  ),
+  Tutor(
+    id: 'tutor-khalid',
+    name: 'Khalid Al-Thani',
+    avatarUrl: _avatar('tutor-khalid'),
+    affiliationListingId: 'tutor-arabicroots',
+    subjects: ['ARABIC', 'ENGLISH'],
+    formats: [TutorFormat.oneOnOne, TutorFormat.atCentre],
+    ageGroups: ['12-15', '16+'],
+    pricePerHourQar: 165,
+    rating: 4.7,
+    reviewCount: 44,
+    yearsExperience: 11,
+    credentials: 'MA Applied Linguistics, Qatar University',
+    languages: ['EN', 'AR'],
+    trialAvailable: false,
+    bio:
+        'Khalid bridges Arabic and English for bilingual teens, focusing on '
+        'academic writing and grammar. His students consistently lift their '
+        'school essay grades within a term.',
+    city: 'Al Rayyan, QA',
+  ),
+  Tutor(
+    id: 'tutor-natalia',
+    name: 'Natalia Ivanova',
+    avatarUrl: _avatar('tutor-natalia'),
+    affiliationListingId: 'tutor-summit',
+    subjects: ['SCIENCE', 'EXAM_PREP'],
+    formats: [TutorFormat.smallGroup, TutorFormat.atCentre, TutorFormat.online],
+    ageGroups: ['12-15', '16+'],
+    pricePerHourQar: 210,
+    rating: 4.9,
+    reviewCount: 39,
+    yearsExperience: 13,
+    credentials: 'PhD Chemistry; IB Diploma examiner',
+    languages: ['EN', 'RU'],
+    trialAvailable: true,
+    bio:
+        'Natalia coaches IB and IGCSE chemistry and biology with a focus on '
+        'exam command terms and lab reports. Russian-speaking families '
+        'appreciate her bilingual explanations of tricky concepts.',
+    city: 'Lusail, QA',
+  ),
+  Tutor(
+    id: 'tutor-tariq',
+    name: 'Tariq Nasser',
+    avatarUrl: _avatar('tutor-tariq'),
+    affiliationListingId: 'tutor-mathcraft',
+    subjects: ['MATH', 'SCIENCE'],
+    formats: [TutorFormat.oneOnOne, TutorFormat.online],
+    ageGroups: ['16+'],
+    pricePerHourQar: 190,
+    rating: 4.6,
+    reviewCount: 26,
+    yearsExperience: 6,
+    credentials: 'MEng Mechanical Engineering, Texas A&M Qatar',
+    languages: ['EN', 'AR'],
+    trialAvailable: true,
+    bio:
+        'Tariq tutors A-Level and IB maths and physics with an engineer\'s eye '
+        'for real-world intuition. He specialises in students aiming for '
+        'STEM university admissions.',
+    city: 'Al Wakrah, QA',
+  ),
+  Tutor(
+    id: 'tutor-hana',
+    name: 'Hana Farouk',
+    avatarUrl: _avatar('tutor-hana'),
+    affiliationListingId: 'tutor-arabicroots',
+    subjects: ['ARABIC'],
+    formats: [
+      TutorFormat.oneOnOne,
+      TutorFormat.smallGroup,
+      TutorFormat.atCentre,
+      TutorFormat.online,
+    ],
+    ageGroups: ['3-5', '6-11', '12-15'],
+    pricePerHourQar: 155,
+    rating: 4.8,
+    reviewCount: 61,
+    yearsExperience: 9,
+    credentials: 'Certified Quranic Arabic & Tajweed instructor',
+    languages: ['EN', 'AR'],
+    trialAvailable: true,
+    bio:
+        'Hana teaches reading, writing and recitation of classical Arabic to '
+        'learners of all ages. Her patient, structured approach suits both '
+        'complete beginners and heritage speakers.',
+    city: 'Doha, QA',
+  ),
 ];
 
 Tutor? tutorById(String id) {

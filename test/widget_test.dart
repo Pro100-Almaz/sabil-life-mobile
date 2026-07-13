@@ -78,11 +78,7 @@ void main() {
 
   test('every listing carries at least one tag', () {
     for (final listing in mockListings) {
-      expect(
-        listing.tags,
-        isNotEmpty,
-        reason: '${listing.id} has no tags',
-      );
+      expect(listing.tags, isNotEmpty, reason: '${listing.id} has no tags');
     }
   });
 

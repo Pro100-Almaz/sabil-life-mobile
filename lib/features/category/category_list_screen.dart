@@ -13,6 +13,7 @@ import '../../shared/widgets/app_refresh_indicator.dart';
 import '../home/widgets/listing_card.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
+import 'widgets/search_pill.dart';
 
 class CategoryListScreen extends ConsumerStatefulWidget {
   const CategoryListScreen({super.key, required this.category});
@@ -63,6 +64,19 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.lg,
+            ),
+            child: SearchPill(),
+          ),
+          const SizedBox(
+            height: 40, 
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,

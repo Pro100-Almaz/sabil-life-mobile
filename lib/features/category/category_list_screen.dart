@@ -47,9 +47,9 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
       notifier.resetFilters();
       notifier.setSortMode(widget.initialSort ?? SortMode.distance);
       notifier.applyFilters(
-          maxDistanceKm: widget.initialMaxDistance ?? 30,
-          priceMax: widget.initialPriceMax ?? 30,
-          ageGroup: widget.initialAgeGroup,
+        maxDistanceKm: widget.initialMaxDistance ?? 30,
+        priceMax: widget.initialPriceMax ?? 30,
+        ageGroup: widget.initialAgeGroup,
       );
     });
   }

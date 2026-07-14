@@ -87,7 +87,7 @@ class TutorProfileSheet extends ConsumerWidget {
               children: [
                 ClipOval(
                   child: CachedNetworkImage(
-                    imageUrl: tutor.avatarUrl,
+                    imageUrl: tutor.avatarDisplayUrl,
                     width: 72,
                     height: 72,
                     fit: BoxFit.cover,

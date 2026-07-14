@@ -12,6 +12,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/tutor_label.dart';
+import '../../../data/api/api_config.dart';
 import '../../../data/models/city.dart';
 import '../../../data/models/provider_profile.dart';
 import '../../../data/models/tutor.dart';
@@ -350,7 +351,8 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
                   backgroundImage: _pickedAvatarFile != null
                       ? FileImage(_pickedAvatarFile!)
                       : (_avatarUrl.isNotEmpty
-                            ? NetworkImage(_avatarUrl) as ImageProvider
+                            ? NetworkImage(resolveMediaUrl(_avatarUrl))
+                                  as ImageProvider
                             : null),
                   child: (_pickedAvatarFile == null && _avatarUrl.isEmpty)
                       ? const Icon(

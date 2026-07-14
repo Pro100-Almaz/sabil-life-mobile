@@ -19,6 +19,7 @@ import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
 import '../../data/mock/mock_masterclasses.dart';
 import '../../data/mock/mock_tutors.dart';
+import '../../data/models/tutor.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/masterclass_info.dart';
 import '../../data/models/review.dart';
@@ -451,7 +452,7 @@ class _TutorsRail extends StatelessWidget {
                     children: [
                       ClipOval(
                         child: CachedNetworkImage(
-                          imageUrl: tutor.avatarUrl,
+                          imageUrl: tutor.avatarDisplayUrl,
                           width: 48,
                           height: 48,
                           fit: BoxFit.cover,

@@ -166,11 +166,7 @@ final List<Tutor> mockTutors = [
     avatarUrl: _avatar('tutor-sara'),
     affiliationListingId: 'tutor-mathcraft',
     subjects: ['MATH'],
-    formats: [
-      TutorFormat.oneOnOne,
-      TutorFormat.smallGroup,
-      TutorFormat.online,
-    ],
+    formats: [TutorFormat.oneOnOne, TutorFormat.smallGroup, TutorFormat.online],
     ageGroups: ['3-5', '6-11'],
     pricePerHourQar: 145,
     rating: 4.8,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sabil_life/shared/widgets/pill_chip.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -67,7 +66,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   enabled: !isBusy,
                   decoration: InputDecoration(labelText: l10n.email),
                   validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? l10n.email : null,
+                      (v == null || v.trim().isEmpty) ? l10n.email : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 TextFormField(
@@ -78,7 +77,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onFieldSubmitted: (_) => _submit(),
                   decoration: InputDecoration(labelText: l10n.password),
                   validator: (v) =>
-                  (v == null || v.isEmpty) ? l10n.password : null,
+                      (v == null || v.isEmpty) ? l10n.password : null,
                 ),
                 if (auth.errorMessage != null) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -108,7 +107,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Text(l10n.noAccountPrompt, style: AppTypography.caption),
                     TextButton(
-                      onPressed: isBusy ? null : () => context.push('/register'),
+                      onPressed: isBusy
+                          ? null
+                          : () => context.push('/register'),
                       child: Text(l10n.createAccount),
                     ),
                   ],

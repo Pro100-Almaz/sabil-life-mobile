@@ -31,9 +31,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   void _goBack() {
-    if (context.canPop()){
+    if (context.canPop()) {
       context.pop();
-    }else {
+    } else {
       context.go('/');
     }
   }
@@ -77,7 +77,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   enabled: !isBusy,
                   decoration: InputDecoration(labelText: l10n.fullName),
                   validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? l10n.fullName : null,
+                      (v == null || v.trim().isEmpty) ? l10n.fullName : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 TextFormField(
@@ -87,7 +87,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   enabled: !isBusy,
                   decoration: InputDecoration(labelText: l10n.email),
                   validator: (v) =>
-                  (v == null || !v.contains('@')) ? l10n.email : null,
+                      (v == null || !v.contains('@')) ? l10n.email : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 TextFormField(
@@ -98,7 +98,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   onFieldSubmitted: (_) => _submit(),
                   decoration: InputDecoration(labelText: l10n.password),
                   validator: (v) =>
-                  (v == null || v.length < 6) ? l10n.password : null,
+                      (v == null || v.length < 6) ? l10n.password : null,
                 ),
                 if (auth.errorMessage != null) ...[
                   const SizedBox(height: AppSpacing.md),
@@ -112,16 +112,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 const SizedBox(height: AppSpacing.xl),
                 isBusy
                     ? const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.primary,
-                    strokeWidth: 2.5,
-                  ),
-                )
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                          strokeWidth: 2.5,
+                        ),
+                      )
                     : AppButton(
-                  label: l10n.createAccount,
-                  onPressed: _submit,
-                  expanded: true,
-                ),
+                        label: l10n.createAccount,
+                        onPressed: _submit,
+                        expanded: true,
+                      ),
                 const SizedBox(height: AppSpacing.lg),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

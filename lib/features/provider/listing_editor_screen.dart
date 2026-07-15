@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -12,8 +13,11 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_button.dart';
+
+import 'widgets/listing_location_map.dart';
 
 class ListingEditorScreen extends ConsumerStatefulWidget {
   const ListingEditorScreen({
@@ -44,6 +48,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _removedImageIds = <String>{};
   bool _saving = false;
   bool _showErrors = false;
+  LatLng _pickedLocation = mockHome;
 
   Listing? _existing;
 
@@ -70,6 +75,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       }
       _ageGroups.addAll(l.ageGroups);
       _existingImages.addAll(l.images);
+      _pickedLocation = LatLng(l.lat, l.lng);
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -129,8 +135,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
             category: CategoryType.masterclasses,
             subtitle: '',
             neighborhood: '',
-            lat: 25.3690,
-            lng: 51.5510,
+            lat: _pickedLocation.latitude,
+            lng: _pickedLocation.longitude,
             rating: 0,
             reviewCount: 0,
             priceFromQar: 0,
@@ -147,6 +153,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         title: _title.text.trim(),
         subtitle: _subtitle.text.trim(),
         neighborhood: _neighborhood.text.trim(),
+        lat: _pickedLocation.latitude,
+        lng: _pickedLocation.longitude,
         priceFromQar: price,
         description: _description.text.trim(),
         highlights: highlights,
@@ -220,6 +228,11 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
             TextField(
               controller: _neighborhood,
               decoration: InputDecoration(labelText: l10n.fieldNeighborhood),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            ListingLocationMap(
+              initialLocation: _pickedLocation,
+              onLocationPicked: (point) => _pickedLocation = point,
             ),
             const SizedBox(height: AppSpacing.md),
             TextField(

@@ -24,10 +24,12 @@ class MapScreen extends ConsumerStatefulWidget {
   ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends ConsumerState<MapScreen>
-    with TickerProviderStateMixin {
+class _MapScreenState extends ConsumerState<MapScreen> 
+with TickerProviderStateMixin {
+  
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
+  LatLng pickLocaton = mockHome;
 
   String? _selectedId;
   bool _showCategory = false;
@@ -148,6 +150,11 @@ class _MapScreenState extends ConsumerState<MapScreen>
     }
   }
 
+  void _markerOnLatLen(LatLng coordinates){
+    setState(() => pickLocaton = coordinates);
+    _mapController.move(coordinates, 17);
+  }
+
   @override
   void didUpdateWidget(covariant MapScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -201,7 +208,12 @@ class _MapScreenState extends ConsumerState<MapScreen>
             options: MapOptions(
               initialCenter: initialCenter,
               initialZoom: focused != null ? 14 : 11.5,
-              onTap: (tapPosition, point) => setState(() => _selectedId = null),
+              onTap: (tapPosition, point) {
+                setState(() {
+                  _selectedId = null;
+                  _markerOnLatLen(point);
+                });
+              },
             ),
             children: [
               TileLayer(
@@ -211,6 +223,16 @@ class _MapScreenState extends ConsumerState<MapScreen>
               MarkerLayer(
                 rotate: true,
                 markers: [
+                  Marker(
+                    point: pickLocaton,
+                    width: 40,
+                    height: 40,
+                    child: const Icon(
+                      Icons.place,
+                      size: 22,
+                      color: Colors.purple
+                    ),
+                  ),
                   Marker(
                     point: mockHome,
                     width: 40,

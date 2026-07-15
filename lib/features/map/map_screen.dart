@@ -24,9 +24,8 @@ class MapScreen extends ConsumerStatefulWidget {
   ConsumerState<MapScreen> createState() => _MapScreenState();
 }
 
-class _MapScreenState extends ConsumerState<MapScreen> 
-with TickerProviderStateMixin {
-  
+class _MapScreenState extends ConsumerState<MapScreen>
+    with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
   LatLng pickLocaton = mockHome;
@@ -150,7 +149,7 @@ with TickerProviderStateMixin {
     }
   }
 
-  void _markerOnLatLen(LatLng coordinates){
+  void _markerOnLatLen(LatLng coordinates) {
     setState(() => pickLocaton = coordinates);
     _mapController.move(coordinates, 17);
   }
@@ -230,7 +229,7 @@ with TickerProviderStateMixin {
                     child: const Icon(
                       Icons.place,
                       size: 22,
-                      color: Colors.purple
+                      color: Colors.purple,
                     ),
                   ),
                   Marker(

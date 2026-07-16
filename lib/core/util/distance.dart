@@ -3,7 +3,6 @@ import 'package:latlong2/latlong.dart';
 
 import '../../data/models/listing.dart';
 
-
 const double _earthRadiusKm = 6371.0;
 
 /// Haversine distance in kilometres between two coordinates.
@@ -25,7 +24,9 @@ double _degToRad(double deg) => deg * math.pi / 180;
 String formatKm(double km) => km.toStringAsFixed(1);
 
 extension ListingDistance on Listing {
-  double distanceFromHomeKm(LatLng origin) => haversineKm(origin.latitude, origin.longitude, lat, lng);
+  double distanceFromHomeKm(LatLng origin) =>
+      haversineKm(origin.latitude, origin.longitude, lat, lng);
 
-  String distanceFromHomeLabel(LatLng origin) => formatKm(distanceFromHomeKm(origin));
+  String distanceFromHomeLabel(LatLng origin) =>
+      formatKm(distanceFromHomeKm(origin));
 }

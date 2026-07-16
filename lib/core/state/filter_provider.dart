@@ -48,7 +48,7 @@ class FilterState {
     String? Function()? ageGroup,
     SortMode? sortMode,
     String? Function()? tag,
-    LatLng? userPosition
+    LatLng? userPosition,
   }) {
     return FilterState(
       query: query ?? this.query,
@@ -60,7 +60,7 @@ class FilterState {
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
       tag: tag != null ? tag() : this.tag,
-      userPosition: userPosition ?? this.userPosition
+      userPosition: userPosition ?? this.userPosition,
     );
   }
 }
@@ -82,17 +82,18 @@ class FilterNotifier extends StateNotifier<FilterState> {
     required double maxDistanceKm,
     required int priceMax,
     required String? ageGroup,
-    required LatLng userPosition
+    required LatLng userPosition,
   }) {
     state = state.copyWith(
       maxDistanceKm: maxDistanceKm,
       priceMax: priceMax,
       ageGroup: () => ageGroup,
-      userPosition: userPosition
+      userPosition: userPosition,
     );
   }
 
-  void updateOrigin(LatLng? userPosition) => state = state.copyWith(userPosition: userPosition);
+  void updateOrigin(LatLng? userPosition) =>
+      state = state.copyWith(userPosition: userPosition);
 
   void resetFilters() {
     state = state.copyWith(

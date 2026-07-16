@@ -133,7 +133,9 @@ class _DetailBody extends ConsumerWidget {
                       Text(listing.neighborhood, style: AppTypography.caption),
                       Text(' · ', style: AppTypography.caption),
                       Text(
-                        l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
+                        l10n.distanceAway(
+                          listing.distanceFromHomeLabel(origin),
+                        ),
                         style: AppTypography.caption,
                       ),
                     ],

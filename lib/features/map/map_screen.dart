@@ -72,7 +72,9 @@ class _MapScreenState extends ConsumerState<MapScreen>
 
   Future<void> _goToUserLocation() async {
     try {
-      final position = await ref.read(locationServiceProvider).getUserLocation();
+      final position = await ref
+          .read(locationServiceProvider)
+          .getUserLocation();
       if (!mounted) return;
       setState(() => userLocation = position);
       _mapController.move(userLocation, 14);

@@ -112,7 +112,11 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
     final popular = List.of(widget.listings)
       ..sort((a, b) => b.reviewCount.compareTo(a.reviewCount));
     final nearYou = List.of(widget.listings)
-      ..sort((a, b) => a.distanceFromHomeKm(origin).compareTo(b.distanceFromHomeKm(origin)));
+      ..sort(
+        (a, b) => a
+            .distanceFromHomeKm(origin)
+            .compareTo(b.distanceFromHomeKm(origin)),
+      );
 
     return Stack(
       children: [

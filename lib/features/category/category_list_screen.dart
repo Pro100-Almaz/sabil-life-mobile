@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/filter_provider.dart';
 import '../../core/state/provider_providers.dart';
@@ -45,13 +44,15 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   void initState() {
     super.initState();
     _filter = ref.read(filterProvider.notifier);
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       _filter.setCategory(widget.category);
       _filter.resetFilters();
       _filter.setSortMode(widget.initialSort ?? SortMode.distance);
-      
-      final userPosition = await ref.read(locationServiceProvider).getUserLocation();
+
+      final userPosition = await ref
+          .read(locationServiceProvider)
+          .getUserLocation();
       _filter.applyFilters(
         maxDistanceKm: widget.initialMaxDistance ?? 30,
         priceMax: widget.initialPriceMax ?? 50000,

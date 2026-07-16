@@ -118,4 +118,3 @@ abstract class CatalogRepository {
 }
 
 // ── Mock implementation ──────────────────────────────────────────────────────
-

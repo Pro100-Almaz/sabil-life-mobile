@@ -29,6 +29,7 @@ class ListingsFilter {
   const ListingsFilter({
     this.category,
     this.query,
+    this.tag,
     this.priceMax,
     this.ageGroup,
     this.lat,
@@ -40,6 +41,9 @@ class ListingsFilter {
 
   final CategoryType? category;
   final String? query;
+
+  /// Category-scoped tag pill selection. null = all tags.
+  final String? tag;
   final int? priceMax;
   final String? ageGroup;
   final double? lat;
@@ -54,6 +58,7 @@ class ListingsFilter {
     return other is ListingsFilter &&
         other.category == category &&
         other.query == query &&
+        other.tag == tag &&
         other.priceMax == priceMax &&
         other.ageGroup == ageGroup &&
         other.lat == lat &&
@@ -67,6 +72,7 @@ class ListingsFilter {
   int get hashCode => Object.hash(
     category,
     query,
+    tag,
     priceMax,
     ageGroup,
     lat,
@@ -93,6 +99,7 @@ abstract class CatalogRepository {
   Future<List<Listing>> listings({
     CategoryType? category,
     String? query,
+    String? tag,
     int? priceMax,
     String? ageGroup,
     double? lat,
@@ -105,6 +112,11 @@ abstract class CatalogRepository {
   Future<Listing> listing(String id);
 
   Future<List<CategoryCount>> categories();
+
+  /// The distinct tags available within [category] (the backend category key,
+  /// e.g. `SCHOOLS`; empty string = across all categories). Feeds the tag-pill
+  /// rail on the category screen.
+  Future<List<String>> tags(String category);
 }
 
 // ── Mock implementation ──────────────────────────────────────────────────────
@@ -116,6 +128,7 @@ class MockCatalogRepository implements CatalogRepository {
   Future<List<Listing>> listings({
     CategoryType? category,
     String? query,
+    String? tag,
     int? priceMax,
     String? ageGroup,
     double? lat,
@@ -136,6 +149,7 @@ class MockCatalogRepository implements CatalogRepository {
               .toLowerCase();
           if (!haystack.contains(q)) return false;
         }
+        if (tag != null && !l.tags.contains(tag)) return false;
         if (priceMax != null && l.priceFromQar > priceMax) return false;
         if (ageGroup != null && !l.ageGroups.contains(ageGroup)) return false;
         if (maxDistanceKm != null && l.distanceFromHomeKm > maxDistanceKm) {
@@ -180,5 +194,31 @@ class MockCatalogRepository implements CatalogRepository {
           .length;
       return CategoryCount(key: cat, count: count);
     }).toList();
+  }
+
+  @override
+  Future<List<String>> tags(String category) async {
+    await Future<void>.delayed(_latency);
+    final target = _categoryFromKey(category);
+    final seen = <String>{};
+    final ordered = <String>[];
+    for (final l in mockListings) {
+      if (l.status != ListingStatus.active) continue;
+      if (target != null && l.category != target) continue;
+      for (final tag in l.tags) {
+        if (seen.add(tag)) ordered.add(tag);
+      }
+    }
+    return ordered;
+  }
+
+  /// Maps a backend category key (e.g. `SCHOOLS`) back to a [CategoryType].
+  /// An empty / unknown key means "all categories" (null).
+  CategoryType? _categoryFromKey(String key) {
+    if (key.isEmpty) return null;
+    for (final cat in CategoryType.values) {
+      if (cat.name.toUpperCase() == key.toUpperCase()) return cat;
+    }
+    return null;
   }
 }

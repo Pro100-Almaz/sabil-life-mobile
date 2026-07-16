@@ -21,8 +21,10 @@ class FilterState {
     this.priceMax = kPriceCeilingQar,
     this.ageGroup,
     this.sortMode = SortMode.distance,
+    this.userPosition,
   });
 
+  final LatLng userPosition;
   final String query;
   final CategoryType? selectedCategory;
   final double maxDistanceKm;
@@ -42,6 +44,7 @@ class FilterState {
     int? priceMax,
     String? Function()? ageGroup,
     SortMode? sortMode,
+    LatLng? userPosition
   }) {
     return FilterState(
       query: query ?? this.query,
@@ -52,6 +55,7 @@ class FilterState {
       priceMax: priceMax ?? this.priceMax,
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
+      userPosition: userPosition ?? this.userPosition
     );
   }
 }
@@ -70,13 +74,17 @@ class FilterNotifier extends StateNotifier<FilterState> {
     required double maxDistanceKm,
     required int priceMax,
     required String? ageGroup,
+    required LatLng userPosition
   }) {
     state = state.copyWith(
       maxDistanceKm: maxDistanceKm,
       priceMax: priceMax,
       ageGroup: () => ageGroup,
+      userPosition: userPosition
     );
   }
+
+  void updateOrigin(LatLng? userPosition) => state = state.copyWith(userPosition)
 
   void resetFilters() {
     state = state.copyWith(
@@ -104,7 +112,8 @@ ListingSort _toListingSort(SortMode mode) => switch (mode) {
 /// so screens can await a real refresh of `catalogListingsProvider(thisFilter)`.
 final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   final filter = ref.watch(filterProvider);
-
+  final latitude = filterProvider.lat;
+  final longitude = filterProvider.lng;
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,
@@ -115,8 +124,8 @@ final listingsFilterProvider = Provider<ListingsFilter>((ref) {
         : null,
     sort: _toListingSort(filter.sortMode),
     page: 1,
-    lat: mockHomeLat,
-    lng: mockHomeLng,
+    lat: latitude,
+    lng: longitude,
   );
 });
 

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../data/models/listing.dart';
 import '../../data/repositories/catalog_repository.dart';
@@ -21,7 +22,7 @@ class FilterState {
     this.priceMax = kPriceCeilingQar,
     this.ageGroup,
     this.sortMode = SortMode.distance,
-    this.userPosition,
+    this.userPosition = mockHome,
   });
 
   final LatLng userPosition;
@@ -84,7 +85,7 @@ class FilterNotifier extends StateNotifier<FilterState> {
     );
   }
 
-  void updateOrigin(LatLng? userPosition) => state = state.copyWith(userPosition)
+  void updateOrigin(LatLng? userPosition) => state = state.copyWith(userPosition: userPosition);
 
   void resetFilters() {
     state = state.copyWith(
@@ -112,8 +113,8 @@ ListingSort _toListingSort(SortMode mode) => switch (mode) {
 /// so screens can await a real refresh of `catalogListingsProvider(thisFilter)`.
 final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   final filter = ref.watch(filterProvider);
-  final latitude = filterProvider.lat;
-  final longitude = filterProvider.lng;
+  final latitude = filter.userPosition.latitude;
+  final longitude = filter.userPosition.longitude;
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,

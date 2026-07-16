@@ -20,6 +20,7 @@ class FilterState {
     this.priceMax = kPriceCeilingQar,
     this.ageGroup,
     this.sortMode = SortMode.distance,
+    this.tag,
   });
 
   final String query;
@@ -28,6 +29,7 @@ class FilterState {
   final int priceMax;
   final String? ageGroup;
   final SortMode sortMode;
+  final String? tag;
 
   bool get hasActiveFilters =>
       maxDistanceKm < kMaxDistanceCeilingKm ||
@@ -41,6 +43,7 @@ class FilterState {
     int? priceMax,
     String? Function()? ageGroup,
     SortMode? sortMode,
+    String? Function()? tag,
   }) {
     return FilterState(
       query: query ?? this.query,
@@ -51,6 +54,7 @@ class FilterState {
       priceMax: priceMax ?? this.priceMax,
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
+      tag: tag != null ? tag() : this.tag,
     );
   }
 }
@@ -60,8 +64,11 @@ class FilterNotifier extends StateNotifier<FilterState> {
 
   void setQuery(String query) => state = state.copyWith(query: query);
 
+  /// Switching category clears any active tag — tags are category-scoped.
   void setCategory(CategoryType? category) =>
-      state = state.copyWith(selectedCategory: () => category);
+      state = state.copyWith(selectedCategory: () => category, tag: () => null);
+
+  void setTag(String? tag) => state = state.copyWith(tag: () => tag);
 
   void setSortMode(SortMode mode) => state = state.copyWith(sortMode: mode);
 
@@ -107,6 +114,7 @@ final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,
+    tag: filter.tag,
     priceMax: filter.priceMax < kPriceCeilingQar ? filter.priceMax : null,
     ageGroup: filter.ageGroup,
     maxDistanceKm: filter.maxDistanceKm < kMaxDistanceCeilingKm

@@ -15,23 +15,55 @@ import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
 
 class CategoryListScreen extends ConsumerStatefulWidget {
-  const CategoryListScreen({super.key, required this.category});
+  const CategoryListScreen({
+    super.key,
+    required this.category,
+    this.initialAgeGroup,
+    this.initialMaxDistance,
+    this.initialPriceMax,
+    this.initialSort,
+  });
 
   /// Null = "all categories" (e.g. an unknown route param).
   final CategoryType? category;
+  final SortMode? initialSort;
+  final String? initialAgeGroup;
+  final int? initialPriceMax;
+  final double? initialMaxDistance;
 
   @override
   ConsumerState<CategoryListScreen> createState() => _CategoryListScreenState();
 }
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
+  late final FilterNotifier _filter;
+
   @override
   void initState() {
     super.initState();
+    _filter = ref.read(filterProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ref.read(filterProvider.notifier).setCategory(widget.category);
+      _filter.setCategory(widget.category);
+      _filter.resetFilters();
+      _filter.setSortMode(widget.initialSort ?? SortMode.distance);
+      _filter.applyFilters(
+        maxDistanceKm: widget.initialMaxDistance ?? 30,
+        priceMax: widget.initialPriceMax ?? 50000,
+        ageGroup: widget.initialAgeGroup,
+      );
     });
+  }
+
+  @override
+  void dispose() {
+    final filter = _filter;
+    Future.microtask(() {
+      filter.setCategory(null);
+      filter.resetFilters();
+      filter.setSortMode(SortMode.distance);
+    });
+    super.dispose();
   }
 
   @override

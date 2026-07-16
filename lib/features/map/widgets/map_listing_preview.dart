@@ -1,19 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/distance.dart';
+import '../../../core/state/filter_provider.dart';
 import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 
 /// Mini card shown at the bottom of the map when a marker is tapped.
 /// Tapping it opens the listing detail.
-class MapListingPreview extends StatelessWidget {
+class MapListingPreview extends ConsumerWidget {
   const MapListingPreview({
     super.key,
     required this.listing,
@@ -24,9 +26,9 @@ class MapListingPreview extends StatelessWidget {
   final VoidCallback onClose;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-
+    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
       child: Container(
@@ -85,7 +87,7 @@ class MapListingPreview extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    l10n.distanceAway(listing.distanceFromHomeLabel),
+                    l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
                     style: AppTypography.small,
                   ),
                 ],

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/listing.dart';
 import '../../data/repositories/catalog_repository.dart';
+import '../../data/mock/mock_home.dart';
 import 'provider_providers.dart';
 
 enum SortMode { distance, rating, priceLow }
@@ -114,6 +115,8 @@ final listingsFilterProvider = Provider<ListingsFilter>((ref) {
         : null,
     sort: _toListingSort(filter.sortMode),
     page: 1,
+    lat: mockHomeLat,
+    lng: mockHomeLng,
   );
 });
 

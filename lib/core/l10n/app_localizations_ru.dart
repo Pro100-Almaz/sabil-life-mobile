@@ -910,4 +910,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Ваш запрос отменён.';
+
+  @override
+  String get directions => 'Маршрут';
+
+  @override
+  String get directionError => 'Couldn\'t open a map app';
 }

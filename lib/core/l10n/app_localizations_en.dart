@@ -911,4 +911,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Your inquiry has been cancelled.';
+
+  @override
+  String get directions => 'Directions';
+
+  @override
+  String get directionError => 'Couldn\'t open a map app';
 }

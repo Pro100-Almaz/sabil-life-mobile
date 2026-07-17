@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/distance.dart';
+import '../../../core/util/directions.dart';
 import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
@@ -91,13 +92,37 @@ class MapListingPreview extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              icon: const Icon(
-                Icons.close,
-                size: 20,
-                color: AppColors.textSecondary,
-              ),
-              onPressed: onClose,
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                    size: 20,
+                    color: AppColors.textSecondary,
+                  ),
+                  onPressed: onClose,
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.directions,
+                    size: 22,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final ok = await openDirections(
+                      lat: listing.lat,
+                      lng: listing.lng,
+                    );
+                    if (!ok) {
+                      messenger.showSnackBar(
+                        SnackBar(content: Text(l10n.directionsError)),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           ],
         ),

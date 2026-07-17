@@ -1786,11 +1786,11 @@ abstract class AppLocalizations {
   /// **'Directions'**
   String get directions;
 
-  /// No description provided for @directionError.
+  /// No description provided for @directionsError.
   ///
   /// In en, this message translates to:
   /// **'Couldn\'t open a map app'**
-  String get directionError;
+  String get directionsError;
 }
 
 class _AppLocalizationsDelegate

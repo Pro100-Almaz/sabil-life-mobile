@@ -916,5 +916,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get directions => 'Directions';
 
   @override
-  String get directionError => 'Couldn\'t open a map app';
+  String get directionsError => 'Couldn\'t open a map app';
 }

@@ -917,5 +917,5 @@ class AppLocalizationsKk extends AppLocalizations {
   String get directions => 'Бағыт';
 
   @override
-  String get directionError => 'Couldn\'t open a map app';
+  String get directionsError => 'Карта қосымшасын ашу мүмкін болмады';
 }

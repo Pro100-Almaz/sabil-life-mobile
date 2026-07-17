@@ -915,5 +915,5 @@ class AppLocalizationsRu extends AppLocalizations {
   String get directions => 'Маршрут';
 
   @override
-  String get directionError => 'Couldn\'t open a map app';
+  String get directionsError => 'Не удалось открыть приложение карт';
 }

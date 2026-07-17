@@ -17,6 +17,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
+import '../../core/util/directions.dart';
 import '../../data/mock/mock_masterclasses.dart';
 import '../../data/mock/mock_tutors.dart';
 import '../../data/models/listing.dart';
@@ -230,6 +231,26 @@ class _DetailBody extends ConsumerWidget {
                     expanded: true,
                     onPressed: () => context.go('/map?listing=${listing.id}'),
                   ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppButton(
+                    label: l10n.directions,
+                    variant: AppButtonVariant.outlined,
+                    icon: Icons.directions_outlined,
+                    expanded: true,
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final ok = await openDirections(
+                        lat: listing.lat,
+                        lng: listing.lng,
+                      );
+                      if (!ok) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(l10n.directionsError)),
+                        );
+                      }
+                    },
+                  ),
+
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
                     child: Divider(),

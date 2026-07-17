@@ -299,5 +299,7 @@
   "cancelInquiryTitle": "Cancel inquiry?",
   "cancelInquiryMessage": "This withdraws your inquiry to this tutor. You can send a new one later.",
   "keepInquiry": "Keep inquiry",
-  "inquiryCancelled": "Your inquiry has been cancelled."
+  "inquiryCancelled": "Your inquiry has been cancelled.",
+  "directions": "Directions",
+  "directionError": "Couldn't open a map app",
 }

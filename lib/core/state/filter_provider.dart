@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../data/models/listing.dart';
 import '../../data/repositories/catalog_repository.dart';
+import '../../data/mock/mock_home.dart';
 import 'provider_providers.dart';
 
 enum SortMode { distance, rating, priceLow }
@@ -21,8 +23,10 @@ class FilterState {
     this.ageGroup,
     this.sortMode = SortMode.distance,
     this.tag,
+    this.userPosition = mockHome,
   });
 
+  final LatLng userPosition;
   final String query;
   final CategoryType? selectedCategory;
   final double maxDistanceKm;
@@ -44,6 +48,7 @@ class FilterState {
     String? Function()? ageGroup,
     SortMode? sortMode,
     String? Function()? tag,
+    LatLng? userPosition,
   }) {
     return FilterState(
       query: query ?? this.query,
@@ -55,6 +60,7 @@ class FilterState {
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
       tag: tag != null ? tag() : this.tag,
+      userPosition: userPosition ?? this.userPosition,
     );
   }
 }
@@ -76,13 +82,18 @@ class FilterNotifier extends StateNotifier<FilterState> {
     required double maxDistanceKm,
     required int priceMax,
     required String? ageGroup,
+    required LatLng userPosition,
   }) {
     state = state.copyWith(
       maxDistanceKm: maxDistanceKm,
       priceMax: priceMax,
       ageGroup: () => ageGroup,
+      userPosition: userPosition,
     );
   }
+
+  void updateOrigin(LatLng? userPosition) =>
+      state = state.copyWith(userPosition: userPosition);
 
   void resetFilters() {
     state = state.copyWith(
@@ -110,7 +121,8 @@ ListingSort _toListingSort(SortMode mode) => switch (mode) {
 /// so screens can await a real refresh of `catalogListingsProvider(thisFilter)`.
 final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   final filter = ref.watch(filterProvider);
-
+  final latitude = filter.userPosition.latitude;
+  final longitude = filter.userPosition.longitude;
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,
@@ -122,6 +134,8 @@ final listingsFilterProvider = Provider<ListingsFilter>((ref) {
         : null,
     sort: _toListingSort(filter.sortMode),
     page: 1,
+    lat: latitude,
+    lng: longitude,
   );
 });
 

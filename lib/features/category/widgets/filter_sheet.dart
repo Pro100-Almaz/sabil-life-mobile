@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/state/filter_provider.dart';
@@ -34,6 +35,7 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
   late double _maxDistanceKm;
   late int _priceMax;
   late String? _ageGroup;
+  late LatLng _userPosition;
 
   @override
   void initState() {
@@ -42,6 +44,7 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
     _maxDistanceKm = filter.maxDistanceKm;
     _priceMax = filter.priceMax;
     _ageGroup = filter.ageGroup;
+    _userPosition = filter.userPosition;
   }
 
   @override
@@ -153,6 +156,7 @@ class _FilterSheetState extends ConsumerState<FilterSheet> {
                             maxDistanceKm: _maxDistanceKm,
                             priceMax: _priceMax,
                             ageGroup: _ageGroup,
+                            userPosition: _userPosition,
                           );
                       Navigator.of(context).pop();
                     },

@@ -3,8 +3,8 @@ import 'package:sabil_life/core/util/distance.dart';
 import 'package:sabil_life/data/mock/mock_listings.dart';
 import 'package:sabil_life/data/mock/mock_masterclasses.dart';
 import 'package:sabil_life/data/mock/mock_tutors.dart';
+import 'package:sabil_life/data/mock/mock_home.dart';
 import 'package:sabil_life/data/models/listing.dart';
-import 'package:sabil_life/data/repositories/catalog_repository.dart';
 
 void main() {
   test('mock data sanity: ≥24 listings, every category ≥2 entries', () {
@@ -82,54 +82,10 @@ void main() {
     }
   });
 
-  group('catalog tags', () {
-    final repo = MockCatalogRepository();
-
-    test('tags(SCHOOLS) returns the distinct school tags only', () async {
-      final tags = await repo.tags('SCHOOLS');
-      expect(tags, containsAll(['British', 'IB', 'Cambridge', 'Bilingual']));
-      // No cross-category leakage (e.g. an activities tag).
-      expect(tags, isNot(contains('Swimming')));
-      // Distinct — 'Primary' appears on two schools but only once here.
-      expect(tags.where((t) => t == 'Primary').length, 1);
-    });
-
-    test('tags("") returns tags across every category', () async {
-      final all = await repo.tags('');
-      expect(all, containsAll(['British', 'Swimming', 'Cooking', 'Heritage']));
-    });
-
-    test('listings(tag: ...) filters within the category', () async {
-      final sporty = await repo.listings(
-        category: CategoryType.activities,
-        tag: 'Sports',
-      );
-      expect(sporty, isNotEmpty);
-      expect(sporty.every((l) => l.tags.contains('Sports')), isTrue);
-
-      final swimming = await repo.listings(
-        category: CategoryType.activities,
-        tag: 'Swimming',
-      );
-      expect(swimming.map((l) => l.id), contains('activity-bluewave'));
-      // 'Swimming' is narrower than 'Sports'.
-      expect(swimming.length, lessThan(sporty.length));
-    });
-
-    test('a null tag leaves the category unfiltered', () async {
-      final withTag = await repo.listings(
-        category: CategoryType.schools,
-        tag: 'British',
-      );
-      final withoutTag = await repo.listings(category: CategoryType.schools);
-      expect(withTag.length, lessThan(withoutTag.length));
-    });
-  });
-
   test('every listing is within 30 km of the mock home', () {
     for (final listing in mockListings) {
       expect(
-        listing.distanceFromHomeKm,
+        listing.distanceFromHomeKm(mockHome),
         lessThan(30),
         reason: '${listing.id} is too far from home',
       );

@@ -54,16 +54,16 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-class _HomeContent extends StatefulWidget {
+class _HomeContent extends ConsumerStatefulWidget {
   const _HomeContent({required this.listings});
 
   final List<Listing> listings;
 
   @override
-  State<_HomeContent> createState() => _HomeContentState();
+  ConsumerState<_HomeContent> createState() => _HomeContentState();
 }
 
-class _HomeContentState extends State<_HomeContent> {
+class _HomeContentState extends ConsumerState<_HomeContent> {
   final _scrollController = ScrollController();
   bool _showScrollToTop = false;
 
@@ -107,12 +107,16 @@ class _HomeContentState extends State<_HomeContent> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
+    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
     final featured = widget.listings.where((l) => l.isFeatured).toList();
     final popular = List.of(widget.listings)
       ..sort((a, b) => b.reviewCount.compareTo(a.reviewCount));
     final nearYou = List.of(widget.listings)
-      ..sort((a, b) => a.distanceFromHomeKm.compareTo(b.distanceFromHomeKm));
+      ..sort(
+        (a, b) => a
+            .distanceFromHomeKm(origin)
+            .compareTo(b.distanceFromHomeKm(origin)),
+      );
 
     return Stack(
       children: [

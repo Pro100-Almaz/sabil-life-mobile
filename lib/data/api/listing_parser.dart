@@ -20,6 +20,7 @@ class ListingParser {
       imageUrls: toStringList(data['image_urls']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
+      tags: toStringList(data['tags']),
       // Not present on list cards — defaults.
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
@@ -46,6 +47,7 @@ class ListingParser {
       images: parseImages(data['images']),
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
+      tags: toStringList(data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
     );

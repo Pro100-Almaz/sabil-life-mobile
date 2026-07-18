@@ -107,7 +107,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Text(l10n.noAccountPrompt, style: AppTypography.caption),
                     TextButton(
-                      onPressed: isBusy ? null : () => context.go('/register'),
+                      onPressed: isBusy
+                          ? null
+                          : () => context.push('/register'),
                       child: Text(l10n.createAccount),
                     ),
                   ],

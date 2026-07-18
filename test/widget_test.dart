@@ -3,6 +3,7 @@ import 'package:sabil_life/core/util/distance.dart';
 import 'package:sabil_life/data/mock/mock_listings.dart';
 import 'package:sabil_life/data/mock/mock_masterclasses.dart';
 import 'package:sabil_life/data/mock/mock_tutors.dart';
+import 'package:sabil_life/data/mock/mock_home.dart';
 import 'package:sabil_life/data/models/listing.dart';
 
 void main() {
@@ -75,10 +76,16 @@ void main() {
     }
   });
 
+  test('every listing carries at least one tag', () {
+    for (final listing in mockListings) {
+      expect(listing.tags, isNotEmpty, reason: '${listing.id} has no tags');
+    }
+  });
+
   test('every listing is within 30 km of the mock home', () {
     for (final listing in mockListings) {
       expect(
-        listing.distanceFromHomeKm,
+        listing.distanceFromHomeKm(mockHome),
         lessThan(30),
         reason: '${listing.id} is too far from home',
       );

@@ -30,6 +30,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
+  void _goBack() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go('/');
+    }
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     final ok = await ref
@@ -120,7 +128,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   children: [
                     Text(l10n.haveAccountPrompt, style: AppTypography.caption),
                     TextButton(
-                      onPressed: isBusy ? null : () => context.go('/login'),
+                      onPressed: isBusy ? null : () => _goBack(),
                       child: Text(l10n.signIn),
                     ),
                   ],

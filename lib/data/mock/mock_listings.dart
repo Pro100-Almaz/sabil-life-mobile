@@ -12,6 +12,7 @@ final List<Listing> mockListings = [
   // ── Schools (4) ────────────────────────────────────────────────────────
   Listing(
     id: 'school-crescent',
+    tags: ['British', 'Primary'],
     title: 'Crescent International School',
     category: CategoryType.schools,
     subtitle: 'British curriculum · Ages 3–11',
@@ -35,6 +36,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'school-meridian',
+    tags: ['IB'],
     title: 'Doha Meridian Academy',
     category: CategoryType.schools,
     subtitle: 'IB continuum · Ages 4–18',
@@ -58,6 +60,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'school-lusail',
+    tags: ['Bilingual'],
     title: 'Lusail Bilingual School',
     category: CategoryType.schools,
     subtitle: 'English–Arabic bilingual · Ages 4–14',
@@ -81,6 +84,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'school-pearlgate',
+    tags: ['Cambridge', 'Primary'],
     title: 'Pearl Gate Primary',
     category: CategoryType.schools,
     subtitle: 'Cambridge Primary · Ages 5–11',
@@ -106,6 +110,7 @@ final List<Listing> mockListings = [
   // ── Nurseries (3) ──────────────────────────────────────────────────────
   Listing(
     id: 'nursery-littledunes',
+    tags: ['Montessori'],
     title: 'Little Dunes Nursery',
     category: CategoryType.nurseries,
     subtitle: 'Montessori-inspired · 6 months–4 years',
@@ -129,6 +134,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'nursery-sprouts',
+    tags: ['Bilingual'],
     title: 'Msheireb Sprouts Nursery',
     category: CategoryType.nurseries,
     subtitle: 'Bilingual EYFS · 1–4 years',
@@ -152,6 +158,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'nursery-palmsteps',
+    tags: ['Play-based'],
     title: 'Palm Steps Nursery',
     category: CategoryType.nurseries,
     subtitle: 'Play-based learning · 6 months–4 years',
@@ -177,6 +184,7 @@ final List<Listing> mockListings = [
   // ── Activities (6) ─────────────────────────────────────────────────────
   Listing(
     id: 'activity-bluewave',
+    tags: ['Swimming', 'Sports'],
     title: 'BlueWave Swimming Academy',
     category: CategoryType.activities,
     subtitle: 'Swimming · Beginner to squad',
@@ -200,6 +208,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'activity-falconfc',
+    tags: ['Football', 'Sports'],
     title: 'Falcon Youth Football Club',
     category: CategoryType.activities,
     subtitle: 'Football · Ages 4–16',
@@ -223,6 +232,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'activity-skyline',
+    tags: ['Basketball', 'Sports'],
     title: 'Skyline Basketball Camp',
     category: CategoryType.activities,
     subtitle: 'Basketball · Ages 7–17',
@@ -246,6 +256,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'activity-rhythm',
+    tags: ['Dance'],
     title: 'Rhythm & Motion Dance Studio',
     category: CategoryType.activities,
     subtitle: 'Ballet, hip-hop, contemporary · Ages 3+',
@@ -269,6 +280,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'activity-desertstars',
+    tags: ['Gymnastics', 'Sports'],
     title: 'Desert Stars Gymnastics',
     category: CategoryType.activities,
     subtitle: 'Artistic gymnastics · Ages 2–14',
@@ -292,6 +304,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'activity-engarde',
+    tags: ['Fencing', 'Sports'],
     title: 'En Garde Fencing Club',
     category: CategoryType.activities,
     subtitle: 'Fencing · Ages 6–18',
@@ -317,6 +330,7 @@ final List<Listing> mockListings = [
   // ── Entertainment (3) ──────────────────────────────────────────────────
   Listing(
     id: 'fun-oasispark',
+    tags: ['Outdoor'],
     title: 'Oasis Adventure Park',
     category: CategoryType.entertainment,
     subtitle: 'Outdoor adventure park · All ages',
@@ -340,6 +354,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'fun-trampoline',
+    tags: ['Indoor'],
     title: 'Pearl Bay Trampoline Hub',
     category: CategoryType.entertainment,
     subtitle: 'Indoor trampoline & ninja park',
@@ -363,6 +378,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'fun-galaxykids',
+    tags: ['Cinema', 'Indoor'],
     title: 'Galaxy Kids Cinema & Play',
     category: CategoryType.entertainment,
     subtitle: 'Family cinema with soft-play lounge',
@@ -388,6 +404,7 @@ final List<Listing> mockListings = [
   // ── Tutoring (3) ───────────────────────────────────────────────────────
   Listing(
     id: 'tutor-arabicroots',
+    tags: ['Arabic'],
     ownerId: kDemoTutorId,
     title: 'Arabic Roots Tutoring',
     category: CategoryType.tutoring,
@@ -412,6 +429,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'tutor-mathcraft',
+    tags: ['Maths'],
     ownerId: kDemoTutorId,
     title: 'MathCraft Learning Studio',
     category: CategoryType.tutoring,
@@ -436,6 +454,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'tutor-summit',
+    tags: ['Exam Prep'],
     ownerId: kDemoTutorId,
     title: 'Summit Exam Prep Centre',
     category: CategoryType.tutoring,
@@ -462,6 +481,7 @@ final List<Listing> mockListings = [
   // ── Masterclasses (3) ──────────────────────────────────────────────────
   Listing(
     id: 'master-canvas',
+    tags: ['Painting'],
     ownerId: kDemoMasterclassId,
     title: 'Canvas & Co. Painting Studio',
     category: CategoryType.masterclasses,
@@ -486,6 +506,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'master-clayhouse',
+    tags: ['Pottery'],
     ownerId: kDemoMasterclassId,
     title: 'Clay House Pottery Workshop',
     category: CategoryType.masterclasses,
@@ -510,6 +531,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'master-littlechefs',
+    tags: ['Cooking'],
     ownerId: kDemoMasterclassId,
     title: 'Little Chefs Culinary Lab',
     category: CategoryType.masterclasses,
@@ -536,6 +558,7 @@ final List<Listing> mockListings = [
   // ── Partnerships (2) ───────────────────────────────────────────────────
   Listing(
     id: 'partner-familytours',
+    tags: ['Tours'],
     title: 'Doha Family Tours',
     category: CategoryType.partnerships,
     subtitle: 'Partner offer · Family city tours',
@@ -559,6 +582,7 @@ final List<Listing> mockListings = [
   ),
   Listing(
     id: 'partner-heritage',
+    tags: ['Heritage'],
     title: 'Heritage Quarter Learning Trail',
     category: CategoryType.partnerships,
     subtitle: 'Partner offer · Culture & heritage education',

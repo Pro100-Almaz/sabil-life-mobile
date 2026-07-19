@@ -12,11 +12,13 @@ import '../../core/state/auth_provider.dart';
 import '../../core/state/favorites_provider.dart';
 import '../../core/state/masterclass_provider.dart';
 import '../../core/state/provider_providers.dart';
+import '../../core/state/filter_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
+import '../../core/util/directions.dart';
 import '../../data/mock/mock_masterclasses.dart';
 import '../../data/mock/mock_tutors.dart';
 import '../../data/models/listing.dart';
@@ -83,6 +85,7 @@ class _DetailBody extends ConsumerWidget {
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
     final asyncReviews = ref.watch(listingReviewsProvider(listing.id));
     final reviews = asyncReviews.valueOrNull ?? const <Review>[];
+    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
 
     return Scaffold(
       body: CustomScrollView(
@@ -131,7 +134,9 @@ class _DetailBody extends ConsumerWidget {
                       Text(listing.neighborhood, style: AppTypography.caption),
                       Text(' · ', style: AppTypography.caption),
                       Text(
-                        l10n.distanceAway(listing.distanceFromHomeLabel),
+                        l10n.distanceAway(
+                          listing.distanceFromHomeLabel(origin),
+                        ),
                         style: AppTypography.caption,
                       ),
                     ],
@@ -230,6 +235,26 @@ class _DetailBody extends ConsumerWidget {
                     expanded: true,
                     onPressed: () => context.go('/map?listing=${listing.id}'),
                   ),
+                  const SizedBox(height: AppSpacing.md),
+                  AppButton(
+                    label: l10n.directions,
+                    variant: AppButtonVariant.outlined,
+                    icon: Icons.directions_outlined,
+                    expanded: true,
+                    onPressed: () async {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final ok = await openDirections(
+                        lat: listing.lat,
+                        lng: listing.lng,
+                      );
+                      if (!ok) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(l10n.directionsError)),
+                        );
+                      }
+                    },
+                  ),
+
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
                     child: Divider(),

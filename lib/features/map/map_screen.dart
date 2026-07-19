@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/filter_provider.dart';
@@ -10,6 +9,7 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/util/category_label.dart';
+import '../../core/util/location_service.dart';
 import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/pill_chip.dart';
@@ -28,6 +28,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
     with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
+  LatLng pickLocaton = mockHome;
 
   String? _selectedId;
   bool _showCategory = false;
@@ -69,75 +70,11 @@ class _MapScreenState extends ConsumerState<MapScreen>
     controller.forward();
   }
 
-  Future<LatLng?> _lastKnownLocation() async {
-    Position? position = await Geolocator.getLastKnownPosition();
-
-    if (position != null) {
-      return LatLng(position.latitude, position.longitude);
-    } else {
-      return null;
-    }
-  }
-
-  Future<bool> _checkGeolocationEnabled() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error("Geolocation disabled");
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error("Permission for geolocation denied");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error("Permission for geolocation denied");
-    }
-
-    return true;
-  }
-
-  Future<LatLng> _getUserLocation() async {
-    LatLng position;
-    if (await _checkGeolocationEnabled()) {
-      final LocationSettings locationSettings = LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 100,
-      );
-
-      Position positionValue = await Geolocator.getCurrentPosition(
-        locationSettings: locationSettings,
-      );
-      position = LatLng(positionValue.latitude, positionValue.longitude);
-    } else {
-      LatLng? lastLocation = await _lastKnownLocation();
-      if (lastLocation != null) {
-        position = lastLocation;
-      } else {
-        position = mockHome;
-      }
-    }
-    return position;
-  }
-
   Future<void> _goToUserLocation() async {
     try {
-      final position = await _getUserLocation();
+      final position = await ref
+          .read(locationServiceProvider)
+          .getUserLocation();
       if (!mounted) return;
       setState(() => userLocation = position);
       _mapController.move(userLocation, 14);
@@ -146,6 +83,11 @@ class _MapScreenState extends ConsumerState<MapScreen>
         const SnackBar(content: Text('Could not get your location')),
       );
     }
+  }
+
+  void _markerOnLatLen(LatLng coordinates) {
+    setState(() => pickLocaton = coordinates);
+    _mapController.move(coordinates, 17);
   }
 
   @override
@@ -201,7 +143,12 @@ class _MapScreenState extends ConsumerState<MapScreen>
             options: MapOptions(
               initialCenter: initialCenter,
               initialZoom: focused != null ? 14 : 11.5,
-              onTap: (tapPosition, point) => setState(() => _selectedId = null),
+              onTap: (tapPosition, point) {
+                setState(() {
+                  _selectedId = null;
+                  _markerOnLatLen(point);
+                });
+              },
             ),
             children: [
               TileLayer(
@@ -211,6 +158,16 @@ class _MapScreenState extends ConsumerState<MapScreen>
               MarkerLayer(
                 rotate: true,
                 markers: [
+                  Marker(
+                    point: pickLocaton,
+                    width: 40,
+                    height: 40,
+                    child: const Icon(
+                      Icons.place,
+                      size: 22,
+                      color: Colors.purple,
+                    ),
+                  ),
                   Marker(
                     point: mockHome,
                     width: 40,

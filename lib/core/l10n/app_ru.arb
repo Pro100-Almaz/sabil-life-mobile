@@ -279,5 +279,7 @@
   "cancelInquiryTitle": "Отменить запрос?",
   "cancelInquiryMessage": "Ваш запрос этому репетитору будет отозван. Позже вы сможете отправить новый.",
   "keepInquiry": "Оставить запрос",
-  "inquiryCancelled": "Ваш запрос отменён."
+  "inquiryCancelled": "Ваш запрос отменён.",
+  "directions": "Маршрут",
+  "directionsError": "Не удалось открыть приложение карт"
 }

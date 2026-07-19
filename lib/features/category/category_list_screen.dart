@@ -8,36 +8,76 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/category_label.dart';
+import '../../core/util/location_service.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
+import '../../shared/widgets/pill_chip.dart';
 import '../home/widgets/listing_card.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
+import 'widgets/search_pill.dart';
 
 class CategoryListScreen extends ConsumerStatefulWidget {
-  const CategoryListScreen({super.key, required this.category});
+  const CategoryListScreen({
+    super.key,
+    required this.category,
+    this.initialAgeGroup,
+    this.initialMaxDistance,
+    this.initialPriceMax,
+    this.initialSort,
+  });
 
   /// Null = "all categories" (e.g. an unknown route param).
   final CategoryType? category;
+  final SortMode? initialSort;
+  final String? initialAgeGroup;
+  final int? initialPriceMax;
+  final double? initialMaxDistance;
 
   @override
   ConsumerState<CategoryListScreen> createState() => _CategoryListScreenState();
 }
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
+  late final FilterNotifier _filter;
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _filter = ref.read(filterProvider.notifier);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      ref.read(filterProvider.notifier).setCategory(widget.category);
+      _filter.setCategory(widget.category);
+      _filter.resetFilters();
+      _filter.setSortMode(widget.initialSort ?? SortMode.distance);
+
+      final userPosition = await ref
+          .read(locationServiceProvider)
+          .getUserLocation();
+      _filter.applyFilters(
+        maxDistanceKm: widget.initialMaxDistance ?? 30,
+        priceMax: widget.initialPriceMax ?? 50000,
+        ageGroup: widget.initialAgeGroup,
+        userPosition: userPosition,
+      );
     });
+  }
+
+  @override
+  void dispose() {
+    final filter = _filter;
+    Future.microtask(() {
+      filter.setCategory(null);
+      filter.resetFilters();
+      filter.setSortMode(SortMode.distance);
+    });
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final asyncListings = ref.watch(filteredListingsProvider);
+    final asyncTags = ref.watch(categoryTagsProvider(widget.category));
     final filter = ref.watch(filterProvider);
 
     final title = widget.category == null
@@ -63,6 +103,49 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.lg,
+            ),
+            child: SearchPill(),
+          ),
+          SizedBox(
+            height: 40,
+            child: asyncTags.when(
+              loading: () => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
+              data: (tags) => tags.isEmpty
+                  ? const SizedBox.shrink()
+                  : ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                      ),
+                      children: [
+                        PillChip(
+                          label: l10n.catAll,
+                          selected: filter.tag == null,
+                          onTap: () =>
+                              ref.read(filterProvider.notifier).setTag(null),
+                        ),
+                        for (final tag in tags) ...[
+                          const SizedBox(width: AppSpacing.sm),
+                          PillChip(
+                            label: tag,
+                            selected: filter.tag == tag,
+                            onTap: () => ref
+                                .read(filterProvider.notifier)
+                                .setTag(filter.tag == tag ? null : tag),
+                          ),
+                        ],
+                      ],
+                    ),
+            ),
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,

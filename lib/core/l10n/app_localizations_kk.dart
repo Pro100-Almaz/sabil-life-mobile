@@ -912,4 +912,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Сұрауыңыз болдырылмады.';
+
+  @override
+  String get directions => 'Бағыт';
+
+  @override
+  String get directionsError => 'Карта қосымшасын ашу мүмкін болмады';
 }

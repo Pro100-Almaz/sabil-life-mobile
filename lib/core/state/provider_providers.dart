@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/catalog.dart';
 import 'package:sabil_life/data/api/inquiry.dart';
 import 'package:sabil_life/data/api/listing_enroll.dart';
+import 'package:sabil_life/data/api/listing_parser.dart';
 import 'package:sabil_life/data/api/provider.dart';
 import 'package:sabil_life/data/api/review.dart';
 import 'package:sabil_life/data/api/tutor_review.dart';
@@ -187,6 +188,7 @@ final catalogListingsProvider = FutureProvider.family
           .listings(
             category: filter.category,
             query: filter.query,
+            tag: filter.tag,
             priceMax: filter.priceMax,
             ageGroup: filter.ageGroup,
             lat: filter.lat,
@@ -272,3 +274,15 @@ final tutorListProvider = FutureProvider.family
 final availableSubjectsProvider = FutureProvider.autoDispose<List<String>>(
   (ref) => ref.watch(tutorRepositoryProvider).subjects(),
 );
+
+/// The tag vocabulary available within a category, feeding the category
+/// screen's tag-pill rail. Family key is the [CategoryType] (null = all
+/// categories); the repo receives the backend category key.
+final categoryTagsProvider = FutureProvider.autoDispose
+    .family<List<String>, CategoryType?>(
+      (ref, category) => ref
+          .watch(catalogRepositoryProvider)
+          .tags(
+            category == null ? '' : ListingParser.serializeCategory(category),
+          ),
+    );

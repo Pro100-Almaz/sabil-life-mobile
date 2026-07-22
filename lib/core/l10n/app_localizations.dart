@@ -1779,6 +1779,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your inquiry has been cancelled.'**
   String get inquiryCancelled;
+
+  /// No description provided for @directions.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get directions;
+
+  /// No description provided for @directionsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open a map app'**
+  String get directionsError;
 }
 
 class _AppLocalizationsDelegate

@@ -279,5 +279,7 @@
   "cancelInquiryTitle": "Сұрауды болдырмау ма?",
   "cancelInquiryMessage": "Бұл репетиторға жіберген сұрауыңыз кері қайтарылады. Кейін жаңасын жібере аласыз.",
   "keepInquiry": "Сұрауды қалдыру",
-  "inquiryCancelled": "Сұрауыңыз болдырылмады."
+  "inquiryCancelled": "Сұрауыңыз болдырылмады.",
+  "directions": "Бағыт",
+  "directionsError": "Карта қосымшасын ашу мүмкін болмады"
 }

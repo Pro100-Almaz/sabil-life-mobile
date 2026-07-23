@@ -18,6 +18,7 @@ class ListingParser {
       reviewCount: toInt(data['review_count']),
       priceFromQar: toInt(data['price_from_qar']),
       imageUrls: toStringList(data['image_urls']),
+      images: parseImages(data['images']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
       tags: toStringList(data['tags']),

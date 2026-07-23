@@ -205,20 +205,42 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           children: [
+            //Title 
             TextField(
               controller: _title,
               decoration: InputDecoration(
-                labelText: l10n.fieldTitle,
+                label: Text.rich(
+                  TextSpan(
+                    text: l10n.fieldTitle,
+                    children:[
+                      TextSpan(
+                        text: "*",
+                        style: const TextStyle(color: AppColors.primary),
+                      )
+                    ]
+                  )
+                ),
                 errorText: _showErrors && _title.text.trim().isEmpty
                     ? l10n.fieldRequired
                     : null,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
+            //Subtitle
             TextField(
               controller: _subtitle,
               decoration: InputDecoration(
-                labelText: l10n.fieldSubtitle,
+                label: Text.rich(
+                  TextSpan(
+                    text: l10n.fieldTitle,
+                    children:[
+                      TextSpan(
+                        text: "*",
+                        style: const TextStyle(color: AppColors.primary),
+                      )
+                    ]
+                  )
+                ),
                 errorText: _showErrors && _subtitle.text.trim().isEmpty
                     ? l10n.fieldRequired
                     : null,

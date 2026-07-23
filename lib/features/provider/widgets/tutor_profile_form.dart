@@ -284,7 +284,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.profileSubmittedForReview)));
+      ).showSnackBar(SnackBar(content: Text(l10n.providerProfileSaved)));
       if (widget.popOnSave && context.canPop()) context.pop();
     } catch (e) {
       if (!mounted) return;

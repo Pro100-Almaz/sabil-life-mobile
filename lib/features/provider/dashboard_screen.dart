@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -12,7 +12,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
-import '../../data/models/subscription.dart';
+// import '../../data/models/subscription.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
 
 class DashboardScreen extends ConsumerWidget {
@@ -30,9 +30,9 @@ class DashboardScreen extends ConsumerWidget {
     final profileAsync = ref.watch(providerProfileProvider);
     final listingsAsync = ref.watch(myListingsProvider(user.id));
     final inquiriesAsync = ref.watch(incomingInquiriesProvider(user.id));
-    final subscribersAsync = ref.watch(
-      incomingSubscriptionsProvider(const SubscriptionsFilter()),
-    );
+    // final subscribersAsync = ref.watch(
+    //   incomingSubscriptionsProvider(const SubscriptionsFilter()),
+    // );
 
     final totalListings = listingsAsync.maybeWhen(
       data: (items) => items.length,
@@ -53,11 +53,11 @@ class DashboardScreen extends ConsumerWidget {
           .length,
       orElse: () => 0,
     );
-    final subscriberCount = subscribersAsync.maybeWhen(
-      data: (items) =>
-          items.where((s) => s.status == SubscriptionStatus.confirmed).length,
-      orElse: () => 0,
-    );
+    // final subscriberCount = subscribersAsync.maybeWhen(
+    //   data: (items) =>
+    //       items.where((s) => s.status == SubscriptionStatus.confirmed).length,
+    //   orElse: () => 0,
+    // );
 
     return Scaffold(
       appBar: AppBar(
@@ -107,39 +107,39 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
             ],
-            _MetricCard(
-              label: l10n.providerSubscribers,
-              value: '$subscriberCount',
-              icon: Icons.people_outline,
-              onTap: () => context.go(
-                interface == ActiveInterface.tutor
-                    ? '${interface.basePath}/inquiries'
-                    : '${interface.basePath}/listings',
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            // Subscribers mini-roster
-            subscribersAsync.when(
-              loading: () => const SizedBox.shrink(),
-              error: (e, _) => const SizedBox.shrink(),
-              data: (subs) {
-                final confirmed = subs
-                    .where((s) => s.status == SubscriptionStatus.confirmed)
-                    .toList();
-                if (confirmed.isEmpty) return const SizedBox.shrink();
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(l10n.providerSubscribers, style: AppTypography.h3),
-                    const SizedBox(height: AppSpacing.sm),
-                    for (final sub in confirmed.take(3)) ...[
-                      _SubscriberRow(subscription: sub),
-                      const SizedBox(height: AppSpacing.sm),
-                    ],
-                  ],
-                );
-              },
-            ),
+            // _MetricCard(
+            //   label: l10n.providerSubscribers,
+            //   value: '$subscriberCount',
+            //   icon: Icons.people_outline,
+            //   onTap: () => context.go(
+            //     interface == ActiveInterface.tutor
+            //         ? '${interface.basePath}/inquiries'
+            //         : '${interface.basePath}/listings',
+            //   ),
+            // ),
+            // const SizedBox(height: AppSpacing.lg),
+            // // Subscribers mini-roster
+            // subscribersAsync.when(
+            //   loading: () => const SizedBox.shrink(),
+            //   error: (e, _) => const SizedBox.shrink(),
+            //   data: (subs) {
+            //     final confirmed = subs
+            //         .where((s) => s.status == SubscriptionStatus.confirmed)
+            //         .toList();
+            //     if (confirmed.isEmpty) return const SizedBox.shrink();
+            //     return Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(l10n.providerSubscribers, style: AppTypography.h3),
+            //         const SizedBox(height: AppSpacing.sm),
+            //         for (final sub in confirmed.take(3)) ...[
+            //           _SubscriberRow(subscription: sub),
+            //           const SizedBox(height: AppSpacing.sm),
+            //         ],
+            //       ],
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
@@ -180,46 +180,46 @@ class _UnverifiedBanner extends StatelessWidget {
   }
 }
 
-class _SubscriberRow extends StatelessWidget {
-  const _SubscriberRow({required this.subscription});
+// class _SubscriberRow extends StatelessWidget {
+//   const _SubscriberRow({required this.subscription});
 
-  final Subscription subscription;
+//   final Subscription subscription;
 
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final dateLabel = DateFormat(
-      'd MMM yyyy',
-      locale,
-    ).format(subscription.createdAt);
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: AppColors.divider),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(subscription.familyName ?? '—', style: AppTypography.body),
-                if (subscription.listingTitle != null)
-                  Text(subscription.listingTitle!, style: AppTypography.small),
-              ],
-            ),
-          ),
-          Text(dateLabel, style: AppTypography.small),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final locale = Localizations.localeOf(context).toString();
+//     final dateLabel = DateFormat(
+//       'd MMM yyyy',
+//       locale,
+//     ).format(subscription.createdAt);
+//     return Container(
+//       padding: const EdgeInsets.symmetric(
+//         horizontal: AppSpacing.lg,
+//         vertical: AppSpacing.md,
+//       ),
+//       decoration: BoxDecoration(
+//         color: AppColors.surface,
+//         borderRadius: BorderRadius.circular(AppRadius.card),
+//         border: Border.all(color: AppColors.divider),
+//       ),
+//       child: Row(
+//         children: [
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(subscription.familyName ?? '—', style: AppTypography.body),
+//                 if (subscription.listingTitle != null)
+//                   Text(subscription.listingTitle!, style: AppTypography.small),
+//               ],
+//             ),
+//           ),
+//           Text(dateLabel, style: AppTypography.small),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class _MetricCard extends StatelessWidget {
   const _MetricCard({

@@ -207,7 +207,7 @@ class _DetailBody extends ConsumerWidget {
                           TileLayer(
                             urlTemplate:
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'io.sabil.sabil_life',
+                            userAgentPackageName: 'io.sabilLife.app',
                           ),
                           MarkerLayer(
                             markers: [

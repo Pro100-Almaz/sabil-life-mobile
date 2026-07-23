@@ -2,7 +2,7 @@ name: sabil_life
 description: "Sabil Life — family-life directory app (frontend / mock data build)."
 publish_to: 'none'
 
-version: 1.0.0+3
+version: 1.0.0+4
 
 environment:
   sdk: ^3.11.0

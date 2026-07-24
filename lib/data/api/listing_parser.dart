@@ -27,6 +27,8 @@ class ListingParser {
       highlights: toStringList(data['highlights']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
+      isOnline: (data['is_online'] ?? true) as bool,
+      meetingUrl: (data['meeting_url'] ?? '') as String,
     );
   }
 
@@ -51,6 +53,8 @@ class ListingParser {
       tags: toStringList(data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
+      isOnline: (data['is_online'] ?? true) as bool,
+      meetingUrl: (data['meeting_url'] ?? '') as String,
     );
   }
 

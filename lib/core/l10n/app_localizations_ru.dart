@@ -459,6 +459,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fieldNeighborhood => 'Район';
 
   @override
+  String get fieldOnline => 'Онлайн';
+
+  @override
+  String get fieldOffline => 'Офлайн';
+
+  @override
+  String get fieldUrl => 'Ссылка на встречу';
+
+  @override
   String get fieldPrice => 'Цена (QAR, от)';
 
   @override

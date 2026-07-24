@@ -50,8 +50,6 @@ class Listing {
     required this.category,
     required this.subtitle,
     required this.neighborhood,
-    required this.lat,
-    required this.lng,
     required this.rating,
     required this.reviewCount,
     required this.priceFromQar,
@@ -60,6 +58,10 @@ class Listing {
     required this.isFeatured,
     required this.description,
     required this.highlights,
+    this.isOnline = false,
+    this.lat = 0,
+    this.lng = 0,
+    this.meetingUrl = '',
     this.tags = const [],
     this.images = const [],
     this.ownerId,
@@ -71,10 +73,15 @@ class Listing {
   final CategoryType category;
   final String subtitle;
   final String neighborhood;
-  final double lat;
-  final double lng;
   final double rating;
   final int reviewCount;
+  final bool isOnline;
+
+  /// if isOnline = true 
+  final String meetingUrl;
+  /// if isOnline = false 
+  final double lat;
+  final double lng;
 
   /// 0 = free / not applicable.
   final int priceFromQar;
@@ -118,6 +125,8 @@ class Listing {
     List<ListingImage>? images,
     String? Function()? ownerId,
     ListingStatus? status,
+    bool? isOnline,
+    String? meetingUrl,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -139,6 +148,8 @@ class Listing {
       images: images ?? this.images,
       ownerId: ownerId != null ? ownerId() : this.ownerId,
       status: status ?? this.status,
+      isOnline: isOnline ?? this.isOnline,
+      meetingUrl: meetingUrl ?? this.meetingUrl,
     );
   }
 }

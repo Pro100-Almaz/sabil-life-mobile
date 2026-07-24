@@ -928,6 +928,24 @@ abstract class AppLocalizations {
   /// **'Neighborhood'**
   String get fieldNeighborhood;
 
+  /// No description provided for @fieldOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get fieldOnline;
+
+  /// No description provided for @fieldOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get fieldOffline;
+
+  /// No description provided for @fieldUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting link'**
+  String get fieldUrl;
+
   /// No description provided for @fieldPrice.
   ///
   /// In en, this message translates to:

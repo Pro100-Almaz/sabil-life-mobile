@@ -46,6 +46,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _pickedImages = <XFile>[];
   final _existingImages = <ListingImage>[];
   final _removedImageIds = <String>{};
+  final _url = TextEditingController();
+
+  bool _isOnline = true;
   bool _saving = false;
   bool _showErrors = false;
   LatLng _pickedLocation = mockHome;
@@ -63,6 +66,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _existing = widget.initialListing;
     _title.addListener(_onRequiredChanged);
     _subtitle.addListener(_onRequiredChanged);
+    _url.addListener(_onRequiredChanged);
+    _neighborhood.addListener(_onRequiredChanged);
+
     final l = _existing;
     if (l != null) {
       _title.text = l.title;
@@ -76,6 +82,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       _ageGroups.addAll(l.ageGroups);
       _existingImages.addAll(l.images);
       _pickedLocation = LatLng(l.lat, l.lng);
+      _isOnline = l.isOnline;
+      _url.text = l.meetingUrl;
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -87,6 +95,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _neighborhood.dispose();
     _price.dispose();
     _description.dispose();
+    _url.dispose();
     for (final c in _highlights) {
       c.dispose();
     }
@@ -107,8 +116,13 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
 
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
+    final missingCore =
+        _title.text.trim().isEmpty || _subtitle.text.trim().isEmpty;
+    final missingUrl = _isOnline && _url.text.trim().isEmpty;
+    final missingLocation = !_isOnline && _neighborhood.text.trim().isEmpty;
+
     if (user == null) return;
-    if (_title.text.trim().isEmpty || _subtitle.text.trim().isEmpty) {
+    if (missingCore || missingLocation || missingUrl) {
       final l10n = AppLocalizations.of(context)!;
       setState(() => _showErrors = true);
       ScaffoldMessenger.of(
@@ -160,6 +174,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         highlights: highlights,
         ageGroups: _ageGroups.toList(),
         status: ListingStatus.draft,
+        isOnline: _isOnline,
+        meetingUrl: _isOnline ? _url.text.trim() : '',
       );
 
       // 1. Save the listing fields (images are managed separately). Create
@@ -205,36 +221,116 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           children: [
+            //Title
             TextField(
               controller: _title,
               decoration: InputDecoration(
-                labelText: l10n.fieldTitle,
+                label: Text.rich(
+                  TextSpan(
+                    text: l10n.fieldTitle,
+                    children: [
+                      TextSpan(
+                        text: "*",
+                        style: const TextStyle(color: AppColors.primary),
+                      ),
+                    ],
+                  ),
+                ),
                 errorText: _showErrors && _title.text.trim().isEmpty
                     ? l10n.fieldRequired
                     : null,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
+            //Subtitle
             TextField(
               controller: _subtitle,
               decoration: InputDecoration(
-                labelText: l10n.fieldSubtitle,
+                label: Text.rich(
+                  TextSpan(
+                    text: l10n.fieldSubtitle,
+                    children: [
+                      TextSpan(
+                        text: "*",
+                        style: const TextStyle(color: AppColors.primary),
+                      ),
+                    ],
+                  ),
+                ),
                 errorText: _showErrors && _subtitle.text.trim().isEmpty
                     ? l10n.fieldRequired
                     : null,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
-            TextField(
-              controller: _neighborhood,
-              decoration: InputDecoration(labelText: l10n.fieldNeighborhood),
+            SegmentedButton<bool>(
+              style: SegmentedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                selectedForegroundColor: Colors.white,
+                selectedBackgroundColor: AppColors.primary,
+              ),
+              segments: [
+                ButtonSegment(value: true, label: Text(l10n.fieldOnline)),
+                ButtonSegment(value: false, label: Text(l10n.fieldOffline)),
+              ],
+              selected: {_isOnline},
+              onSelectionChanged: (s) => setState(() => _isOnline = s.first),
             ),
             const SizedBox(height: AppSpacing.md),
-            ListingLocationMap(
-              initialLocation: _pickedLocation,
-              onLocationPicked: (point) => _pickedLocation = point,
-            ),
-            const SizedBox(height: AppSpacing.md),
+            if (_isOnline) ...[
+              TextField(
+                controller: _url,
+                keyboardType: TextInputType.url,
+                decoration: InputDecoration(
+                  label: Text.rich(
+                    TextSpan(
+                      text: l10n.fieldUrl,
+                      children: [
+                        TextSpan(
+                          text: "*",
+                          style: const TextStyle(color: AppColors.primary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  errorText:
+                      _showErrors && _isOnline && _url.text.trim().isEmpty
+                      ? l10n.fieldRequired
+                      : null,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            if (!_isOnline) ...[
+              TextField(
+                controller: _neighborhood,
+                decoration: InputDecoration(
+                  label: Text.rich(
+                    TextSpan(
+                      text: l10n.fieldNeighborhood,
+                      children: [
+                        TextSpan(
+                          text: "*",
+                          style: const TextStyle(color: AppColors.primary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  errorText:
+                      _showErrors &&
+                          !_isOnline &&
+                          _neighborhood.text.trim().isEmpty
+                      ? l10n.fieldRequired
+                      : null,
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              ListingLocationMap(
+                initialLocation: _pickedLocation,
+                onLocationPicked: (point) => _pickedLocation = point,
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
             TextField(
               controller: _price,
               keyboardType: TextInputType.number,

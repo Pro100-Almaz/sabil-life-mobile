@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/client.dart';
 import 'package:sabil_life/data/api/push_notifications.dart';
-
+import 'package:flutter/foundation.dart';
 import '../../data/api/auth_token_store.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -142,7 +140,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    await _push.unregister();
+    try {
+      await _push.unregister().timeout(const Duration(seconds: 5));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint("push unregister failed (ignored): $e");
+      }
+    }
     await _repo.logout();
     await authTokenStore.clear();
     onLogout?.call();

@@ -63,17 +63,29 @@ class NotificaionsScreen extends ConsumerWidget {
   }
 }
 
-class _NotificationTile extends StatelessWidget {
+class _NotificationTile extends StatefulWidget {
   const _NotificationTile({required this.notification, required this.onTap});
 
   final AppNotification notification;
   final VoidCallback onTap;
 
   @override
+  State<_NotificationTile> createState() => _NotificationTileState();
+}
+
+class _NotificationTileState extends State<_NotificationTile> {
+  bool _expanded = false;
+
+  @override
   Widget build(BuildContext context) {
+    final notification = widget.notification;
     final unread = !notification.isRead;
+
     return ListTile(
-      onTap: onTap,
+      onTap: () {
+        setState(() => _expanded = !_expanded);
+        widget.onTap;
+      },
       leading: Icon(
         Icons.notifications,
         color: unread ? AppColors.primary : AppColors.textSecondary,
@@ -84,10 +96,18 @@ class _NotificationTile extends StatelessWidget {
           fontWeight: unread ? FontWeight.w700 : FontWeight.w500,
         ),
       ),
-      subtitle: Text(notification.body),
-      trailing: unread
-          ? const CircleAvatar(radius: 4, backgroundColor: AppColors.primary)
-          : null,
+      subtitle: _expanded ? Text(notification.body) : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (unread)
+            const CircleAvatar(radius: 4, backgroundColor: AppColors.primary),
+          Icon(
+            _expanded ? Icons.expand_less : Icons.expand_more,
+            color: AppColors.textSecondary,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -77,9 +77,10 @@ class Listing {
   final int reviewCount;
   final bool isOnline;
 
-  /// if isOnline = true 
+  /// if isOnline = true
   final String meetingUrl;
-  /// if isOnline = false 
+
+  /// if isOnline = false
   final double lat;
   final double lng;
 

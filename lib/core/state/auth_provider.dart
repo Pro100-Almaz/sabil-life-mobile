@@ -140,10 +140,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    try{
+    try {
       await _push.unregister().timeout(const Duration(seconds: 5));
-    }catch (e){
-      if (kDebugMode){
+    } catch (e) {
+      if (kDebugMode) {
         debugPrint("push unregister failed (ignored): $e");
       }
     }

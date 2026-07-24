@@ -3,7 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/util/location_service.dart';
@@ -25,16 +24,16 @@ class ListingLocationMap extends ConsumerStatefulWidget {
   ConsumerState<ListingLocationMap> createState() => _ListingLocationMapState();
 }
 
-class _ListingLocationMapState extends ConsumerState<ListingLocationMap> with TickerProviderStateMixin {
+class _ListingLocationMapState extends ConsumerState<ListingLocationMap>
+    with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   late LatLng _picked = widget.initialLocation;
   LatLng userLocation = mockHome;
-  
+
   void _onTap(LatLng point) {
     setState(() => _picked = point);
     widget.onLocationPicked(point);
   }
-  
 
   void _mapRotationReset() {
     final currentRotation = _mapController.camera.rotation;
@@ -59,7 +58,6 @@ class _ListingLocationMapState extends ConsumerState<ListingLocationMap> with Ti
     controller.forward();
   }
 
-  
   Future<void> _goToUserLocation() async {
     try {
       final position = await ref
@@ -84,7 +82,7 @@ class _ListingLocationMapState extends ConsumerState<ListingLocationMap> with Ti
       borderRadius: BorderRadius.circular(AppRadius.card),
       child: SizedBox(
         height: 200,
-        
+
         child: Stack(
           children: [
             FlutterMap(
@@ -139,11 +137,11 @@ class _ListingLocationMapState extends ConsumerState<ListingLocationMap> with Ti
                     foregroundColor: AppColors.primaryPressed,
                     child: const Icon(Icons.my_location, size: 20),
                   ),
-                ]
-              )
-            )
-          ]
-        ) 
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

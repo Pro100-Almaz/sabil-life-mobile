@@ -512,7 +512,7 @@ class HttpProviderRepository implements ProviderRepository {
       'highlights': listing.highlights,
       'is_featured': listing.isFeatured,
       'is_online': listing.isOnline,
-      'meeting_url': listing.meetingUrl
+      'meeting_url': listing.meetingUrl,
     };
   }
 

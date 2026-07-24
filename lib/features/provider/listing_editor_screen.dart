@@ -47,7 +47,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _existingImages = <ListingImage>[];
   final _removedImageIds = <String>{};
   final _url = TextEditingController();
-  
+
   bool _isOnline = true;
   bool _saving = false;
   bool _showErrors = false;
@@ -116,7 +116,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
 
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
-    final missingCore = _title.text.trim().isEmpty || _subtitle.text.trim().isEmpty;
+    final missingCore =
+        _title.text.trim().isEmpty || _subtitle.text.trim().isEmpty;
     final missingUrl = _isOnline && _url.text.trim().isEmpty;
     final missingLocation = !_isOnline && _neighborhood.text.trim().isEmpty;
 
@@ -124,8 +125,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     if (missingCore || missingLocation || missingUrl) {
       final l10n = AppLocalizations.of(context)!;
       setState(() => _showErrors = true);
-      ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
       return;
     }
 
@@ -219,20 +221,20 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           children: [
-            //Title 
+            //Title
             TextField(
               controller: _title,
               decoration: InputDecoration(
                 label: Text.rich(
                   TextSpan(
                     text: l10n.fieldTitle,
-                    children:[
+                    children: [
                       TextSpan(
                         text: "*",
                         style: const TextStyle(color: AppColors.primary),
-                      )
-                    ]
-                  )
+                      ),
+                    ],
+                  ),
                 ),
                 errorText: _showErrors && _title.text.trim().isEmpty
                     ? l10n.fieldRequired
@@ -247,13 +249,13 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
                 label: Text.rich(
                   TextSpan(
                     text: l10n.fieldSubtitle,
-                    children:[
+                    children: [
                       TextSpan(
                         text: "*",
                         style: const TextStyle(color: AppColors.primary),
-                      )
-                    ]
-                  )
+                      ),
+                    ],
+                  ),
                 ),
                 errorText: _showErrors && _subtitle.text.trim().isEmpty
                     ? l10n.fieldRequired
@@ -291,7 +293,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
                       ],
                     ),
                   ),
-                  errorText: _showErrors && _isOnline && _url.text.trim().isEmpty
+                  errorText:
+                      _showErrors && _isOnline && _url.text.trim().isEmpty
                       ? l10n.fieldRequired
                       : null,
                 ),

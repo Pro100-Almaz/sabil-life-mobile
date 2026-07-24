@@ -73,7 +73,7 @@ class _NotificationTile extends StatefulWidget {
   State<_NotificationTile> createState() => _NotificationTileState();
 }
 
-class _NotificationTileState extends State<_NotificationTile>{
+class _NotificationTileState extends State<_NotificationTile> {
   bool _expanded = false;
 
   @override

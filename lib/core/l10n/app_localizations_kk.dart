@@ -458,6 +458,15 @@ class AppLocalizationsKk extends AppLocalizations {
   String get fieldNeighborhood => 'Аудан';
 
   @override
+  String get fieldOnline => 'Онлайн';
+
+  @override
+  String get fieldOffline => 'Офлайн';
+
+  @override
+  String get fieldUrl => 'Кездесу сілтемесі';
+
+  @override
   String get fieldPrice => 'Баға (QAR, бастап)';
 
   @override

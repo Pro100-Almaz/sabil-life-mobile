@@ -11,7 +11,7 @@ enum TutorSort {
 
   /// The key the backend expects in the `ordering` query parameter.
   String get backendKey => switch (this) {
-    TutorSort.rating => 'rating',
+    TutorSort.rating => '-rating',
     TutorSort.priceLow => 'price_per_hour_qar',
     TutorSort.priceHigh => '-price_per_hour_qar',
     TutorSort.experience => '-years_experience',

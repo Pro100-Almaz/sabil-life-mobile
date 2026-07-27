@@ -18,6 +18,7 @@ class ListingParser {
       reviewCount: toInt(data['review_count']),
       priceFromQar: toInt(data['price_from_qar']),
       imageUrls: toStringList(data['image_urls']),
+      images: parseImages(data['images']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
       tags: toStringList(data['tags']),
@@ -26,6 +27,8 @@ class ListingParser {
       highlights: toStringList(data['highlights']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
+      isOnline: (data['is_online'] ?? true) as bool,
+      meetingUrl: (data['meeting_url'] ?? '') as String,
     );
   }
 
@@ -50,6 +53,8 @@ class ListingParser {
       tags: toStringList(data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
+      isOnline: (data['is_online'] ?? true) as bool,
+      meetingUrl: (data['meeting_url'] ?? '') as String,
     );
   }
 

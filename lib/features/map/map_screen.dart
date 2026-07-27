@@ -347,7 +347,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
             ),
           ),
           Positioned(
-            top: AppSpacing.xl,
+            top: 40,
             left: AppSpacing.lg,
             child: AnimatedSlide(
               offset: _showBurger ? Offset.zero : Offset(0, 1.0),

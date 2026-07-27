@@ -155,6 +155,7 @@ class HttpListingEnrollmentRepository implements ListingEnrollmentRepository {
     isFeatured: false,
     description: '',
     highlights: const [],
+    isOnline: false,
   );
 
   DateTime? _parseDate(dynamic raw) {

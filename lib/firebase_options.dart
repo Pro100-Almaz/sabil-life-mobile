@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDUie0imGPGPBG3b_p9oV1p3ogfk4ZSXpc',
-    appId: '1:533762359466:ios:69f4c3d010e2323fbe10d3',
+    appId: '1:533762359466:ios:025d9c3d2e125178be10d3',
     messagingSenderId: '533762359466',
     projectId: 'sabil-life',
     storageBucket: 'sabil-life.firebasestorage.app',
-    iosBundleId: 'io.sabil.sabilLife',
+    iosBundleId: 'io.sabilLife.app',
   );
 }

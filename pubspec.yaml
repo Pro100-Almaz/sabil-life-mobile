@@ -16,6 +16,7 @@ dependencies:
   flutter_riverpod: ^2.5.0
   go_router: ^14.0.0
   flutter_map: ^7.0.0
+  flutter_map_marker_cluster: 1.4.0   # exact pin — only 1.4.0 targets flutter_map 7.x
   latlong2: ^0.9.0
   cached_network_image: ^3.3.0
   google_fonts: ^6.2.0

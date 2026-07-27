@@ -458,6 +458,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldNeighborhood => 'Neighborhood';
 
   @override
+  String get fieldOnline => 'Online';
+
+  @override
+  String get fieldOffline => 'Offline';
+
+  @override
+  String get fieldUrl => 'Meeting link';
+
+  @override
   String get fieldPrice => 'Price (QAR, from)';
 
   @override

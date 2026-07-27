@@ -341,6 +341,32 @@ class AppLocalizationsKk extends AppLocalizations {
   String get haveAccountPrompt => 'Аккаунтыңыз бар ма?';
 
   @override
+  String get continueLabel => 'Жалғастыру';
+
+  @override
+  String get verifyEmailTitle => 'Email-ді растаңыз';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Біз $email мекенжайына 6 таңбалы код жібердік';
+  }
+
+  @override
+  String get verificationCode => 'Растау коды';
+
+  @override
+  String get verify => 'Растау';
+
+  @override
+  String get didntGetCode => 'Код келмеді ме?';
+
+  @override
+  String get resendCode => 'Қайта жіберу';
+
+  @override
+  String get codeResent => 'Жаңа код жіберілді.';
+
+  @override
   String get demoLoginHint =>
       'Демо-аккаунттар: family@demo · tutor@demo · mc@demo (құпиясөз: demo1234)';
 

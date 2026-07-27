@@ -26,21 +26,36 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<AuthSession> register({
+  Future<void> requestRegistrationCode({
     required String email,
     required String password,
     required String fullName,
-    UserRole role = UserRole.family,
+    String phone = '',
   }) async {
     try {
-      final response = await _dio.post(
+      await _dio.post(
         '/auth/register/',
         data: {
           'email': email,
           'password': password,
           'full_name': fullName,
-          'role': role.name.toUpperCase(),
+          'phone': phone,
         },
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<AuthSession> confirmRegistration({
+    required String email,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/auth/register/verify/',
+        data: {'email': email, 'code': code},
       );
       final session = _parseSession(response.data);
       await authTokenStore.write(session.token);
@@ -100,6 +115,13 @@ class HttpAuthRepository implements AuthRepository {
     if (data is Map) {
       if (data.containsKey('detail')) return data['detail'].toString();
       if (data.containsKey('message')) return data['message'].toString();
+      // DRF field errors, e.g. {"code": ["Invalid code."]} or
+      // {"email": ["A user with this email already exists."]}.
+      if (data.isNotEmpty) {
+        final first = data.values.first;
+        if (first is List && first.isNotEmpty) return first.first.toString();
+        if (first is String) return first;
+      }
     }
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout) {

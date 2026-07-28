@@ -341,6 +341,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get haveAccountPrompt => 'Уже есть аккаунт?';
 
   @override
+  String get continueLabel => 'Продолжить';
+
+  @override
+  String get verifyEmailTitle => 'Подтвердите email';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Мы отправили 6-значный код на $email';
+  }
+
+  @override
+  String get verificationCode => 'Код подтверждения';
+
+  @override
+  String get verify => 'Подтвердить';
+
+  @override
+  String get didntGetCode => 'Не получили код?';
+
+  @override
+  String get resendCode => 'Отправить снова';
+
+  @override
+  String get codeResent => 'Новый код отправлен.';
+
+  @override
   String get demoLoginHint =>
       'Демо-аккаунты: family@demo · tutor@demo · mc@demo (пароль: demo1234)';
 

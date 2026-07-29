@@ -953,4 +953,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get directionsError => 'Карта қосымшасын ашу мүмкін болмады';
+
+  @override
+  String get credentialsHint => 'Дәрежесі мен Cертификаттары';
 }

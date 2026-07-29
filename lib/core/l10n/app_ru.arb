@@ -293,5 +293,6 @@
   "keepInquiry": "Оставить запрос",
   "inquiryCancelled": "Ваш запрос отменён.",
   "directions": "Маршрут",
-  "directionsError": "Не удалось открыть приложение карт"
+  "directionsError": "Не удалось открыть приложение карт",
+  "credentialsHint": "Степень и сертификаты"
 }

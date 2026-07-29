@@ -1857,6 +1857,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t open a map app'**
   String get directionsError;
+
+  /// No description provided for @credentialsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Degrees & Certificates'**
+  String get credentialsHint;
 }
 
 class _AppLocalizationsDelegate

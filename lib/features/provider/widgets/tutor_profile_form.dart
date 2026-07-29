@@ -581,7 +581,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.lg),
 
         // Credentials
-        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl, hintText: "Degree or Certificates"),
+        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl, hintText: l10n.credentialsHint),
         const SizedBox(height: AppSpacing.md),
 
         // Bio

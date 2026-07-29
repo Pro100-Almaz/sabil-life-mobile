@@ -313,5 +313,6 @@
   "keepInquiry": "Keep inquiry",
   "inquiryCancelled": "Your inquiry has been cancelled.",
   "directions": "Directions",
-  "directionsError": "Couldn't open a map app"
+  "directionsError": "Couldn't open a map app",
+  "credentialsHint": "Degrees & Certificates"
 }

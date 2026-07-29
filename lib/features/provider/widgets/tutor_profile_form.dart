@@ -585,7 +585,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.md),
 
         // Bio
-        _Field(label: l10n.bio, controller: _bioCtrl, maxLines: 3),
+        _Field(label: l10n.bio, controller: _bioCtrl, maxLines: 3, maxLength: 600),
         const SizedBox(height: AppSpacing.md),
 
         // Trial available toggle
@@ -683,8 +683,10 @@ class _Field extends StatelessWidget {
     this.keyboardType,
     this.errorText,
     this.hintText = '',
+    this.maxLength,
   });
 
+  final int? maxLength;
   final String hintText;
   final String label;
   final TextEditingController controller;
@@ -707,6 +709,7 @@ class _Field extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         TextField(
+          maxLength: maxLength,
           controller: controller,
           maxLines: maxLines,
           keyboardType: keyboardType,

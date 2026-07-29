@@ -19,6 +19,10 @@ Future<void> showTutorProfileSheet(BuildContext context, Tutor tutor) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
+    enableDrag: true,
+    constraints: BoxConstraints(
+      maxHeight: MediaQuery.of(context).size.height * 0.9,
+    ),
     backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(

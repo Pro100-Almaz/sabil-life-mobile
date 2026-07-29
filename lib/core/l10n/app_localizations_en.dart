@@ -414,6 +414,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get requestStatusDeclined => 'Declined';
 
   @override
+  String get requestStatusCancelled => 'Cancelled';
+
+  @override
   String get dashboard => 'Dashboard';
 
   @override

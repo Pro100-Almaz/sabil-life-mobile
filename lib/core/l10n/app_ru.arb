@@ -124,6 +124,7 @@
   "requestStatusPending": "В ожидании",
   "requestStatusAccepted": "Принят",
   "requestStatusDeclined": "Отклонён",
+  "requestStatusCancelled": "Отменен",
   "dashboard": "Главная",
   "myListings": "Объявления",
   "inquiries": "Запросы",

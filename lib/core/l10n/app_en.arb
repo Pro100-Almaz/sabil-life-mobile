@@ -138,6 +138,7 @@
   "requestStatusPending": "Pending",
   "requestStatusAccepted": "Accepted",
   "requestStatusDeclined": "Declined",
+  "requestStatusCancelled": "Cancelled",
   "dashboard": "Dashboard",
   "myListings": "Listings",
   "inquiries": "Inquiries",

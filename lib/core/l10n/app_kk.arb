@@ -124,6 +124,7 @@
   "requestStatusPending": "Күтуде",
   "requestStatusAccepted": "Қабылданды",
   "requestStatusDeclined": "Қабылданбады",
+  "requestStatusCancelled": "Тоқтатылды",
   "dashboard": "Басты бет",
   "myListings": "Хабарландырулар",
   "inquiries": "Сұраныстар",

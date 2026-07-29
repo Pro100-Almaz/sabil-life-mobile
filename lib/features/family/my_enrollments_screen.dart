@@ -496,18 +496,12 @@ class _InquiryStatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final (label, color) = switch (status) {
-      InquiryStatus.new_ ||
       InquiryStatus.pending => (l10n.requestStatusPending, AppColors.primary),
-      InquiryStatus.contacted => (
-        l10n.statusContacted,
-        AppColors.textSecondary,
-      ),
       InquiryStatus.accepted => (l10n.requestStatusAccepted, AppColors.success),
       InquiryStatus.declined => (
         l10n.requestStatusDeclined,
         AppColors.textTertiary,
       ),
-      InquiryStatus.completed => (l10n.statusCompleted, AppColors.success),
       InquiryStatus.cancelled => (l10n.statusCancelled, AppColors.textTertiary),
     };
     return _Chip(label: label, color: color);

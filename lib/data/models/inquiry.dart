@@ -1,48 +1,33 @@
 enum InquiryStatus {
-  new_,
-  contacted,
+  pending,
   accepted,
   declined,
-  completed,
-  cancelled,
-  // Legacy mock alias — treated as new_ on backend.
-  pending;
+  cancelled;
 
   String toBackend() => switch (this) {
-    InquiryStatus.new_ => 'NEW',
-    InquiryStatus.contacted => 'CONTACTED',
     InquiryStatus.accepted => 'ACCEPTED',
     InquiryStatus.declined => 'DECLINED',
-    InquiryStatus.completed => 'COMPLETED',
     InquiryStatus.cancelled => 'CANCELLED',
-    InquiryStatus.pending => 'NEW',
+    InquiryStatus.pending => 'PENDING',
   };
 
   static InquiryStatus fromBackend(String? raw) => switch (raw?.toUpperCase()) {
-    'NEW' => InquiryStatus.new_,
-    'CONTACTED' => InquiryStatus.contacted,
+    'PENDING' => InquiryStatus.pending,
     'ACCEPTED' => InquiryStatus.accepted,
     'DECLINED' => InquiryStatus.declined,
-    'COMPLETED' => InquiryStatus.completed,
     'CANCELLED' => InquiryStatus.cancelled,
-    _ => InquiryStatus.new_,
+    _ => InquiryStatus.pending,
   };
 
   /// The family may cancel only while the inquiry is still live; the backend
-  /// returns 409 for terminal states (declined / completed / cancelled).
+  /// returns 409 for terminal states (declined / cancelled).
   bool get isCancellable =>
-      this == InquiryStatus.new_ ||
-      this == InquiryStatus.contacted ||
-      this == InquiryStatus.accepted ||
-      this == InquiryStatus.pending;
+      this == InquiryStatus.pending || this == InquiryStatus.accepted;
 
   /// The family may review the tutor only once the engagement has actually
   /// started. Mirrors the backend engagement-gate: a review is accepted only
-  /// while the inquiry is CONTACTED / ACCEPTED / COMPLETED.
-  bool get isReviewable =>
-      this == InquiryStatus.contacted ||
-      this == InquiryStatus.accepted ||
-      this == InquiryStatus.completed;
+  /// while the inquiry is ACCEPTED.
+  bool get isReviewable => this == InquiryStatus.accepted;
 }
 
 /// Lightweight tutor summary embedded in a family-side inquiry response

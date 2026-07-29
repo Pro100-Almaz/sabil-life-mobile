@@ -415,6 +415,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get requestStatusDeclined => 'Отклонён';
 
   @override
+  String get requestStatusCancelled => 'Отменен';
+
+  @override
   String get dashboard => 'Главная';
 
   @override

@@ -414,6 +414,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get requestStatusDeclined => 'Қабылданбады';
 
   @override
+  String get requestStatusCancelled => 'Тоқтатылды';
+
+  @override
   String get dashboard => 'Басты бет';
 
   @override

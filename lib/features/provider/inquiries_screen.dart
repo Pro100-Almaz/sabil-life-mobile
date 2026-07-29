@@ -85,11 +85,10 @@ class _StatusFilterBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final options = <(InquiryStatus?, String)>[
       (null, l10n.filterAll),
-      (InquiryStatus.new_, l10n.requestStatusPending),
-      (InquiryStatus.contacted, l10n.statusContacted),
+      (InquiryStatus.pending, l10n.requestStatusPending),
       (InquiryStatus.accepted, l10n.requestStatusAccepted),
       (InquiryStatus.declined, l10n.requestStatusDeclined),
-      (InquiryStatus.completed, l10n.statusCompleted),
+      (InquiryStatus.cancelled, l10n.requestStatusCancelled),
     ];
     return SizedBox(
       height: 44,
@@ -276,10 +275,8 @@ class _InquiryCardState extends ConsumerState<_InquiryCard> {
             _ActionButtons(
               status: inq.status,
               l10n: l10n,
-              onContacted: () => _runAction(() => repo.markContacted(inq.id)),
               onAccept: () => _runAction(() => repo.acceptInquiry(inq.id)),
               onDecline: () => _runAction(() => repo.declineInquiry(inq.id)),
-              onComplete: () => _runAction(() => repo.completeInquiry(inq.id)),
             ),
         ],
       ),
@@ -291,23 +288,19 @@ class _ActionButtons extends StatelessWidget {
   const _ActionButtons({
     required this.status,
     required this.l10n,
-    required this.onContacted,
     required this.onAccept,
     required this.onDecline,
-    required this.onComplete,
   });
 
   final InquiryStatus status;
   final AppLocalizations l10n;
-  final VoidCallback onContacted;
   final VoidCallback onAccept;
   final VoidCallback onDecline;
-  final VoidCallback onComplete;
 
   @override
   Widget build(BuildContext context) {
     return switch (status) {
-      InquiryStatus.new_ || InquiryStatus.pending => Row(
+      InquiryStatus.pending => Row(
         children: [
           Expanded(
             child: AppButton(
@@ -318,39 +311,12 @@ class _ActionButtons extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
-            child: AppButton(
-              label: l10n.providerMarkContacted,
-              variant: AppButtonVariant.outlined,
-              onPressed: onContacted,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          Expanded(
             child: AppButton(label: l10n.accept, onPressed: onAccept),
           ),
         ],
-      ),
-      InquiryStatus.contacted => Row(
-        children: [
-          Expanded(
-            child: AppButton(
-              label: l10n.decline,
-              variant: AppButtonVariant.outlined,
-              onPressed: onDecline,
-            ),
-          ),
-          const SizedBox(width: AppSpacing.md),
-          Expanded(
-            child: AppButton(label: l10n.accept, onPressed: onAccept),
-          ),
-        ],
-      ),
-      InquiryStatus.accepted => AppButton(
-        label: l10n.providerComplete,
-        onPressed: onComplete,
       ),
       InquiryStatus.declined ||
-      InquiryStatus.completed ||
+      InquiryStatus.accepted ||
       InquiryStatus.cancelled => const SizedBox.shrink(),
     };
   }
@@ -365,18 +331,12 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final (label, color) = switch (status) {
-      InquiryStatus.new_ ||
       InquiryStatus.pending => (l10n.requestStatusPending, AppColors.primary),
-      InquiryStatus.contacted => (
-        l10n.statusContacted,
-        AppColors.textSecondary,
-      ),
       InquiryStatus.accepted => (l10n.requestStatusAccepted, AppColors.success),
       InquiryStatus.declined => (
         l10n.requestStatusDeclined,
         AppColors.textTertiary,
       ),
-      InquiryStatus.completed => (l10n.statusCompleted, AppColors.success),
       InquiryStatus.cancelled => (l10n.statusCancelled, AppColors.textTertiary),
     };
     return Container(

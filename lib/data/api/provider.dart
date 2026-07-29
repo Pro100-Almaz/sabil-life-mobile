@@ -382,11 +382,6 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<void> markContacted(String inquiryId) async {
-    return _patchTransition(inquiryId, InquiryStatus.contacted);
-  }
-
-  @override
   Future<void> acceptInquiry(String inquiryId) async {
     return _patchTransition(inquiryId, InquiryStatus.accepted);
   }
@@ -394,11 +389,6 @@ class HttpProviderRepository implements ProviderRepository {
   @override
   Future<void> declineInquiry(String inquiryId) async {
     return _patchTransition(inquiryId, InquiryStatus.declined);
-  }
-
-  @override
-  Future<void> completeInquiry(String inquiryId) async {
-    return _patchTransition(inquiryId, InquiryStatus.completed);
   }
 
   Future<void> _patchTransition(String inquiryId, InquiryStatus status) async {

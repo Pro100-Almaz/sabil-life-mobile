@@ -844,6 +844,12 @@ abstract class AppLocalizations {
   /// **'Declined'**
   String get requestStatusDeclined;
 
+  /// No description provided for @requestStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get requestStatusCancelled;
+
   /// No description provided for @dashboard.
   ///
   /// In en, this message translates to:

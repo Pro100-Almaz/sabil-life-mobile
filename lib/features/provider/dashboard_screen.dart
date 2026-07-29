@@ -47,8 +47,8 @@ class DashboardScreen extends ConsumerWidget {
       data: (items) => items
           .where(
             (i) =>
-                i.status == InquiryStatus.new_ ||
-                i.status == InquiryStatus.contacted,
+                i.status == InquiryStatus.pending ||
+                i.status == InquiryStatus.accepted,
           )
           .length,
       orElse: () => 0,

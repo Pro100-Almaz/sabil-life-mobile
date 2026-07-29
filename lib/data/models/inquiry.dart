@@ -22,8 +22,7 @@ enum InquiryStatus {
   /// The family may cancel only while the inquiry is still live; the backend
   /// returns 409 for terminal states (declined / cancelled).
   bool get isCancellable =>
-      this == InquiryStatus.pending ||
-      this == InquiryStatus.accepted;
+      this == InquiryStatus.pending || this == InquiryStatus.accepted;
 
   /// The family may review the tutor only once the engagement has actually
   /// started. Mirrors the backend engagement-gate: a review is accepted only

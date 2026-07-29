@@ -581,7 +581,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.lg),
 
         // Credentials
-        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl),
+        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl, hintText: "Degree or Certificates"),
         const SizedBox(height: AppSpacing.md),
 
         // Bio
@@ -682,8 +682,10 @@ class _Field extends StatelessWidget {
     this.maxLines = 1,
     this.keyboardType,
     this.errorText,
+    this.hintText = '',
   });
 
+  final String hintText;
   final String label;
   final TextEditingController controller;
   final int maxLines;
@@ -710,6 +712,7 @@ class _Field extends StatelessWidget {
           keyboardType: keyboardType,
           style: AppTypography.body,
           decoration: InputDecoration(
+            hintText: hintText,
             errorText: errorText,
             errorStyle: AppTypography.small.copyWith(color: AppColors.primary),
             contentPadding: const EdgeInsets.symmetric(

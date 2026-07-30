@@ -581,11 +581,20 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.lg),
 
         // Credentials
-        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl, hintText: l10n.credentialsHint),
+        _Field(
+          label: l10n.profileCredentials,
+          controller: _credentialsCtrl,
+          hintText: l10n.credentialsHint,
+        ),
         const SizedBox(height: AppSpacing.md),
 
         // Bio
-        _Field(label: l10n.bio, controller: _bioCtrl, maxLines: 3, maxLength: 600),
+        _Field(
+          label: l10n.bio,
+          controller: _bioCtrl,
+          maxLines: 3,
+          maxLength: 600,
+        ),
         const SizedBox(height: AppSpacing.md),
 
         // Trial available toggle

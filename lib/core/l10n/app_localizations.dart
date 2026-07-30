@@ -712,6 +712,54 @@ abstract class AppLocalizations {
   /// **'Already have an account?'**
   String get haveAccountPrompt;
 
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @codeSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a 6-digit code to {email}'**
+  String codeSentTo(String email);
+
+  /// No description provided for @verificationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code'**
+  String get verificationCode;
+
+  /// No description provided for @verify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get verify;
+
+  /// No description provided for @didntGetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Didn\'t get the code?'**
+  String get didntGetCode;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @codeResent.
+  ///
+  /// In en, this message translates to:
+  /// **'A new code has been sent.'**
+  String get codeResent;
+
   /// No description provided for @demoLoginHint.
   ///
   /// In en, this message translates to:
@@ -795,6 +843,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Declined'**
   String get requestStatusDeclined;
+
+  /// No description provided for @requestStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get requestStatusCancelled;
 
   /// No description provided for @dashboard.
   ///
@@ -927,6 +981,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Neighborhood'**
   String get fieldNeighborhood;
+
+  /// No description provided for @fieldOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get fieldOnline;
+
+  /// No description provided for @fieldOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get fieldOffline;
+
+  /// No description provided for @fieldUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting link'**
+  String get fieldUrl;
 
   /// No description provided for @fieldPrice.
   ///
@@ -1779,6 +1851,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your inquiry has been cancelled.'**
   String get inquiryCancelled;
+
+  /// No description provided for @directions.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get directions;
+
+  /// No description provided for @directionsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open a map app'**
+  String get directionsError;
 }
 
 class _AppLocalizationsDelegate

@@ -90,15 +90,11 @@ abstract class ProviderRepository {
 
   Future<List<Inquiry>> incomingInquiries(String providerId);
 
-  Future<void> markContacted(String inquiryId);
-
   /// Accepting flips status and reveals family contact info.
   /// Returns the updated Inquiry (no commission — billing is Phase 6).
   Future<void> acceptInquiry(String inquiryId);
 
   Future<void> declineInquiry(String inquiryId);
-
-  Future<void> completeInquiry(String inquiryId);
 
   Future<List<Subscription>> incomingSubscriptions({
     String? listingId,

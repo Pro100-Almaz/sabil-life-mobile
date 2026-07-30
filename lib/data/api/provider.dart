@@ -273,7 +273,7 @@ class HttpProviderRepository implements ProviderRepository {
       final response = await _dio.post('/provider/avatar/', data: formData);
       final data = response.data;
       if (data is Map<String, dynamic>) {
-        return (data['avatar_url'] ?? data['url'] ?? '') as String;
+        return (data['url'] ?? data['avatar_url'] ?? '') as String;
       }
       return '';
     } on DioException catch (e) {
@@ -382,11 +382,6 @@ class HttpProviderRepository implements ProviderRepository {
   }
 
   @override
-  Future<void> markContacted(String inquiryId) async {
-    return _patchTransition(inquiryId, InquiryStatus.contacted);
-  }
-
-  @override
   Future<void> acceptInquiry(String inquiryId) async {
     return _patchTransition(inquiryId, InquiryStatus.accepted);
   }
@@ -394,11 +389,6 @@ class HttpProviderRepository implements ProviderRepository {
   @override
   Future<void> declineInquiry(String inquiryId) async {
     return _patchTransition(inquiryId, InquiryStatus.declined);
-  }
-
-  @override
-  Future<void> completeInquiry(String inquiryId) async {
-    return _patchTransition(inquiryId, InquiryStatus.completed);
   }
 
   Future<void> _patchTransition(String inquiryId, InquiryStatus status) async {
@@ -511,6 +501,8 @@ class HttpProviderRepository implements ProviderRepository {
       'description': listing.description,
       'highlights': listing.highlights,
       'is_featured': listing.isFeatured,
+      'is_online': listing.isOnline,
+      'meeting_url': listing.meetingUrl,
     };
   }
 

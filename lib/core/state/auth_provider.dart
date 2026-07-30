@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/data/api/client.dart';
 import 'package:sabil_life/data/api/push_notifications.dart';
-
+import 'package:flutter/foundation.dart';
 import '../../data/api/auth_token_store.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/repositories/auth_repository.dart';
@@ -100,20 +98,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<bool> register({
+  /// Step 1: validate inputs and email a verification code. Does not create
+  /// a session — returns true if the code was sent so the UI can advance to
+  /// the code-entry step.
+  Future<bool> requestRegistrationCode({
     required String email,
     required String password,
     required String fullName,
-    UserRole role = UserRole.family,
   }) async {
     state = const AuthState.authenticating();
     try {
-      final session = await _repo.register(
+      await _repo.requestRegistrationCode(
         email: email,
         password: password,
         fullName: fullName,
-        role: role,
       );
+      state = const AuthState.unauthenticated(); // idle, no error
+      return true;
+    } on AuthException catch (e) {
+      state = AuthState.unauthenticated(error: e.message);
+      return false;
+    }
+  }
+
+  /// Step 2: confirm the emailed code. On success the account is created and
+  /// the user is signed in.
+  Future<bool> confirmRegistration({
+    required String email,
+    required String code,
+  }) async {
+    state = const AuthState.authenticating();
+    try {
+      final session = await _repo.confirmRegistration(email: email, code: code);
       await _persist(session.token);
       unawaited(_push.registerForUser());
       state = AuthState.authenticated(user: session.user, token: session.token);
@@ -142,7 +158,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    await _push.unregister();
+    try {
+      await _push.unregister().timeout(const Duration(seconds: 5));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint("push unregister failed (ignored): $e");
+      }
+    }
     await _repo.logout();
     await authTokenStore.clear();
     onLogout?.call();

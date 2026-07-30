@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sabil_life/core/state/filter_provider.dart';
 
 import '../../data/models/listing.dart';
 import '../../data/models/tutor.dart';
@@ -259,7 +260,24 @@ final routerProvider = Provider<GoRouter>((ref) {
           if (category == CategoryType.tutoring) {
             return const TutoringScreen();
           }
-          return CategoryListScreen(category: category);
+          final q = state.uri.queryParameters;
+          final sort = switch (q['sort']) {
+            'rating' => SortMode.rating,
+            'distance' => SortMode.distance,
+            'priceLow' => SortMode.priceLow,
+            _ => null,
+          };
+          final maxDistanceKm = double.tryParse(q['maxDistanceKm'] ?? '');
+          final priceMax = int.tryParse(q['priceMax'] ?? '');
+          final ageGroup = q['ageGroup'];
+
+          return CategoryListScreen(
+            category: category,
+            initialSort: sort,
+            initialMaxDistance: maxDistanceKm,
+            initialPriceMax: priceMax,
+            initialAgeGroup: ageGroup,
+          );
         },
       ),
       GoRoute(

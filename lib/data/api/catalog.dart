@@ -14,6 +14,7 @@ class HttpCatalogRepository implements CatalogRepository {
   Future<List<Listing>> listings({
     CategoryType? category,
     String? query,
+    String? tag,
     int? priceMax,
     String? ageGroup,
     double? lat,
@@ -28,6 +29,7 @@ class HttpCatalogRepository implements CatalogRepository {
         params['category'] = ListingParser.serializeCategory(category);
       }
       if (query != null && query.isNotEmpty) params['search'] = query;
+      if (tag != null && tag.isNotEmpty) params['tag'] = tag;
       if (priceMax != null) params['price_max'] = priceMax;
       if (ageGroup != null) params['age_group'] = ageGroup;
       if (lat != null) params['lat'] = lat;
@@ -97,6 +99,33 @@ class HttpCatalogRepository implements CatalogRepository {
       throw CatalogException(_extractError(e));
     } catch (e) {
       throw CatalogException('Failed to load categories: $e');
+    }
+  }
+
+  @override
+  Future<List<String>> tags(String category) async {
+    try {
+      final params = <String, dynamic>{};
+      if (category.isNotEmpty) params['category'] = category;
+      final response = await _dio.get('/tags/', queryParameters: params);
+      final data = response.data;
+      if (data is List) {
+        return data.map((item) => item.toString()).toList();
+      }
+      if (data is Map<String, dynamic>) {
+        final results = data['results'] as List?;
+        if (results != null) {
+          return results.map((item) => item.toString()).toList();
+        }
+      }
+      return const [];
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 429) {
+        throw const CatalogException('Rate limited, try again later');
+      }
+      throw CatalogException(_extractError(e));
+    } catch (e) {
+      throw CatalogException('Failed to load tags: $e');
     }
   }
 

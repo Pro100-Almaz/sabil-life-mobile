@@ -50,8 +50,6 @@ class Listing {
     required this.category,
     required this.subtitle,
     required this.neighborhood,
-    required this.lat,
-    required this.lng,
     required this.rating,
     required this.reviewCount,
     required this.priceFromQar,
@@ -60,6 +58,11 @@ class Listing {
     required this.isFeatured,
     required this.description,
     required this.highlights,
+    this.isOnline = false,
+    this.lat = 0,
+    this.lng = 0,
+    this.meetingUrl = '',
+    this.tags = const [],
     this.images = const [],
     this.ownerId,
     this.status = ListingStatus.active,
@@ -70,10 +73,16 @@ class Listing {
   final CategoryType category;
   final String subtitle;
   final String neighborhood;
-  final double lat;
-  final double lng;
   final double rating;
   final int reviewCount;
+  final bool isOnline;
+
+  /// if isOnline = true
+  final String meetingUrl;
+
+  /// if isOnline = false
+  final double lat;
+  final double lng;
 
   /// 0 = free / not applicable.
   final int priceFromQar;
@@ -82,6 +91,11 @@ class Listing {
   final bool isFeatured;
   final String description;
   final List<String> highlights;
+
+  /// Category-scoped filter tags this listing carries (e.g. `British`,
+  /// `Swimming`). Mirrors the backend `tags` array; drives the tag-pill rail
+  /// on the category screen.
+  final List<String> tags;
 
   /// Images as first-class objects (id + url + position). Empty on public
   /// card payloads; populated on detail and provider-owned listings.
@@ -108,9 +122,12 @@ class Listing {
     bool? isFeatured,
     String? description,
     List<String>? highlights,
+    List<String>? tags,
     List<ListingImage>? images,
     String? Function()? ownerId,
     ListingStatus? status,
+    bool? isOnline,
+    String? meetingUrl,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -128,9 +145,12 @@ class Listing {
       isFeatured: isFeatured ?? this.isFeatured,
       description: description ?? this.description,
       highlights: highlights ?? this.highlights,
+      tags: tags ?? this.tags,
       images: images ?? this.images,
       ownerId: ownerId != null ? ownerId() : this.ownerId,
       status: status ?? this.status,
+      isOnline: isOnline ?? this.isOnline,
+      meetingUrl: meetingUrl ?? this.meetingUrl,
     );
   }
 }

@@ -1,27 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/distance.dart';
+import '../../../core/state/filter_provider.dart';
 import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 
 /// Horizontal card variant: photo left, meta right. Used in dense lists
 /// (e.g. Saved tab).
-class ListingCardWide extends StatelessWidget {
+class ListingCardWide extends ConsumerWidget {
   const ListingCardWide({super.key, required this.listing});
 
   final Listing listing;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final imageUrl = listing.primaryImageUrl;
+    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
       child: Row(
@@ -83,7 +87,7 @@ class ListingCardWide extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  l10n.distanceAway(listing.distanceFromHomeLabel),
+                  l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
                   style: AppTypography.small,
                 ),
               ],

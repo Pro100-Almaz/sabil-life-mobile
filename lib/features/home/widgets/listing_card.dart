@@ -1,18 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/distance.dart';
+import '../../../core/state/filter_provider.dart';
 import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 
 /// The reusable Airbnb-style card: 16:10 photo, heart overlay, meta rows.
-class ListingCard extends StatelessWidget {
+class ListingCard extends ConsumerWidget {
   const ListingCard({super.key, required this.listing, this.width});
 
   final Listing listing;
@@ -21,7 +23,8 @@ class ListingCard extends StatelessWidget {
   final double? width;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
     final l10n = AppLocalizations.of(context)!;
     final imageUrl = listing.primaryImageUrl;
     return GestureDetector(
@@ -88,7 +91,7 @@ class ListingCard extends StatelessWidget {
             ),
             const SizedBox(height: 2),
             Text(
-              l10n.distanceAway(listing.distanceFromHomeLabel),
+              l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
               style: AppTypography.small,
             ),
             const SizedBox(height: 2),

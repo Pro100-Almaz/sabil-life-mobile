@@ -341,6 +341,32 @@ class AppLocalizationsKk extends AppLocalizations {
   String get haveAccountPrompt => 'Аккаунтыңыз бар ма?';
 
   @override
+  String get continueLabel => 'Жалғастыру';
+
+  @override
+  String get verifyEmailTitle => 'Email-ді растаңыз';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Біз $email мекенжайына 6 таңбалы код жібердік';
+  }
+
+  @override
+  String get verificationCode => 'Растау коды';
+
+  @override
+  String get verify => 'Растау';
+
+  @override
+  String get didntGetCode => 'Код келмеді ме?';
+
+  @override
+  String get resendCode => 'Қайта жіберу';
+
+  @override
+  String get codeResent => 'Жаңа код жіберілді.';
+
+  @override
   String get demoLoginHint =>
       'Демо-аккаунттар: family@demo · tutor@demo · mc@demo (құпиясөз: demo1234)';
 
@@ -386,6 +412,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get requestStatusDeclined => 'Қабылданбады';
+
+  @override
+  String get requestStatusCancelled => 'Тоқтатылды';
 
   @override
   String get dashboard => 'Басты бет';
@@ -456,6 +485,15 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get fieldNeighborhood => 'Аудан';
+
+  @override
+  String get fieldOnline => 'Онлайн';
+
+  @override
+  String get fieldOffline => 'Офлайн';
+
+  @override
+  String get fieldUrl => 'Кездесу сілтемесі';
 
   @override
   String get fieldPrice => 'Баға (QAR, бастап)';
@@ -912,4 +950,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Сұрауыңыз болдырылмады.';
+
+  @override
+  String get directions => 'Бағыт';
+
+  @override
+  String get directionsError => 'Карта қосымшасын ашу мүмкін болмады';
 }

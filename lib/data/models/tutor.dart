@@ -1,3 +1,5 @@
+import '../api/api_config.dart';
+
 enum TutorFormat {
   oneOnOne,
   smallGroup,
@@ -60,4 +62,9 @@ class Tutor {
   /// Canonical city value, e.g. `"Doha, QA"` (English name + country code).
   /// Empty when the tutor has no city (e.g. online-only).
   final String city;
+}
+
+extension TutorAvatar on Tutor {
+  /// Proxy-resolved avatar URL for display. Never store or send this back.
+  String get avatarDisplayUrl => resolveMediaUrl(avatarUrl);
 }

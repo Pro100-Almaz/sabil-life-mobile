@@ -341,6 +341,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get haveAccountPrompt => 'Already have an account?';
 
   @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get verifyEmailTitle => 'Verify your email';
+
+  @override
+  String codeSentTo(String email) {
+    return 'We sent a 6-digit code to $email';
+  }
+
+  @override
+  String get verificationCode => 'Verification code';
+
+  @override
+  String get verify => 'Verify';
+
+  @override
+  String get didntGetCode => 'Didn\'t get the code?';
+
+  @override
+  String get resendCode => 'Resend code';
+
+  @override
+  String get codeResent => 'A new code has been sent.';
+
+  @override
   String get demoLoginHint =>
       'Try the demo accounts: family@demo · tutor@demo · mc@demo (password: demo1234)';
 
@@ -386,6 +412,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestStatusDeclined => 'Declined';
+
+  @override
+  String get requestStatusCancelled => 'Cancelled';
 
   @override
   String get dashboard => 'Dashboard';
@@ -456,6 +485,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldNeighborhood => 'Neighborhood';
+
+  @override
+  String get fieldOnline => 'Online';
+
+  @override
+  String get fieldOffline => 'Offline';
+
+  @override
+  String get fieldUrl => 'Meeting link';
 
   @override
   String get fieldPrice => 'Price (QAR, from)';
@@ -911,4 +949,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Your inquiry has been cancelled.';
+
+  @override
+  String get directions => 'Directions';
+
+  @override
+  String get directionsError => 'Couldn\'t open a map app';
 }

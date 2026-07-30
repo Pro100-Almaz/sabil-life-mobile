@@ -39,7 +39,7 @@ class TutorCard extends StatelessWidget {
           children: [
             ClipOval(
               child: CachedNetworkImage(
-                imageUrl: tutor.avatarUrl,
+                imageUrl: tutor.avatarDisplayUrl,
                 width: 56,
                 height: 56,
                 fit: BoxFit.cover,

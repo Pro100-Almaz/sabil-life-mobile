@@ -77,6 +77,7 @@ class _CityAutocompleteFieldState extends ConsumerState<CityAutocompleteField> {
         }
       }
     });
+    if (_selected != null) widget.onChanged(_selected);
   }
 
   @override

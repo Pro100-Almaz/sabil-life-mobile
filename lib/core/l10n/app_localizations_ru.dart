@@ -341,6 +341,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get haveAccountPrompt => 'Уже есть аккаунт?';
 
   @override
+  String get continueLabel => 'Продолжить';
+
+  @override
+  String get verifyEmailTitle => 'Подтвердите email';
+
+  @override
+  String codeSentTo(String email) {
+    return 'Мы отправили 6-значный код на $email';
+  }
+
+  @override
+  String get verificationCode => 'Код подтверждения';
+
+  @override
+  String get verify => 'Подтвердить';
+
+  @override
+  String get didntGetCode => 'Не получили код?';
+
+  @override
+  String get resendCode => 'Отправить снова';
+
+  @override
+  String get codeResent => 'Новый код отправлен.';
+
+  @override
   String get demoLoginHint =>
       'Демо-аккаунты: family@demo · tutor@demo · mc@demo (пароль: demo1234)';
 
@@ -387,6 +413,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get requestStatusDeclined => 'Отклонён';
+
+  @override
+  String get requestStatusCancelled => 'Отменен';
 
   @override
   String get dashboard => 'Главная';
@@ -457,6 +486,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get fieldNeighborhood => 'Район';
+
+  @override
+  String get fieldOnline => 'Онлайн';
+
+  @override
+  String get fieldOffline => 'Офлайн';
+
+  @override
+  String get fieldUrl => 'Ссылка на встречу';
 
   @override
   String get fieldPrice => 'Цена (QAR, от)';
@@ -910,4 +948,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get inquiryCancelled => 'Ваш запрос отменён.';
+
+  @override
+  String get directions => 'Маршрут';
+
+  @override
+  String get directionsError => 'Не удалось открыть приложение карт';
 }

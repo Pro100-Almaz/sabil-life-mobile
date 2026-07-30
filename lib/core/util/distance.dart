@@ -1,6 +1,6 @@
 import 'dart:math' as math;
+import 'package:latlong2/latlong.dart';
 
-import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 
 const double _earthRadiusKm = 6371.0;
@@ -24,8 +24,9 @@ double _degToRad(double deg) => deg * math.pi / 180;
 String formatKm(double km) => km.toStringAsFixed(1);
 
 extension ListingDistance on Listing {
-  double get distanceFromHomeKm =>
-      haversineKm(mockHomeLat, mockHomeLng, lat, lng);
+  double distanceFromHomeKm(LatLng origin) =>
+      haversineKm(origin.latitude, origin.longitude, lat, lng);
 
-  String get distanceFromHomeLabel => formatKm(distanceFromHomeKm);
+  String distanceFromHomeLabel(LatLng origin) =>
+      formatKm(distanceFromHomeKm(origin));
 }

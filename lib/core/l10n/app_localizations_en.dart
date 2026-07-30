@@ -955,4 +955,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get directionsError => 'Couldn\'t open a map app';
+
+  @override
+  String get credentialsHint => 'Degrees & Certificates';
 }

@@ -954,4 +954,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get directionsError => 'Не удалось открыть приложение карт';
+
+  @override
+  String get credentialsHint => 'Степень и сертификаты';
 }

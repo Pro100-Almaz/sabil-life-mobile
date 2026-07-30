@@ -581,11 +581,20 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         const SizedBox(height: AppSpacing.lg),
 
         // Credentials
-        _Field(label: l10n.profileCredentials, controller: _credentialsCtrl),
+        _Field(
+          label: l10n.profileCredentials,
+          controller: _credentialsCtrl,
+          hintText: l10n.credentialsHint,
+        ),
         const SizedBox(height: AppSpacing.md),
 
         // Bio
-        _Field(label: l10n.bio, controller: _bioCtrl, maxLines: 3),
+        _Field(
+          label: l10n.bio,
+          controller: _bioCtrl,
+          maxLines: 3,
+          maxLength: 600,
+        ),
         const SizedBox(height: AppSpacing.md),
 
         // Trial available toggle
@@ -682,8 +691,12 @@ class _Field extends StatelessWidget {
     this.maxLines = 1,
     this.keyboardType,
     this.errorText,
+    this.hintText = '',
+    this.maxLength,
   });
 
+  final int? maxLength;
+  final String hintText;
   final String label;
   final TextEditingController controller;
   final int maxLines;
@@ -705,11 +718,13 @@ class _Field extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         TextField(
+          maxLength: maxLength,
           controller: controller,
           maxLines: maxLines,
           keyboardType: keyboardType,
           style: AppTypography.body,
           decoration: InputDecoration(
+            hintText: hintText,
             errorText: errorText,
             errorStyle: AppTypography.small.copyWith(color: AppColors.primary),
             contentPadding: const EdgeInsets.symmetric(

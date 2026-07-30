@@ -294,5 +294,6 @@
   "keepInquiry": "Сұрауды қалдыру",
   "inquiryCancelled": "Сұрауыңыз болдырылмады.",
   "directions": "Бағыт",
-  "directionsError": "Карта қосымшасын ашу мүмкін болмады"
+  "directionsError": "Карта қосымшасын ашу мүмкін болмады",
+  "credentialsHint": "Дәрежесі мен Cертификаттары"
 }

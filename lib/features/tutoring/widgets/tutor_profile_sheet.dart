@@ -20,25 +20,34 @@ Future<void> showTutorProfileSheet(BuildContext context, Tutor tutor) {
     context: context,
     isScrollControlled: true,
     enableDrag: true,
-    constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.9,
-    ),
     backgroundColor: AppColors.surface,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(AppRadius.sheet),
       ),
     ),
-    builder: (context) => TutorProfileSheet(tutor: tutor),
+    builder: (context) => DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      minChildSize: 0.35,
+      builder: (context, scrollController) =>
+          TutorProfileSheet(tutor: tutor, scrollController: scrollController),
+    ),
   );
 }
 
 /// Light tutor detail: profile sheet with credentials, formats, languages
 /// and a link to the tutor's centre listing.
 class TutorProfileSheet extends ConsumerWidget {
-  const TutorProfileSheet({super.key, required this.tutor});
+  const TutorProfileSheet({
+    super.key,
+    required this.tutor,
+    this.scrollController,
+  });
 
   final Tutor tutor;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -65,6 +74,7 @@ class TutorProfileSheet extends ConsumerWidget {
 
     return SafeArea(
       child: SingleChildScrollView(
+        controller: scrollController,
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.xxl,
           AppSpacing.md,

@@ -38,17 +38,26 @@ class HttpCatalogRepository implements CatalogRepository {
       if (sort != null) params['sort'] = sort.backendKey;
 
       final response = await _dio.get('/listings/', queryParameters: params);
-      final data = response.data;
+      final data = Map<String, dynamic>.from(response.data as Map);
+
       final items = data is Map<String, dynamic>
           ? (data['results'] as List?)
           : data as List?;
+      
       if (items == null) return const [];
-      return items
-          .whereType<Map>()
-          .map(
-            (item) => ListingParser.fromCard(Map<String, dynamic>.from(item)),
-          )
-          .toList();
+      results = items
+        .whereType<Map>()
+        .map(
+          (item) => ListingParser.fromCard(Map<String, dynamic>.from(item)),
+        )
+        .toList();
+      return ListingPage(
+        results: results,
+        count: ListingParser.toInt(data['count']),
+        hasNext: data['next'] != null,
+        hasPrevious: data['previous'] != null,
+        page: page,
+      );
     } on DioException catch (e) {
       if (e.response?.statusCode == 429) {
         throw const CatalogException('Rate limited, try again later');

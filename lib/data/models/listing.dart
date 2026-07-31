@@ -154,3 +154,11 @@ class Listing {
     );
   }
 }
+
+class ListingPage {
+  final List<Listing> results;
+  final int count;
+  final bool hasNext;
+  final bool hasPrevious;
+  final int page;
+}

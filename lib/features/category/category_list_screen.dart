@@ -33,13 +33,14 @@ class CategoryListScreen extends ConsumerStatefulWidget {
   final String? initialAgeGroup;
   final int? initialPriceMax;
   final double? initialMaxDistance;
-
   @override
   ConsumerState<CategoryListScreen> createState() => _CategoryListScreenState();
 }
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   late final FilterNotifier _filter;
+  late int _page = 1;
+
   @override
   void initState() {
     super.initState();

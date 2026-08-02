@@ -1,3 +1,4 @@
 {
-  "API_BASE_URL": "https://api.sabil-life.com/api/v1"
+  "API_BASE_URL": "https://api.sabil-life.com/api/v1",
+  "MAP_TILE_URL_TEMPLATE": "https://api.sabil-life.com/maps/styles/light/{z}/{x}/{y}.png"
 }

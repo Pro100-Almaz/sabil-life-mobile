@@ -182,7 +182,7 @@ final incomingSubscriptionsProvider = FutureProvider.family
 // ── Catalog providers ────────────────────────────────────────────────────────
 
 final catalogListingsProvider = FutureProvider.family
-    .autoDispose<List<Listing>, ListingsFilter>(
+    .autoDispose<ListingPage, ListingsFilter>(
       (ref, filter) => ref
           .watch(catalogRepositoryProvider)
           .listings(

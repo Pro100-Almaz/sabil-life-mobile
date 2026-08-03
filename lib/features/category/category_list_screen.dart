@@ -39,7 +39,6 @@ class CategoryListScreen extends ConsumerStatefulWidget {
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   late final FilterNotifier _filter;
-  late int _page = 1;
 
   @override
   void initState() {
@@ -94,8 +93,8 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
             asyncListings.when(
               loading: () => Text(l10n.loading, style: AppTypography.small),
               error: (e, st) => const SizedBox.shrink(),
-              data: (list) => Text(
-                l10n.resultsCount(list.length),
+              data: (page) => Text(
+                l10n.resultsCount(page.count),
                 style: AppTypography.small,
               ),
             ),
@@ -196,39 +195,103 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
                     ],
                   ),
                 ),
-                data: (listings) => listings.isEmpty
-                    ? RefreshableMessage(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                data: (page) {
+                  final listings = page.results;
+                  return listings.isEmpty
+                      ? RefreshableMessage(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.search_off,
+                                size: 48,
+                                color: AppColors.textTertiary,
+                              ),
+                              const SizedBox(height: AppSpacing.md),
+                              Text(l10n.noResults, style: AppTypography.h3),
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                l10n.noResultsHint,
+                                style: AppTypography.caption,
+                              ),
+                            ],
+                          ),
+                        )
+                      : Column(
                           children: [
-                            const Icon(
-                              Icons.search_off,
-                              size: 48,
-                              color: AppColors.textTertiary,
+                            Expanded(
+                              child: ListView.separated(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(AppSpacing.lg),
+                                itemCount: listings.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: AppSpacing.xxl),
+                                itemBuilder: (context, index) =>
+                                    ListingCard(listing: listings[index]),
+                              ),
                             ),
-                            const SizedBox(height: AppSpacing.md),
-                            Text(l10n.noResults, style: AppTypography.h3),
-                            const SizedBox(height: AppSpacing.xs),
-                            Text(
-                              l10n.noResultsHint,
-                              style: AppTypography.caption,
+                            _PageControllerPill(
+                              page: filter.page,
+                              hasPrevious: page.hasPrevious,
+                              hasNext: page.hasNext,
+                              onPrevious: () => ref
+                                  .read(filterProvider.notifier)
+                                  .previousPage(),
+                              onNext: () =>
+                                  ref.read(filterProvider.notifier).nextPage(),
                             ),
                           ],
-                        ),
-                      )
-                    : ListView.separated(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(AppSpacing.lg),
-                        itemCount: listings.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: AppSpacing.xxl),
-                        itemBuilder: (context, index) =>
-                            ListingCard(listing: listings[index]),
-                      ),
+                        );
+                },
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PageControllerPill extends StatelessWidget {
+  const _PageControllerPill({
+    required this.page,
+    required this.hasPrevious,
+    required this.hasNext,
+    required this.onPrevious,
+    required this.onNext,
+  });
+
+  final int page;
+  final bool hasPrevious;
+  final bool hasNext;
+  final VoidCallback onPrevious;
+  final VoidCallback onNext;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          AppSpacing.sm,
+          AppSpacing.lg,
+          AppSpacing.md,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: hasPrevious ? onPrevious : null,
+            ),
+            Text('$page', style: AppTypography.label),
+            IconButton(
+              icon: const Icon(Icons.chevron_right),
+              onPressed: hasNext ? onNext : null,
+            ),
+          ],
+        ),
       ),
     );
   }

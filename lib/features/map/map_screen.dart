@@ -173,7 +173,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
         }
       });
     }
-    final listings = asyncListings.valueOrNull ?? const [];
+    final listings = asyncListings.valueOrNull?.results ?? const <Listing>[];
     final showCarousel = _clusterListings.isNotEmpty;
 
     return Scaffold(

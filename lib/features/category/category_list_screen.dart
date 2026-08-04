@@ -96,10 +96,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: SizedBox(
-                height: 48,
-                child: SearchPill(title: title),
-              )
+              child: SizedBox(height: 48, child: SearchPill(title: title)),
             ),
             SizedBox(width: AppSpacing.sm),
             SizedBox.square(
@@ -110,7 +107,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
               ),
             ),
             SizedBox(width: AppSpacing.md),
-            
+
             // asyncListings.when(
             //   loading: () => Text(l10n.loading, style: AppTypography.small),
             //   error: (e, st) => const SizedBox.shrink(),
@@ -163,31 +160,31 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           //search filters and sort options
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
-            child: _searchOptionsEnabled 
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.sm,
-                  ),
-                  child: Row(
-                    children: [
-                      _ToolbarButton(
-                        icon: Icons.tune,
-                        label: l10n.filters,
-                        highlighted: filter.hasActiveFilters,
-                        onTap: () => showFilterSheet(context),
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      _ToolbarButton(
-                        icon: Icons.swap_vert,
-                        label: l10n.sort,
-                        highlighted: filter.sortMode != SortMode.distance,
-                        onTap: () => showSortMenu(context),
-                      ),
-                    ],
-                  ),
-                )
-              : const SizedBox.shrink(),
+            child: _searchOptionsEnabled
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: Row(
+                      children: [
+                        _ToolbarButton(
+                          icon: Icons.tune,
+                          label: l10n.filters,
+                          highlighted: filter.hasActiveFilters,
+                          onTap: () => showFilterSheet(context),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        _ToolbarButton(
+                          icon: Icons.swap_vert,
+                          label: l10n.sort,
+                          highlighted: filter.sortMode != SortMode.distance,
+                          onTap: () => showSortMenu(context),
+                        ),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ),
           const Divider(),
           Expanded(

@@ -19,7 +19,7 @@ dependencies {
 }
 
 android {
-    namespace = "io.sabil.sabil_life"
+    namespace = "io.sabilLife.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

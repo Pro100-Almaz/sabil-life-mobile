@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/util/location_service.dart';
+import '../../../data/api/api_config.dart';
 import '../../../data/mock/mock_home.dart';
 
 /// Tap-to-pick location map for the listing editor. Reports the chosen
@@ -94,8 +95,8 @@ class _ListingLocationMapState extends ConsumerState<ListingLocationMap>
               ),
               children: [
                 TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'io.sabil.sabil_life',
+                  urlTemplate: mapTileUrlTemplate,
+                  userAgentPackageName: 'io.sabilLife.app',
                 ),
                 MarkerLayer(
                   rotate: true,

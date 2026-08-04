@@ -8,6 +8,11 @@ const String apiBaseUrl = String.fromEnvironment(
   defaultValue: 'http://10.0.2.2:8000/api/v1',
 );
 
+const String mapTileUrlTemplate = String.fromEnvironment(
+  'MAP_TILE_URL_TEMPLATE',
+  defaultValue: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+);
+
 String resolveMediaUrl(String url) {
   final trimmed = url.trim();
   if (trimmed.isEmpty) return trimmed;

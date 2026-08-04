@@ -11,6 +11,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/util/category_label.dart';
 import '../../core/util/location_service.dart';
+import '../../data/api/api_config.dart';
 import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/pill_chip.dart';
@@ -173,7 +174,9 @@ class _MapScreenState extends ConsumerState<MapScreen>
         }
       });
     }
-    final listings = asyncListings.valueOrNull?.results ?? const <Listing>[];
+    final listings = (asyncListings.valueOrNull ?? const [])
+        .where((listing) => listing.lat != 0 || listing.lng != 0)
+        .toList();
     final showCarousel = _clusterListings.isNotEmpty;
 
     return Scaffold(
@@ -195,8 +198,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'io.sabil.sabil_life',
+                urlTemplate: mapTileUrlTemplate,
+                userAgentPackageName: 'io.sabilLife.app',
               ),
               // Fixed reference markers (pick / home / user) never cluster.
               MarkerLayer(

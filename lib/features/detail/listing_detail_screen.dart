@@ -19,6 +19,7 @@ import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/tutor_label.dart';
 import '../../core/util/directions.dart';
+import '../../data/api/api_config.dart';
 import '../../data/mock/mock_masterclasses.dart';
 import '../../data/mock/mock_tutors.dart';
 import '../../data/models/tutor.dart';
@@ -206,8 +207,7 @@ class _DetailBody extends ConsumerWidget {
                         ),
                         children: [
                           TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            urlTemplate: mapTileUrlTemplate,
                             userAgentPackageName: 'io.sabilLife.app',
                           ),
                           MarkerLayer(

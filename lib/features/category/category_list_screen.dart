@@ -39,6 +39,11 @@ class CategoryListScreen extends ConsumerStatefulWidget {
 
 class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   late final FilterNotifier _filter;
+  bool _searchOptionsEnabled = false;
+
+  void enableSearchOptions() {
+    setState(() => _searchOptionsEnabled = !_searchOptionsEnabled);
+  }
 
   @override
   void initState() {
@@ -79,39 +84,48 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
     final asyncListings = ref.watch(filteredListingsProvider);
     final asyncTags = ref.watch(categoryTagsProvider(widget.category));
     final filter = ref.watch(filterProvider);
-
     final title = widget.category == null
         ? l10n.catAll
         : widget.category!.label(l10n);
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        titleSpacing: 0,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title, style: AppTypography.h3),
-            asyncListings.when(
-              loading: () => Text(l10n.loading, style: AppTypography.small),
-              error: (e, st) => const SizedBox.shrink(),
-              data: (page) => Text(
-                l10n.resultsCount(page.count),
-                style: AppTypography.small,
+            Expanded(
+              child: SizedBox(
+                height: 48,
+                child: SearchPill(title: title),
+              )
+            ),
+            SizedBox(width: AppSpacing.sm),
+            SizedBox.square(
+              dimension: 48,
+              child: IconButton(
+                onPressed: enableSearchOptions,
+                icon: const Icon(Icons.tune, size: 20),
               ),
             ),
+            SizedBox(width: AppSpacing.md),
+            
+            // asyncListings.when(
+            //   loading: () => Text(l10n.loading, style: AppTypography.small),
+            //   error: (e, st) => const SizedBox.shrink(),
+            //   data: (page) => Text(
+            //     l10n.resultsCount(page.count),
+            //     style: AppTypography.small,
+            //   ),
+            // ),
           ],
         ),
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.md,
-              AppSpacing.lg,
-              AppSpacing.lg,
-            ),
-            child: SearchPill(),
-          ),
+          const SizedBox(height: AppSpacing.md),
+          //listing tags
           SizedBox(
             height: 40,
             child: asyncTags.when(
@@ -145,29 +159,35 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
                     ),
             ),
           ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              children: [
-                _ToolbarButton(
-                  icon: Icons.tune,
-                  label: l10n.filters,
-                  highlighted: filter.hasActiveFilters,
-                  onTap: () => showFilterSheet(context),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                _ToolbarButton(
-                  icon: Icons.swap_vert,
-                  label: l10n.sort,
-                  highlighted: filter.sortMode != SortMode.distance,
-                  onTap: () => showSortMenu(context),
-                ),
-              ],
-            ),
+          SizedBox(height: _searchOptionsEnabled ? 0 : AppSpacing.sm),
+          //search filters and sort options
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: _searchOptionsEnabled 
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.sm,
+                  ),
+                  child: Row(
+                    children: [
+                      _ToolbarButton(
+                        icon: Icons.tune,
+                        label: l10n.filters,
+                        highlighted: filter.hasActiveFilters,
+                        onTap: () => showFilterSheet(context),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      _ToolbarButton(
+                        icon: Icons.swap_vert,
+                        label: l10n.sort,
+                        highlighted: filter.sortMode != SortMode.distance,
+                        onTap: () => showSortMenu(context),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
           ),
           const Divider(),
           Expanded(

@@ -11,11 +11,11 @@ import '../../core/util/category_label.dart';
 import '../../core/util/location_service.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
-import '../../shared/widgets/pill_chip.dart';
 import '../home/widgets/listing_card.dart';
 import 'widgets/filter_sheet.dart';
 import 'widgets/sort_menu.dart';
 import 'widgets/search_pill.dart';
+import 'widgets/tag_group_rail.dart';
 
 class CategoryListScreen extends ConsumerStatefulWidget {
   const CategoryListScreen({
@@ -123,37 +123,21 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
         children: [
           const SizedBox(height: AppSpacing.md),
           //listing tags
-          SizedBox(
-            height: 40,
+          AnimatedSize(
+            duration: const Duration(milliseconds: 100),
             child: asyncTagGroups.when(
               loading: () => const SizedBox.shrink(),
               error: (_, _) => const SizedBox.shrink(),
-              data: (tags) => tags.isEmpty
+              data: (tagGroups) => tagGroups.isEmpty
                   ? const SizedBox.shrink()
-                  : ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lg,
-                      ),
-                      children: [
-                        PillChip(
-                          label: l10n.catAll,
-                          selected: filter.tag == null,
-                          onTap: () =>
-                              ref.read(filterProvider.notifier).setTag(null),
-                        ),
-                        for (final tag in tags) ...[
-                          const SizedBox(width: AppSpacing.sm),
-                          PillChip(
-                            label: tag,
-                            selected: filter.tag == tag,
-                            onTap: () => ref
-                                .read(filterProvider.notifier)
-                                .setTag(filter.tag == tag ? null : tag),
-                          ),
-                        ],
-                      ],
-                    ),
+                  : TagGroupRail(
+                    groups: tagGroups,
+                    selectedTags: filter.tags,
+                    onToggleTag: (tag) =>
+                      ref.read(filterProvider.notifier).toggleTag(tag),
+                    onClear: () => 
+                      ref.read(filterProvider.notifier).clearTags(),
+                  ),
             ),
           ),
           SizedBox(height: _searchOptionsEnabled ? 0 : AppSpacing.sm),

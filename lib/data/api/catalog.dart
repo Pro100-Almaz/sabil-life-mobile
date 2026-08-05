@@ -14,7 +14,7 @@ class HttpCatalogRepository implements CatalogRepository {
   Future<ListingPage> listings({
     CategoryType? category,
     String? query,
-    String? tag,
+    Set<String> tags = const {},
     int? priceMax,
     String? ageGroup,
     double? lat,
@@ -29,7 +29,7 @@ class HttpCatalogRepository implements CatalogRepository {
         params['category'] = ListingParser.serializeCategory(category);
       }
       if (query != null && query.isNotEmpty) params['search'] = query;
-      if (tag != null && tag.isNotEmpty) params['tags'] = tag;
+      if (tags.isNotEmpty) params['tags'] = tags.join(',');
       if (priceMax != null) params['price_max'] = priceMax;
       if (ageGroup != null) params['age'] = ageGroup;
       if (lat != null) params['lat'] = lat;
@@ -134,7 +134,7 @@ class HttpCatalogRepository implements CatalogRepository {
             .where((name) => name.isNotEmpty)
             .toList()
         );
-      }).where((group) => group.name.isNotEmpty).toList;
+      }).where((group) => group.name.isNotEmpty).toList();
     } on DioException catch(e) {
       if (e.response?.statusCode == 429) {
         throw const CatalogException('Rate limited, try again later');

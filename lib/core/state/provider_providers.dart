@@ -188,7 +188,7 @@ final catalogListingsProvider = FutureProvider.family
           .listings(
             category: filter.category,
             query: filter.query,
-            tag: filter.tag,
+            tags: filter.tags,
             priceMax: filter.priceMax,
             ageGroup: filter.ageGroup,
             lat: filter.lat,
@@ -297,4 +297,4 @@ final categoryTagGroupsProvider = FutureProvider.autoDispose
 
       return ref.watch(catalogRepositoryProvider).tagGroups(backendCategory);
     }
-  )
+  );

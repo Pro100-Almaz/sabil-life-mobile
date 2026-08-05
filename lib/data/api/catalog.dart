@@ -11,7 +11,7 @@ class HttpCatalogRepository implements CatalogRepository {
   Dio get _dio => apiClient.dio;
 
   @override
-  Future<List<Listing>> listings({
+  Future<ListingPage> listings({
     CategoryType? category,
     String? query,
     String? tag,
@@ -29,26 +29,31 @@ class HttpCatalogRepository implements CatalogRepository {
         params['category'] = ListingParser.serializeCategory(category);
       }
       if (query != null && query.isNotEmpty) params['search'] = query;
-      if (tag != null && tag.isNotEmpty) params['tag'] = tag;
+      if (tag != null && tag.isNotEmpty) params['tags'] = tag;
       if (priceMax != null) params['price_max'] = priceMax;
-      if (ageGroup != null) params['age_group'] = ageGroup;
+      if (ageGroup != null) params['age'] = ageGroup;
       if (lat != null) params['lat'] = lat;
       if (lng != null) params['lng'] = lng;
       if (maxDistanceKm != null) params['max_distance_km'] = maxDistanceKm;
       if (sort != null) params['sort'] = sort.backendKey;
 
       final response = await _dio.get('/listings/', queryParameters: params);
-      final data = response.data;
-      final items = data is Map<String, dynamic>
-          ? (data['results'] as List?)
-          : data as List?;
-      if (items == null) return const [];
-      return items
+      final data = Map<String, dynamic>.from(response.data as Map);
+
+      final items = data['results'] as List? ?? const [];
+      final results = items
           .whereType<Map>()
           .map(
             (item) => ListingParser.fromCard(Map<String, dynamic>.from(item)),
           )
           .toList();
+      return ListingPage(
+        results: results,
+        count: ListingParser.toInt(data['count']),
+        hasNext: data['next'] != null,
+        hasPrevious: data['previous'] != null,
+        page: page,
+      );
     } on DioException catch (e) {
       if (e.response?.statusCode == 429) {
         throw const CatalogException('Rate limited, try again later');

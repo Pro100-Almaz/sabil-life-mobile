@@ -104,7 +104,7 @@ class CatalogException implements Exception {
 // ── Abstract contract ────────────────────────────────────────────────────────
 
 abstract class CatalogRepository {
-  Future<List<Listing>> listings({
+  Future<ListingPage> listings({
     CategoryType? category,
     String? query,
     String? tag,

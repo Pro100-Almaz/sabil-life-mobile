@@ -286,3 +286,15 @@ final categoryTagsProvider = FutureProvider.autoDispose
             category == null ? '' : ListingParser.serializeCategory(category),
           ),
     );
+
+final categoryTagGroupsProvider = FutureProvider.autoDispose
+  .family<List<TagGroup>, CategoryType?>(
+    (ref, category){
+      if (category == null){
+        return Future.value(const <TagGroup>[]);
+      }
+      final backendCategory = ListingParser.serializeCategory(category);
+
+      return ref.watch(catalogRepositoryProvider).tagGroups(backendCategory);
+    }
+  )

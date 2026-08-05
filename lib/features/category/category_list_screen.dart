@@ -77,7 +77,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final asyncListings = ref.watch(filteredListingsProvider);
-    final asyncTags = ref.watch(categoryTagsProvider(widget.category));
+    final asyncTagGroups = ref.watch(categoryTagGroupsProvider(widget.category));
     final filter = ref.watch(filterProvider);
 
     final title = widget.category == null
@@ -114,7 +114,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
           ),
           SizedBox(
             height: 40,
-            child: asyncTags.when(
+            child: asyncTagGroups.when(
               loading: () => const SizedBox.shrink(),
               error: (_, _) => const SizedBox.shrink(),
               data: (tags) => tags.isEmpty

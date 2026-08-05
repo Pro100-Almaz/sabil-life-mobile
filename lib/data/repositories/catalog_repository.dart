@@ -22,6 +22,16 @@ class CategoryCount {
   final int count;
 }
 
+class TagGroup{
+  const TagGroup({
+    required this.name,
+    required this.tags,
+  })
+
+  final String name;
+  final List<String> tags;
+}
+
 /// Immutable filter bag used as the family key for [catalogListingsProvider].
 class ListingsFilter {
   const ListingsFilter({
@@ -115,6 +125,8 @@ abstract class CatalogRepository {
   /// e.g. `SCHOOLS`; empty string = across all categories). Feeds the tag-pill
   /// rail on the category screen.
   Future<List<String>> tags(String category);
+
+  Future<List<TagGroup>> tagGroups(String category);
 }
 
 // ── Mock implementation ──────────────────────────────────────────────────────

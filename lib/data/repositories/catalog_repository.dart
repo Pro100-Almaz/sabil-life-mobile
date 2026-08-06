@@ -22,11 +22,8 @@ class CategoryCount {
   final int count;
 }
 
-class TagGroup{
-  const TagGroup({
-    required this.name,
-    required this.tags,
-  });
+class TagGroup {
+  const TagGroup({required this.name, required this.tags});
 
   final String name;
   final List<String> tags;

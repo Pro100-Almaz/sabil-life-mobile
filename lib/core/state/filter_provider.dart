@@ -88,15 +88,14 @@ class FilterNotifier extends StateNotifier<FilterState> {
     page: 1,
   );
 
-  void toggleTag(String tag){
+  void toggleTag(String tag) {
     final next = {...state.tags};
-    if (next.contains(tag)){
+    if (next.contains(tag)) {
       next.remove(tag);
-    }
-    else {
+    } else {
       next.add(tag);
     }
-    state = state.copyWith(tags:next, page: 1);
+    state = state.copyWith(tags: next, page: 1);
   }
 
   void clearTags() {

@@ -113,34 +113,36 @@ class HttpCatalogRepository implements CatalogRepository {
       final params = <String, dynamic>{};
       if (category.isNotEmpty) params['category'] = category;
       final response = await _dio.get('/tag-groups', queryParameters: params);
-      
+
       final data = response.data;
       if (data is! List) return const [];
 
-      return data.whereType<Map>().map((item){
-        final raw = Map<String, dynamic>.from(item);
-        final tags = raw["tags"] is List 
-          ? raw["tags"] as List
-          : const [];
+      return data
+          .whereType<Map>()
+          .map((item) {
+            final raw = Map<String, dynamic>.from(item);
+            final tags = raw["tags"] is List ? raw["tags"] as List : const [];
 
-        return TagGroup(
-          name: raw['name']?.toString() ?? '',
-          tags: tags
-            .whereType<Map>()
-            .map((tag) {
-              final rawTag = Map<String, dynamic>.from(tag);
-              return rawTag["name"]?.toString() ?? '';
-            })
-            .where((name) => name.isNotEmpty)
-            .toList()
-        );
-      }).where((group) => group.name.isNotEmpty).toList();
-    } on DioException catch(e) {
+            return TagGroup(
+              name: raw['name']?.toString() ?? '',
+              tags: tags
+                  .whereType<Map>()
+                  .map((tag) {
+                    final rawTag = Map<String, dynamic>.from(tag);
+                    return rawTag["name"]?.toString() ?? '';
+                  })
+                  .where((name) => name.isNotEmpty)
+                  .toList(),
+            );
+          })
+          .where((group) => group.name.isNotEmpty)
+          .toList();
+    } on DioException catch (e) {
       if (e.response?.statusCode == 429) {
         throw const CatalogException('Rate limited, try again later');
       }
       throw CatalogException(_extractError(e));
-    } catch(e){
+    } catch (e) {
       throw CatalogException("Failed to load tag groups: $e");
     }
   }

@@ -82,7 +82,9 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final asyncListings = ref.watch(filteredListingsProvider);
-    final asyncTagGroups = ref.watch(categoryTagGroupsProvider(widget.category));
+    final asyncTagGroups = ref.watch(
+      categoryTagGroupsProvider(widget.category),
+    );
     final filter = ref.watch(filterProvider);
     final title = widget.category == null
         ? l10n.catAll
@@ -131,13 +133,13 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
               data: (tagGroups) => tagGroups.isEmpty
                   ? const SizedBox.shrink()
                   : TagGroupRail(
-                    groups: tagGroups,
-                    selectedTags: filter.tags,
-                    onToggleTag: (tag) =>
-                      ref.read(filterProvider.notifier).toggleTag(tag),
-                    onClear: () => 
-                      ref.read(filterProvider.notifier).clearTags(),
-                  ),
+                      groups: tagGroups,
+                      selectedTags: filter.tags,
+                      onToggleTag: (tag) =>
+                          ref.read(filterProvider.notifier).toggleTag(tag),
+                      onClear: () =>
+                          ref.read(filterProvider.notifier).clearTags(),
+                    ),
             ),
           ),
           SizedBox(height: _searchOptionsEnabled ? 0 : AppSpacing.sm),

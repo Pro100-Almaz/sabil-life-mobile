@@ -22,12 +22,19 @@ class CategoryCount {
   final int count;
 }
 
+class TagGroup {
+  const TagGroup({required this.name, required this.tags});
+
+  final String name;
+  final List<String> tags;
+}
+
 /// Immutable filter bag used as the family key for [catalogListingsProvider].
 class ListingsFilter {
   const ListingsFilter({
     this.category,
     this.query,
-    this.tag,
+    this.tags = const {},
     this.priceMax,
     this.ageGroup,
     this.lat,
@@ -40,8 +47,8 @@ class ListingsFilter {
   final CategoryType? category;
   final String? query;
 
-  /// Category-scoped tag pill selection. null = all tags.
-  final String? tag;
+  /// Category-scoped tags pill selection. null = all tags.
+  final Set<String> tags;
   final int? priceMax;
   final String? ageGroup;
   final double? lat;
@@ -56,7 +63,7 @@ class ListingsFilter {
     return other is ListingsFilter &&
         other.category == category &&
         other.query == query &&
-        other.tag == tag &&
+        other.tags == tags &&
         other.priceMax == priceMax &&
         other.ageGroup == ageGroup &&
         other.lat == lat &&
@@ -70,7 +77,7 @@ class ListingsFilter {
   int get hashCode => Object.hash(
     category,
     query,
-    tag,
+    tags,
     priceMax,
     ageGroup,
     lat,
@@ -97,7 +104,7 @@ abstract class CatalogRepository {
   Future<ListingPage> listings({
     CategoryType? category,
     String? query,
-    String? tag,
+    Set<String> tags = const {},
     int? priceMax,
     String? ageGroup,
     double? lat,
@@ -115,6 +122,8 @@ abstract class CatalogRepository {
   /// e.g. `SCHOOLS`; empty string = across all categories). Feeds the tag-pill
   /// rail on the category screen.
   Future<List<String>> tags(String category);
+
+  Future<List<TagGroup>> tagGroups(String category);
 }
 
 // ── Mock implementation ──────────────────────────────────────────────────────

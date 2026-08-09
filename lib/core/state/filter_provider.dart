@@ -22,8 +22,9 @@ class FilterState {
     this.priceMax = kPriceCeilingQar,
     this.ageGroup,
     this.sortMode = SortMode.distance,
-    this.tag,
+    this.tags = const {},
     this.userPosition = mockHome,
+    this.page = 1,
   });
 
   final LatLng userPosition;
@@ -33,7 +34,8 @@ class FilterState {
   final int priceMax;
   final String? ageGroup;
   final SortMode sortMode;
-  final String? tag;
+  final Set<String> tags;
+  final int page;
 
   bool get hasActiveFilters =>
       maxDistanceKm < kMaxDistanceCeilingKm ||
@@ -47,8 +49,9 @@ class FilterState {
     int? priceMax,
     String? Function()? ageGroup,
     SortMode? sortMode,
-    String? Function()? tag,
+    Set<String>? tags,
     LatLng? userPosition,
+    int? page,
   }) {
     return FilterState(
       query: query ?? this.query,
@@ -59,8 +62,9 @@ class FilterState {
       priceMax: priceMax ?? this.priceMax,
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
-      tag: tag != null ? tag() : this.tag,
+      tags: tags ?? this.tags,
       userPosition: userPosition ?? this.userPosition,
+      page: page ?? this.page,
     );
   }
 }
@@ -68,15 +72,38 @@ class FilterState {
 class FilterNotifier extends StateNotifier<FilterState> {
   FilterNotifier() : super(const FilterState());
 
-  void setQuery(String query) => state = state.copyWith(query: query);
+  void setPage(int page) => state = state.copyWith(page: page);
+
+  void nextPage() => state = state.copyWith(page: state.page + 1);
+
+  void previousPage() =>
+      state = state.copyWith(page: (state.page - 1 <= 1) ? 1 : state.page - 1);
+
+  void setQuery(String query) => state = state.copyWith(query: query, page: 1);
 
   /// Switching category clears any active tag — tags are category-scoped.
-  void setCategory(CategoryType? category) =>
-      state = state.copyWith(selectedCategory: () => category, tag: () => null);
+  void setCategory(CategoryType? category) => state = state.copyWith(
+    selectedCategory: () => category,
+    tags: const {},
+    page: 1,
+  );
 
-  void setTag(String? tag) => state = state.copyWith(tag: () => tag);
+  void toggleTag(String tag) {
+    final next = {...state.tags};
+    if (next.contains(tag)) {
+      next.remove(tag);
+    } else {
+      next.add(tag);
+    }
+    state = state.copyWith(tags: next, page: 1);
+  }
 
-  void setSortMode(SortMode mode) => state = state.copyWith(sortMode: mode);
+  void clearTags() {
+    state = state.copyWith(tags: const {}, page: 1);
+  }
+
+  void setSortMode(SortMode mode) =>
+      state = state.copyWith(sortMode: mode, page: 1);
 
   void applyFilters({
     required double maxDistanceKm,
@@ -89,6 +116,7 @@ class FilterNotifier extends StateNotifier<FilterState> {
       priceMax: priceMax,
       ageGroup: () => ageGroup,
       userPosition: userPosition,
+      page: 1,
     );
   }
 
@@ -100,6 +128,7 @@ class FilterNotifier extends StateNotifier<FilterState> {
       maxDistanceKm: kMaxDistanceCeilingKm,
       priceMax: kPriceCeilingQar,
       ageGroup: () => null,
+      page: 1,
     );
   }
 }
@@ -126,19 +155,19 @@ final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,
-    tag: filter.tag,
+    tags: filter.tags,
     priceMax: filter.priceMax < kPriceCeilingQar ? filter.priceMax : null,
     ageGroup: filter.ageGroup,
     maxDistanceKm: filter.maxDistanceKm < kMaxDistanceCeilingKm
         ? filter.maxDistanceKm
         : null,
     sort: _toListingSort(filter.sortMode),
-    page: 1,
+    page: filter.page,
     lat: latitude,
     lng: longitude,
   );
 });
 
-final filteredListingsProvider = Provider<AsyncValue<List<Listing>>>((ref) {
+final filteredListingsProvider = Provider<AsyncValue<ListingPage>>((ref) {
   return ref.watch(catalogListingsProvider(ref.watch(listingsFilterProvider)));
 });

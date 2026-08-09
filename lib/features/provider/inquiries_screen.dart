@@ -127,6 +127,7 @@ class _FilterChip extends StatelessWidget {
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
+        constraints: const BoxConstraints(minWidth: 64),
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
           vertical: AppSpacing.xs,

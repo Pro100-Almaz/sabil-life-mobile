@@ -46,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            data: (listings) => _HomeContent(listings: listings),
+            data: (page) => _HomeContent(listings: page.results),
           ),
         ),
       ),

@@ -154,3 +154,23 @@ class Listing {
     );
   }
 }
+
+class ListingPage {
+  const ListingPage({
+    required this.results,
+    required this.count,
+    required this.page,
+    required this.hasNext,
+    required this.hasPrevious,
+  });
+
+  static const int pageSize = 20;
+
+  final List<Listing> results;
+  final int count;
+  final bool hasNext;
+  final bool hasPrevious;
+  final int page;
+
+  int get totalPages => count == 0 ? 1 : ((count - 1) ~/ pageSize) + 1;
+}

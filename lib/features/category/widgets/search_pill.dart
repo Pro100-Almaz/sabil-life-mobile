@@ -10,8 +10,8 @@ import '../../../core/theme/app_typography.dart';
 /// Airbnb-style search pill: an inline text field that drives
 /// `filterProvider.query` live, with a clear (✕) button.
 class SearchPill extends ConsumerStatefulWidget {
-  const SearchPill({super.key});
-
+  const SearchPill({super.key, this.title});
+  final String? title;
   @override
   ConsumerState<SearchPill> createState() => _SearchPillState();
 }
@@ -55,7 +55,9 @@ class _SearchPillState extends ConsumerState<SearchPill> {
         style: AppTypography.body,
         decoration: InputDecoration(
           filled: false,
-          hintText: l10n.searchHint,
+          hintText: widget.title == l10n.catAll || widget.title == null
+              ? l10n.searchHint
+              : widget.title,
           prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
           suffixIcon: query.isEmpty
               ? null

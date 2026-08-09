@@ -174,7 +174,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
         }
       });
     }
-    final listings = (asyncListings.valueOrNull ?? const [])
+    final listings = (asyncListings.valueOrNull?.results ?? const <Listing>[])
         .where((listing) => listing.lat != 0 || listing.lng != 0)
         .toList();
     final showCarousel = _clusterListings.isNotEmpty;

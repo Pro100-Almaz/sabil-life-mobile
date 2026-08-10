@@ -38,7 +38,9 @@ class CategoryStrip extends ConsumerWidget {
               label: category.label(l10n),
               selected: selected == category,
               onTap: () {
-                ref.read(filterProvider.notifier).setCategory(category);
+                if (category != CategoryType.tutoring){
+                  ref.read(filterProvider.notifier).setCategory(category);
+                }
                 context.push('/category/${category.name}');
               },
             ),

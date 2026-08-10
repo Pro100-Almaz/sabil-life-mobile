@@ -320,6 +320,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'Пароль';
 
   @override
+  String get passwordRequirements =>
+      'Не менее 8 символов, не содержит только цифры, не распространённый пароль';
+
+  @override
+  String get passwordTooShort => 'Пароль должен содержать не менее 8 символов';
+
+  @override
+  String get emailInvalid => 'Введите корректный адрес электронной почты';
+
+  @override
   String get fullName => 'Полное имя';
 
   @override

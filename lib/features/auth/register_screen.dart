@@ -145,7 +145,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         textInputAction: TextInputAction.next,
         enabled: !isBusy,
         decoration: InputDecoration(labelText: l10n.email),
-        validator: (v) => (v == null || !v.contains('@')) ? l10n.email : null,
+        validator: (v) =>
+            (v == null || !v.contains('@')) ? l10n.emailInvalid : null,
       ),
       const SizedBox(height: AppSpacing.md),
       TextFormField(
@@ -154,8 +155,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         textInputAction: TextInputAction.done,
         enabled: !isBusy,
         onFieldSubmitted: (_) => _requestCode(),
-        decoration: InputDecoration(labelText: l10n.password),
-        validator: (v) => (v == null || v.length < 6) ? l10n.password : null,
+        decoration: InputDecoration(
+          labelText: l10n.password,
+          helperText: l10n.passwordRequirements,
+          helperMaxLines: 2,
+        ),
+        validator: (v) =>
+            (v == null || v.length < 8) ? l10n.passwordTooShort : null,
       ),
       ..._errorAndActions(
         isBusy,

@@ -320,6 +320,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get password => 'Құпиясөз';
 
   @override
+  String get passwordRequirements =>
+      'Кемінде 8 таңба, тек сандардан тұрмауы керек, кең тараған құпиясөз болмауы керек';
+
+  @override
+  String get passwordTooShort => 'Құпиясөз кемінде 8 таңбадан тұруы керек';
+
+  @override
+  String get emailInvalid => 'Жарамды электрондық пошта мекенжайын енгізіңіз';
+
+  @override
   String get fullName => 'Толық аты-жөні';
 
   @override

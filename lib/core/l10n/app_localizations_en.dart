@@ -320,6 +320,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get password => 'Password';
 
   @override
+  String get passwordRequirements =>
+      'At least 8 characters, not all numbers, not a common password';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get emailInvalid => 'Enter a valid email address';
+
+  @override
   String get fullName => 'Full name';
 
   @override

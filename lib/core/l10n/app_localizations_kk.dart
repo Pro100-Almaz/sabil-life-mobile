@@ -969,4 +969,33 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get credentialsHint => 'Дәрежесі мен Cертификаттары';
+
+  @override
+  String get forgotPassword => 'Құпиясөзді ұмыттыңыз ба?';
+
+  @override
+  String get forgotPasswordHint =>
+      'Электрондық поштаңызды енгізіңіз, біз құпиясөзді қалпына келтіруге арналған 6 таңбалы код жібереміз.';
+
+  @override
+  String get sendResetCode => 'Кодты жіберу';
+
+  @override
+  String get resetPassword => 'Құпиясөзді қалпына келтіру';
+
+  @override
+  String get newPassword => 'Жаңа құпиясөз';
+
+  @override
+  String get confirmNewPassword => 'Жаңа құпиясөзді растаңыз';
+
+  @override
+  String get passwordsDoNotMatch => 'Құпиясөздер сәйкес келмейді';
+
+  @override
+  String get passwordResetSuccessful =>
+      'Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.';
+
+  @override
+  String get backToSignIn => 'Кіру бетіне оралу';
 }

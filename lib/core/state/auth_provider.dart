@@ -140,6 +140,42 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<bool> requestPasswordReset({required String email}) async {
+    state = const AuthState.authenticating();
+
+    try {
+      await _repo.requestPasswordReset(email: email);
+      state = const AuthState.unauthenticated();
+      return true;
+    } on AuthException catch (e) {
+      state = AuthState.unauthenticated(error: e.message);
+      return false;
+    }
+  }
+
+  Future<bool> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String password,
+    required String password2,
+  }) async {
+    state = const AuthState.authenticating();
+
+    try {
+      await _repo.confirmPasswordReset(
+        email: email,
+        code: code,
+        password: password,
+        password2: password2,
+      );
+      state = const AuthState.unauthenticated();
+      return true;
+    } on AuthException catch (e) {
+      state = AuthState.unauthenticated(error: e.message);
+      return false;
+    }
+  }
+
   /// Re-fetches the signed-in user from the backend without disturbing the
   /// session token. Used when the active interface changes so provider data is
   /// always current. No-op when logged out; guarded so it never resurrects a

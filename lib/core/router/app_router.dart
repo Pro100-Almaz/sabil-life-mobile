@@ -7,6 +7,7 @@ import '../../data/models/listing.dart';
 import '../../data/models/tutor.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
+import '../../features/auth/forgot_password_screen.dart';
 import '../../features/category/category_list_screen.dart';
 import '../../features/detail/listing_detail_screen.dart';
 import '../../features/family/listing_client_composer_screen.dart';
@@ -150,7 +151,9 @@ StatefulShellRoute _providerShellRoute({
 
 bool _isProviderArea(String location) => location.startsWith('/provider');
 bool _isAuthArea(String location) =>
-    location == '/login' || location == '/register';
+    location == '/login' ||
+    location == '/register' ||
+    location == '/forgot-password';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = RouterRefreshListenable();
@@ -199,6 +202,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/forgot-password',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
         path: '/notifications',

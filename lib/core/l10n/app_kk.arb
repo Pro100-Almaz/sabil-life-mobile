@@ -298,5 +298,14 @@
   "inquiryCancelled": "Сұрауыңыз болдырылмады.",
   "directions": "Бағыт",
   "directionsError": "Карта қосымшасын ашу мүмкін болмады",
-  "credentialsHint": "Дәрежесі мен Cертификаттары"
+  "credentialsHint": "Дәрежесі мен Cертификаттары",
+  "forgotPassword": "Құпиясөзді ұмыттыңыз ба?",
+  "forgotPasswordHint": "Электрондық поштаңызды енгізіңіз, біз құпиясөзді қалпына келтіруге арналған 6 таңбалы код жібереміз.",
+  "sendResetCode": "Кодты жіберу",
+  "resetPassword": "Құпиясөзді қалпына келтіру",
+  "newPassword": "Жаңа құпиясөз",
+  "confirmNewPassword": "Жаңа құпиясөзді растаңыз",
+  "passwordsDoNotMatch": "Құпиясөздер сәйкес келмейді",
+  "passwordResetSuccessful": "Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.",
+  "backToSignIn": "Кіру бетіне оралу"
 }

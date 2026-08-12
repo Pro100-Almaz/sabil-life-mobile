@@ -967,4 +967,33 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get credentialsHint => 'Степень и сертификаты';
+
+  @override
+  String get forgotPassword => 'Забыли пароль?';
+
+  @override
+  String get forgotPasswordHint =>
+      'Введите адрес электронной почты, и мы отправим 6-значный код для сброса пароля.';
+
+  @override
+  String get sendResetCode => 'Отправить код';
+
+  @override
+  String get resetPassword => 'Сбросить пароль';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get confirmNewPassword => 'Подтвердите новый пароль';
+
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String get passwordResetSuccessful =>
+      'Пароль успешно изменён. Теперь вы можете войти.';
+
+  @override
+  String get backToSignIn => 'Вернуться ко входу';
 }

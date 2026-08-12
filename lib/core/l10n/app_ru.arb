@@ -298,5 +298,14 @@
   "inquiryCancelled": "Ваш запрос отменён.",
   "directions": "Маршрут",
   "directionsError": "Не удалось открыть приложение карт",
-  "credentialsHint": "Степень и сертификаты"
+  "credentialsHint": "Степень и сертификаты",
+  "forgotPassword": "Забыли пароль?",
+  "forgotPasswordHint": "Введите адрес электронной почты, и мы отправим 6-значный код для сброса пароля.",
+  "sendResetCode": "Отправить код",
+  "resetPassword": "Сбросить пароль",
+  "newPassword": "Новый пароль",
+  "confirmNewPassword": "Подтвердите новый пароль",
+  "passwordsDoNotMatch": "Пароли не совпадают",
+  "passwordResetSuccessful": "Пароль успешно изменён. Теперь вы можете войти.",
+  "backToSignIn": "Вернуться ко входу"
 }

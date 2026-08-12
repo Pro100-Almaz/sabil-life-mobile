@@ -968,4 +968,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get credentialsHint => 'Degrees & Certificates';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get forgotPasswordHint =>
+      'Enter your email and we’ll send you a 6-digit password reset code.';
+
+  @override
+  String get sendResetCode => 'Send reset code';
+
+  @override
+  String get resetPassword => 'Reset password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get confirmNewPassword => 'Confirm new password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordResetSuccessful =>
+      'Your password has been reset. You can now sign in.';
+
+  @override
+  String get backToSignIn => 'Back to sign in';
 }

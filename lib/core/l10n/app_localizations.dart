@@ -1887,6 +1887,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Degrees & Certificates'**
   String get credentialsHint;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we’ll send you a 6-digit password reset code.'**
+  String get forgotPasswordHint;
+
+  /// No description provided for @sendResetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset code'**
+  String get sendResetCode;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordResetSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password has been reset. You can now sign in.'**
+  String get passwordResetSuccessful;
+
+  /// No description provided for @backToSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
+  String get backToSignIn;
 }
 
 class _AppLocalizationsDelegate

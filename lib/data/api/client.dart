@@ -66,6 +66,37 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> requestPasswordReset({required String email}) async {
+    try {
+      await _dio.post('/auth/forgot-password/', data: {'email': email.trim()});
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String password,
+    required String password2,
+  }) async {
+    try {
+      await _dio.post(
+        '/auth/forgot-password/confirm/',
+        data: {
+          'email': email.trim(),
+          'code': code.trim(),
+          'password': password,
+          'password2': password2,
+        },
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<AuthUser> me(String token) async {
     try {
       // Pass token explicitly: restore() calls me() before the store is

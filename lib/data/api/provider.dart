@@ -503,6 +503,7 @@ class HttpProviderRepository implements ProviderRepository {
       'is_featured': listing.isFeatured,
       'is_online': listing.isOnline,
       'meeting_url': listing.meetingUrl,
+      'registration_url': listing.registrationUrl,
     };
   }
 

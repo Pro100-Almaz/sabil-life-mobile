@@ -1000,6 +1000,19 @@ class AppLocalizationsKk extends AppLocalizations {
   String get backToSignIn => 'Кіру бетіне оралу';
 
   @override
+  String get fieldRegistrationUrl => 'Тіркелу сілтемесі';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Міндетті емес — пайдаланушылар тіркелу үшін осы сілтемені ашады';
+
+  @override
+  String get invalidUrl => 'Жарамды сілтемені енгізіңіз';
+
+  @override
+  String get registerForMasterclass => 'Тіркелу';
+
+  @override
   String get joinMeeting => 'Кездесуге қосылу';
 
   @override

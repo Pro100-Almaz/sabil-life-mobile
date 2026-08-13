@@ -998,6 +998,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backToSignIn => 'Вернуться ко входу';
 
   @override
+  String get fieldRegistrationUrl => 'Ссылка для регистрации';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Необязательно — пользователи перейдут по этой ссылке для регистрации';
+
+  @override
+  String get invalidUrl => 'Введите корректную ссылку';
+
+  @override
+  String get registerForMasterclass => 'Зарегистрироваться';
+
+  @override
   String get joinMeeting => 'Присоединиться к встрече';
 
   @override

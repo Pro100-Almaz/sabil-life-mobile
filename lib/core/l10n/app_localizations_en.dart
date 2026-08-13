@@ -999,6 +999,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backToSignIn => 'Back to sign in';
 
   @override
+  String get fieldRegistrationUrl => 'Registration link';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Optional — users will open this link to register';
+
+  @override
+  String get invalidUrl => 'Enter a valid URL';
+
+  @override
+  String get registerForMasterclass => 'Register';
+
+  @override
   String get joinMeeting => 'Join meeting';
 
   @override

@@ -998,4 +998,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get backToSignIn => 'Кіру бетіне оралу';
+
+  @override
+  String get joinMeeting => 'Кездесуге қосылу';
+
+  @override
+  String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
 }

@@ -997,4 +997,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToSignIn => 'Back to sign in';
+
+  @override
+  String get joinMeeting => 'Join meeting';
+
+  @override
+  String get meetingLinkError => 'Couldn’t open the meeting link';
 }

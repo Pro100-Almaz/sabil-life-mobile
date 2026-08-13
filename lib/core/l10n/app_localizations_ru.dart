@@ -996,4 +996,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get backToSignIn => 'Вернуться ко входу';
+
+  @override
+  String get joinMeeting => 'Присоединиться к встрече';
+
+  @override
+  String get meetingLinkError => 'Не удалось открыть ссылку на встречу';
 }

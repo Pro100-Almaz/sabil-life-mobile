@@ -307,5 +307,7 @@
   "confirmNewPassword": "Жаңа құпиясөзді растаңыз",
   "passwordsDoNotMatch": "Құпиясөздер сәйкес келмейді",
   "passwordResetSuccessful": "Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.",
-  "backToSignIn": "Кіру бетіне оралу"
+  "backToSignIn": "Кіру бетіне оралу",
+  "joinMeeting": "Кездесуге қосылу",
+  "meetingLinkError": "Кездесу сілтемесін ашу мүмкін болмады"
 }

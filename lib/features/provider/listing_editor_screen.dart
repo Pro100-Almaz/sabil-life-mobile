@@ -47,6 +47,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _existingImages = <ListingImage>[];
   final _removedImageIds = <String>{};
   final _url = TextEditingController();
+  final _registrationUrl = TextEditingController();
 
   bool _isOnline = true;
   bool _saving = false;
@@ -67,6 +68,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _title.addListener(_onRequiredChanged);
     _subtitle.addListener(_onRequiredChanged);
     _url.addListener(_onRequiredChanged);
+    _registrationUrl.addListener(_onRequiredChanged);
     _neighborhood.addListener(_onRequiredChanged);
 
     final l = _existing;
@@ -84,6 +86,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       _pickedLocation = LatLng(l.lat, l.lng);
       _isOnline = l.isOnline;
       _url.text = l.meetingUrl;
+      _registrationUrl.text = l.registrationUrl;
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -96,6 +99,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _price.dispose();
     _description.dispose();
     _url.dispose();
+    _registrationUrl.dispose();
     for (final c in _highlights) {
       c.dispose();
     }
@@ -114,15 +118,29 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     });
   }
 
+  bool _isValidOptionalUrl(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return true;
+
+    final uri = Uri.tryParse(trimmed);
+    return uri != null &&
+        (uri.scheme == 'http' || uri.scheme == 'https') &&
+        uri.host.isNotEmpty;
+  }
+
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     final missingCore =
         _title.text.trim().isEmpty || _subtitle.text.trim().isEmpty;
     final missingUrl = _isOnline && _url.text.trim().isEmpty;
     final missingLocation = !_isOnline && _neighborhood.text.trim().isEmpty;
+    final invalidRegistrationUrl = !_isValidOptionalUrl(_registrationUrl.text);
 
     if (user == null) return;
-    if (missingCore || missingLocation || missingUrl) {
+    if (missingCore ||
+        missingLocation ||
+        missingUrl ||
+        invalidRegistrationUrl) {
       final l10n = AppLocalizations.of(context)!;
       setState(() => _showErrors = true);
       ScaffoldMessenger.of(
@@ -176,6 +194,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         status: ListingStatus.draft,
         isOnline: _isOnline,
         meetingUrl: _isOnline ? _url.text.trim() : '',
+        registrationUrl: _registrationUrl.text.trim(),
       );
 
       // 1. Save the listing fields (images are managed separately). Create
@@ -331,6 +350,22 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
               ),
               const SizedBox(height: AppSpacing.md),
             ],
+            TextField(
+              controller: _registrationUrl,
+              keyboardType: TextInputType.url,
+              textInputAction: TextInputAction.next,
+              autocorrect: false,
+              decoration: InputDecoration(
+                labelText: l10n.fieldRegistrationUrl,
+                hintText: 'https://example.com/register',
+                helperText: l10n.fieldRegistrationUrlOptional,
+                errorText:
+                    _showErrors && !_isValidOptionalUrl(_registrationUrl.text)
+                    ? l10n.invalidUrl
+                    : null,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
             TextField(
               controller: _price,
               keyboardType: TextInputType.number,

@@ -1941,6 +1941,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to sign in'**
   String get backToSignIn;
+
+  /// No description provided for @fieldRegistrationUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration link'**
+  String get fieldRegistrationUrl;
+
+  /// No description provided for @fieldRegistrationUrlOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — users will open this link to register'**
+  String get fieldRegistrationUrlOptional;
+
+  /// No description provided for @invalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid URL'**
+  String get invalidUrl;
+
+  /// No description provided for @registerForMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerForMasterclass;
 }
 
 class _AppLocalizationsDelegate

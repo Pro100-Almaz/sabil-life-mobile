@@ -308,4 +308,9 @@
   "passwordsDoNotMatch": "Құпиясөздер сәйкес келмейді",
   "passwordResetSuccessful": "Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.",
   "backToSignIn": "Кіру бетіне оралу"
+  "credentialsHint": "Дәрежесі мен Cертификаттары",
+  "fieldRegistrationUrl": "Тіркелу сілтемесі",
+  "fieldRegistrationUrlOptional": "Міндетті емес — пайдаланушылар тіркелу үшін осы сілтемені ашады",
+  "invalidUrl": "Жарамды сілтемені енгізіңіз",
+  "registerForMasterclass": "Тіркелу"
 }

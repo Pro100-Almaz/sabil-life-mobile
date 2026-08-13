@@ -17,6 +17,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
+import '../../core/util/meeting_link.dart';
 import '../../core/util/tutor_label.dart';
 import '../../core/util/directions.dart';
 import '../../data/api/api_config.dart';
@@ -125,24 +126,40 @@ class _DetailBody extends ConsumerWidget {
                     reviewCount: listing.reviewCount,
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.place_outlined,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text(listing.neighborhood, style: AppTypography.caption),
-                      Text(' · ', style: AppTypography.caption),
-                      Text(
-                        l10n.distanceAway(
-                          listing.distanceFromHomeLabel(origin),
+                  if (listing.isOnline)
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.videocam_outlined,
+                          size: 16,
+                          color: AppColors.textSecondary,
                         ),
-                        style: AppTypography.caption,
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(l10n.fieldOnline, style: AppTypography.caption),
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.place_outlined,
+                          size: 16,
+                          color: AppColors.textSecondary,
+                        ),
+                        const SizedBox(width: AppSpacing.xs),
+                        Text(
+                          listing.neighborhood,
+                          style: AppTypography.caption,
+                        ),
+                        Text(' · ', style: AppTypography.caption),
+                        Text(
+                          l10n.distanceAway(
+                            listing.distanceFromHomeLabel(origin),
+                          ),
+                          style: AppTypography.caption,
+                        ),
+                      ],
+                    ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     listing.priceFromQar == 0
@@ -193,68 +210,87 @@ class _DetailBody extends ConsumerWidget {
                   ),
                   Text(l10n.details, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.md),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadius.card),
-                    child: SizedBox(
-                      height: 180,
-                      child: FlutterMap(
-                        options: MapOptions(
-                          initialCenter: LatLng(listing.lat, listing.lng),
-                          initialZoom: 14,
-                          interactionOptions: const InteractionOptions(
-                            flags: InteractiveFlag.none,
+                  if (listing.isOnline) ...[
+                    AppButton(
+                      label: l10n.joinMeeting,
+                      icon: Icons.videocam_outlined,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final opened = await openMeetingLink(
+                          listing.meetingUrl,
+                        );
+                        if (!opened) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.meetingLinkError)),
+                          );
+                        }
+                      },
+                    ),
+                  ] else ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.card),
+                      child: SizedBox(
+                        height: 180,
+                        child: FlutterMap(
+                          options: MapOptions(
+                            initialCenter: LatLng(listing.lat, listing.lng),
+                            initialZoom: 14,
+                            interactionOptions: const InteractionOptions(
+                              flags: InteractiveFlag.none,
+                            ),
                           ),
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate: mapTileUrlTemplate,
-                            userAgentPackageName: 'io.sabilLife.app',
-                          ),
-                          MarkerLayer(
-                            markers: [
-                              Marker(
-                                point: LatLng(listing.lat, listing.lng),
-                                width: 36,
-                                height: 36,
-                                child: const Icon(
-                                  Icons.place,
-                                  size: 36,
-                                  color: AppColors.primary,
+                          children: [
+                            TileLayer(
+                              urlTemplate: mapTileUrlTemplate,
+                              userAgentPackageName: 'io.sabilLife.app',
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: LatLng(listing.lat, listing.lng),
+                                  width: 36,
+                                  height: 36,
+                                  child: const Icon(
+                                    Icons.place,
+                                    size: 36,
+                                    color: AppColors.primary,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppButton(
-                    label: l10n.viewOnMap,
-                    variant: AppButtonVariant.outlined,
-                    icon: Icons.map_outlined,
-                    expanded: true,
-                    onPressed: () => context.go('/map?listing=${listing.id}'),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppButton(
-                    label: l10n.directions,
-                    variant: AppButtonVariant.outlined,
-                    icon: Icons.directions_outlined,
-                    expanded: true,
-                    onPressed: () async {
-                      final messenger = ScaffoldMessenger.of(context);
-                      final ok = await openDirections(
-                        lat: listing.lat,
-                        lng: listing.lng,
-                      );
-                      if (!ok) {
-                        messenger.showSnackBar(
-                          SnackBar(content: Text(l10n.directionsError)),
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.viewOnMap,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.map_outlined,
+                      expanded: true,
+                      onPressed: () => context.go('/map?listing=${listing.id}'),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.directions,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.directions_outlined,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final opened = await openDirections(
+                          lat: listing.lat,
+                          lng: listing.lng,
                         );
-                      }
-                    },
-                  ),
+                        if (!opened) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.directionsError)),
+                          );
+                        }
+                      },
+                    ),
+                  ],
 
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),

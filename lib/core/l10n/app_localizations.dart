@@ -1941,6 +1941,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to sign in'**
   String get backToSignIn;
+
+  /// No description provided for @joinMeeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Join meeting'**
+  String get joinMeeting;
+
+  /// No description provided for @meetingLinkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the meeting link'**
+  String get meetingLinkError;
 }
 
 class _AppLocalizationsDelegate

@@ -317,5 +317,8 @@
   "passwordResetSuccessful": "Пароль успешно изменён. Теперь вы можете войти.",
   "backToSignIn": "Вернуться ко входу",
   "joinMeeting": "Присоединиться к встрече",
-  "meetingLinkError": "Не удалось открыть ссылку на встречу"
+  "meetingLinkError": "Не удалось открыть ссылку на встречу",
+  "changePassword": "Изменить пароль",
+  "currentPassword": "Текущий пароль",
+  "passwordChangedSignInAgain": "Пароль изменён. Войдите снова."
 }

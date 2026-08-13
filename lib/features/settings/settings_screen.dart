@@ -80,6 +80,21 @@ class SettingsScreen extends ConsumerWidget {
                 horizontal: AppSpacing.lg,
               ),
               leading: const Icon(
+                Icons.lock_outline,
+                color: AppColors.textPrimary,
+              ),
+              title: Text(l10n.changePassword, style: AppTypography.body),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: AppColors.textSecondary,
+              ),
+              onTap: () => context.push('/change-password'),
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(
                 Icons.inbox_outlined,
                 color: AppColors.textPrimary,
               ),

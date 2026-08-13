@@ -1024,6 +1024,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backToSignIn => 'Back to sign in';
 
   @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get passwordChangedSignInAgain =>
+      'Password changed. Please sign in again.';
+
+  @override
   String get joinMeeting => 'Join meeting';
 
   @override

@@ -307,7 +307,7 @@
   "confirmNewPassword": "Подтвердите новый пароль",
   "passwordsDoNotMatch": "Пароли не совпадают",
   "passwordResetSuccessful": "Пароль успешно изменён. Теперь вы можете войти.",
-  "backToSignIn": "Вернуться ко входу"
+  "backToSignIn": "Вернуться ко входу",
   "credentialsHint": "Степень и сертификаты",
   "fieldRegistrationUrl": "Ссылка для регистрации",
   "fieldRegistrationUrlOptional": "Необязательно — пользователи перейдут по этой ссылке для регистрации",

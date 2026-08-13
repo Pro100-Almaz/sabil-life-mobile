@@ -1612,6 +1612,54 @@ abstract class AppLocalizations {
   /// **'Request to become a masterclass provider'**
   String get requestMasterclassProvider;
 
+  /// No description provided for @continueWithCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to CV submission'**
+  String get continueWithCv;
+
+  /// No description provided for @submitCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit your CV'**
+  String get submitCv;
+
+  /// No description provided for @masterclassCvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include your CV with your application'**
+  String get masterclassCvTitle;
+
+  /// No description provided for @masterclassCvInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'A CV is required to apply as a masterclass provider. Upload one PDF file; other file formats are not accepted.'**
+  String get masterclassCvInstructions;
+
+  /// No description provided for @choosePdfCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose CV (PDF only)'**
+  String get choosePdfCv;
+
+  /// No description provided for @cvRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your CV in PDF format.'**
+  String get cvRequired;
+
+  /// No description provided for @cvPdfOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only PDF files are accepted.'**
+  String get cvPdfOnly;
+
+  /// No description provided for @submitApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit application'**
+  String get submitApplication;
+
   /// No description provided for @masterclassRequestSent.
   ///
   /// In en, this message translates to:

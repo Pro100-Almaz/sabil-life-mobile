@@ -24,6 +24,7 @@ import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_clients_screen.dart';
 import '../../features/provider/listing_editor_screen.dart';
 import '../../features/provider/masterclass_gate_screen.dart';
+import '../../features/provider/masterclass_cv_screen.dart';
 import '../../features/provider/my_listings_screen.dart';
 import '../../features/provider/provider_settings_screen.dart';
 import '../../features/provider/provider_shell.dart';
@@ -329,6 +330,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/switch-to-masterclass',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const MasterclassGateScreen(),
+      ),
+      GoRoute(
+        path: '/masterclass-cv',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const MasterclassCvScreen(),
       ),
       GoRoute(
         path: '/tutor-profile-edit',

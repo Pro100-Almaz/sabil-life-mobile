@@ -824,6 +824,31 @@ class AppLocalizationsEn extends AppLocalizations {
       'Request to become a masterclass provider';
 
   @override
+  String get continueWithCv => 'Continue to CV submission';
+
+  @override
+  String get submitCv => 'Submit your CV';
+
+  @override
+  String get masterclassCvTitle => 'Include your CV with your application';
+
+  @override
+  String get masterclassCvInstructions =>
+      'A CV is required to apply as a masterclass provider. Upload one PDF file; other file formats are not accepted.';
+
+  @override
+  String get choosePdfCv => 'Choose CV (PDF only)';
+
+  @override
+  String get cvRequired => 'Please select your CV in PDF format.';
+
+  @override
+  String get cvPdfOnly => 'Only PDF files are accepted.';
+
+  @override
+  String get submitApplication => 'Submit application';
+
+  @override
   String get masterclassRequestSent =>
       'Your request has been submitted. We\'ll review it shortly.';
 

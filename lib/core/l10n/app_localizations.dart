@@ -1636,6 +1636,30 @@ abstract class AppLocalizations {
   /// **'A CV is required to apply as a masterclass provider. Upload one PDF file; other file formats are not accepted.'**
   String get masterclassCvInstructions;
 
+  /// No description provided for @cvAiScreeningDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CV will be processed by an external AI service for an advisory screening. A human administrator always makes the final decision.'**
+  String get cvAiScreeningDisclosure;
+
+  /// No description provided for @cvAiScreeningInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your CV is being screened by AI. A human administrator will make the final decision.'**
+  String get cvAiScreeningInProgress;
+
+  /// No description provided for @cvAiConsentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand and agree to this AI processing.'**
+  String get cvAiConsentLabel;
+
+  /// No description provided for @cvAiConsentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the AI processing before submitting your CV.'**
+  String get cvAiConsentRequired;
+
   /// No description provided for @choosePdfCv.
   ///
   /// In en, this message translates to:

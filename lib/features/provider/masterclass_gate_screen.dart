@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/auth_user.dart';
+import '../../data/models/provider_verification.dart';
 import '../../shared/widgets/app_button.dart';
 import 'widgets/verification_banner.dart';
 
@@ -70,7 +71,9 @@ class _MasterclassGateScreenState extends ConsumerState<MasterclassGateScreen> {
             return _StatusBody(
               banner: VerificationBanner(
                 icon: Icons.hourglass_top,
-                message: l10n.masterclassAccountUnderReview,
+                message: verification.aiScreeningStatus.isInProgress
+                    ? l10n.cvAiScreeningInProgress
+                    : l10n.masterclassAccountUnderReview,
               ),
               actions: [
                 const CancelRequestButton(providerType: UserRole.masterclass),

@@ -836,6 +836,22 @@ class AppLocalizationsRu extends AppLocalizations {
       'Для заявки на роль организатора мастер-классов требуется резюме. Загрузите один PDF-файл; другие форматы не принимаются.';
 
   @override
+  String get cvAiScreeningDisclosure =>
+      'Ваше резюме будет обработано внешним сервисом ИИ для предварительной оценки. Окончательное решение всегда принимает администратор.';
+
+  @override
+  String get cvAiScreeningInProgress =>
+      'Ваше резюме проходит проверку ИИ. Окончательное решение примет администратор.';
+
+  @override
+  String get cvAiConsentLabel =>
+      'Я понимаю и соглашаюсь на такую обработку с помощью ИИ.';
+
+  @override
+  String get cvAiConsentRequired =>
+      'Перед отправкой резюме подтвердите согласие на обработку с помощью ИИ.';
+
+  @override
   String get choosePdfCv => 'Выбрать резюме (только PDF)';
 
   @override

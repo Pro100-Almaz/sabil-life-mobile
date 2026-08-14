@@ -823,6 +823,31 @@ class AppLocalizationsKk extends AppLocalizations {
       'Шеберлік сыныбы ұйымдастырушысы болуға өтініш беру';
 
   @override
+  String get continueWithCv => 'Түйіндемені жіберуге өту';
+
+  @override
+  String get submitCv => 'Түйіндемеңізді жіберіңіз';
+
+  @override
+  String get masterclassCvTitle => 'Өтінішіңізге түйіндемеңізді қосыңыз';
+
+  @override
+  String get masterclassCvInstructions =>
+      'Шеберлік сыныбының ұйымдастырушысы болу үшін түйіндеме қажет. Бір PDF файлын жүктеңіз; басқа форматтар қабылданбайды.';
+
+  @override
+  String get choosePdfCv => 'Түйіндемені таңдаңыз (тек PDF)';
+
+  @override
+  String get cvRequired => 'Түйіндемеңізді PDF форматында таңдаңыз.';
+
+  @override
+  String get cvPdfOnly => 'Тек PDF файлдары қабылданады.';
+
+  @override
+  String get submitApplication => 'Өтінішті жіберу';
+
+  @override
   String get masterclassRequestSent =>
       'Өтінішіңіз жіберілді. Жақын арада қарастырамыз.';
 

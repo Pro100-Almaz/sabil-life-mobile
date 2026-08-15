@@ -22,6 +22,15 @@ abstract class AuthRepository {
     required String code,
   });
 
+  Future<void> requestPasswordReset({required String email});
+
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String password,
+    required String password2,
+  });
+
   Future<AuthUser> me(String token);
   Future<void> logout();
 }
@@ -34,6 +43,7 @@ class MockAuthRepository implements AuthRepository {
 
   /// Pending registrations awaiting code confirmation, keyed by email.
   final Map<String, ({String password, String fullName})> _pending = {};
+  final Set<String> _pendingPasswordResets = {};
 
   @override
   Future<AuthSession> login(String email, String password) async {
@@ -106,5 +116,51 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+
+  @override
+  Future<void> requestPasswordReset({required String email}) async {
+    await Future<void>.delayed(_latency);
+
+    final normalized = email.trim().toLowerCase();
+
+    // Match the real backend: never reveal whether the account exists.
+    if (findMockUserByEmail(normalized) != null) {
+      _pendingPasswordResets.add(normalized);
+    }
+  }
+
+  @override
+  Future<void> confirmPasswordReset({
+    required String email,
+    required String code,
+    required String password,
+    required String password2,
+  }) async {
+    await Future<void>.delayed(_latency);
+
+    final normalized = email.trim().toLowerCase();
+
+    if (!_pendingPasswordResets.contains(normalized)) {
+      throw const AuthException(
+        'Code expired or not found. Please request a new one.',
+      );
+    }
+
+    if (code != _mockCode) {
+      throw const AuthException('Invalid code.');
+    }
+
+    if (password != password2) {
+      throw const AuthException('Passwords do not match.');
+    }
+
+    if (password.length < 8) {
+      throw const AuthException('Password must be at least 8 characters.');
+    }
+
+    // Add an appropriate mock password-update helper if mock reset behavior is
+    // required. The real HTTP implementation does not need this.
+    _pendingPasswordResets.remove(normalized);
   }
 }

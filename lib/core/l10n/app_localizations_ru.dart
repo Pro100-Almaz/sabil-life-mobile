@@ -320,6 +320,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get password => 'Пароль';
 
   @override
+  String get passwordRequirements =>
+      'Не менее 8 символов, не содержит только цифры, не распространённый пароль';
+
+  @override
+  String get passwordTooShort => 'Пароль должен содержать не менее 8 символов';
+
+  @override
+  String get emailInvalid => 'Введите корректный адрес электронной почты';
+
+  @override
   String get fullName => 'Полное имя';
 
   @override
@@ -813,6 +823,31 @@ class AppLocalizationsRu extends AppLocalizations {
       'Подать заявку на организатора мастер-классов';
 
   @override
+  String get continueWithCv => 'Перейти к отправке резюме';
+
+  @override
+  String get submitCv => 'Отправьте ваше резюме';
+
+  @override
+  String get masterclassCvTitle => 'Приложите резюме к заявке';
+
+  @override
+  String get masterclassCvInstructions =>
+      'Для заявки на роль организатора мастер-классов требуется резюме. Загрузите один PDF-файл; другие форматы не принимаются.';
+
+  @override
+  String get choosePdfCv => 'Выбрать резюме (только PDF)';
+
+  @override
+  String get cvRequired => 'Выберите резюме в формате PDF.';
+
+  @override
+  String get cvPdfOnly => 'Принимаются только PDF-файлы.';
+
+  @override
+  String get submitApplication => 'Отправить заявку';
+
+  @override
   String get masterclassRequestSent =>
       'Ваша заявка отправлена. Мы рассмотрим её в ближайшее время.';
 
@@ -957,4 +992,39 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get credentialsHint => 'Степень и сертификаты';
+
+  @override
+  String get forgotPassword => 'Забыли пароль?';
+
+  @override
+  String get forgotPasswordHint =>
+      'Введите адрес электронной почты, и мы отправим 6-значный код для сброса пароля.';
+
+  @override
+  String get sendResetCode => 'Отправить код';
+
+  @override
+  String get resetPassword => 'Сбросить пароль';
+
+  @override
+  String get newPassword => 'Новый пароль';
+
+  @override
+  String get confirmNewPassword => 'Подтвердите новый пароль';
+
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String get passwordResetSuccessful =>
+      'Пароль успешно изменён. Теперь вы можете войти.';
+
+  @override
+  String get backToSignIn => 'Вернуться ко входу';
+
+  @override
+  String get joinMeeting => 'Присоединиться к встрече';
+
+  @override
+  String get meetingLinkError => 'Не удалось открыть ссылку на встречу';
 }

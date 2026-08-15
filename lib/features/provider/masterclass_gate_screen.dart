@@ -21,8 +21,6 @@ class MasterclassGateScreen extends ConsumerStatefulWidget {
 }
 
 class _MasterclassGateScreenState extends ConsumerState<MasterclassGateScreen> {
-  bool _requesting = false;
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -88,17 +86,11 @@ class _MasterclassGateScreenState extends ConsumerState<MasterclassGateScreen> {
                 reason: verification.comment,
               ),
               actions: [
-                _requesting
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
-                      )
-                    : AppButton(
-                        label: l10n.requestAgain,
-                        expanded: true,
-                        onPressed: _request,
-                      ),
+                AppButton(
+                  label: l10n.requestAgain,
+                  expanded: true,
+                  onPressed: () => context.push('/masterclass-cv'),
+                ),
                 const SizedBox(height: AppSpacing.md),
                 const CancelRequestButton(providerType: UserRole.masterclass),
               ],
@@ -108,34 +100,11 @@ class _MasterclassGateScreenState extends ConsumerState<MasterclassGateScreen> {
           // none / cancelled — fresh request.
           return _RequestBody(
             l10n: l10n,
-            requesting: _requesting,
-            onRequest: _request,
+            onRequest: () => context.push('/masterclass-cv'),
           );
         },
       ),
     );
-  }
-
-  Future<void> _request() async {
-    final l10n = AppLocalizations.of(context)!;
-    setState(() => _requesting = true);
-    try {
-      await ref
-          .read(providerRepositoryProvider)
-          .requestVerification(UserRole.masterclass);
-      ref.invalidate(myVerificationsProvider);
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.masterclassRequestSent)));
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally {
-      if (mounted) setState(() => _requesting = false);
-    }
   }
 }
 
@@ -174,14 +143,9 @@ class _StatusBody extends StatelessWidget {
 }
 
 class _RequestBody extends StatelessWidget {
-  const _RequestBody({
-    required this.l10n,
-    required this.requesting,
-    required this.onRequest,
-  });
+  const _RequestBody({required this.l10n, required this.onRequest});
 
   final AppLocalizations l10n;
-  final bool requesting;
   final VoidCallback onRequest;
 
   @override
@@ -204,13 +168,11 @@ class _RequestBody extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.xl),
-            requesting
-                ? const CircularProgressIndicator(color: AppColors.primary)
-                : AppButton(
-                    label: l10n.requestMasterclassProvider,
-                    onPressed: onRequest,
-                    expanded: true,
-                  ),
+            AppButton(
+              label: l10n.continueWithCv,
+              onPressed: onRequest,
+              expanded: true,
+            ),
             const SizedBox(height: AppSpacing.md),
             AppButton(
               label: l10n.goBack,

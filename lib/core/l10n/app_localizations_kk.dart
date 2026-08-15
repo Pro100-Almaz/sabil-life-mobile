@@ -320,6 +320,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get password => 'Құпиясөз';
 
   @override
+  String get passwordRequirements =>
+      'Кемінде 8 таңба, тек сандардан тұрмауы керек, кең тараған құпиясөз болмауы керек';
+
+  @override
+  String get passwordTooShort => 'Құпиясөз кемінде 8 таңбадан тұруы керек';
+
+  @override
+  String get emailInvalid => 'Жарамды электрондық пошта мекенжайын енгізіңіз';
+
+  @override
   String get fullName => 'Толық аты-жөні';
 
   @override
@@ -813,6 +823,31 @@ class AppLocalizationsKk extends AppLocalizations {
       'Шеберлік сыныбы ұйымдастырушысы болуға өтініш беру';
 
   @override
+  String get continueWithCv => 'Түйіндемені жіберуге өту';
+
+  @override
+  String get submitCv => 'Түйіндемеңізді жіберіңіз';
+
+  @override
+  String get masterclassCvTitle => 'Өтінішіңізге түйіндемеңізді қосыңыз';
+
+  @override
+  String get masterclassCvInstructions =>
+      'Шеберлік сыныбының ұйымдастырушысы болу үшін түйіндеме қажет. Бір PDF файлын жүктеңіз; басқа форматтар қабылданбайды.';
+
+  @override
+  String get choosePdfCv => 'Түйіндемені таңдаңыз (тек PDF)';
+
+  @override
+  String get cvRequired => 'Түйіндемеңізді PDF форматында таңдаңыз.';
+
+  @override
+  String get cvPdfOnly => 'Тек PDF файлдары қабылданады.';
+
+  @override
+  String get submitApplication => 'Өтінішті жіберу';
+
+  @override
   String get masterclassRequestSent =>
       'Өтінішіңіз жіберілді. Жақын арада қарастырамыз.';
 
@@ -959,4 +994,39 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get credentialsHint => 'Дәрежесі мен Cертификаттары';
+
+  @override
+  String get forgotPassword => 'Құпиясөзді ұмыттыңыз ба?';
+
+  @override
+  String get forgotPasswordHint =>
+      'Электрондық поштаңызды енгізіңіз, біз құпиясөзді қалпына келтіруге арналған 6 таңбалы код жібереміз.';
+
+  @override
+  String get sendResetCode => 'Кодты жіберу';
+
+  @override
+  String get resetPassword => 'Құпиясөзді қалпына келтіру';
+
+  @override
+  String get newPassword => 'Жаңа құпиясөз';
+
+  @override
+  String get confirmNewPassword => 'Жаңа құпиясөзді растаңыз';
+
+  @override
+  String get passwordsDoNotMatch => 'Құпиясөздер сәйкес келмейді';
+
+  @override
+  String get passwordResetSuccessful =>
+      'Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.';
+
+  @override
+  String get backToSignIn => 'Кіру бетіне оралу';
+
+  @override
+  String get joinMeeting => 'Кездесуге қосылу';
+
+  @override
+  String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
 }

@@ -235,6 +235,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
                             ),
                             _PageControllerPill(
                               page: filter.page,
+                              totalPages: page.totalPages,
                               hasPrevious: page.hasPrevious,
                               hasNext: page.hasNext,
                               onPrevious: () => ref
@@ -242,6 +243,9 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
                                   .previousPage(),
                               onNext: () =>
                                   ref.read(filterProvider.notifier).nextPage(),
+                              onJumpToPage: (target) => ref
+                                  .read(filterProvider.notifier)
+                                  .setPage(target),
                             ),
                           ],
                         );
@@ -258,20 +262,47 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
 class _PageControllerPill extends StatelessWidget {
   const _PageControllerPill({
     required this.page,
+    required this.totalPages,
     required this.hasPrevious,
     required this.hasNext,
     required this.onPrevious,
     required this.onNext,
+    required this.onJumpToPage,
   });
 
   final int page;
+  final int totalPages;
   final bool hasPrevious;
   final bool hasNext;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
+  final ValueChanged<int> onJumpToPage;
+
+  List<int?> _buildPageItems() {
+    if (totalPages <= 7) {
+      return List.generate(totalPages, (i) => i + 1);
+    }
+    final keep = <int>{
+      1,
+      totalPages,
+      if (page - 1 >= 1) page - 1,
+      page,
+      if (page + 1 <= totalPages) page + 1,
+    }.toList()..sort();
+
+    final items = <int?>[];
+    for (var i = 0; i < keep.length; i++) {
+      if (i > 0 && keep[i] - keep[i - 1] > 1) {
+        items.add(null);
+      }
+      items.add(keep[i]);
+    }
+    return items;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final items = _buildPageItems();
     return SafeArea(
       top: false,
       child: Padding(
@@ -281,19 +312,69 @@ class _PageControllerPill extends StatelessWidget {
           AppSpacing.lg,
           AppSpacing.md,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.chevron_left),
-              onPressed: hasPrevious ? onPrevious : null,
-            ),
-            Text('$page', style: AppTypography.label),
-            IconButton(
-              icon: const Icon(Icons.chevron_right),
-              onPressed: hasNext ? onNext : null,
-            ),
-          ],
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.chevron_left),
+                onPressed: hasPrevious ? onPrevious : null,
+              ),
+              for (final item in items)
+                item == null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xs,
+                        ),
+                        child: Text('…', style: AppTypography.label),
+                      )
+                    : _PageNumber(
+                        number: item,
+                        isCurrent: item == page,
+                        onTap: () => onJumpToPage(item),
+                      ),
+              IconButton(
+                icon: const Icon(Icons.chevron_right),
+                onPressed: hasNext ? onNext : null,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PageNumber extends StatelessWidget {
+  const _PageNumber({
+    required this.number,
+    required this.isCurrent,
+    required this.onTap,
+  });
+
+  final int number;
+  final bool isCurrent;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: isCurrent ? null : onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 2),
+        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: isCurrent ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.button),
+        ),
+        child: Text(
+          '$number',
+          style: AppTypography.label.copyWith(
+            color: isCurrent ? Colors.white : AppColors.textPrimary,
+            fontWeight: isCurrent ? FontWeight.w600 : FontWeight.w400,
+          ),
         ),
       ),
     );

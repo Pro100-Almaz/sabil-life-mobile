@@ -70,13 +70,19 @@ class HttpProviderRepository implements ProviderRepository {
 
   @override
   Future<ProviderVerification> requestVerification(
-    UserRole providerType,
-  ) async {
+    UserRole providerType, {
+    String? cvPath,
+  }) async {
     try {
-      final response = await _dio.post(
-        '/provider/verify/',
-        data: {'provider_type': providerType.verifyPathSegment},
-      );
+      final data = FormData.fromMap({
+        'provider_type': providerType.verifyPathSegment,
+        if (cvPath != null)
+          'cv': await MultipartFile.fromFile(
+            cvPath,
+            filename: cvPath.split('/').last,
+          ),
+      });
+      final response = await _dio.post('/provider/verify/', data: data);
       return _parseVerification(
         Map<String, dynamic>.from(response.data as Map),
       );

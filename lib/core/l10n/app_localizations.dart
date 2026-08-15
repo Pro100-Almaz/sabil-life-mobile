@@ -670,6 +670,24 @@ abstract class AppLocalizations {
   /// **'Password'**
   String get password;
 
+  /// No description provided for @passwordRequirements.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 characters, not all numbers, not a common password'**
+  String get passwordRequirements;
+
+  /// No description provided for @passwordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordTooShort;
+
+  /// No description provided for @emailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address'**
+  String get emailInvalid;
+
   /// No description provided for @fullName.
   ///
   /// In en, this message translates to:
@@ -1594,6 +1612,54 @@ abstract class AppLocalizations {
   /// **'Request to become a masterclass provider'**
   String get requestMasterclassProvider;
 
+  /// No description provided for @continueWithCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to CV submission'**
+  String get continueWithCv;
+
+  /// No description provided for @submitCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit your CV'**
+  String get submitCv;
+
+  /// No description provided for @masterclassCvTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include your CV with your application'**
+  String get masterclassCvTitle;
+
+  /// No description provided for @masterclassCvInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'A CV is required to apply as a masterclass provider. Upload one PDF file; other file formats are not accepted.'**
+  String get masterclassCvInstructions;
+
+  /// No description provided for @choosePdfCv.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose CV (PDF only)'**
+  String get choosePdfCv;
+
+  /// No description provided for @cvRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your CV in PDF format.'**
+  String get cvRequired;
+
+  /// No description provided for @cvPdfOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only PDF files are accepted.'**
+  String get cvPdfOnly;
+
+  /// No description provided for @submitApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit application'**
+  String get submitApplication;
+
   /// No description provided for @masterclassRequestSent.
   ///
   /// In en, this message translates to:
@@ -1869,6 +1935,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Degrees & Certificates'**
   String get credentialsHint;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get forgotPassword;
+
+  /// No description provided for @forgotPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email and we’ll send you a 6-digit password reset code.'**
+  String get forgotPasswordHint;
+
+  /// No description provided for @sendResetCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send reset code'**
+  String get sendResetCode;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset password'**
+  String get resetPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New password'**
+  String get newPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm new password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordResetSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Your password has been reset. You can now sign in.'**
+  String get passwordResetSuccessful;
+
+  /// No description provided for @backToSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to sign in'**
+  String get backToSignIn;
+
+  /// No description provided for @joinMeeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Join meeting'**
+  String get joinMeeting;
+
+  /// No description provided for @meetingLinkError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the meeting link'**
+  String get meetingLinkError;
 }
 
 class _AppLocalizationsDelegate

@@ -836,22 +836,6 @@ class AppLocalizationsKk extends AppLocalizations {
       'Шеберлік сыныбының ұйымдастырушысы болу үшін түйіндеме қажет. Бір PDF файлын жүктеңіз; басқа форматтар қабылданбайды.';
 
   @override
-  String get cvAiScreeningDisclosure =>
-      'Түйіндемеңіз алдын ала бағалау үшін сыртқы ЖИ қызметімен өңделеді. Соңғы шешімді әрқашан әкімші қабылдайды.';
-
-  @override
-  String get cvAiScreeningInProgress =>
-      'Түйіндемеңіз ЖИ арқылы тексерілуде. Соңғы шешімді әкімші қабылдайды.';
-
-  @override
-  String get cvAiConsentLabel =>
-      'Мен ЖИ арқылы өңдеуді түсінемін және оған келісемін.';
-
-  @override
-  String get cvAiConsentRequired =>
-      'Түйіндемені жібермес бұрын ЖИ арқылы өңдеуге келісіңіз.';
-
-  @override
   String get choosePdfCv => 'Түйіндемені таңдаңыз (тек PDF)';
 
   @override

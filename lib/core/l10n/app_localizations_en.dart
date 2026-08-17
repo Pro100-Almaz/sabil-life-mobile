@@ -837,22 +837,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'A CV is required to apply as a masterclass provider. Upload one PDF file; other file formats are not accepted.';
 
   @override
-  String get cvAiScreeningDisclosure =>
-      'Your CV will be processed by an external AI service for an advisory screening. A human administrator always makes the final decision.';
-
-  @override
-  String get cvAiScreeningInProgress =>
-      'Your CV is being screened by AI. A human administrator will make the final decision.';
-
-  @override
-  String get cvAiConsentLabel =>
-      'I understand and agree to this AI processing.';
-
-  @override
-  String get cvAiConsentRequired =>
-      'Please agree to the AI processing before submitting your CV.';
-
-  @override
   String get choosePdfCv => 'Choose CV (PDF only)';
 
   @override

@@ -71,9 +71,7 @@ class _MasterclassGateScreenState extends ConsumerState<MasterclassGateScreen> {
             return _StatusBody(
               banner: VerificationBanner(
                 icon: Icons.hourglass_top,
-                message: verification.aiScreeningStatus.isInProgress
-                    ? l10n.cvAiScreeningInProgress
-                    : l10n.masterclassAccountUnderReview,
+                message: l10n.masterclassAccountUnderReview,
               ),
               actions: [
                 const CancelRequestButton(providerType: UserRole.masterclass),

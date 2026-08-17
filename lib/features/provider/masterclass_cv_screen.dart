@@ -22,7 +22,6 @@ class MasterclassCvScreen extends ConsumerStatefulWidget {
 class _MasterclassCvScreenState extends ConsumerState<MasterclassCvScreen> {
   PlatformFile? _cv;
   bool _submitting = false;
-  bool _aiConsent = false;
   String? _error;
 
   Future<void> _pickCv() async {
@@ -52,11 +51,6 @@ class _MasterclassCvScreenState extends ConsumerState<MasterclassCvScreen> {
       setState(() => _error = l10n.cvRequired);
       return;
     }
-    if (!_aiConsent) {
-      setState(() => _error = l10n.cvAiConsentRequired);
-      return;
-    }
-
     setState(() {
       _submitting = true;
       _error = null;
@@ -92,25 +86,6 @@ class _MasterclassCvScreenState extends ConsumerState<MasterclassCvScreen> {
             Text(l10n.masterclassCvTitle, style: AppTypography.h2),
             const SizedBox(height: AppSpacing.sm),
             Text(l10n.masterclassCvInstructions, style: AppTypography.body),
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              l10n.cvAiScreeningDisclosure,
-              style: AppTypography.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            CheckboxListTile(
-              value: _aiConsent,
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text(l10n.cvAiConsentLabel, style: AppTypography.body),
-              onChanged: _submitting
-                  ? null
-                  : (value) => setState(() {
-                      _aiConsent = value ?? false;
-                      _error = null;
-                    }),
-            ),
             const SizedBox(height: AppSpacing.xl),
             InkWell(
               onTap: _submitting ? null : _pickCv,

@@ -1051,4 +1051,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Couldn’t open the meeting link';
+
+  @override
+  String get linkedinUrl => 'LinkedIn profile URL';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Optional — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl => 'Enter a valid LinkedIn profile URL.';
+
+  @override
+  String get viewLinkedinProfile => 'View LinkedIn profile';
+
+  @override
+  String get linkedinOpenError => 'Couldn’t open the LinkedIn profile.';
 }

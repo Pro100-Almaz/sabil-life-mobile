@@ -1049,4 +1049,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Не удалось открыть ссылку на встречу';
+
+  @override
+  String get linkedinUrl => 'Ссылка на профиль LinkedIn';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Необязательно — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl =>
+      'Введите корректную ссылку на профиль LinkedIn.';
+
+  @override
+  String get viewLinkedinProfile => 'Открыть профиль LinkedIn';
+
+  @override
+  String get linkedinOpenError => 'Не удалось открыть профиль LinkedIn.';
 }

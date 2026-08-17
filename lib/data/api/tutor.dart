@@ -96,6 +96,7 @@ class HttpTutorRepository implements TutorRepository {
       reviewCount: ListingParser.toInt(data['review_count']),
       yearsExperience: ListingParser.toInt(data['years_experience']),
       credentials: (data['credentials'] ?? '') as String,
+      linkedinUrl: (data['linkedin_url'] ?? '') as String,
       languages: ListingParser.toStringList(data['languages']),
       trialAvailable: (data['trial_available'] ?? false) as bool,
       bio: (data['bio'] ?? '') as String,

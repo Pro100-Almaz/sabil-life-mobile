@@ -325,5 +325,10 @@
   "currentPassword": "Ағымдағы құпиясөз",
   "passwordChangedSignInAgain": "Құпиясөз өзгертілді. Қайта кіріңіз.",
   "joinMeeting": "Кездесуге қосылу",
-  "meetingLinkError": "Кездесу сілтемесін ашу мүмкін болмады"
+  "meetingLinkError": "Кездесу сілтемесін ашу мүмкін болмады",
+  "linkedinUrl": "LinkedIn профилінің сілтемесі",
+  "linkedinUrlOptional": "Міндетті емес — https://www.linkedin.com/in/your-profile",
+  "invalidLinkedinUrl": "Жарамды LinkedIn профиль сілтемесін енгізіңіз.",
+  "viewLinkedinProfile": "LinkedIn профилін ашу",
+  "linkedinOpenError": "LinkedIn профилін ашу мүмкін болмады."
 }

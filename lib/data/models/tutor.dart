@@ -31,6 +31,7 @@ class Tutor {
     required this.reviewCount,
     required this.yearsExperience,
     required this.credentials,
+    this.linkedinUrl = '',
     required this.languages,
     required this.trialAvailable,
     required this.bio,
@@ -53,6 +54,7 @@ class Tutor {
 
   /// Mock content (e.g. "MSc Mathematics") — not localized, like venue names.
   final String credentials;
+  final String linkedinUrl;
 
   /// Display codes, e.g. ["EN", "AR"].
   final List<String> languages;

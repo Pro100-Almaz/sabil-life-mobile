@@ -28,6 +28,8 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen>
     with TickerProviderStateMixin {
+  static const double _listingMarkerMinZoom = 11.75;
+
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
   LatLng pickLocaton = mockHome;
@@ -35,6 +37,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
   String? _selectedId;
   bool _showCategory = false;
   bool _showBurger = true;
+  bool _showListingMarkers = false;
 
   /// Listings behind a tapped cluster, shown as a swipeable carousel.
   List<Listing> _clusterListings = const [];
@@ -47,6 +50,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
   void initState() {
     super.initState();
     _selectedId = widget.focusListingId;
+    _showListingMarkers = widget.focusListingId != null;
   }
 
   @override
@@ -187,6 +191,18 @@ class _MapScreenState extends ConsumerState<MapScreen>
             options: MapOptions(
               initialCenter: initialCenter,
               initialZoom: focused != null ? 14 : 11.5,
+              onPositionChanged: (camera, _) {
+                final shouldShow = camera.zoom > _listingMarkerMinZoom;
+                if (shouldShow == _showListingMarkers) return;
+                setState(() {
+                  _showListingMarkers = shouldShow;
+                  if (!shouldShow) {
+                    _selectedId = null;
+                    _clusterListings = const [];
+                    _carouselIndex = 0;
+                  }
+                });
+              },
               onTap: (tapPosition, point) {
                 setState(() {
                   _selectedId = null;
@@ -251,63 +267,54 @@ class _MapScreenState extends ConsumerState<MapScreen>
                   ),
                 ],
               ),
-              // Listing markers cluster together when zoomed out.
-              MarkerClusterLayerWidget(
-                options: MarkerClusterLayerOptions(
-                  rotate: true,
-                  maxClusterRadius: 45,
-                  size: const Size(44, 44),
-                  disableClusteringAtZoom: 16,
-                  padding: const EdgeInsets.all(50),
-                  zoomToBoundsOnClick: false,
-                  onClusterTap: (node) => _onClusterTapped(node, listings),
-                  markers: [
-                    for (final listing in listings)
-                      Marker(
-                        key: ValueKey(listing.id),
-                        point: LatLng(listing.lat, listing.lng),
-                        width: 40,
-                        height: 40,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedId = listing.id;
-                              _clusterListings = const [];
-                              _carouselIndex = 0;
-                            });
-                            _mapController.move(
-                              LatLng(listing.lat, listing.lng),
-                              13.5,
-                            );
-                          },
-                          child: Icon(
-                            Icons.place,
-                            size: listing.id == _selectedId ? 44 : 36,
-                            color: listing.id == _selectedId
-                                ? AppColors.primaryPressed
-                                : AppColors.primary,
+              // Keep the city-level view clean. Listing markers appear only
+              // once the user has zoomed in far enough to distinguish them.
+              if (_showListingMarkers)
+                MarkerClusterLayerWidget(
+                  options: MarkerClusterLayerOptions(
+                    rotate: true,
+                    maxClusterRadius: 45,
+                    size: const Size(44, 44),
+                    disableClusteringAtZoom: 16,
+                    padding: const EdgeInsets.all(50),
+                    zoomToBoundsOnClick: false,
+                    onClusterTap: (node) => _onClusterTapped(node, listings),
+                    markers: [
+                      for (final listing in listings)
+                        Marker(
+                          key: ValueKey(listing.id),
+                          point: LatLng(listing.lat, listing.lng),
+                          width: 40,
+                          height: 40,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedId = listing.id;
+                                _clusterListings = const [];
+                                _carouselIndex = 0;
+                              });
+                              _mapController.move(
+                                LatLng(listing.lat, listing.lng),
+                                13.5,
+                              );
+                            },
+                            child: Icon(
+                              Icons.place,
+                              size: listing.id == _selectedId ? 44 : 36,
+                              color: listing.id == _selectedId
+                                  ? AppColors.primaryPressed
+                                  : AppColors.primary,
+                            ),
                           ),
                         ),
-                      ),
-                  ],
-                  builder: (context, clusterMarkers) => Container(
-                    decoration: const BoxDecoration(
+                    ],
+                    builder: (context, clusterMarkers) => const Icon(
+                      Icons.place,
+                      size: 36,
                       color: AppColors.primary,
-                      shape: BoxShape.circle,
-                      boxShadow: AppShadow.soft,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${clusterMarkers.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
           SafeArea(

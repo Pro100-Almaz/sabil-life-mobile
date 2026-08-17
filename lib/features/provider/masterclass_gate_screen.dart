@@ -9,6 +9,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/auth_user.dart';
+import '../../data/models/provider_verification.dart';
 import '../../shared/widgets/app_button.dart';
 import 'widgets/verification_banner.dart';
 

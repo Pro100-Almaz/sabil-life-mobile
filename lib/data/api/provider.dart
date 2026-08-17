@@ -76,6 +76,7 @@ class HttpProviderRepository implements ProviderRepository {
     try {
       final data = FormData.fromMap({
         'provider_type': providerType.verifyPathSegment,
+        if (providerType == UserRole.masterclass) 'ai_processing_consent': true,
         if (cvPath != null)
           'cv': await MultipartFile.fromFile(
             cvPath,
@@ -116,6 +117,9 @@ class HttpProviderRepository implements ProviderRepository {
       providerType: _parseRole(d['provider_type'] as String?),
       status: VerificationStatusX.fromBackend(d['status'] as String?),
       comment: d['comment'] as String? ?? '',
+      aiScreeningStatus: AiScreeningStatusX.fromBackend(
+        d['ai_screening_status'] as String?,
+      ),
       createdAt: _parseDate(d['created_at']),
       updatedAt: _parseDate(d['updated_at']),
     );

@@ -1025,6 +1025,16 @@ class AppLocalizationsKk extends AppLocalizations {
   String get backToSignIn => 'Кіру бетіне оралу';
 
   @override
+  String get changePassword => 'Құпиясөзді өзгерту';
+
+  @override
+  String get currentPassword => 'Ағымдағы құпиясөз';
+
+  @override
+  String get passwordChangedSignInAgain =>
+      'Құпиясөз өзгертілді. Қайта кіріңіз.';
+
+  @override
   String get joinMeeting => 'Кездесуге қосылу';
 
   @override

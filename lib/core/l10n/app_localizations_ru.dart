@@ -1023,6 +1023,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backToSignIn => 'Вернуться ко входу';
 
   @override
+  String get changePassword => 'Изменить пароль';
+
+  @override
+  String get currentPassword => 'Текущий пароль';
+
+  @override
+  String get passwordChangedSignInAgain => 'Пароль изменён. Войдите снова.';
+
+  @override
   String get joinMeeting => 'Присоединиться к встрече';
 
   @override

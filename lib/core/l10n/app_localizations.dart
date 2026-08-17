@@ -1990,6 +1990,24 @@ abstract class AppLocalizations {
   /// **'Back to sign in'**
   String get backToSignIn;
 
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @passwordChangedSignInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed. Please sign in again.'**
+  String get passwordChangedSignInAgain;
+
   /// No description provided for @joinMeeting.
   ///
   /// In en, this message translates to:

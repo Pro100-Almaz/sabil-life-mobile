@@ -316,6 +316,9 @@
   "passwordsDoNotMatch": "Құпиясөздер сәйкес келмейді",
   "passwordResetSuccessful": "Құпиясөз өзгертілді. Енді жүйеге кіре аласыз.",
   "backToSignIn": "Кіру бетіне оралу",
+  "changePassword": "Құпиясөзді өзгерту",
+  "currentPassword": "Ағымдағы құпиясөз",
+  "passwordChangedSignInAgain": "Құпиясөз өзгертілді. Қайта кіріңіз.",
   "joinMeeting": "Кездесуге қосылу",
   "meetingLinkError": "Кездесу сілтемесін ашу мүмкін болмады"
 }

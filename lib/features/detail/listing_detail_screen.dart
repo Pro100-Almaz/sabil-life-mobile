@@ -195,68 +195,87 @@ class _DetailBody extends ConsumerWidget {
                   ),
                   Text(l10n.details, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.md),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(AppRadius.card),
-                    child: SizedBox(
-                      height: 180,
-                      child: FlutterMap(
-                        options: MapOptions(
-                          initialCenter: LatLng(listing.lat, listing.lng),
-                          initialZoom: 14,
-                          interactionOptions: const InteractionOptions(
-                            flags: InteractiveFlag.none,
+                  if (listing.isOnline) ...[
+                    AppButton(
+                      label: l10n.joinMeeting,
+                      icon: Icons.videocam_outlined,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final opened = await openMeetingLink(
+                          listing.meetingUrl,
+                        );
+                        if (!opened) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.meetingLinkError)),
+                          );
+                        }
+                      },
+                    ),
+                  ] else ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.card),
+                      child: SizedBox(
+                        height: 180,
+                        child: FlutterMap(
+                          options: MapOptions(
+                            initialCenter: LatLng(listing.lat, listing.lng),
+                            initialZoom: 14,
+                            interactionOptions: const InteractionOptions(
+                              flags: InteractiveFlag.none,
+                            ),
                           ),
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate: mapTileUrlTemplate,
-                            userAgentPackageName: 'io.sabilLife.app',
-                          ),
-                          MarkerLayer(
-                            markers: [
-                              Marker(
-                                point: LatLng(listing.lat, listing.lng),
-                                width: 36,
-                                height: 36,
-                                child: const Icon(
-                                  Icons.place,
-                                  size: 36,
-                                  color: AppColors.primary,
+                          children: [
+                            TileLayer(
+                              urlTemplate: mapTileUrlTemplate,
+                              userAgentPackageName: 'io.sabilLife.app',
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  point: LatLng(listing.lat, listing.lng),
+                                  width: 36,
+                                  height: 36,
+                                  child: const Icon(
+                                    Icons.place,
+                                    size: 36,
+                                    color: AppColors.primary,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppButton(
-                    label: l10n.viewOnMap,
-                    variant: AppButtonVariant.outlined,
-                    icon: Icons.map_outlined,
-                    expanded: true,
-                    onPressed: () => context.go('/map?listing=${listing.id}'),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppButton(
-                    label: l10n.directions,
-                    variant: AppButtonVariant.outlined,
-                    icon: Icons.directions_outlined,
-                    expanded: true,
-                    onPressed: () async {
-                      final messenger = ScaffoldMessenger.of(context);
-                      final ok = await openDirections(
-                        lat: listing.lat,
-                        lng: listing.lng,
-                      );
-                      if (!ok) {
-                        messenger.showSnackBar(
-                          SnackBar(content: Text(l10n.directionsError)),
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.viewOnMap,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.map_outlined,
+                      expanded: true,
+                      onPressed: () => context.go('/map?listing=${listing.id}'),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.directions,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.directions_outlined,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final ok = await openDirections(
+                          lat: listing.lat,
+                          lng: listing.lng,
                         );
-                      }
-                    },
-                  ),
+                        if (!ok) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.directionsError)),
+                          );
+                        }
+                      },
+                    ),
+                  ],
                   if (listing.category == CategoryType.masterclasses &&
                       listing.registrationUrl.trim().isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.md),

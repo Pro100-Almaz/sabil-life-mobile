@@ -85,71 +85,37 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextFormField(
+                _PasswordField(
                   controller: _oldPassword,
+                  label: l10n.currentPassword,
+                  hidden: _oldHidden,
                   enabled: !_saving,
-                  obscureText: _oldHidden,
-                  textInputAction: TextInputAction.next,
-                  autofillHints: const [AutofillHints.password],
-                  decoration: InputDecoration(
-                    labelText: l10n.currentPassword,
-                    suffixIcon: IconButton(
-                      onPressed: () => setState(() => _oldHidden = !_oldHidden),
-                      icon: Icon(
-                        _oldHidden
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                    ),
-                  ),
+                  onToggle: () => setState(() => _oldHidden = !_oldHidden),
                   validator: (value) => value == null || value.isEmpty
                       ? l10n.fieldRequired
                       : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
-                TextFormField(
+                _PasswordField(
                   controller: _newPassword,
+                  label: l10n.newPassword,
+                  hidden: _newHidden,
                   enabled: !_saving,
-                  obscureText: _newHidden,
-                  textInputAction: TextInputAction.next,
-                  autofillHints: const [AutofillHints.newPassword],
-                  decoration: InputDecoration(
-                    labelText: l10n.newPassword,
-                    helperText: l10n.passwordRequirements,
-                    helperMaxLines: 2,
-                    suffixIcon: IconButton(
-                      onPressed: () => setState(() => _newHidden = !_newHidden),
-                      icon: Icon(
-                        _newHidden
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                    ),
-                  ),
+                  helperText: l10n.passwordRequirements,
+                  onToggle: () => setState(() => _newHidden = !_newHidden),
                   validator: (value) => value == null || value.length < 8
                       ? l10n.passwordTooShort
                       : null,
                 ),
                 const SizedBox(height: AppSpacing.md),
-                TextFormField(
+                _PasswordField(
                   controller: _newPassword2,
+                  label: l10n.confirmNewPassword,
+                  hidden: _new2Hidden,
                   enabled: !_saving,
-                  obscureText: _new2Hidden,
                   textInputAction: TextInputAction.done,
-                  autofillHints: const [AutofillHints.newPassword],
-                  onFieldSubmitted: (_) => _submit(),
-                  decoration: InputDecoration(
-                    labelText: l10n.confirmNewPassword,
-                    suffixIcon: IconButton(
-                      onPressed: () =>
-                          setState(() => _new2Hidden = !_new2Hidden),
-                      icon: Icon(
-                        _new2Hidden
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                      ),
-                    ),
-                  ),
+                  onSubmitted: (_) => _submit(),
+                  onToggle: () => setState(() => _new2Hidden = !_new2Hidden),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return l10n.fieldRequired;
@@ -183,6 +149,54 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _PasswordField extends StatelessWidget {
+  const _PasswordField({
+    required this.controller,
+    required this.label,
+    required this.hidden,
+    required this.enabled,
+    required this.onToggle,
+    required this.validator,
+    this.helperText,
+    this.textInputAction = TextInputAction.next,
+    this.onSubmitted,
+  });
+
+  final TextEditingController controller;
+  final String label;
+  final bool hidden;
+  final bool enabled;
+  final VoidCallback onToggle;
+  final String? Function(String?) validator;
+  final String? helperText;
+  final TextInputAction textInputAction;
+  final ValueChanged<String>? onSubmitted;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      enabled: enabled,
+      obscureText: hidden,
+      textInputAction: textInputAction,
+      autofillHints: const [AutofillHints.password],
+      onFieldSubmitted: onSubmitted,
+      decoration: InputDecoration(
+        labelText: label,
+        helperText: helperText,
+        helperMaxLines: 2,
+        suffixIcon: IconButton(
+          onPressed: onToggle,
+          icon: Icon(
+            hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+          ),
+        ),
+      ),
+      validator: validator,
     );
   }
 }

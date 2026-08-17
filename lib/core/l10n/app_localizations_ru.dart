@@ -823,6 +823,31 @@ class AppLocalizationsRu extends AppLocalizations {
       'Подать заявку на организатора мастер-классов';
 
   @override
+  String get continueWithCv => 'Перейти к отправке резюме';
+
+  @override
+  String get submitCv => 'Отправьте ваше резюме';
+
+  @override
+  String get masterclassCvTitle => 'Приложите резюме к заявке';
+
+  @override
+  String get masterclassCvInstructions =>
+      'Для заявки на роль организатора мастер-классов требуется резюме. Загрузите один PDF-файл; другие форматы не принимаются.';
+
+  @override
+  String get choosePdfCv => 'Выбрать резюме (только PDF)';
+
+  @override
+  String get cvRequired => 'Выберите резюме в формате PDF.';
+
+  @override
+  String get cvPdfOnly => 'Принимаются только PDF-файлы.';
+
+  @override
+  String get submitApplication => 'Отправить заявку';
+
+  @override
   String get masterclassRequestSent =>
       'Ваша заявка отправлена. Мы рассмотрим её в ближайшее время.';
 
@@ -1009,6 +1034,15 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get registerForMasterclass => 'Зарегистрироваться';
+
+  @override
+  String get changePassword => 'Изменить пароль';
+
+  @override
+  String get currentPassword => 'Текущий пароль';
+
+  @override
+  String get passwordChangedSignInAgain => 'Пароль изменён. Войдите снова.';
 
   @override
   String get joinMeeting => 'Присоединиться к встрече';

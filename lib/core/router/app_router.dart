@@ -24,12 +24,14 @@ import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_clients_screen.dart';
 import '../../features/provider/listing_editor_screen.dart';
 import '../../features/provider/masterclass_gate_screen.dart';
+import '../../features/provider/masterclass_cv_screen.dart';
 import '../../features/provider/my_listings_screen.dart';
 import '../../features/provider/provider_settings_screen.dart';
 import '../../features/provider/provider_shell.dart';
 import '../../features/provider/tutor_gate_screen.dart';
 import '../../features/provider/tutor_profile_edit_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/settings/change_password_screen.dart';
 import '../../features/shell/shell_screen.dart';
 import '../../features/tutoring/tutoring_screen.dart';
 import '../state/auth_provider.dart';
@@ -186,6 +188,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       }
 
+      if (location == '/change-password' && !auth.isAuthenticated) {
+        return '/login';
+      }
+
       if (auth.isAuthenticated && _isAuthArea(location)) {
         return '/';
       }
@@ -207,6 +213,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/forgot-password',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/change-password',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
         path: '/notifications',
@@ -329,6 +340,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/switch-to-masterclass',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const MasterclassGateScreen(),
+      ),
+      GoRoute(
+        path: '/masterclass-cv',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const MasterclassCvScreen(),
       ),
       GoRoute(
         path: '/tutor-profile-edit',

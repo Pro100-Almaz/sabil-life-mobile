@@ -49,7 +49,10 @@ abstract class ProviderRepository {
   Future<List<ProviderVerification>> myVerifications();
 
   /// Submit a verification request for [providerType] (`TUTOR`/`MASTERCLASS`).
-  Future<ProviderVerification> requestVerification(UserRole providerType);
+  Future<ProviderVerification> requestVerification(
+    UserRole providerType, {
+    String? cvPath,
+  });
 
   /// Cancel a pending/rejected verification request for [providerType].
   Future<ProviderVerification> cancelVerification(UserRole providerType);

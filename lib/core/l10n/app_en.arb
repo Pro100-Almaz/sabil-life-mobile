@@ -332,8 +332,7 @@
   "fieldRegistrationUrl": "Registration link",
   "fieldRegistrationUrlOptional": "Optional — users will open this link to register",
   "invalidUrl": "Enter a valid URL",
-  "registerForMasterclass": "Register"
-  "backToSignIn": "Back to sign in",
+  "registerForMasterclass": "Register",
   "joinMeeting": "Join meeting",
   "meetingLinkError": "Couldn’t open the meeting link"
 }

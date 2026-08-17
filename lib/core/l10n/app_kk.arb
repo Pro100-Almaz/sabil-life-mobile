@@ -312,8 +312,7 @@
   "fieldRegistrationUrl": "Тіркелу сілтемесі",
   "fieldRegistrationUrlOptional": "Міндетті емес — пайдаланушылар тіркелу үшін осы сілтемені ашады",
   "invalidUrl": "Жарамды сілтемені енгізіңіз",
-  "registerForMasterclass": "Тіркелу"
-  "backToSignIn": "Кіру бетіне оралу",
+  "registerForMasterclass": "Тіркелу",
   "joinMeeting": "Кездесуге қосылу",
   "meetingLinkError": "Кездесу сілтемесін ашу мүмкін болмады"
 }

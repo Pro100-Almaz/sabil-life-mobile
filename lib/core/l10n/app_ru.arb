@@ -312,8 +312,7 @@
   "fieldRegistrationUrl": "Ссылка для регистрации",
   "fieldRegistrationUrlOptional": "Необязательно — пользователи перейдут по этой ссылке для регистрации",
   "invalidUrl": "Введите корректную ссылку",
-  "registerForMasterclass": "Зарегистрироваться"
-  "backToSignIn": "Вернуться ко входу",
+  "registerForMasterclass": "Зарегистрироваться",
   "joinMeeting": "Присоединиться к встрече",
   "meetingLinkError": "Не удалось открыть ссылку на встречу"
 }

@@ -257,6 +257,34 @@ class _DetailBody extends ConsumerWidget {
                       }
                     },
                   ),
+                  if (listing.category == CategoryType.masterclasses &&
+                      listing.registrationUrl.trim().isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.registerForMasterclass,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.open_in_new,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final uri = Uri.tryParse(
+                          listing.registrationUrl.trim(),
+                        );
+                        final opened =
+                            uri != null &&
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+
+                        if (!opened) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.invalidUrl)),
+                          );
+                        }
+                      },
+                    ),
+                  ],
 
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),

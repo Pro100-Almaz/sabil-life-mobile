@@ -135,6 +135,7 @@ class HttpProviderRepository implements ProviderRepository {
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
+    ProviderProfileState? status,
   }) {
     final payload = <String, dynamic>{};
     if (displayName != null) payload['display_name'] = displayName;
@@ -150,6 +151,7 @@ class HttpProviderRepository implements ProviderRepository {
     if (avatarUrl != null) payload['avatar_url'] = avatarUrl;
     if (trialAvailable != null) payload['trial_available'] = trialAvailable;
     if (city != null) payload['city'] = city;
+    if (status != null) payload['status'] = status.backendKey;
     return payload;
   }
 
@@ -210,6 +212,7 @@ class HttpProviderRepository implements ProviderRepository {
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
+    ProviderProfileState? status,
   }) async {
     final payload = _buildTutorPayload(
       displayName: displayName,
@@ -225,6 +228,7 @@ class HttpProviderRepository implements ProviderRepository {
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
       city: city,
+      status: status,
     );
     try {
       final response = await _dio.patch(
@@ -261,8 +265,16 @@ class HttpProviderRepository implements ProviderRepository {
       city: d['city'] as String? ?? '',
       createdAt: _parseDate(d['created_at']),
       updatedAt: _parseDate(d['updated_at']),
+      status: _parseState(d['status'] as String?),
     );
   }
+
+  ProviderProfileState _parseState(String? raw) => switch (raw?.toUpperCase()) {
+    'ACTIVE' => ProviderProfileState.active,
+    'PAUSED' => ProviderProfileState.paused,
+    'DELETED' => ProviderProfileState.deleted,
+    _ => ProviderProfileState.active,
+  };
 
   UserRole _parseRole(String? raw) => switch (raw?.toUpperCase()) {
     'TUTOR' => UserRole.tutor,

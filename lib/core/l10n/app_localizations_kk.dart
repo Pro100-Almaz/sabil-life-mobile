@@ -1029,4 +1029,30 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
+
+  @override
+  String get pauseProfile => 'Сабақтарды тоқтату';
+
+  @override
+  String get activateProfile => 'Сабақтарды жалғастыру';
+
+  @override
+  String get activateAlert => 'Профайлды қосу?';
+
+  @override
+  String get activateAlertLong =>
+      'Сіздің профиліңіз клиенттерге көрінеді және сізге жаңа сұраныстар келе бастайды.';
+
+  @override
+  String get pauseAlert => 'Профайлды тоқтату?';
+
+  @override
+  String get pauseAlertLong =>
+      'Сіздің профиліңіз енді клиенттерге көрінбейді және жаңа сұраныстар келмейді.';
+
+  @override
+  String get profileActivated => 'Сіздің репетиторлық профиліңіз іске қосылды.';
+
+  @override
+  String get profilePaused => 'Сіздің репетиторлық профиліңіз тоқтатылды.';
 }

@@ -83,6 +83,8 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
 
   bool _saving = false;
   bool _showErrors = false;
+  bool _profilePaused = false;
+  bool _changingProfileStatus = false;
 
   /// Rebuild so inline errors clear as the user fills required fields.
   void _onRequiredChanged() {
@@ -113,7 +115,10 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     _yearsCtrl.addListener(_onRequiredChanged);
 
     final p = widget.existingProfile;
-    if (p != null) _prefill(p);
+    if (p != null) {
+      _profilePaused = p.status == ProviderProfileState.paused;
+      _prefill(p);
+    }
   }
 
   void _prefill(ProviderProfile p) {
@@ -294,6 +299,61 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  Future<void> _changeTutorStatus() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _changingProfileStatus = true);
+    final nextStatus = _profilePaused
+        ? ProviderProfileState.active
+        : ProviderProfileState.paused;
+    try {
+      final repo = ref.read(providerRepositoryProvider);
+      await repo.updateTutorDetail(status: nextStatus);
+      if (!mounted) return;
+
+      setState(
+        () => _profilePaused = nextStatus == ProviderProfileState.paused,
+      );
+      ref.invalidate(tutorDetailForUserProvider(widget.userId));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            _profilePaused ? l10n.profilePaused : l10n.profileActivated,
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      if (mounted) setState(() => _changingProfileStatus = false);
+    }
+  }
+
+  Future<bool> _showStatusChangeWarning({required bool activate}) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(activate ? l10n.activateAlert : l10n.pauseAlert),
+        content: Text(activate ? l10n.activateAlertLong : l10n.pauseAlertLong),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(activate ? l10n.activateProfile : l10n.pauseProfile),
+          ),
+        ],
+      ),
+    );
+
+    return confirmed ?? false;
   }
 
   /// Section header for a chip group; turns coral when the group is required
@@ -635,6 +695,19 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           ),
         ],
         const SizedBox(height: AppSpacing.lg),
+
+        AppButton(
+          label: _profilePaused ? l10n.activateProfile : l10n.pauseProfile,
+          expanded: true,
+          onPressed: () async {
+            if (_changingProfileStatus) return;
+            final confirmed = await _showStatusChangeWarning(
+              activate: _profilePaused,
+            );
+            if (!confirmed) return;
+            await _changeTutorStatus();
+          },
+        ),
       ],
     );
   }

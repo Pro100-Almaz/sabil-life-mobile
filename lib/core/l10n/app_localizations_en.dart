@@ -1028,4 +1028,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Couldn’t open the meeting link';
+
+  @override
+  String get pauseProfile => 'Stop tutoring';
+
+  @override
+  String get activateProfile => 'Start tutoring';
+
+  @override
+  String get activateAlert => 'Activate Profile?';
+
+  @override
+  String get activateAlertLong =>
+      'Your profile will be visible to clients and you will start recieving new inquiries.';
+
+  @override
+  String get pauseAlert => 'Pause Teaching?';
+
+  @override
+  String get pauseAlertLong =>
+      'Your profile will no longer appear to clients and you will not receive new inquiries.';
+
+  @override
+  String get profileActivated => 'Your tutor profile has been activated.';
+
+  @override
+  String get profilePaused => 'Your tutor profile has been paused.';
 }

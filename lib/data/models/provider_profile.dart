@@ -1,5 +1,17 @@
 import 'auth_user.dart';
 
+enum ProviderProfileState {
+  active,
+  paused,
+  deleted;
+
+  String get backendKey => switch (this) {
+    ProviderProfileState.active => 'ACTIVE',
+    ProviderProfileState.paused => 'PAUSED',
+    ProviderProfileState.deleted => 'DELETED',
+  };
+}
+
 class ProviderProfile {
   const ProviderProfile({
     required this.userId,
@@ -22,6 +34,7 @@ class ProviderProfile {
     this.city = '',
     this.createdAt,
     this.updatedAt,
+    this.status = ProviderProfileState.active,
   });
 
   final int userId;
@@ -41,6 +54,7 @@ class ProviderProfile {
   final String credentials;
   final String avatarUrl;
   final bool trialAvailable;
+  final ProviderProfileState status;
 
   /// Canonical city value, e.g. `"Doha, QA"` (English name + country code).
   final String city;
@@ -68,6 +82,7 @@ class ProviderProfile {
     String? city,
     DateTime? Function()? createdAt,
     DateTime? Function()? updatedAt,
+    ProviderProfileState? status,
   }) {
     return ProviderProfile(
       userId: userId ?? this.userId,
@@ -92,6 +107,7 @@ class ProviderProfile {
       city: city ?? this.city,
       createdAt: createdAt != null ? createdAt() : this.createdAt,
       updatedAt: updatedAt != null ? updatedAt() : this.updatedAt,
+      status: status ?? this.status,
     );
   }
 }

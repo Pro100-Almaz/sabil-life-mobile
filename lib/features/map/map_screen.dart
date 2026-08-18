@@ -155,7 +155,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final asyncListings = ref.watch(filteredListingsProvider);
+    final mapFilter = ref.watch(listingsFilterProvider);
+    final asyncListings = ref.watch(allCatalogListingsProvider(mapFilter));
     final selectedCategory = ref.watch(
       filterProvider.select((f) => f.selectedCategory),
     );
@@ -178,8 +179,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
         }
       });
     }
-    final listings = (asyncListings.valueOrNull?.results ?? const <Listing>[])
-        .where((listing) => listing.lat != 0 || listing.lng != 0)
+    final listings = (asyncListings.valueOrNull ?? const <Listing>[])
+        .where((listing) => listing.lat != 0 && listing.lng != 0)
         .toList();
     final showCarousel = _clusterListings.isNotEmpty;
 

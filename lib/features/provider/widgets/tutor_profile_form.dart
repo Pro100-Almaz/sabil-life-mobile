@@ -323,6 +323,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           ),
         ),
       );
+      if (widget.popOnSave && context.canPop()) context.pop();
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -698,6 +699,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
 
         AppButton(
           label: _profilePaused ? l10n.activateProfile : l10n.pauseProfile,
+          variant: AppButtonVariant.outlined,
           expanded: true,
           onPressed: () async {
             if (_changingProfileStatus) return;
@@ -708,6 +710,9 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
             await _changeTutorStatus();
           },
         ),
+
+        const SizedBox(height: AppSpacing.lg),
+        const SizedBox(height: 40)
       ],
     );
   }

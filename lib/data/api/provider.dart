@@ -76,6 +76,7 @@ class HttpProviderRepository implements ProviderRepository {
     try {
       final data = FormData.fromMap({
         'provider_type': providerType.verifyPathSegment,
+        if (providerType == UserRole.masterclass) 'ai_processing_consent': true,
         if (cvPath != null)
           'cv': await MultipartFile.fromFile(
             cvPath,
@@ -116,6 +117,9 @@ class HttpProviderRepository implements ProviderRepository {
       providerType: _parseRole(d['provider_type'] as String?),
       status: VerificationStatusX.fromBackend(d['status'] as String?),
       comment: d['comment'] as String? ?? '',
+      aiScreeningStatus: AiScreeningStatusX.fromBackend(
+        d['ai_screening_status'] as String?,
+      ),
       createdAt: _parseDate(d['created_at']),
       updatedAt: _parseDate(d['updated_at']),
     );
@@ -132,6 +136,7 @@ class HttpProviderRepository implements ProviderRepository {
     List<String>? languages,
     int? yearsExperience,
     String? credentials,
+    String? linkedinUrl,
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
@@ -148,6 +153,7 @@ class HttpProviderRepository implements ProviderRepository {
     if (languages != null) payload['languages'] = languages;
     if (yearsExperience != null) payload['years_experience'] = yearsExperience;
     if (credentials != null) payload['credentials'] = credentials;
+    if (linkedinUrl != null) payload['linkedin_url'] = linkedinUrl;
     if (avatarUrl != null) payload['avatar_url'] = avatarUrl;
     if (trialAvailable != null) payload['trial_available'] = trialAvailable;
     if (city != null) payload['city'] = city;
@@ -167,6 +173,7 @@ class HttpProviderRepository implements ProviderRepository {
     List<String>? languages,
     int? yearsExperience,
     String? credentials,
+    String? linkedinUrl,
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
@@ -182,6 +189,7 @@ class HttpProviderRepository implements ProviderRepository {
       languages: languages,
       yearsExperience: yearsExperience,
       credentials: credentials,
+      linkedinUrl: linkedinUrl,
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
       city: city,
@@ -209,6 +217,7 @@ class HttpProviderRepository implements ProviderRepository {
     List<String>? languages,
     int? yearsExperience,
     String? credentials,
+    String? linkedinUrl,
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
@@ -225,6 +234,7 @@ class HttpProviderRepository implements ProviderRepository {
       languages: languages,
       yearsExperience: yearsExperience,
       credentials: credentials,
+      linkedinUrl: linkedinUrl,
       avatarUrl: avatarUrl,
       trialAvailable: trialAvailable,
       city: city,
@@ -260,6 +270,7 @@ class HttpProviderRepository implements ProviderRepository {
       languages: List<String>.from((d['languages'] as List?) ?? []),
       yearsExperience: (d['years_experience'] as num?)?.toInt() ?? 0,
       credentials: d['credentials'] as String? ?? '',
+      linkedinUrl: d['linkedin_url'] as String? ?? '',
       avatarUrl: d['avatar_url'] as String? ?? '',
       trialAvailable: d['trial_available'] as bool? ?? false,
       city: d['city'] as String? ?? '',
@@ -521,6 +532,7 @@ class HttpProviderRepository implements ProviderRepository {
       'is_featured': listing.isFeatured,
       'is_online': listing.isOnline,
       'meeting_url': listing.meetingUrl,
+      'registration_url': listing.registrationUrl,
     };
   }
 

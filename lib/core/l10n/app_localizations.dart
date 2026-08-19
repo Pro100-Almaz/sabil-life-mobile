@@ -1990,6 +1990,48 @@ abstract class AppLocalizations {
   /// **'Back to sign in'**
   String get backToSignIn;
 
+  /// No description provided for @fieldRegistrationUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration link'**
+  String get fieldRegistrationUrl;
+
+  /// No description provided for @fieldRegistrationUrlOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — users will open this link to register'**
+  String get fieldRegistrationUrlOptional;
+
+  /// No description provided for @invalidUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid URL'**
+  String get invalidUrl;
+
+  /// No description provided for @registerForMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registerForMasterclass;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current password'**
+  String get currentPassword;
+
+  /// No description provided for @passwordChangedSignInAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed. Please sign in again.'**
+  String get passwordChangedSignInAgain;
+
   /// No description provided for @joinMeeting.
   ///
   /// In en, this message translates to:
@@ -2049,6 +2091,35 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your tutor profile has been paused.'**
   String get profilePaused;
+  /// No description provided for @linkedinUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn profile URL'**
+  String get linkedinUrl;
+
+  /// No description provided for @linkedinUrlOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — https://www.linkedin.com/in/your-profile'**
+  String get linkedinUrlOptional;
+
+  /// No description provided for @invalidLinkedinUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid LinkedIn profile URL.'**
+  String get invalidLinkedinUrl;
+
+  /// No description provided for @viewLinkedinProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View LinkedIn profile'**
+  String get viewLinkedinProfile;
+
+  /// No description provided for @linkedinOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open the LinkedIn profile.'**
+  String get linkedinOpenError;
 }
 
 class _AppLocalizationsDelegate

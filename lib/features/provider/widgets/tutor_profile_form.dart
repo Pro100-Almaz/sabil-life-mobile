@@ -11,6 +11,7 @@ import '../../../core/state/provider_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../core/util/linkedin.dart';
 import '../../../core/util/tutor_label.dart';
 import '../../../data/api/api_config.dart';
 import '../../../data/models/city.dart';
@@ -63,6 +64,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
   late final TextEditingController _rateCtrl;
   late final TextEditingController _availabilityCtrl;
   late final TextEditingController _credentialsCtrl;
+  late final TextEditingController _linkedinCtrl;
   late final TextEditingController _yearsCtrl;
   late final TextEditingController _customSubjectCtrl;
 
@@ -109,10 +111,12 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     _rateCtrl = TextEditingController();
     _availabilityCtrl = TextEditingController();
     _credentialsCtrl = TextEditingController();
+    _linkedinCtrl = TextEditingController();
     _yearsCtrl = TextEditingController();
     _customSubjectCtrl = TextEditingController();
     _rateCtrl.addListener(_onRequiredChanged);
     _yearsCtrl.addListener(_onRequiredChanged);
+    _linkedinCtrl.addListener(_onRequiredChanged);
 
     final p = widget.existingProfile;
     if (p != null) {
@@ -127,6 +131,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     _rateCtrl.text = p.hourlyRateQar != null ? '${p.hourlyRateQar}' : '';
     _availabilityCtrl.text = p.availability;
     _credentialsCtrl.text = p.credentials;
+    _linkedinCtrl.text = p.linkedinUrl;
     _yearsCtrl.text = p.yearsExperience > 0 ? '${p.yearsExperience}' : '';
     _trialAvailable = p.trialAvailable;
     _avatarUrl = p.avatarUrl;
@@ -147,6 +152,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
     _rateCtrl.dispose();
     _availabilityCtrl.dispose();
     _credentialsCtrl.dispose();
+    _linkedinCtrl.dispose();
     _yearsCtrl.dispose();
     _customSubjectCtrl.dispose();
     super.dispose();
@@ -245,6 +251,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         _rateCtrl.text.trim().isEmpty ||
         _yearsCtrl.text.trim().isEmpty ||
         _selectedLanguages.isEmpty ||
+        !isValidOptionalLinkedInUrl(_linkedinCtrl.text) ||
         (_cityRequired && _selectedCity == null)) {
       setState(() => _showErrors = true);
       ScaffoldMessenger.of(
@@ -278,6 +285,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         languages: _selectedLanguages.toList(),
         yearsExperience: int.tryParse(_yearsCtrl.text.trim()) ?? 0,
         credentials: _credentialsCtrl.text.trim(),
+        linkedinUrl: _linkedinCtrl.text.trim(),
         avatarUrl: avatarUrl,
         trialAvailable: _trialAvailable,
         city: _selectedCity?.backendValue ?? '',
@@ -646,6 +654,19 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           label: l10n.profileCredentials,
           controller: _credentialsCtrl,
           hintText: l10n.credentialsHint,
+        ),
+        const SizedBox(height: AppSpacing.md),
+
+        // LinkedIn profile
+        _Field(
+          label: l10n.linkedinUrl,
+          controller: _linkedinCtrl,
+          hintText: l10n.linkedinUrlOptional,
+          keyboardType: TextInputType.url,
+          errorText:
+              _showErrors && !isValidOptionalLinkedInUrl(_linkedinCtrl.text)
+              ? l10n.invalidLinkedinUrl
+              : null,
         ),
         const SizedBox(height: AppSpacing.md),
 

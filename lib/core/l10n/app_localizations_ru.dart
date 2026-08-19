@@ -1023,6 +1023,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get backToSignIn => 'Вернуться ко входу';
 
   @override
+  String get fieldRegistrationUrl => 'Ссылка для регистрации';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Необязательно — пользователи перейдут по этой ссылке для регистрации';
+
+  @override
+  String get invalidUrl => 'Введите корректную ссылку';
+
+  @override
+  String get registerForMasterclass => 'Зарегистрироваться';
+
+  @override
+  String get changePassword => 'Изменить пароль';
+
+  @override
+  String get currentPassword => 'Текущий пароль';
+
+  @override
+  String get passwordChangedSignInAgain => 'Пароль изменён. Войдите снова.';
+
+  @override
   String get joinMeeting => 'Присоединиться к встрече';
 
   @override
@@ -1053,4 +1075,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profilePaused => 'Ваш учительский профайл был приостановлен.';
+  String get linkedinUrl => 'Ссылка на профиль LinkedIn';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Необязательно — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl =>
+      'Введите корректную ссылку на профиль LinkedIn.';
+
+  @override
+  String get viewLinkedinProfile => 'Открыть профиль LinkedIn';
+
+  @override
+  String get linkedinOpenError => 'Не удалось открыть профиль LinkedIn.';
 }

@@ -336,6 +336,14 @@
   "passwordsDoNotMatch": "Passwords do not match",
   "passwordResetSuccessful": "Your password has been reset. You can now sign in.",
   "backToSignIn": "Back to sign in",
+  "credentialsHint": "Degrees & Certificates",
+  "fieldRegistrationUrl": "Registration link",
+  "fieldRegistrationUrlOptional": "Optional — users will open this link to register",
+  "invalidUrl": "Enter a valid URL",
+  "registerForMasterclass": "Register",
+  "changePassword": "Change password",
+  "currentPassword": "Current password",
+  "passwordChangedSignInAgain": "Password changed. Please sign in again.",
   "joinMeeting": "Join meeting",
   "meetingLinkError": "Couldn’t open the meeting link",
   "pauseProfile": "Stop tutoring",
@@ -346,4 +354,9 @@
   "pauseAlertLong": "Your profile will no longer appear to clients and you will not receive new inquiries.",
   "profileActivated": "Your tutor profile has been activated.",
   "profilePaused": "Your tutor profile has been paused."
+  "linkedinUrl": "LinkedIn profile URL",
+  "linkedinUrlOptional": "Optional — https://www.linkedin.com/in/your-profile",
+  "invalidLinkedinUrl": "Enter a valid LinkedIn profile URL.",
+  "viewLinkedinProfile": "View LinkedIn profile",
+  "linkedinOpenError": "Couldn’t open the LinkedIn profile."
 }

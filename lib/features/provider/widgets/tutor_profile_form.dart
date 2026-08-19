@@ -712,7 +712,7 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
         ),
 
         const SizedBox(height: AppSpacing.lg),
-        const SizedBox(height: 40)
+        const SizedBox(height: 40),
       ],
     );
   }

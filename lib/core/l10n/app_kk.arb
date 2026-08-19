@@ -333,7 +333,7 @@
   "pauseAlert": "Профайлды тоқтату?",
   "pauseAlertLong": "Сіздің профиліңіз енді клиенттерге көрінбейді және жаңа сұраныстар келмейді.",
   "profileActivated": "Сіздің репетиторлық профиліңіз іске қосылды.",
-  "profilePaused": "Сіздің репетиторлық профиліңіз тоқтатылды."
+  "profilePaused": "Сіздің репетиторлық профиліңіз тоқтатылды.",
   "linkedinUrl": "LinkedIn профилінің сілтемесі",
   "linkedinUrlOptional": "Міндетті емес — https://www.linkedin.com/in/your-profile",
   "invalidLinkedinUrl": "Жарамды LinkedIn профиль сілтемесін енгізіңіз.",

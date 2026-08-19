@@ -1024,8 +1024,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backToSignIn => 'Back to sign in';
 
   @override
+  String get fieldRegistrationUrl => 'Registration link';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Optional — users will open this link to register';
+
+  @override
+  String get invalidUrl => 'Enter a valid URL';
+
+  @override
+  String get registerForMasterclass => 'Register';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get passwordChangedSignInAgain =>
+      'Password changed. Please sign in again.';
+
+  @override
   String get joinMeeting => 'Join meeting';
 
   @override
   String get meetingLinkError => 'Couldn’t open the meeting link';
+
+  @override
+  String get linkedinUrl => 'LinkedIn profile URL';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Optional — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl => 'Enter a valid LinkedIn profile URL.';
+
+  @override
+  String get viewLinkedinProfile => 'View LinkedIn profile';
+
+  @override
+  String get linkedinOpenError => 'Couldn’t open the LinkedIn profile.';
 }

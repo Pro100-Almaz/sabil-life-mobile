@@ -1025,8 +1025,48 @@ class AppLocalizationsKk extends AppLocalizations {
   String get backToSignIn => 'Кіру бетіне оралу';
 
   @override
+  String get fieldRegistrationUrl => 'Тіркелу сілтемесі';
+
+  @override
+  String get fieldRegistrationUrlOptional =>
+      'Міндетті емес — пайдаланушылар тіркелу үшін осы сілтемені ашады';
+
+  @override
+  String get invalidUrl => 'Жарамды сілтемені енгізіңіз';
+
+  @override
+  String get registerForMasterclass => 'Тіркелу';
+
+  @override
+  String get changePassword => 'Құпиясөзді өзгерту';
+
+  @override
+  String get currentPassword => 'Ағымдағы құпиясөз';
+
+  @override
+  String get passwordChangedSignInAgain =>
+      'Құпиясөз өзгертілді. Қайта кіріңіз.';
+
+  @override
   String get joinMeeting => 'Кездесуге қосылу';
 
   @override
   String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
+
+  @override
+  String get linkedinUrl => 'LinkedIn профилінің сілтемесі';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Міндетті емес — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl =>
+      'Жарамды LinkedIn профиль сілтемесін енгізіңіз.';
+
+  @override
+  String get viewLinkedinProfile => 'LinkedIn профилін ашу';
+
+  @override
+  String get linkedinOpenError => 'LinkedIn профилін ашу мүмкін болмады.';
 }

@@ -2091,6 +2091,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your tutor profile has been paused.'**
   String get profilePaused;
+
   /// No description provided for @linkedinUrl.
   ///
   /// In en, this message translates to:

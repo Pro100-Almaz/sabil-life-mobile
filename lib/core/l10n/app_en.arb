@@ -353,7 +353,7 @@
   "pauseAlert": "Pause Teaching?",
   "pauseAlertLong": "Your profile will no longer appear to clients and you will not receive new inquiries.",
   "profileActivated": "Your tutor profile has been activated.",
-  "profilePaused": "Your tutor profile has been paused."
+  "profilePaused": "Your tutor profile has been paused.",
   "linkedinUrl": "LinkedIn profile URL",
   "linkedinUrlOptional": "Optional — https://www.linkedin.com/in/your-profile",
   "invalidLinkedinUrl": "Enter a valid LinkedIn profile URL.",

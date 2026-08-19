@@ -30,6 +30,10 @@
 	<string>Sabil Life uses your location to show nearby listings on the map.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Sabil Life uses your location to show nearby listings on the map.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sabil Life lets you select photos from your library for your profile and listings.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Sabil Life lets you take photos for your profile and listings.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

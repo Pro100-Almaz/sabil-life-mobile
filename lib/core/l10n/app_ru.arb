@@ -316,6 +316,19 @@
   "passwordsDoNotMatch": "Пароли не совпадают",
   "passwordResetSuccessful": "Пароль успешно изменён. Теперь вы можете войти.",
   "backToSignIn": "Вернуться ко входу",
+  "credentialsHint": "Степень и сертификаты",
+  "fieldRegistrationUrl": "Ссылка для регистрации",
+  "fieldRegistrationUrlOptional": "Необязательно — пользователи перейдут по этой ссылке для регистрации",
+  "invalidUrl": "Введите корректную ссылку",
+  "registerForMasterclass": "Зарегистрироваться",
   "joinMeeting": "Присоединиться к встрече",
-  "meetingLinkError": "Не удалось открыть ссылку на встречу"
+  "meetingLinkError": "Не удалось открыть ссылку на встречу",
+  "changePassword": "Изменить пароль",
+  "currentPassword": "Текущий пароль",
+  "passwordChangedSignInAgain": "Пароль изменён. Войдите снова.",
+  "linkedinUrl": "Ссылка на профиль LinkedIn",
+  "linkedinUrlOptional": "Необязательно — https://www.linkedin.com/in/your-profile",
+  "invalidLinkedinUrl": "Введите корректную ссылку на профиль LinkedIn.",
+  "viewLinkedinProfile": "Открыть профиль LinkedIn",
+  "linkedinOpenError": "Не удалось открыть профиль LinkedIn."
 }

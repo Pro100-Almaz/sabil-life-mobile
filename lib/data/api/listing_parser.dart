@@ -29,6 +29,7 @@ class ListingParser {
       status: parseStatus(data['status']?.toString()),
       isOnline: (data['is_online'] ?? true) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
+      registrationUrl: (data['registration_url'] ?? '') as String,
     );
   }
 
@@ -55,6 +56,7 @@ class ListingParser {
       status: parseStatus(data['status']?.toString()),
       isOnline: (data['is_online'] ?? true) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
+      registrationUrl: (data['registration_url'] ?? '') as String,
     );
   }
 

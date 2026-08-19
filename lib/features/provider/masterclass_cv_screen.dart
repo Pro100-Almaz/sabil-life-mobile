@@ -51,7 +51,6 @@ class _MasterclassCvScreenState extends ConsumerState<MasterclassCvScreen> {
       setState(() => _error = l10n.cvRequired);
       return;
     }
-
     setState(() {
       _submitting = true;
       _error = null;

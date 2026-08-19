@@ -17,6 +17,7 @@ class ProviderProfile {
     this.languages = const [],
     this.yearsExperience = 0,
     this.credentials = '',
+    this.linkedinUrl = '',
     this.avatarUrl = '',
     this.trialAvailable = false,
     this.city = '',
@@ -39,6 +40,7 @@ class ProviderProfile {
   final List<String> languages;
   final int yearsExperience;
   final String credentials;
+  final String linkedinUrl;
   final String avatarUrl;
   final bool trialAvailable;
 
@@ -63,6 +65,7 @@ class ProviderProfile {
     List<String>? languages,
     int? yearsExperience,
     String? credentials,
+    String? linkedinUrl,
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
@@ -87,6 +90,7 @@ class ProviderProfile {
       languages: languages ?? this.languages,
       yearsExperience: yearsExperience ?? this.yearsExperience,
       credentials: credentials ?? this.credentials,
+      linkedinUrl: linkedinUrl ?? this.linkedinUrl,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       trialAvailable: trialAvailable ?? this.trialAvailable,
       city: city ?? this.city,

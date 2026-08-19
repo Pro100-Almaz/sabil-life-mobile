@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -126,40 +127,24 @@ class _DetailBody extends ConsumerWidget {
                     reviewCount: listing.reviewCount,
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  if (listing.isOnline)
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.videocam_outlined,
-                          size: 16,
-                          color: AppColors.textSecondary,
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.place_outlined,
+                        size: 16,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(width: AppSpacing.xs),
+                      Text(listing.neighborhood, style: AppTypography.caption),
+                      Text(' · ', style: AppTypography.caption),
+                      Text(
+                        l10n.distanceAway(
+                          listing.distanceFromHomeLabel(origin),
                         ),
-                        const SizedBox(width: AppSpacing.xs),
-                        Text(l10n.fieldOnline, style: AppTypography.caption),
-                      ],
-                    )
-                  else
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.place_outlined,
-                          size: 16,
-                          color: AppColors.textSecondary,
-                        ),
-                        const SizedBox(width: AppSpacing.xs),
-                        Text(
-                          listing.neighborhood,
-                          style: AppTypography.caption,
-                        ),
-                        Text(' · ', style: AppTypography.caption),
-                        Text(
-                          l10n.distanceAway(
-                            listing.distanceFromHomeLabel(origin),
-                          ),
-                          style: AppTypography.caption,
-                        ),
-                      ],
-                    ),
+                        style: AppTypography.caption,
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     listing.priceFromQar == 0
@@ -279,13 +264,41 @@ class _DetailBody extends ConsumerWidget {
                       expanded: true,
                       onPressed: () async {
                         final messenger = ScaffoldMessenger.of(context);
-                        final opened = await openDirections(
+                        final ok = await openDirections(
                           lat: listing.lat,
                           lng: listing.lng,
                         );
-                        if (!opened) {
+                        if (!ok) {
                           messenger.showSnackBar(
                             SnackBar(content: Text(l10n.directionsError)),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                  if (listing.category == CategoryType.masterclasses &&
+                      listing.registrationUrl.trim().isNotEmpty) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    AppButton(
+                      label: l10n.registerForMasterclass,
+                      variant: AppButtonVariant.outlined,
+                      icon: Icons.open_in_new,
+                      expanded: true,
+                      onPressed: () async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        final uri = Uri.tryParse(
+                          listing.registrationUrl.trim(),
+                        );
+                        final opened =
+                            uri != null &&
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+
+                        if (!opened) {
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.invalidUrl)),
                           );
                         }
                       },

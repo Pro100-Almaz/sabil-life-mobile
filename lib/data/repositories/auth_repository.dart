@@ -31,6 +31,12 @@ abstract class AuthRepository {
     required String password2,
   });
 
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String newPassword2,
+  });
+
   Future<AuthUser> me(String token);
   Future<void> logout();
 }
@@ -116,6 +122,24 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+
+  @override
+  Future<void> changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    await Future<void>.delayed(_latency);
+    if (oldPassword != 'demo1234') {
+      throw const AuthException('Current password is incorrect.');
+    }
+    if (newPassword != newPassword2) {
+      throw const AuthException('Passwords do not match.');
+    }
+    if (newPassword.length < 8) {
+      throw const AuthException('Password must be at least 8 characters.');
+    }
   }
 
   @override

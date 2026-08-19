@@ -193,6 +193,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Returns null on success, otherwise the backend validation message.
+  Future<String?> changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    try {
+      await _repo.changePassword(
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        newPassword2: newPassword2,
+      );
+      await authTokenStore.clear();
+      onLogout?.call();
+      state = const AuthState.unauthenticated();
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _push.unregister().timeout(const Duration(seconds: 5));

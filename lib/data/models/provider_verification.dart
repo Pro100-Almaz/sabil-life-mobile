@@ -12,6 +12,32 @@ enum VerificationStatus {
   none,
 }
 
+enum AiScreeningStatus {
+  queued,
+  processing,
+  recommended,
+  needsReview,
+  insufficient,
+  failed,
+  none,
+}
+
+extension AiScreeningStatusX on AiScreeningStatus {
+  static AiScreeningStatus fromBackend(String? raw) =>
+      switch (raw?.toUpperCase()) {
+        'QUEUED' => AiScreeningStatus.queued,
+        'PROCESSING' => AiScreeningStatus.processing,
+        'RECOMMENDED' => AiScreeningStatus.recommended,
+        'NEEDS_REVIEW' => AiScreeningStatus.needsReview,
+        'INSUFFICIENT' => AiScreeningStatus.insufficient,
+        'FAILED' => AiScreeningStatus.failed,
+        _ => AiScreeningStatus.none,
+      };
+
+  bool get isInProgress =>
+      this == AiScreeningStatus.queued || this == AiScreeningStatus.processing;
+}
+
 extension VerificationStatusX on VerificationStatus {
   static VerificationStatus fromBackend(String? raw) =>
       switch (raw?.toUpperCase()) {
@@ -49,6 +75,7 @@ class ProviderVerification {
     required this.providerType,
     required this.status,
     this.comment = '',
+    this.aiScreeningStatus = AiScreeningStatus.none,
     this.createdAt,
     this.updatedAt,
   });
@@ -62,6 +89,7 @@ class ProviderVerification {
 
   /// When [status] is rejected this holds the admin's reason; otherwise empty.
   final String comment;
+  final AiScreeningStatus aiScreeningStatus;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 

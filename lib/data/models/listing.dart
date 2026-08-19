@@ -62,6 +62,7 @@ class Listing {
     this.lat = 0,
     this.lng = 0,
     this.meetingUrl = '',
+    this.registrationUrl = '',
     this.tags = const [],
     this.images = const [],
     this.ownerId,
@@ -79,6 +80,9 @@ class Listing {
 
   /// if isOnline = true
   final String meetingUrl;
+
+  /// Optional external page where users can register for the masterclass.
+  final String registrationUrl;
 
   /// if isOnline = false
   final double lat;
@@ -128,6 +132,7 @@ class Listing {
     ListingStatus? status,
     bool? isOnline,
     String? meetingUrl,
+    String? registrationUrl,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -151,6 +156,7 @@ class Listing {
       status: status ?? this.status,
       isOnline: isOnline ?? this.isOnline,
       meetingUrl: meetingUrl ?? this.meetingUrl,
+      registrationUrl: registrationUrl ?? this.registrationUrl,
     );
   }
 }

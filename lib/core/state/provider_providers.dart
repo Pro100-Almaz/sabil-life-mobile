@@ -199,6 +199,43 @@ final catalogListingsProvider = FutureProvider.family
           ),
     );
 
+/// Loads every matching catalog page for map markers.
+///
+/// Directory screens keep using [catalogListingsProvider] so their normal
+/// pagination is unchanged. Listing IDs are used as keys to guard against a
+/// duplicate item appearing across page boundaries.
+final allCatalogListingsProvider = FutureProvider.family
+    .autoDispose<List<Listing>, ListingsFilter>((ref, filter) async {
+      final repository = ref.watch(catalogRepositoryProvider);
+      final listingsById = <String, Listing>{};
+      var page = 1;
+      var hasNextPage = true;
+
+      while (hasNextPage) {
+        final result = await repository.listings(
+          category: filter.category,
+          query: filter.query,
+          tags: filter.tags,
+          priceMax: filter.priceMax,
+          ageGroup: filter.ageGroup,
+          lat: filter.lat,
+          lng: filter.lng,
+          maxDistanceKm: filter.maxDistanceKm,
+          sort: filter.sort,
+          page: page,
+        );
+
+        for (final listing in result.results) {
+          listingsById[listing.id] = listing;
+        }
+
+        hasNextPage = result.hasNext;
+        page++;
+      }
+
+      return List.unmodifiable(listingsById.values);
+    });
+
 final catalogDetailProvider = FutureProvider.family
     .autoDispose<Listing, String>(
       (ref, id) => ref.watch(catalogRepositoryProvider).listing(id),

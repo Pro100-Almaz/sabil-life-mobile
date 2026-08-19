@@ -31,6 +31,7 @@ import '../../features/provider/provider_shell.dart';
 import '../../features/provider/tutor_gate_screen.dart';
 import '../../features/provider/tutor_profile_edit_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/settings/change_password_screen.dart';
 import '../../features/shell/shell_screen.dart';
 import '../../features/tutoring/tutoring_screen.dart';
 import '../state/auth_provider.dart';
@@ -187,6 +188,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       }
 
+      if (location == '/change-password' && !auth.isAuthenticated) {
+        return '/login';
+      }
+
       if (auth.isAuthenticated && _isAuthArea(location)) {
         return '/';
       }
@@ -208,6 +213,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/forgot-password',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/change-password',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
       GoRoute(
         path: '/notifications',

@@ -8,6 +8,7 @@ import '../../../core/state/city_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
+import '../../../core/util/linkedin.dart';
 import '../../../core/util/tutor_label.dart';
 import '../../../data/mock/mock_listings.dart';
 import '../../../data/models/tutor.dart';
@@ -59,6 +60,7 @@ class TutorProfileSheet extends ConsumerWidget {
     final hasLanguages = tutor.languages.isNotEmpty;
     final hasCity = tutor.city.trim().isNotEmpty;
     final hasBio = tutor.bio.trim().isNotEmpty;
+    final hasLinkedIn = tutor.linkedinUrl.trim().isNotEmpty;
     final hasFacts =
         hasCredentials || hasLanguages || hasCity || centre != null;
 
@@ -186,6 +188,26 @@ class TutorProfileSheet extends ConsumerWidget {
               Text(tutor.bio, style: AppTypography.body.copyWith(height: 1.5)),
             ],
 
+            if (hasLinkedIn) ...[
+              const SizedBox(height: AppSpacing.lg),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  icon: const _LinkedInMark(),
+                  label: Text(l10n.viewLinkedinProfile),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final opened = await openLinkedInProfile(tutor.linkedinUrl);
+                    if (!opened) {
+                      messenger.showSnackBar(
+                        SnackBar(content: Text(l10n.linkedinOpenError)),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+
             const SizedBox(height: AppSpacing.xl),
             Row(
               children: [
@@ -244,6 +266,32 @@ class _AvatarFallback extends StatelessWidget {
       height: 72,
       color: AppColors.surfaceAlt,
       child: const Icon(Icons.person_outline, color: AppColors.textTertiary),
+    );
+  }
+}
+
+class _LinkedInMark extends StatelessWidget {
+  const _LinkedInMark();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20,
+      height: 20,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: const Color(0xFF0A66C2),
+        borderRadius: BorderRadius.circular(2),
+      ),
+      child: const Text(
+        'in',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          height: 1,
+        ),
+      ),
     );
   }
 }

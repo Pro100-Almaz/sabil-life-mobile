@@ -1052,4 +1052,21 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
+
+  @override
+  String get linkedinUrl => 'LinkedIn профилінің сілтемесі';
+
+  @override
+  String get linkedinUrlOptional =>
+      'Міндетті емес — https://www.linkedin.com/in/your-profile';
+
+  @override
+  String get invalidLinkedinUrl =>
+      'Жарамды LinkedIn профиль сілтемесін енгізіңіз.';
+
+  @override
+  String get viewLinkedinProfile => 'LinkedIn профилін ашу';
+
+  @override
+  String get linkedinOpenError => 'LinkedIn профилін ашу мүмкін болмады.';
 }

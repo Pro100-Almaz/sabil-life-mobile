@@ -325,5 +325,10 @@
   "meetingLinkError": "Не удалось открыть ссылку на встречу",
   "changePassword": "Изменить пароль",
   "currentPassword": "Текущий пароль",
-  "passwordChangedSignInAgain": "Пароль изменён. Войдите снова."
+  "passwordChangedSignInAgain": "Пароль изменён. Войдите снова.",
+  "linkedinUrl": "Ссылка на профиль LinkedIn",
+  "linkedinUrlOptional": "Необязательно — https://www.linkedin.com/in/your-profile",
+  "invalidLinkedinUrl": "Введите корректную ссылку на профиль LinkedIn.",
+  "viewLinkedinProfile": "Открыть профиль LinkedIn",
+  "linkedinOpenError": "Не удалось открыть профиль LinkedIn."
 }

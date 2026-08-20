@@ -403,7 +403,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inquiryComposerHint =>
-      'Tell the provider a bit about your child and what you\'re looking for.';
+      'Tell the tutor a bit about yourself or the student, and what you\'re looking for.';
 
   @override
   String get send => 'Send';
@@ -1106,6 +1106,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profilePaused => 'Your tutor profile has been paused.';
+
+  @override
   String get linkedinUrl => 'LinkedIn profile URL';
 
   @override

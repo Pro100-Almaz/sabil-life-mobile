@@ -823,7 +823,7 @@ abstract class AppLocalizations {
   /// No description provided for @inquiryComposerHint.
   ///
   /// In en, this message translates to:
-  /// **'Tell the provider a bit about your child and what you\'re looking for.'**
+  /// **'Tell the tutor a bit about yourself or the student, and what you\'re looking for.'**
   String get inquiryComposerHint;
 
   /// No description provided for @send.

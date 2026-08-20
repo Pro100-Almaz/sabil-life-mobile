@@ -95,7 +95,7 @@ class _TutorInquiryComposerScreenState
                 Text(tutorName, style: AppTypography.h2),
                 const SizedBox(height: AppSpacing.xs),
               ],
-              Text(l10n.inquiryComposerHint, style: AppTypography.caption),
+              // Text(l10n.inquiryComposerHint, style: AppTypography.caption),
               const SizedBox(height: AppSpacing.lg),
               Expanded(
                 child: TextField(

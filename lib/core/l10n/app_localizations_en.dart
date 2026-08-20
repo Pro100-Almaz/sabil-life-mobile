@@ -1077,6 +1077,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profilePaused => 'Your tutor profile has been paused.';
+
+  @override
   String get linkedinUrl => 'LinkedIn profile URL';
 
   @override

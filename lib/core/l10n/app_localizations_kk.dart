@@ -1078,6 +1078,8 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get profilePaused => 'Сіздің репетиторлық профиліңіз тоқтатылды.';
+
+  @override
   String get linkedinUrl => 'LinkedIn профилінің сілтемесі';
 
   @override

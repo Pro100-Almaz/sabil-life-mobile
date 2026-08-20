@@ -1075,6 +1075,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get profilePaused => 'Ваш учительский профайл был приостановлен.';
+
+  @override
   String get linkedinUrl => 'Ссылка на профиль LinkedIn';
 
   @override

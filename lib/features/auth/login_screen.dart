@@ -57,7 +57,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 Text(l10n.signIn, style: AppTypography.display),
                 const SizedBox(height: AppSpacing.xs),
-                Text(l10n.demoLoginHint, style: AppTypography.caption),
+                // Text(l10n.demoLoginHint, style: AppTypography.caption),
                 const SizedBox(height: AppSpacing.xxl),
                 TextFormField(
                   controller: _email,

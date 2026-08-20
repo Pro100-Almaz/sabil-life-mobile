@@ -140,7 +140,7 @@ StatefulShellRoute _providerShellRoute({
     dashboardBranch,
     if (interface == ActiveInterface.masterclass) listingsBranch,
     if (interface == ActiveInterface.tutor) inquiriesBranch,
-    earningsBranch,
+    // earningsBranch,
     settingsBranch,
   ];
 

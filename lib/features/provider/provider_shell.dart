@@ -50,10 +50,10 @@ class ProviderShell extends StatelessWidget {
                 icon: const Icon(Icons.inbox_outlined),
                 label: l10n.inquiries,
               ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.payments_outlined),
-              label: l10n.earnings,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: const Icon(Icons.payments_outlined),
+            //   label: l10n.earnings,
+            // ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person_outline),
               label: l10n.providerSettings,

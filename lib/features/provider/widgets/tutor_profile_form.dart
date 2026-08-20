@@ -717,21 +717,21 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           ),
         ],
         const SizedBox(height: AppSpacing.lg),
-
-        AppButton(
-          label: _profilePaused ? l10n.activateProfile : l10n.pauseProfile,
-          variant: AppButtonVariant.outlined,
-          expanded: true,
-          onPressed: () async {
-            if (_changingProfileStatus) return;
-            final confirmed = await _showStatusChangeWarning(
-              activate: _profilePaused,
-            );
-            if (!confirmed) return;
-            await _changeTutorStatus();
-          },
-        ),
-
+        if (widget.existingProfile != null) ...[  
+          AppButton(
+            label: _profilePaused ? l10n.activateProfile : l10n.pauseProfile,
+            variant: AppButtonVariant.outlined,
+            expanded: true,
+            onPressed: () async {
+              if (_changingProfileStatus) return;
+              final confirmed = await _showStatusChangeWarning(
+                activate: _profilePaused,
+              );
+              if (!confirmed) return;
+              await _changeTutorStatus();
+            },
+          ),
+        ],
         const SizedBox(height: AppSpacing.lg),
         const SizedBox(height: 40),
       ],

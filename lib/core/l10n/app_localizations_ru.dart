@@ -1051,6 +1051,35 @@ class AppLocalizationsRu extends AppLocalizations {
   String get meetingLinkError => 'Не удалось открыть ссылку на встречу';
 
   @override
+  String get eventScheduleTitle => 'Расписание мастер-класса';
+
+  @override
+  String get eventTypePrompt =>
+      'Это разовое событие или регулярный мастер-класс?';
+
+  @override
+  String get eventOneTime => 'Разовое событие';
+
+  @override
+  String get eventOngoing => 'Регулярный';
+
+  @override
+  String get eventTypeRequired => 'Выберите тип события';
+
+  @override
+  String get oneTimeEventWarningTitle => 'Создать разовое событие?';
+
+  @override
+  String get oneTimeEventWarningMessage =>
+      'Через час после назначенного времени мастер-класс перестанет отображаться публично и вернётся в черновики.';
+
+  @override
+  String get chooseEventDateTime => 'Выберите дату и время';
+
+  @override
+  String get futureEventDateRequired => 'Выберите будущие дату и время';
+
+  @override
   String get pauseProfile => 'Приостановить уроки';
 
   @override

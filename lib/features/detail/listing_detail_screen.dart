@@ -153,6 +153,50 @@ class _DetailBody extends ConsumerWidget {
                     style: AppTypography.h3,
                   ),
                   if (listing.category == CategoryType.masterclasses &&
+                      listing.startsAt != null) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    Container(
+                      padding: const EdgeInsets.all(AppSpacing.md),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceAlt,
+                        borderRadius: BorderRadius.circular(AppRadius.card),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            listing.eventType == MasterclassEventType.oneTime
+                                ? Icons.event_outlined
+                                : Icons.event_repeat_outlined,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  listing.eventType ==
+                                          MasterclassEventType.oneTime
+                                      ? l10n.eventOneTime
+                                      : l10n.eventOngoing,
+                                  style: AppTypography.label,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  DateFormat(
+                                    'EEE, d MMM yyyy · HH:mm',
+                                    Localizations.localeOf(context).toString(),
+                                  ).format(listing.startsAt!),
+                                  style: AppTypography.caption,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (listing.category == CategoryType.masterclasses &&
                       mockMasterclassInfo[listing.id] != null) ...[
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),

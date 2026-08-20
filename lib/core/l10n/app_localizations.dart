@@ -2044,6 +2044,60 @@ abstract class AppLocalizations {
   /// **'Couldn’t open the meeting link'**
   String get meetingLinkError;
 
+  /// No description provided for @eventScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Masterclass schedule'**
+  String get eventScheduleTitle;
+
+  /// No description provided for @eventTypePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Is this a one-time event or an ongoing masterclass?'**
+  String get eventTypePrompt;
+
+  /// No description provided for @eventOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time event'**
+  String get eventOneTime;
+
+  /// No description provided for @eventOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get eventOngoing;
+
+  /// No description provided for @eventTypeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an event type'**
+  String get eventTypeRequired;
+
+  /// No description provided for @oneTimeEventWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a one-time event?'**
+  String get oneTimeEventWarningTitle;
+
+  /// No description provided for @oneTimeEventWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'One hour after its scheduled start, this masterclass will no longer be shown publicly and will return to Draft.'**
+  String get oneTimeEventWarningMessage;
+
+  /// No description provided for @chooseEventDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date and time'**
+  String get chooseEventDateTime;
+
+  /// No description provided for @futureEventDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date and time in the future'**
+  String get futureEventDateRequired;
+
   /// No description provided for @pauseProfile.
   ///
   /// In en, this message translates to:

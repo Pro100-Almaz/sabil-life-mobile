@@ -30,6 +30,8 @@ class ListingParser {
       isOnline: (data['is_online'] ?? true) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
       registrationUrl: (data['registration_url'] ?? '') as String,
+      eventType: parseEventType(data['event_type']?.toString()),
+      startsAt: parseDate(data['starts_at']),
     );
   }
 
@@ -57,6 +59,8 @@ class ListingParser {
       isOnline: (data['is_online'] ?? true) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
       registrationUrl: (data['registration_url'] ?? '') as String,
+      eventType: parseEventType(data['event_type']?.toString()),
+      startsAt: parseDate(data['starts_at']),
     );
   }
 
@@ -118,6 +122,25 @@ class ListingParser {
       'REJECTED' => ListingStatus.rejected,
       _ => ListingStatus.active,
     };
+  }
+
+  static MasterclassEventType parseEventType(String? raw) {
+    return switch (raw?.toUpperCase()) {
+      'ONE_TIME' => MasterclassEventType.oneTime,
+      _ => MasterclassEventType.ongoing,
+    };
+  }
+
+  static String serializeEventType(MasterclassEventType eventType) {
+    return switch (eventType) {
+      MasterclassEventType.oneTime => 'ONE_TIME',
+      MasterclassEventType.ongoing => 'ONGOING',
+    };
+  }
+
+  static DateTime? parseDate(dynamic raw) {
+    if (raw == null) return null;
+    return DateTime.tryParse(raw.toString())?.toLocal();
   }
 
   static List<String> toStringList(dynamic value) {

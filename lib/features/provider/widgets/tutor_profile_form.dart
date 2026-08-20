@@ -717,7 +717,8 @@ class _TutorProfileFormState extends ConsumerState<TutorProfileForm> {
           ),
         ],
         const SizedBox(height: AppSpacing.lg),
-        if (widget.existingProfile != null) ...[  
+        // Pausing/Activating the profile
+        if (widget.existingProfile != null) ...[
           AppButton(
             label: _profilePaused ? l10n.activateProfile : l10n.pauseProfile,
             variant: AppButtonVariant.outlined,

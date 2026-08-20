@@ -2044,6 +2044,54 @@ abstract class AppLocalizations {
   /// **'Couldn’t open the meeting link'**
   String get meetingLinkError;
 
+  /// No description provided for @pauseProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop tutoring'**
+  String get pauseProfile;
+
+  /// No description provided for @activateProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tutoring'**
+  String get activateProfile;
+
+  /// No description provided for @activateAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Profile?'**
+  String get activateAlert;
+
+  /// No description provided for @activateAlertLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile will be visible to clients and you will start recieving new inquiries.'**
+  String get activateAlertLong;
+
+  /// No description provided for @pauseAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Teaching?'**
+  String get pauseAlert;
+
+  /// No description provided for @pauseAlertLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile will no longer appear to clients and you will not receive new inquiries.'**
+  String get pauseAlertLong;
+
+  /// No description provided for @profileActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tutor profile has been activated.'**
+  String get profileActivated;
+
+  /// No description provided for @profilePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tutor profile has been paused.'**
+  String get profilePaused;
+
   /// No description provided for @linkedinUrl.
   ///
   /// In en, this message translates to:

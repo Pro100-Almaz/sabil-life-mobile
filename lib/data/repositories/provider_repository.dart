@@ -89,6 +89,7 @@ abstract class ProviderRepository {
     String? avatarUrl,
     bool? trialAvailable,
     String? city,
+    ProviderProfileState? status,
   });
 
   Future<String> uploadAvatar(String filePath);

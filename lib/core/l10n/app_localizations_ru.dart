@@ -1051,6 +1051,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String get meetingLinkError => 'Не удалось открыть ссылку на встречу';
 
   @override
+  String get pauseProfile => 'Приостановить уроки';
+
+  @override
+  String get activateProfile => 'Возобновить уроки';
+
+  @override
+  String get activateAlert => 'Активировать профайл?';
+
+  @override
+  String get activateAlertLong =>
+      'Ваш учительский профайл будет виден пользователям и вы будете получать запросы';
+
+  @override
+  String get pauseAlert => 'Приостановить репетиторство?';
+
+  @override
+  String get pauseAlertLong =>
+      'Ваш учительский профайл не будет виден пользователям и вы не будете получать запросы';
+
+  @override
+  String get profileActivated => 'Ваш учительский профайл был активирован.';
+
+  @override
+  String get profilePaused => 'Ваш учительский профайл был приостановлен.';
   String get linkedinUrl => 'Ссылка на профиль LinkedIn';
 
   @override

@@ -403,7 +403,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get inquiryComposerHint =>
-      'Балаңыз және не іздеп жатқаныңыз туралы қысқаша айтыңыз.';
+      'Репетиторға өзіңіз немесе оқушы жайлы, және не іздеп жүргеніңізді аздап айтып беріңіз.';
 
   @override
   String get send => 'Жіберу';

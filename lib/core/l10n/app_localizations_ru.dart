@@ -404,7 +404,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get inquiryComposerHint =>
-      'Расскажите немного о ребёнке и о том, что вам нужно.';
+      'Расскажите репетитору немного о себе или ученике, а также о том, чего вы ищете.';
 
   @override
   String get send => 'Отправить';

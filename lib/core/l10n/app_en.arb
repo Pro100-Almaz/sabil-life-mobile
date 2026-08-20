@@ -134,7 +134,7 @@
   "request": "Request",
   "requestSent": "Request sent — the provider will be in touch.",
   "inquiryComposerTitle": "Send a request",
-  "inquiryComposerHint": "Tell the provider a bit about your child and what you're looking for.",
+  "inquiryComposerHint": "Tell the tutor a bit about yourself or the student, and what you're looking for.",
   "send": "Send",
   "myRequests": "My requests",
   "noRequestsYet": "No requests yet",

@@ -1053,6 +1053,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get meetingLinkError => 'Couldn’t open the meeting link';
 
   @override
+  String get eventScheduleTitle => 'Masterclass schedule';
+
+  @override
+  String get eventTypePrompt =>
+      'Is this a one-time event or an ongoing masterclass?';
+
+  @override
+  String get eventOneTime => 'One-time event';
+
+  @override
+  String get eventOngoing => 'Ongoing';
+
+  @override
+  String get eventTypeRequired => 'Choose an event type';
+
+  @override
+  String get oneTimeEventWarningTitle => 'Create a one-time event?';
+
+  @override
+  String get oneTimeEventWarningMessage =>
+      'One hour after its scheduled start, this masterclass will no longer be shown publicly and will return to Draft.';
+
+  @override
+  String get chooseEventDateTime => 'Choose date and time';
+
+  @override
+  String get futureEventDateRequired => 'Choose a date and time in the future';
+
+  @override
   String get pauseProfile => 'Stop tutoring';
 
   @override

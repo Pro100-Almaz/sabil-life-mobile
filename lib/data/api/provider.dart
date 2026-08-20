@@ -533,6 +533,8 @@ class HttpProviderRepository implements ProviderRepository {
       'is_online': listing.isOnline,
       'meeting_url': listing.meetingUrl,
       'registration_url': listing.registrationUrl,
+      'event_type': ListingParser.serializeEventType(listing.eventType),
+      'starts_at': listing.startsAt?.toUtc().toIso8601String(),
     };
   }
 

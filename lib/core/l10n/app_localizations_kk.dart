@@ -1054,6 +1054,35 @@ class AppLocalizationsKk extends AppLocalizations {
   String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
 
   @override
+  String get eventScheduleTitle => 'Мастер-класс кестесі';
+
+  @override
+  String get eventTypePrompt =>
+      'Бұл бір реттік іс-шара ма, әлде тұрақты мастер-класс па?';
+
+  @override
+  String get eventOneTime => 'Бір реттік іс-шара';
+
+  @override
+  String get eventOngoing => 'Тұрақты';
+
+  @override
+  String get eventTypeRequired => 'Іс-шара түрін таңдаңыз';
+
+  @override
+  String get oneTimeEventWarningTitle => 'Бір реттік іс-шара жасау керек пе?';
+
+  @override
+  String get oneTimeEventWarningMessage =>
+      'Белгіленген уақыттан бір сағат өткен соң мастер-класс көпшілікке көрсетілмейді және нобай күйіне қайтарылады.';
+
+  @override
+  String get chooseEventDateTime => 'Күні мен уақытын таңдаңыз';
+
+  @override
+  String get futureEventDateRequired => 'Болашақ күн мен уақытты таңдаңыз';
+
+  @override
   String get pauseProfile => 'Сабақтарды тоқтату';
 
   @override

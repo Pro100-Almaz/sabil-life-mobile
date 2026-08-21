@@ -1121,4 +1121,60 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get linkedinOpenError => 'Не удалось открыть профиль LinkedIn.';
+
+  @override
+  String get contactInformation => 'Контактная информация';
+
+  @override
+  String get contactInformationOptional =>
+      'Необязательно — добавьте до 20 способов связи';
+
+  @override
+  String get contacts => 'Контакты';
+
+  @override
+  String get websitesAndSocialNetworks => 'Сайты и социальные сети';
+
+  @override
+  String get contactType => 'Тип контакта';
+
+  @override
+  String get contactValue => 'Контактные данные или ссылка';
+
+  @override
+  String get contactLabel => 'Название (необязательно)';
+
+  @override
+  String get contactLabelHint => 'Например: Ресепшен';
+
+  @override
+  String get addContact => 'Добавить контакт';
+
+  @override
+  String get remove => 'Удалить';
+
+  @override
+  String get contactPhone => 'Телефон';
+
+  @override
+  String get contactWebsite => 'Сайт';
+
+  @override
+  String get contactWhatsApp => 'WhatsApp';
+
+  @override
+  String get contactInstagram => 'Instagram';
+
+  @override
+  String get contactTelegram => 'Telegram';
+
+  @override
+  String get contactInvalidPhone => 'Введите корректный номер телефона';
+
+  @override
+  String get contactOpenError => 'Не удалось открыть контакт';
+
+  @override
+  String get duplicateContact =>
+      'Один и тот же контакт нельзя добавлять несколько раз';
 }

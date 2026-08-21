@@ -518,6 +518,7 @@ class HttpProviderRepository implements ProviderRepository {
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   Map<String, dynamic> _serializeListing(Listing listing) {
+    final isMasterclass = listing.category == CategoryType.masterclasses;
     return {
       'title': listing.title,
       'category': ListingParser.serializeCategory(listing.category),
@@ -530,11 +531,26 @@ class HttpProviderRepository implements ProviderRepository {
       'description': listing.description,
       'highlights': listing.highlights,
       'is_featured': listing.isFeatured,
-      'is_online': listing.isOnline,
-      'meeting_url': listing.meetingUrl,
-      'registration_url': listing.registrationUrl,
-      'event_type': ListingParser.serializeEventType(listing.eventType),
-      'starts_at': listing.startsAt?.toUtc().toIso8601String(),
+      'is_online': isMasterclass && listing.isOnline,
+      'meeting_url': isMasterclass ? listing.meetingUrl : '',
+      'registration_url': isMasterclass ? listing.registrationUrl : '',
+      'contacts': [
+        for (var index = 0; index < listing.contacts.length; index++)
+          {
+            'contact_type': ListingParser.serializeContactType(
+              listing.contacts[index].type,
+            ),
+            'value': listing.contacts[index].value,
+            'label': listing.contacts[index].label,
+            'position': index,
+          },
+      ],
+      'event_type': ListingParser.serializeEventType(
+        isMasterclass ? listing.eventType : MasterclassEventType.ongoing,
+      ),
+      'starts_at': isMasterclass
+          ? listing.startsAt?.toUtc().toIso8601String()
+          : null,
     };
   }
 

@@ -19,7 +19,7 @@ import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
-import '../../features/provider/earnings_screen.dart';
+// import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_clients_screen.dart';
 import '../../features/provider/listing_editor_screen.dart';
@@ -109,14 +109,14 @@ StatefulShellRoute _providerShellRoute({
     ],
   );
 
-  final earningsBranch = StatefulShellBranch(
-    routes: [
-      GoRoute(
-        path: '$base/earnings',
-        builder: (context, state) => const EarningsScreen(),
-      ),
-    ],
-  );
+  // final earningsBranch = StatefulShellBranch(
+  //   routes: [
+  //     GoRoute(
+  //       path: '$base/earnings',
+  //       builder: (context, state) => const EarningsScreen(),
+  //     ),
+  //   ],
+  // );
 
   final settingsBranch = StatefulShellBranch(
     routes: [

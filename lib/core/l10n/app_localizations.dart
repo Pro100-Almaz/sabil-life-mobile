@@ -823,7 +823,7 @@ abstract class AppLocalizations {
   /// No description provided for @inquiryComposerHint.
   ///
   /// In en, this message translates to:
-  /// **'Tell the provider a bit about your child and what you\'re looking for.'**
+  /// **'Tell the tutor a bit about yourself or the student, and what you\'re looking for.'**
   String get inquiryComposerHint;
 
   /// No description provided for @send.
@@ -2043,6 +2043,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn’t open the meeting link'**
   String get meetingLinkError;
+
+  /// No description provided for @eventScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Masterclass schedule'**
+  String get eventScheduleTitle;
+
+  /// No description provided for @eventTypePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Is this a one-time event or an ongoing masterclass?'**
+  String get eventTypePrompt;
+
+  /// No description provided for @eventOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time event'**
+  String get eventOneTime;
+
+  /// No description provided for @eventOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get eventOngoing;
+
+  /// No description provided for @eventTypeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an event type'**
+  String get eventTypeRequired;
+
+  /// No description provided for @oneTimeEventWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a one-time event?'**
+  String get oneTimeEventWarningTitle;
+
+  /// No description provided for @oneTimeEventWarningMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'One hour after its scheduled start, this masterclass will no longer be shown publicly and will return to Draft.'**
+  String get oneTimeEventWarningMessage;
+
+  /// No description provided for @chooseEventDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose date and time'**
+  String get chooseEventDateTime;
+
+  /// No description provided for @futureEventDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a date and time in the future'**
+  String get futureEventDateRequired;
+
+  /// No description provided for @pauseProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop tutoring'**
+  String get pauseProfile;
+
+  /// No description provided for @activateProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tutoring'**
+  String get activateProfile;
+
+  /// No description provided for @activateAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Profile?'**
+  String get activateAlert;
+
+  /// No description provided for @activateAlertLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile will be visible to clients and you will start recieving new inquiries.'**
+  String get activateAlertLong;
+
+  /// No description provided for @pauseAlert.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Teaching?'**
+  String get pauseAlert;
+
+  /// No description provided for @pauseAlertLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Your profile will no longer appear to clients and you will not receive new inquiries.'**
+  String get pauseAlertLong;
+
+  /// No description provided for @profileActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tutor profile has been activated.'**
+  String get profileActivated;
+
+  /// No description provided for @profilePaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Your tutor profile has been paused.'**
+  String get profilePaused;
 
   /// No description provided for @linkedinUrl.
   ///

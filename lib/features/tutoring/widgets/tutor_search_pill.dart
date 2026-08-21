@@ -10,8 +10,8 @@ import '../../../core/theme/app_typography.dart';
 /// Airbnb-style search pill for the Tutoring page. Drives
 /// `tutorFilterProvider.search`, which feeds the backend `search` param.
 class TutorSearchPill extends ConsumerStatefulWidget {
-  const TutorSearchPill({super.key});
-
+  const TutorSearchPill({super.key, this.title});
+  final String? title;
   @override
   ConsumerState<TutorSearchPill> createState() => _TutorSearchPillState();
 }
@@ -57,7 +57,7 @@ class _TutorSearchPillState extends ConsumerState<TutorSearchPill> {
         style: AppTypography.body,
         decoration: InputDecoration(
           filled: false,
-          hintText: l10n.searchTutorsHint,
+          hintText: widget.title ?? l10n.searchTutorsHint,
           prefixIcon: const Icon(Icons.search, color: AppColors.textPrimary),
           suffixIcon: query.isEmpty
               ? null

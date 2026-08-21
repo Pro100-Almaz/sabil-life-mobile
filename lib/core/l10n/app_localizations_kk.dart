@@ -403,7 +403,7 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get inquiryComposerHint =>
-      'Балаңыз және не іздеп жатқаныңыз туралы қысқаша айтыңыз.';
+      'Репетиторға өзіңіз немесе оқушы жайлы, және не іздеп жүргеніңізді аздап айтып беріңіз.';
 
   @override
   String get send => 'Жіберу';
@@ -1052,6 +1052,61 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Кездесу сілтемесін ашу мүмкін болмады';
+
+  @override
+  String get eventScheduleTitle => 'Мастер-класс кестесі';
+
+  @override
+  String get eventTypePrompt =>
+      'Бұл бір реттік іс-шара ма, әлде тұрақты мастер-класс па?';
+
+  @override
+  String get eventOneTime => 'Бір реттік іс-шара';
+
+  @override
+  String get eventOngoing => 'Тұрақты';
+
+  @override
+  String get eventTypeRequired => 'Іс-шара түрін таңдаңыз';
+
+  @override
+  String get oneTimeEventWarningTitle => 'Бір реттік іс-шара жасау керек пе?';
+
+  @override
+  String get oneTimeEventWarningMessage =>
+      'Белгіленген уақыттан бір сағат өткен соң мастер-класс көпшілікке көрсетілмейді және нобай күйіне қайтарылады.';
+
+  @override
+  String get chooseEventDateTime => 'Күні мен уақытын таңдаңыз';
+
+  @override
+  String get futureEventDateRequired => 'Болашақ күн мен уақытты таңдаңыз';
+
+  @override
+  String get pauseProfile => 'Сабақтарды тоқтату';
+
+  @override
+  String get activateProfile => 'Сабақтарды жалғастыру';
+
+  @override
+  String get activateAlert => 'Профайлды қосу?';
+
+  @override
+  String get activateAlertLong =>
+      'Сіздің профиліңіз клиенттерге көрінеді және сізге жаңа сұраныстар келе бастайды.';
+
+  @override
+  String get pauseAlert => 'Профайлды тоқтату?';
+
+  @override
+  String get pauseAlertLong =>
+      'Сіздің профиліңіз енді клиенттерге көрінбейді және жаңа сұраныстар келмейді.';
+
+  @override
+  String get profileActivated => 'Сіздің репетиторлық профиліңіз іске қосылды.';
+
+  @override
+  String get profilePaused => 'Сіздің репетиторлық профиліңіз тоқтатылды.';
 
   @override
   String get linkedinUrl => 'LinkedIn профилінің сілтемесі';

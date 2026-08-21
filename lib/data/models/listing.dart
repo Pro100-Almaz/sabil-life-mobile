@@ -43,6 +43,8 @@ class ListingImage {
 /// (schools, partner offers seeded as platform content) stay [active].
 enum ListingStatus { draft, pending, active, rejected }
 
+enum MasterclassEventType { oneTime, ongoing }
+
 class Listing {
   const Listing({
     required this.id,
@@ -63,6 +65,8 @@ class Listing {
     this.lng = 0,
     this.meetingUrl = '',
     this.registrationUrl = '',
+    this.eventType = MasterclassEventType.ongoing,
+    this.startsAt,
     this.tags = const [],
     this.images = const [],
     this.ownerId,
@@ -83,6 +87,8 @@ class Listing {
 
   /// Optional external page where users can register for the masterclass.
   final String registrationUrl;
+  final MasterclassEventType eventType;
+  final DateTime? startsAt;
 
   /// if isOnline = false
   final double lat;
@@ -133,6 +139,8 @@ class Listing {
     bool? isOnline,
     String? meetingUrl,
     String? registrationUrl,
+    MasterclassEventType? eventType,
+    DateTime? Function()? startsAt,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -157,6 +165,8 @@ class Listing {
       isOnline: isOnline ?? this.isOnline,
       meetingUrl: meetingUrl ?? this.meetingUrl,
       registrationUrl: registrationUrl ?? this.registrationUrl,
+      eventType: eventType ?? this.eventType,
+      startsAt: startsAt != null ? startsAt() : this.startsAt,
     );
   }
 }

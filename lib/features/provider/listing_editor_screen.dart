@@ -50,6 +50,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _registrationUrl = TextEditingController();
 
   bool _isOnline = true;
+  MasterclassEventType? _eventType;
+  DateTime? _startsAt;
   bool _saving = false;
   bool _showErrors = false;
   LatLng _pickedLocation = mockHome;
@@ -87,6 +89,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       _isOnline = l.isOnline;
       _url.text = l.meetingUrl;
       _registrationUrl.text = l.registrationUrl;
+      _eventType = l.eventType;
+      _startsAt = l.startsAt;
     }
     if (_highlights.isEmpty) _highlights.add(TextEditingController());
   }
@@ -128,6 +132,67 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         uri.host.isNotEmpty;
   }
 
+  Future<void> _chooseEventType(MasterclassEventType eventType) async {
+    if (eventType == MasterclassEventType.oneTime &&
+        _eventType != MasterclassEventType.oneTime) {
+      final l10n = AppLocalizations.of(context)!;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.oneTimeEventWarningTitle),
+          content: Text(l10n.oneTimeEventWarningMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.continueLabel),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true || !mounted) return;
+    }
+    setState(() => _eventType = eventType);
+  }
+
+  Future<void> _chooseStartDateTime() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, now.month, now.day);
+    final lastDate = DateTime(now.year + 5, 12, 31);
+    var initial = _startsAt ?? now.add(const Duration(days: 1));
+    if (initial.isBefore(firstDate)) {
+      initial = now.add(const Duration(days: 1));
+    } else if (initial.isAfter(lastDate)) {
+      initial = lastDate;
+    }
+    final date = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+    if (date == null || !mounted) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (time == null || !mounted) return;
+
+    setState(() {
+      _startsAt = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     final missingCore =
@@ -135,12 +200,17 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     final missingUrl = _isOnline && _url.text.trim().isEmpty;
     final missingLocation = !_isOnline && _neighborhood.text.trim().isEmpty;
     final invalidRegistrationUrl = !_isValidOptionalUrl(_registrationUrl.text);
+    final missingEventType = _eventType == null;
+    final invalidStartsAt =
+        _startsAt == null || !_startsAt!.isAfter(DateTime.now());
 
     if (user == null) return;
     if (missingCore ||
         missingLocation ||
         missingUrl ||
-        invalidRegistrationUrl) {
+        invalidRegistrationUrl ||
+        missingEventType ||
+        invalidStartsAt) {
       final l10n = AppLocalizations.of(context)!;
       setState(() => _showErrors = true);
       ScaffoldMessenger.of(
@@ -195,6 +265,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         isOnline: _isOnline,
         meetingUrl: _isOnline ? _url.text.trim() : '',
         registrationUrl: _registrationUrl.text.trim(),
+        eventType: _eventType!,
+        startsAt: () => _startsAt,
       );
 
       // 1. Save the listing fields (images are managed separately). Create
@@ -240,6 +312,67 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           children: [
+            Text(l10n.eventScheduleTitle, style: AppTypography.h3),
+            const SizedBox(height: AppSpacing.xs),
+            Text(l10n.eventTypePrompt, style: AppTypography.body),
+            const SizedBox(height: AppSpacing.md),
+            SegmentedButton<MasterclassEventType>(
+              style: SegmentedButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                selectedForegroundColor: Colors.white,
+                selectedBackgroundColor: AppColors.primary,
+              ),
+              segments: [
+                ButtonSegment(
+                  value: MasterclassEventType.oneTime,
+                  icon: const Icon(Icons.event_outlined),
+                  label: Text(l10n.eventOneTime),
+                ),
+                ButtonSegment(
+                  value: MasterclassEventType.ongoing,
+                  icon: const Icon(Icons.event_repeat_outlined),
+                  label: Text(l10n.eventOngoing),
+                ),
+              ],
+              selected: _eventType == null ? {} : {_eventType!},
+              emptySelectionAllowed: true,
+              onSelectionChanged: (selection) {
+                if (selection.isNotEmpty) {
+                  _chooseEventType(selection.first);
+                }
+              },
+            ),
+            if (_showErrors && _eventType == null) ...[
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.eventTypeRequired,
+                style: AppTypography.caption.copyWith(color: AppColors.primary),
+              ),
+            ],
+            if (_eventType != null) ...[
+              const SizedBox(height: AppSpacing.md),
+              OutlinedButton.icon(
+                onPressed: _chooseStartDateTime,
+                icon: const Icon(Icons.schedule_outlined),
+                label: Text(
+                  _startsAt == null
+                      ? l10n.chooseEventDateTime
+                      : '${MaterialLocalizations.of(context).formatFullDate(_startsAt!)} · ${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_startsAt!))}',
+                ),
+              ),
+              if (_showErrors &&
+                  (_startsAt == null ||
+                      !_startsAt!.isAfter(DateTime.now()))) ...[
+                const SizedBox(height: AppSpacing.xs),
+                Text(
+                  l10n.futureEventDateRequired,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ],
+            const SizedBox(height: AppSpacing.xxl),
             //Title
             TextField(
               controller: _title,

@@ -19,11 +19,32 @@ import 'widgets/tutor_sort_menu.dart';
 
 /// Dedicated, person-forward Tutoring page: subject rail, format filters
 /// and tutor cards (instead of the generic venue directory).
-class TutoringScreen extends ConsumerWidget {
+class TutoringScreen extends ConsumerStatefulWidget {
   const TutoringScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TutoringScreen> createState() => _TutoringScreenState();
+}
+
+class _TutoringScreenState extends ConsumerState<TutoringScreen> {
+  bool _searchOptionsEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void enableSearchOptions() {
+    setState(() => _searchOptionsEnabled = !_searchOptionsEnabled);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final filter = ref.watch(tutorFilterProvider);
     final asyncTutors = ref.watch(filteredTutorsProvider);
@@ -31,32 +52,41 @@ class TutoringScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        titleSpacing: 0,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(l10n.catTutoring, style: AppTypography.h3),
-            asyncTutors.when(
-              loading: () => Text(l10n.loading, style: AppTypography.small),
-              error: (_, _) => const SizedBox.shrink(),
-              data: (tutors) => Text(
-                l10n.resultsCount(tutors.length),
-                style: AppTypography.small,
+            Expanded(child: SizedBox(height: 48, child: TutorSearchPill())),
+            SizedBox(width: AppSpacing.sm),
+            SizedBox.square(
+              dimension: 48,
+              child: IconButton(
+                onPressed: enableSearchOptions,
+                icon: const Icon(Icons.tune, size: 20),
               ),
             ),
+            SizedBox(width: AppSpacing.md),
           ],
         ),
+        // title: Column(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
+        //     Text(l10n.catTutoring, style: AppTypography.h3),
+        //     asyncTutors.when(
+        //       loading: () => Text(l10n.loading, style: AppTypography.small),
+        //       error: (_, _) => const SizedBox.shrink(),
+        //       data: (tutors) => Text(
+        //         l10n.resultsCount(tutors.length),
+        //         style: AppTypography.small,
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.md,
-              AppSpacing.lg,
-              AppSpacing.md,
-            ),
-            child: TutorSearchPill(),
-          ),
+          SizedBox(height: AppSpacing.sm),
           SizedBox(
             height: 40,
             child: asyncSubjects.when(
@@ -88,28 +118,34 @@ class TutoringScreen extends ConsumerWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.sm,
-            ),
-            child: Row(
-              children: [
-                _ToolbarButton(
-                  icon: Icons.tune,
-                  label: l10n.filters,
-                  highlighted: filter.hasActiveFilters,
-                  onTap: () => showTutorFilterSheet(context),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                _ToolbarButton(
-                  icon: Icons.swap_vert,
-                  label: l10n.sort,
-                  highlighted: filter.sort != TutorSort.rating,
-                  onTap: () => showTutorSortMenu(context),
-                ),
-              ],
-            ),
+          SizedBox(height: _searchOptionsEnabled ? 0 : AppSpacing.sm),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: _searchOptionsEnabled
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.lg,
+                      vertical: AppSpacing.sm,
+                    ),
+                    child: Row(
+                      children: [
+                        _ToolbarButton(
+                          icon: Icons.tune,
+                          label: l10n.filters,
+                          highlighted: filter.hasActiveFilters,
+                          onTap: () => showTutorFilterSheet(context),
+                        ),
+                        const SizedBox(width: AppSpacing.sm),
+                        _ToolbarButton(
+                          icon: Icons.swap_vert,
+                          label: l10n.sort,
+                          highlighted: filter.sort != TutorSort.rating,
+                          onTap: () => showTutorSortMenu(context),
+                        ),
+                      ],
+                    ),
+                  )
+                : SizedBox(height: AppSpacing.sm),
           ),
           const Divider(),
           Expanded(

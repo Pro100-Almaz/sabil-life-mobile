@@ -403,7 +403,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inquiryComposerHint =>
-      'Tell the provider a bit about your child and what you\'re looking for.';
+      'Tell the tutor a bit about yourself or the student, and what you\'re looking for.';
 
   @override
   String get send => 'Send';
@@ -1051,6 +1051,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get meetingLinkError => 'Couldn’t open the meeting link';
+
+  @override
+  String get eventScheduleTitle => 'Masterclass schedule';
+
+  @override
+  String get eventTypePrompt =>
+      'Is this a one-time event or an ongoing masterclass?';
+
+  @override
+  String get eventOneTime => 'One-time event';
+
+  @override
+  String get eventOngoing => 'Ongoing';
+
+  @override
+  String get eventTypeRequired => 'Choose an event type';
+
+  @override
+  String get oneTimeEventWarningTitle => 'Create a one-time event?';
+
+  @override
+  String get oneTimeEventWarningMessage =>
+      'One hour after its scheduled start, this masterclass will no longer be shown publicly and will return to Draft.';
+
+  @override
+  String get chooseEventDateTime => 'Choose date and time';
+
+  @override
+  String get futureEventDateRequired => 'Choose a date and time in the future';
+
+  @override
+  String get pauseProfile => 'Stop tutoring';
+
+  @override
+  String get activateProfile => 'Start tutoring';
+
+  @override
+  String get activateAlert => 'Activate Profile?';
+
+  @override
+  String get activateAlertLong =>
+      'Your profile will be visible to clients and you will start recieving new inquiries.';
+
+  @override
+  String get pauseAlert => 'Pause Teaching?';
+
+  @override
+  String get pauseAlertLong =>
+      'Your profile will no longer appear to clients and you will not receive new inquiries.';
+
+  @override
+  String get profileActivated => 'Your tutor profile has been activated.';
+
+  @override
+  String get profilePaused => 'Your tutor profile has been paused.';
 
   @override
   String get linkedinUrl => 'LinkedIn profile URL';

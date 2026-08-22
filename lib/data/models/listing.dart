@@ -45,6 +45,24 @@ enum ListingStatus { draft, pending, active, rejected }
 
 enum MasterclassEventType { oneTime, ongoing }
 
+enum ListingContactType { phone, email, website, whatsapp, instagram, telegram }
+
+class ListingContact {
+  const ListingContact({
+    this.id,
+    required this.type,
+    required this.value,
+    this.label = '',
+    this.position = 0,
+  });
+
+  final String? id;
+  final ListingContactType type;
+  final String value;
+  final String label;
+  final int position;
+}
+
 class Listing {
   const Listing({
     required this.id,
@@ -69,6 +87,7 @@ class Listing {
     this.startsAt,
     this.tags = const [],
     this.images = const [],
+    this.contacts = const [],
     this.ownerId,
     this.status = ListingStatus.active,
   });
@@ -111,6 +130,9 @@ class Listing {
   /// card payloads; populated on detail and provider-owned listings.
   final List<ListingImage> images;
 
+  /// Optional public contact methods, ordered by [ListingContact.position].
+  final List<ListingContact> contacts;
+
   /// `AuthUser.id` of the provider that owns this listing. `null` = platform-
   /// seeded content (schools, partner offers etc.) that no provider manages.
   final String? ownerId;
@@ -134,6 +156,7 @@ class Listing {
     List<String>? highlights,
     List<String>? tags,
     List<ListingImage>? images,
+    List<ListingContact>? contacts,
     String? Function()? ownerId,
     ListingStatus? status,
     bool? isOnline,
@@ -160,6 +183,7 @@ class Listing {
       highlights: highlights ?? this.highlights,
       tags: tags ?? this.tags,
       images: images ?? this.images,
+      contacts: contacts ?? this.contacts,
       ownerId: ownerId != null ? ownerId() : this.ownerId,
       status: status ?? this.status,
       isOnline: isOnline ?? this.isOnline,

@@ -1122,4 +1122,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get linkedinOpenError => 'Couldn’t open the LinkedIn profile.';
+
+  @override
+  String get contactInformation => 'Contact information';
+
+  @override
+  String get contactInformationOptional =>
+      'Optional — add up to 20 ways for users to contact you';
+
+  @override
+  String get contacts => 'Contacts';
+
+  @override
+  String get websitesAndSocialNetworks => 'Websites and social networks';
+
+  @override
+  String get contactType => 'Contact type';
+
+  @override
+  String get contactValue => 'Contact details or link';
+
+  @override
+  String get contactLabel => 'Label (optional)';
+
+  @override
+  String get contactLabelHint => 'For example: Reception';
+
+  @override
+  String get addContact => 'Add contact';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get contactPhone => 'Phone';
+
+  @override
+  String get contactWebsite => 'Website';
+
+  @override
+  String get contactWhatsApp => 'WhatsApp';
+
+  @override
+  String get contactInstagram => 'Instagram';
+
+  @override
+  String get contactTelegram => 'Telegram';
+
+  @override
+  String get contactInvalidPhone => 'Enter a valid phone number';
+
+  @override
+  String get contactOpenError => 'Couldn’t open this contact';
+
+  @override
+  String get duplicateContact =>
+      'The same contact cannot be added more than once';
 }

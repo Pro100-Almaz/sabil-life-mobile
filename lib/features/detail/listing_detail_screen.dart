@@ -19,6 +19,7 @@ import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/util/distance.dart';
 import '../../core/util/meeting_link.dart';
+import '../../core/util/listing_contact.dart';
 import '../../core/util/tutor_label.dart';
 import '../../core/util/directions.dart';
 import '../../data/api/api_config.dart';
@@ -239,7 +240,9 @@ class _DetailBody extends ConsumerWidget {
                   ),
                   Text(l10n.details, style: AppTypography.h2),
                   const SizedBox(height: AppSpacing.md),
-                  if (listing.isOnline) ...[
+                  if (listing.category == CategoryType.masterclasses &&
+                      listing.isOnline &&
+                      listing.meetingUrl.trim().isNotEmpty) ...[
                     AppButton(
                       label: l10n.joinMeeting,
                       icon: Icons.videocam_outlined,
@@ -348,6 +351,13 @@ class _DetailBody extends ConsumerWidget {
                       },
                     ),
                   ],
+                  if (listing.contacts.isNotEmpty) ...[
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+                      child: Divider(),
+                    ),
+                    _ListingContacts(contacts: listing.contacts),
+                  ],
 
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
@@ -447,6 +457,137 @@ class _DetailBody extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class _ListingContacts extends StatelessWidget {
+  const _ListingContacts({required this.contacts});
+
+  final List<ListingContact> contacts;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final directContacts = contacts
+        .where(
+          (contact) =>
+              contact.type == ListingContactType.phone ||
+              contact.type == ListingContactType.email,
+        )
+        .toList();
+    final webContacts = contacts
+        .where(
+          (contact) =>
+              contact.type != ListingContactType.phone &&
+              contact.type != ListingContactType.email,
+        )
+        .toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (directContacts.isNotEmpty) ...[
+          Text(l10n.contacts, style: AppTypography.h2),
+          const SizedBox(height: AppSpacing.md),
+          for (final contact in directContacts)
+            _ContactButton(contact: contact),
+        ],
+        if (directContacts.isNotEmpty && webContacts.isNotEmpty)
+          const SizedBox(height: AppSpacing.xl),
+        if (webContacts.isNotEmpty) ...[
+          Text(l10n.websitesAndSocialNetworks, style: AppTypography.h2),
+          const SizedBox(height: AppSpacing.md),
+          Wrap(
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (final contact in webContacts)
+                _SocialContactButton(contact: contact),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _ContactButton extends StatelessWidget {
+  const _ContactButton({required this.contact});
+
+  final ListingContact contact;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = contact.label.trim().isEmpty
+        ? contact.value
+        : contact.label.trim();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: Material(
+        color: AppColors.surfaceAlt,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        child: ListTile(
+          leading: Icon(
+            contact.type == ListingContactType.phone
+                ? Icons.phone_outlined
+                : Icons.email_outlined,
+            color: AppColors.primary,
+          ),
+          title: Text(label),
+          subtitle: contact.label.trim().isEmpty ? null : Text(contact.value),
+          trailing: const Icon(Icons.open_in_new, size: 18),
+          onTap: () => _openContact(context, contact),
+        ),
+      ),
+    );
+  }
+}
+
+class _SocialContactButton extends StatelessWidget {
+  const _SocialContactButton({required this.contact});
+
+  final ListingContact contact;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final fallbackLabel = switch (contact.type) {
+      ListingContactType.website => l10n.contactWebsite,
+      ListingContactType.whatsapp => l10n.contactWhatsApp,
+      ListingContactType.instagram => l10n.contactInstagram,
+      ListingContactType.telegram => l10n.contactTelegram,
+      ListingContactType.phone => l10n.contactPhone,
+      ListingContactType.email => l10n.email,
+    };
+    final label = contact.label.trim().isEmpty
+        ? fallbackLabel
+        : contact.label.trim();
+
+    return OutlinedButton.icon(
+      onPressed: () => _openContact(context, contact),
+      icon: Icon(_contactIcon(contact.type)),
+      label: Text(label),
+    );
+  }
+}
+
+IconData _contactIcon(ListingContactType type) {
+  return switch (type) {
+    ListingContactType.phone => Icons.phone_outlined,
+    ListingContactType.email => Icons.email_outlined,
+    ListingContactType.website => Icons.language,
+    ListingContactType.whatsapp => Icons.chat_outlined,
+    ListingContactType.instagram => Icons.camera_alt_outlined,
+    ListingContactType.telegram => Icons.send_outlined,
+  };
+}
+
+Future<void> _openContact(BuildContext context, ListingContact contact) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final errorMessage = AppLocalizations.of(context)!.contactOpenError;
+  final opened = await openListingContact(contact);
+  if (!opened) {
+    messenger.showSnackBar(SnackBar(content: Text(errorMessage)));
   }
 }
 

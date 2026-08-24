@@ -19,6 +19,7 @@ class ListingParser {
       priceFromQar: toInt(data['price_from_qar']),
       imageUrls: toStringList(data['image_urls']),
       images: parseImages(data['images']),
+      contacts: parseContacts(data['contacts']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
       tags: toStringList(data['tags']),
@@ -27,7 +28,7 @@ class ListingParser {
       highlights: toStringList(data['highlights']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
-      isOnline: (data['is_online'] ?? true) as bool,
+      isOnline: (data['is_online'] ?? false) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
@@ -51,12 +52,13 @@ class ListingParser {
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
       images: parseImages(data['images']),
+      contacts: parseContacts(data['contacts']),
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
       tags: toStringList(data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
-      isOnline: (data['is_online'] ?? true) as bool,
+      isOnline: (data['is_online'] ?? false) as bool,
       meetingUrl: (data['meeting_url'] ?? '') as String,
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
@@ -78,6 +80,49 @@ class ListingParser {
       url: (data['url'] ?? '') as String,
       position: toInt(data['position']),
     );
+  }
+
+  static List<ListingContact> parseContacts(dynamic value) {
+    if (value is! List) return const [];
+    final contacts = value
+        .whereType<Map>()
+        .map((item) => Map<String, dynamic>.from(item))
+        .map(
+          (item) => ListingContact(
+            id: item['id']?.toString(),
+            type: parseContactType(item['contact_type']?.toString()),
+            value: (item['value'] ?? '').toString(),
+            label: (item['label'] ?? '').toString(),
+            position: toInt(item['position']),
+          ),
+        )
+        .where((contact) => contact.value.trim().isNotEmpty)
+        .toList();
+    contacts.sort((a, b) => a.position.compareTo(b.position));
+    return contacts;
+  }
+
+  static ListingContactType parseContactType(String? raw) {
+    return switch (raw?.toUpperCase()) {
+      'PHONE' => ListingContactType.phone,
+      'EMAIL' => ListingContactType.email,
+      'WEBSITE' => ListingContactType.website,
+      'WHATSAPP' => ListingContactType.whatsapp,
+      'INSTAGRAM' => ListingContactType.instagram,
+      'TELEGRAM' => ListingContactType.telegram,
+      _ => ListingContactType.website,
+    };
+  }
+
+  static String serializeContactType(ListingContactType type) {
+    return switch (type) {
+      ListingContactType.phone => 'PHONE',
+      ListingContactType.email => 'EMAIL',
+      ListingContactType.website => 'WEBSITE',
+      ListingContactType.whatsapp => 'WHATSAPP',
+      ListingContactType.instagram => 'INSTAGRAM',
+      ListingContactType.telegram => 'TELEGRAM',
+    };
   }
 
   static CategoryType parseCategory(String? raw) {

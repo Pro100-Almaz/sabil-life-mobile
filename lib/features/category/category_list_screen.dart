@@ -71,6 +71,7 @@ class _CategoryListScreenState extends ConsumerState<CategoryListScreen> {
   void dispose() {
     final filter = _filter;
     Future.microtask(() {
+      filter.setQuery('');
       filter.setCategory(null);
       filter.resetFilters();
       filter.setSortMode(SortMode.distance);

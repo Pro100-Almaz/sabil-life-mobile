@@ -13,6 +13,7 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../core/util/listing_contact.dart';
 import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/app_button.dart';
@@ -48,6 +49,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _removedImageIds = <String>{};
   final _url = TextEditingController();
   final _registrationUrl = TextEditingController();
+  final _contacts = <_ContactInput>[];
 
   bool _isOnline = true;
   MasterclassEventType? _eventType;
@@ -89,6 +91,15 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       _isOnline = l.isOnline;
       _url.text = l.meetingUrl;
       _registrationUrl.text = l.registrationUrl;
+      for (final contact in l.contacts) {
+        _contacts.add(
+          _ContactInput(
+            type: contact.type,
+            value: contact.value,
+            label: contact.label,
+          ),
+        );
+      }
       _eventType = l.eventType;
       _startsAt = l.startsAt;
     }
@@ -104,6 +115,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _description.dispose();
     _url.dispose();
     _registrationUrl.dispose();
+    for (final contact in _contacts) {
+      contact.dispose();
+    }
     for (final c in _highlights) {
       c.dispose();
     }
@@ -130,6 +144,38 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     return uri != null &&
         (uri.scheme == 'http' || uri.scheme == 'https') &&
         uri.host.isNotEmpty;
+  }
+
+  String _contactTypeLabel(AppLocalizations l10n, ListingContactType type) {
+    return switch (type) {
+      ListingContactType.phone => l10n.contactPhone,
+      ListingContactType.email => l10n.email,
+      ListingContactType.website => l10n.contactWebsite,
+      ListingContactType.whatsapp => l10n.contactWhatsApp,
+      ListingContactType.instagram => l10n.contactInstagram,
+      ListingContactType.telegram => l10n.contactTelegram,
+    };
+  }
+
+  String? _contactError(AppLocalizations l10n, _ContactInput contact) {
+    return switch (validateListingContact(contact.type, contact.value.text)) {
+      'required' => l10n.fieldRequired,
+      'email' => l10n.emailInvalid,
+      'phone' => l10n.contactInvalidPhone,
+      'url' => l10n.invalidUrl,
+      _ => null,
+    };
+  }
+
+  bool get _hasDuplicateContacts {
+    final seen = <String>{};
+    for (final contact in _contacts) {
+      final value = contact.value.text.trim().toLowerCase();
+      if (value.isEmpty) continue;
+      final identity = '${contact.type.name}:$value';
+      if (!seen.add(identity)) return true;
+    }
+    return false;
   }
 
   Future<void> _chooseEventType(MasterclassEventType eventType) async {
@@ -200,6 +246,10 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     final missingUrl = _isOnline && _url.text.trim().isEmpty;
     final missingLocation = !_isOnline && _neighborhood.text.trim().isEmpty;
     final invalidRegistrationUrl = !_isValidOptionalUrl(_registrationUrl.text);
+    final invalidContacts = _contacts.any(
+      (contact) =>
+          validateListingContact(contact.type, contact.value.text) != null,
+    );
     final missingEventType = _eventType == null;
     final invalidStartsAt =
         _startsAt == null || !_startsAt!.isAfter(DateTime.now());
@@ -209,6 +259,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         missingLocation ||
         missingUrl ||
         invalidRegistrationUrl ||
+        invalidContacts ||
+        _hasDuplicateContacts ||
         missingEventType ||
         invalidStartsAt) {
       final l10n = AppLocalizations.of(context)!;
@@ -265,6 +317,15 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         isOnline: _isOnline,
         meetingUrl: _isOnline ? _url.text.trim() : '',
         registrationUrl: _registrationUrl.text.trim(),
+        contacts: [
+          for (var index = 0; index < _contacts.length; index++)
+            ListingContact(
+              type: _contacts[index].type,
+              value: _contacts[index].value.text.trim(),
+              label: _contacts[index].label.text.trim(),
+              position: index,
+            ),
+        ],
         eventType: _eventType!,
         startsAt: () => _startsAt,
       );
@@ -498,6 +559,103 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
                     : null,
               ),
             ),
+            const SizedBox(height: AppSpacing.md),
+            Text(l10n.contactInformation, style: AppTypography.h3),
+            const SizedBox(height: AppSpacing.xs),
+            Text(l10n.contactInformationOptional, style: AppTypography.caption),
+            const SizedBox(height: AppSpacing.md),
+            for (var index = 0; index < _contacts.length; index++) ...[
+              Container(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: AppColors.surfaceAlt,
+                  borderRadius: BorderRadius.circular(AppRadius.card),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<ListingContactType>(
+                            initialValue: _contacts[index].type,
+                            decoration: InputDecoration(
+                              labelText: l10n.contactType,
+                            ),
+                            items: [
+                              for (final type in ListingContactType.values)
+                                DropdownMenuItem(
+                                  value: type,
+                                  child: Text(_contactTypeLabel(l10n, type)),
+                                ),
+                            ],
+                            onChanged: (type) {
+                              if (type != null) {
+                                setState(() => _contacts[index].type = type);
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          tooltip: l10n.remove,
+                          onPressed: () => setState(() {
+                            final contact = _contacts.removeAt(index);
+                            contact.dispose();
+                          }),
+                          icon: const Icon(Icons.delete_outline),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    TextField(
+                      controller: _contacts[index].value,
+                      keyboardType: switch (_contacts[index].type) {
+                        ListingContactType.phone => TextInputType.phone,
+                        ListingContactType.email => TextInputType.emailAddress,
+                        _ => TextInputType.url,
+                      },
+                      autocorrect: false,
+                      onChanged: (_) {
+                        if (_showErrors) setState(() {});
+                      },
+                      decoration: InputDecoration(
+                        labelText: l10n.contactValue,
+                        hintText: switch (_contacts[index].type) {
+                          ListingContactType.phone => '+974 5555 1234',
+                          ListingContactType.email => 'hello@example.com',
+                          _ => 'https://example.com',
+                        },
+                        errorText: _showErrors
+                            ? _contactError(l10n, _contacts[index])
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    TextField(
+                      controller: _contacts[index].label,
+                      decoration: InputDecoration(
+                        labelText: l10n.contactLabel,
+                        hintText: l10n.contactLabelHint,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+            ],
+            OutlinedButton.icon(
+              onPressed: _contacts.length >= 20
+                  ? null
+                  : () => setState(() => _contacts.add(_ContactInput())),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.addContact),
+            ),
+            if (_showErrors && _hasDuplicateContacts) ...[
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.duplicateContact,
+                style: AppTypography.caption.copyWith(color: AppColors.primary),
+              ),
+            ],
             const SizedBox(height: AppSpacing.md),
             TextField(
               controller: _price,
@@ -773,5 +931,23 @@ class _RepeatableSection extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _ContactInput {
+  _ContactInput({
+    this.type = ListingContactType.phone,
+    String value = '',
+    String label = '',
+  }) : value = TextEditingController(text: value),
+       label = TextEditingController(text: label);
+
+  ListingContactType type;
+  final TextEditingController value;
+  final TextEditingController label;
+
+  void dispose() {
+    value.dispose();
+    label.dispose();
   }
 }

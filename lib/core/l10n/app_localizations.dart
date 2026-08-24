@@ -2175,6 +2175,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn’t open the LinkedIn profile.'**
   String get linkedinOpenError;
+
+  /// No description provided for @contactInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact information'**
+  String get contactInformation;
+
+  /// No description provided for @contactInformationOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — add up to 20 ways for users to contact you'**
+  String get contactInformationOptional;
+
+  /// No description provided for @contacts.
+  ///
+  /// In en, this message translates to:
+  /// **'Contacts'**
+  String get contacts;
+
+  /// No description provided for @websitesAndSocialNetworks.
+  ///
+  /// In en, this message translates to:
+  /// **'Websites and social networks'**
+  String get websitesAndSocialNetworks;
+
+  /// No description provided for @contactType.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact type'**
+  String get contactType;
+
+  /// No description provided for @contactValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact details or link'**
+  String get contactValue;
+
+  /// No description provided for @contactLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label (optional)'**
+  String get contactLabel;
+
+  /// No description provided for @contactLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example: Reception'**
+  String get contactLabelHint;
+
+  /// No description provided for @addContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Add contact'**
+  String get addContact;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @contactPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get contactPhone;
+
+  /// No description provided for @contactWebsite.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get contactWebsite;
+
+  /// No description provided for @contactWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get contactWhatsApp;
+
+  /// No description provided for @contactInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram'**
+  String get contactInstagram;
+
+  /// No description provided for @contactTelegram.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram'**
+  String get contactTelegram;
+
+  /// No description provided for @contactInvalidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid phone number'**
+  String get contactInvalidPhone;
+
+  /// No description provided for @contactOpenError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t open this contact'**
+  String get contactOpenError;
+
+  /// No description provided for @duplicateContact.
+  ///
+  /// In en, this message translates to:
+  /// **'The same contact cannot be added more than once'**
+  String get duplicateContact;
 }
 
 class _AppLocalizationsDelegate

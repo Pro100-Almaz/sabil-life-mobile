@@ -318,64 +318,83 @@ class _MapScreenState extends ConsumerState<MapScreen>
                 ),
             ],
           ),
+          // Keep the rail and its toggle in one layout.  AnimatedSlide only
+          // changes painting position, so separate overlays could overlap when
+          // their sizes or the safe-area inset changed.
           SafeArea(
-            child: AnimatedSlide(
-              offset: _showCategory ? Offset.zero : Offset(0, -3),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              child: Container(
-                height: 40,
-                alignment: Alignment.centerLeft,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                  ),
-                  children: [
-                    _shadowed(
-                      PillChip(
-                        label: l10n.catAll,
-                        selected: selectedCategory == null,
-                        onTap: () =>
-                            ref.read(filterProvider.notifier).setCategory(null),
-                      ),
-                    ),
-                    for (final category in CategoryType.values) ...[
-                      const SizedBox(width: AppSpacing.sm),
-                      _shadowed(
-                        PillChip(
-                          label: category.label(l10n),
-                          selected: selectedCategory == category,
-                          onTap: () => ref
-                              .read(filterProvider.notifier)
-                              .setCategory(category),
+            child: Padding(
+              padding: const EdgeInsets.only(left: AppSpacing.lg),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRect(
+                    child: AnimatedAlign(
+                      alignment: Alignment.topLeft,
+                      heightFactor: _showCategory ? 1 : 0,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                      child: AnimatedSlide(
+                        offset: _showCategory
+                            ? Offset.zero
+                            : const Offset(0, -1),
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                        child: SizedBox(
+                          height: 40,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.only(
+                              right: AppSpacing.lg,
+                            ),
+                            children: [
+                              _shadowed(
+                                PillChip(
+                                  label: l10n.catAll,
+                                  selected: selectedCategory == null,
+                                  onTap: () => ref
+                                      .read(filterProvider.notifier)
+                                      .setCategory(null),
+                                ),
+                              ),
+                              for (final category in CategoryType.values) ...[
+                                const SizedBox(width: AppSpacing.sm),
+                                _shadowed(
+                                  PillChip(
+                                    label: category.label(l10n),
+                                    selected: selectedCategory == category,
+                                    onTap: () => ref
+                                        .read(filterProvider.notifier)
+                                        .setCategory(category),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            left: AppSpacing.lg,
-            child: AnimatedSlide(
-              offset: _showBurger ? Offset.zero : Offset(0, 1.0),
-              duration: const Duration(milliseconds: 200),
-              child: FloatingActionButton.small(
-                onPressed: _burgerPressed,
-                heroTag: 'map_burger',
-                backgroundColor: _showBurger
-                    ? AppColors.surface
-                    : AppColors.primary,
-                foregroundColor: _showBurger
-                    ? AppColors.primaryPressed
-                    : AppColors.surface,
-                elevation: 2,
-                child: _showBurger
-                    ? const Icon(Icons.menu, size: 20)
-                    : const Icon(Icons.arrow_upward, size: 20),
+                    ),
+                  ),
+                  AnimatedContainer(
+                    height: _showCategory ? AppSpacing.md : 0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                  ),
+                  FloatingActionButton.small(
+                    onPressed: _burgerPressed,
+                    heroTag: 'map_burger',
+                    backgroundColor: _showBurger
+                        ? AppColors.surface
+                        : AppColors.primary,
+                    foregroundColor: _showBurger
+                        ? AppColors.primaryPressed
+                        : AppColors.surface,
+                    elevation: 2,
+                    child: _showBurger
+                        ? const Icon(Icons.menu, size: 20)
+                        : const Icon(Icons.arrow_upward, size: 20),
+                  ),
+                ],
               ),
             ),
           ),

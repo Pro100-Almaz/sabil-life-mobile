@@ -82,10 +82,25 @@ class TutorGateScreen extends ConsumerWidget {
             );
           }
 
-          // none / cancelled — fill the profile to request verification.
-          return TutorProfileForm(
-            userId: user.id,
-            headerMessage: l10n.fillTutorProfile,
+          // A verification can be deleted independently of its tutor detail.
+          // Load the detail before choosing create vs update so an existing
+          // profile is re-submitted with PATCH instead of a conflicting POST.
+          final detailAsync = ref.watch(tutorDetailForUserProvider(user.id));
+          return detailAsync.when(
+            loading: () => const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+            error: (e, _) => Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.xxl),
+                child: Text(l10n.genericLoadError, style: AppTypography.body),
+              ),
+            ),
+            data: (detail) => TutorProfileForm(
+              userId: user.id,
+              headerMessage: l10n.fillTutorProfile,
+              existingProfile: detail,
+            ),
           );
         },
       ),

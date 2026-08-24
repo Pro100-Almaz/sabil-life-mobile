@@ -1124,4 +1124,59 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get linkedinOpenError => 'LinkedIn профилін ашу мүмкін болмады.';
+
+  @override
+  String get contactInformation => 'Байланыс ақпараты';
+
+  @override
+  String get contactInformationOptional =>
+      'Міндетті емес — 20-ға дейін байланыс тәсілін қосыңыз';
+
+  @override
+  String get contacts => 'Байланыстар';
+
+  @override
+  String get websitesAndSocialNetworks => 'Веб-сайттар және әлеуметтік желілер';
+
+  @override
+  String get contactType => 'Байланыс түрі';
+
+  @override
+  String get contactValue => 'Байланыс деректері немесе сілтеме';
+
+  @override
+  String get contactLabel => 'Атауы (міндетті емес)';
+
+  @override
+  String get contactLabelHint => 'Мысалы: Қабылдау бөлімі';
+
+  @override
+  String get addContact => 'Байланыс қосу';
+
+  @override
+  String get remove => 'Жою';
+
+  @override
+  String get contactPhone => 'Телефон';
+
+  @override
+  String get contactWebsite => 'Веб-сайт';
+
+  @override
+  String get contactWhatsApp => 'WhatsApp';
+
+  @override
+  String get contactInstagram => 'Instagram';
+
+  @override
+  String get contactTelegram => 'Telegram';
+
+  @override
+  String get contactInvalidPhone => 'Жарамды телефон нөмірін енгізіңіз';
+
+  @override
+  String get contactOpenError => 'Бұл байланысты ашу мүмкін болмады';
+
+  @override
+  String get duplicateContact => 'Бір байланысты бірнеше рет қосуға болмайды';
 }

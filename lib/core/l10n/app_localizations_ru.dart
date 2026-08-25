@@ -133,6 +133,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get saved => 'Сохранено';
 
   @override
+  String get savedToFavorites => 'Сохранено в избранное';
+
+  @override
   String get noFavorites => 'Пока ничего не сохранено';
 
   @override

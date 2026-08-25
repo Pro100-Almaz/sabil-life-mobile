@@ -340,6 +340,12 @@ abstract class AppLocalizations {
   /// **'Saved'**
   String get saved;
 
+  /// No description provided for @savedToFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to favorites'**
+  String get savedToFavorites;
+
   /// No description provided for @noFavorites.
   ///
   /// In en, this message translates to:

@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/state/city_providers.dart';
+import '../../../core/state/provider_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/util/linkedin.dart';
 import '../../../core/util/tutor_label.dart';
 import '../../../data/mock/mock_listings.dart';
+import '../../../data/models/review.dart';
 import '../../../data/models/tutor.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/star_rating.dart';
@@ -63,6 +65,7 @@ class TutorProfileSheet extends ConsumerWidget {
     final hasLinkedIn = tutor.linkedinUrl.trim().isNotEmpty;
     final hasFacts =
         hasCredentials || hasLanguages || hasCity || centre != null;
+    final asyncReviews = ref.watch(tutorReviewsProvider(tutor.id));
 
     // Resolve the canonical city value (e.g. "Doha, QA") to its name in the
     // current app language, falling back to the raw value if not in the list.
@@ -211,6 +214,32 @@ class TutorProfileSheet extends ConsumerWidget {
             const SizedBox(height: AppSpacing.xl),
             Row(
               children: [
+                Text(l10n.reviews(tutor.reviewCount), style: AppTypography.h3),
+                const Spacer(),
+                StarRating(rating: tutor.rating),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            if (asyncReviews.isLoading)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(AppSpacing.lg),
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+            else if (!asyncReviews.hasError)
+              for (final review
+                  in asyncReviews.valueOrNull ?? const <Review>[]) ...[
+                _TutorReviewTile(review: review),
+                const SizedBox(height: AppSpacing.xl),
+              ],
+
+            const SizedBox(height: AppSpacing.xl),
+            Row(
+              children: [
                 Text(
                   l10n.perHour('${tutor.pricePerHourQar}'),
                   style: AppTypography.h3,
@@ -252,6 +281,52 @@ class TutorProfileSheet extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TutorReviewTile extends StatelessWidget {
+  const _TutorReviewTile({required this.review});
+
+  final Review review;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: AppColors.surfaceAlt,
+              child: Text(
+                review.author.characters.first,
+                style: AppTypography.label,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(review.author, style: AppTypography.label),
+                  Text(
+                    l10n.monthsAgo(review.monthsAgo),
+                    style: AppTypography.small,
+                  ),
+                ],
+              ),
+            ),
+            StarRating(rating: review.rating.toDouble()),
+          ],
+        ),
+        if (review.text.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.sm),
+          Text(review.text, style: AppTypography.body.copyWith(height: 1.4)),
+        ],
+      ],
     );
   }
 }

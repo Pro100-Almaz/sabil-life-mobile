@@ -6,6 +6,10 @@
         android:label="Sabil Life"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Keep Firebase Analytics enabled without collecting Android Advertising ID. -->
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
         <activity
             android:name="io.sabil.sabil_life.MainActivity"
             android:exported="true"

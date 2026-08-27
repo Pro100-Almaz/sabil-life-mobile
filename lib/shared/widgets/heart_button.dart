@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/state/favorites_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/repositories/favorites_repository.dart';
+import 'saved_confirmation.dart';
 
 /// Animated save toggle wired to [favoritesProvider].
 class HeartButton extends ConsumerStatefulWidget {
@@ -33,12 +34,14 @@ class _HeartButtonState extends ConsumerState<HeartButton>
   }
 
   Future<void> _toggle() async {
+    final wasSaved = ref.read(favoritesProvider).contains(widget.listingId);
     try {
       await ref.read(favoritesProvider.notifier).toggle(widget.listingId);
       if (!mounted) return;
       _controller
         ..value = _controller.lowerBound
         ..animateTo(_controller.upperBound, curve: Curves.elasticOut);
+      if (!wasSaved) showSavedConfirmation(context);
     } on FavoritesException catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

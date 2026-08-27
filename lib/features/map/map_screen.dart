@@ -15,6 +15,7 @@ import '../../data/api/api_config.dart';
 import '../../data/mock/mock_home.dart';
 import '../../data/models/listing.dart';
 import '../../shared/widgets/pill_chip.dart';
+import 'widgets/category_map_marker.dart';
 import 'widgets/map_listing_preview.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -28,7 +29,9 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen>
     with TickerProviderStateMixin {
-  static const double _listingMarkerMinZoom = 11.75;
+  /// Matches the zoom where the base-map style starts showing detailed POIs
+  /// such as restaurants and cafes.
+  static const double _categoryLogoMinZoom = 16;
 
   final MapController _mapController = MapController();
   LatLng userLocation = mockHome;
@@ -37,7 +40,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
   String? _selectedId;
   bool _showCategory = false;
   bool _showBurger = true;
-  bool _showListingMarkers = false;
+  bool _showAllCategoryLogos = false;
 
   /// Listings behind a tapped cluster, shown as a swipeable carousel.
   List<Listing> _clusterListings = const [];
@@ -50,7 +53,6 @@ class _MapScreenState extends ConsumerState<MapScreen>
   void initState() {
     super.initState();
     _selectedId = widget.focusListingId;
-    _showListingMarkers = widget.focusListingId != null;
   }
 
   @override
@@ -183,6 +185,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
         .where((listing) => listing.lat != 0 && listing.lng != 0)
         .toList();
     final showCarousel = _clusterListings.isNotEmpty;
+    final hasCategoryFilter = selectedCategory != null;
+    final showListingLayer = hasCategoryFilter || _showAllCategoryLogos;
 
     return Scaffold(
       body: Stack(
@@ -193,11 +197,11 @@ class _MapScreenState extends ConsumerState<MapScreen>
               initialCenter: initialCenter,
               initialZoom: focused != null ? 14 : 11.5,
               onPositionChanged: (camera, _) {
-                final shouldShow = camera.zoom > _listingMarkerMinZoom;
-                if (shouldShow == _showListingMarkers) return;
+                final shouldShowLogos = camera.zoom >= _categoryLogoMinZoom;
+                if (shouldShowLogos == _showAllCategoryLogos) return;
                 setState(() {
-                  _showListingMarkers = shouldShow;
-                  if (!shouldShow) {
+                  _showAllCategoryLogos = shouldShowLogos;
+                  if (!shouldShowLogos && !hasCategoryFilter) {
                     _selectedId = null;
                     _clusterListings = const [];
                     _carouselIndex = 0;
@@ -268,9 +272,9 @@ class _MapScreenState extends ConsumerState<MapScreen>
                   ),
                 ],
               ),
-              // Keep the city-level view clean. Listing markers appear only
-              // once the user has zoomed in far enough to distinguish them.
-              if (_showListingMarkers)
+              // A category search always shows classic pins. In the default
+              // "All" view, category logos appear only at close zoom.
+              if (showListingLayer)
                 MarkerClusterLayerWidget(
                   options: MarkerClusterLayerOptions(
                     rotate: true,
@@ -287,24 +291,40 @@ class _MapScreenState extends ConsumerState<MapScreen>
                           point: LatLng(listing.lat, listing.lng),
                           width: 40,
                           height: 40,
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selectedId = listing.id;
-                                _clusterListings = const [];
-                                _carouselIndex = 0;
-                              });
-                              _mapController.move(
-                                LatLng(listing.lat, listing.lng),
-                                13.5,
-                              );
-                            },
-                            child: Icon(
-                              Icons.place,
-                              size: listing.id == _selectedId ? 44 : 36,
-                              color: listing.id == _selectedId
-                                  ? AppColors.primaryPressed
-                                  : AppColors.primary,
+                          child: Semantics(
+                            label: listing.title,
+                            button: true,
+                            selected: listing.id == _selectedId,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                final currentZoom = _mapController.camera.zoom;
+                                setState(() {
+                                  _selectedId = listing.id;
+                                  _clusterListings = const [];
+                                  _carouselIndex = 0;
+                                });
+                                _mapController.move(
+                                  LatLng(listing.lat, listing.lng),
+                                  currentZoom < 13.5 ? 13.5 : currentZoom,
+                                );
+                              },
+                              child: Center(
+                                child: hasCategoryFilter
+                                    ? Icon(
+                                        Icons.place,
+                                        size: listing.id == _selectedId
+                                            ? 44
+                                            : 36,
+                                        color: listing.id == _selectedId
+                                            ? AppColors.primaryPressed
+                                            : AppColors.primary,
+                                      )
+                                    : CategoryMapMarker(
+                                        category: listing.category,
+                                        selected: listing.id == _selectedId,
+                                      ),
+                              ),
                             ),
                           ),
                         ),

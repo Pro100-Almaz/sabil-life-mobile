@@ -133,6 +133,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saved => 'Saved';
 
   @override
+  String get savedToFavorites => 'Saved to favorites';
+
+  @override
   String get noFavorites => 'Nothing saved yet';
 
   @override

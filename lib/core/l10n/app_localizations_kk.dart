@@ -133,6 +133,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get saved => 'Сақталды';
 
   @override
+  String get savedToFavorites => 'Таңдаулыларға сақталды';
+
+  @override
   String get noFavorites => 'Әзірге ештеңе сақталмаған';
 
   @override

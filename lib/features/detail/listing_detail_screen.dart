@@ -32,6 +32,7 @@ import '../../data/models/review.dart';
 import '../../data/repositories/favorites_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../shared/widgets/saved_confirmation.dart';
 import '../../shared/widgets/star_rating.dart';
 import '../family/widgets/listing_enroll_cta.dart';
 import '../family/widgets/request_cta.dart';
@@ -420,10 +421,15 @@ class _DetailBody extends ConsumerWidget {
                     label: isSaved ? l10n.saved : l10n.save,
                     icon: isSaved ? Icons.favorite : Icons.favorite_border,
                     onPressed: () async {
+                      final wasSaved = ref
+                          .read(favoritesProvider)
+                          .contains(listing.id);
                       try {
                         await ref
                             .read(favoritesProvider.notifier)
                             .toggle(listing.id);
+                        if (!context.mounted) return;
+                        if (!wasSaved) showSavedConfirmation(context);
                       } on FavoritesException catch (e) {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(

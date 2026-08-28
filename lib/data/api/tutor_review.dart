@@ -83,6 +83,15 @@ class HttpTutorReviewRepository implements TutorReviewRepository {
     }
   }
 
+  @override
+  Future<void> report(String reviewId) async {
+    try {
+      await _dio.post('/tutor-reviews/$reviewId/report/');
+    } on DioException catch (e) {
+      throw ReviewException(_extractError(e));
+    }
+  }
+
   /// Extracts a user-facing message from a 400/403/409 (gate, ownership,
   /// duplicate), or null when the response isn't one of those.
   static String? _gateMessage(DioException e) {

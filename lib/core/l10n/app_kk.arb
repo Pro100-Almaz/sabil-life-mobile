@@ -245,6 +245,8 @@
   "reviewSubmitted": "Пікір жіберілді",
   "reviewUpdated": "Пікір жаңартылды",
   "reviewDeleted": "Пікір жойылды",
+  "reportReview": "Пікірге шағымдану",
+  "reviewReported": "Шағым жіберілді. Рақмет.",
   "shareExperience": "Тәжірибеңізбен бөлісіңіз…",
   "submitting": "Жіберілуде…",
   "submit": "Жіберу",

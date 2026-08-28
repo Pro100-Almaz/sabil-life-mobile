@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
+import '../../../core/state/auth_provider.dart';
 import '../../../core/state/city_providers.dart';
 import '../../../core/state/provider_providers.dart';
 import '../../../core/theme/app_colors.dart';
@@ -14,6 +15,7 @@ import '../../../core/util/tutor_label.dart';
 import '../../../data/mock/mock_listings.dart';
 import '../../../data/models/review.dart';
 import '../../../data/models/tutor.dart';
+import '../../../data/repositories/review_repository.dart' show ReviewException;
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 import 'tutor_inquire_cta.dart';
@@ -285,14 +287,16 @@ class TutorProfileSheet extends ConsumerWidget {
   }
 }
 
-class _TutorReviewTile extends StatelessWidget {
+class _TutorReviewTile extends ConsumerWidget {
   const _TutorReviewTile({required this.review});
 
   final Review review;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final auth = ref.watch(authProvider);
+    final canReport = auth.isAuthenticated && review.authorId != auth.user?.id;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -320,6 +324,49 @@ class _TutorReviewTile extends StatelessWidget {
               ),
             ),
             StarRating(rating: review.rating.toDouble()),
+            if (canReport)
+              PopupMenuButton<String>(
+                icon: const Icon(
+                  Icons.more_vert,
+                  size: 20,
+                  color: AppColors.textSecondary,
+                ),
+                padding: EdgeInsets.zero,
+                onSelected: (_) async {
+                  try {
+                    await ref
+                        .read(tutorReviewRepositoryProvider)
+                        .report(review.id);
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.reviewReported),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  } on ReviewException catch (e) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(e.message),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (_) => [
+                  PopupMenuItem(
+                    value: 'report',
+                    child: Row(
+                      children: [
+                        const Icon(Icons.flag_outlined, size: 18),
+                        const SizedBox(width: AppSpacing.sm),
+                        Text(l10n.reportReview),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
         if (review.text.isNotEmpty) ...[

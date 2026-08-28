@@ -796,6 +796,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reviewDeleted => 'Отзыв удалён';
 
   @override
+  String get reportReview => 'Пожаловаться на отзыв';
+
+  @override
+  String get reviewReported => 'Жалоба отправлена. Спасибо.';
+
+  @override
   String get shareExperience => 'Поделитесь впечатлениями…';
 
   @override

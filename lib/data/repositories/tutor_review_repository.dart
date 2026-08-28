@@ -24,4 +24,7 @@ abstract class TutorReviewRepository {
 
   /// Delete the family's own tutor review by id (`/tutor-reviews/{id}/`).
   Future<void> delete(String reviewId);
+
+  /// Report another user's tutor review for admin moderation.
+  Future<void> report(String reviewId);
 }

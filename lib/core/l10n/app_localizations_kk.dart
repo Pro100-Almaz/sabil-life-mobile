@@ -796,6 +796,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reviewDeleted => 'Пікір жойылды';
 
   @override
+  String get reportReview => 'Пікірге шағымдану';
+
+  @override
+  String get reviewReported => 'Шағым жіберілді. Рақмет.';
+
+  @override
   String get shareExperience => 'Тәжірибеңізбен бөлісіңіз…';
 
   @override

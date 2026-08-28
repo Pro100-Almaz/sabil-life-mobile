@@ -245,6 +245,8 @@
   "reviewSubmitted": "Отзыв отправлен",
   "reviewUpdated": "Отзыв обновлён",
   "reviewDeleted": "Отзыв удалён",
+  "reportReview": "Пожаловаться на отзыв",
+  "reviewReported": "Жалоба отправлена. Спасибо.",
   "shareExperience": "Поделитесь впечатлениями…",
   "submitting": "Отправка…",
   "submit": "Отправить",

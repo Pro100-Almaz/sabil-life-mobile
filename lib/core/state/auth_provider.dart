@@ -51,6 +51,7 @@ class AuthState {
   bool get isAuthenticated =>
       status == AuthStatus.authenticated && user != null;
   bool get isProvider => user?.isProvider ?? false;
+  bool get isFamily => user?.isFamily ?? false;
 }
 
 /// Singleton repository — swap [MockAuthRepository] for an HTTP implementation

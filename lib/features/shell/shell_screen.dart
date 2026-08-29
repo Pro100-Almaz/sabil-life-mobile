@@ -6,7 +6,6 @@ import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
 import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
-import '../../data/models/auth_user.dart';
 
 class ShellScreen extends ConsumerWidget {
   const ShellScreen({super.key, required this.navigationShell});
@@ -20,7 +19,7 @@ class ShellScreen extends ConsumerWidget {
     // Warm the family's enrollments cache as soon as they're in the shell, so a
     // listing detail can render the enrolled state instantly (no fetch flash).
     final auth = ref.watch(authProvider);
-    if (auth.isAuthenticated && auth.user?.role == UserRole.family) {
+    if (auth.isAuthenticated && auth.isFamily) {
       ref.watch(myListingEnrollmentsProvider);
     }
 

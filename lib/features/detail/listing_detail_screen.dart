@@ -825,6 +825,25 @@ class _ReviewTile extends ConsumerWidget {
     }
   }
 
+  Future<void> _reportReview(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await ref.read(reviewRepositoryProvider).report(review.id);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.reviewReported),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } on ReviewException catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -858,7 +877,7 @@ class _ReviewTile extends ConsumerWidget {
               ),
             ),
             StarRating(rating: review.rating.toDouble()),
-            if (isOwner)
+            if (auth.isAuthenticated)
               PopupMenuButton<String>(
                 icon: const Icon(
                   Icons.more_vert,
@@ -876,37 +895,54 @@ class _ReviewTile extends ConsumerWidget {
                     );
                   } else if (value == 'delete') {
                     _deleteReview(context, ref);
+                  } else if (value == 'report') {
+                    _reportReview(context, ref);
                   }
                 },
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.edit_outlined, size: 18),
-                        const SizedBox(width: AppSpacing.sm),
-                        Text(l10n.editReview),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.delete_outline,
-                          size: 18,
-                          color: AppColors.primary,
+                itemBuilder: (_) => isOwner
+                    ? [
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.edit_outlined, size: 18),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(l10n.editReview),
+                            ],
+                          ),
                         ),
-                        const SizedBox(width: AppSpacing.sm),
-                        Text(
-                          l10n.deleteReview,
-                          style: const TextStyle(color: AppColors.primary),
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.delete_outline,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(
+                                l10n.deleteReview,
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]
+                    : [
+                        PopupMenuItem(
+                          value: 'report',
+                          child: Row(
+                            children: [
+                              const Icon(Icons.flag_outlined, size: 18),
+                              const SizedBox(width: AppSpacing.sm),
+                              Text(l10n.reportReview),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
               ),
           ],
         ),

@@ -102,6 +102,15 @@ class HttpReviewRepository implements ReviewRepository {
     }
   }
 
+  @override
+  Future<void> report(String reviewId) async {
+    try {
+      await _dio.post('/reviews/$reviewId/report/');
+    } on DioException catch (e) {
+      throw ReviewException(_extractError(e));
+    }
+  }
+
   static Review _parse(Map<String, dynamic> data) {
     final rawName = data['author_name']?.toString() ?? '';
     return Review(

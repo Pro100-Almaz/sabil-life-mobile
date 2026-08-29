@@ -214,6 +214,53 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<String?> requestPersonalInformationChange({
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    final user = state.user;
+    if (user == null) return "Please sign in again.";
+    try {
+      await _repo.requestPersonalInformationChange(
+        user: user,
+        newName: newName,
+        newEmail: newEmail,
+        newPassword: newPassword,
+        newPassword2: newPassword2,
+      );
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<String?> confirmPersonalInformationChange({
+    required String code,
+    required bool passwordChanged,
+  }) async {
+    final user = state.user;
+    final token = state.token;
+    if (user == null || token == null) return "Please sign in again.";
+    try {
+      final updatedUser = await _repo.confirmPersonalInformationChange(
+        user: user,
+        code: code,
+      );
+      if (passwordChanged) {
+        await authTokenStore.clear();
+        onLogout?.call();
+        state = const AuthState.unauthenticated();
+      } else {
+        state = AuthState.authenticated(user: updatedUser, token: token);
+      }
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _push.unregister().timeout(const Duration(seconds: 5));

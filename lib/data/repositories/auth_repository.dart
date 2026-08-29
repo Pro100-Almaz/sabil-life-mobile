@@ -31,6 +31,19 @@ abstract class AuthRepository {
     required String password2,
   });
 
+  Future<void> requestPersonalInformationChange({
+    required AuthUser user,
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  });
+
+  Future<AuthUser> confirmPersonalInformationChange({
+    required AuthUser user,
+    required String code,
+  });
+
   Future<void> changePassword({
     required String oldPassword,
     required String newPassword,
@@ -50,6 +63,8 @@ class MockAuthRepository implements AuthRepository {
   /// Pending registrations awaiting code confirmation, keyed by email.
   final Map<String, ({String password, String fullName})> _pending = {};
   final Set<String> _pendingPasswordResets = {};
+  final Map<String, ({String name, String email, String password})>
+  _pendingPersonalInformation = {};
 
   @override
   Future<AuthSession> login(String email, String password) async {
@@ -122,6 +137,49 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<void> logout() async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
+  }
+
+  @override
+  Future<void> requestPersonalInformationChange({
+    required AuthUser user,
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    await Future<void>.delayed(_latency);
+    if (newPassword.isNotEmpty && newPassword != newPassword2) {
+      throw const AuthException("Passwords do not match.");
+    }
+    _pendingPersonalInformation[user.id] = (
+      name: newName,
+      email: newEmail,
+      password: newPassword,
+    );
+  }
+
+  @override
+  Future<AuthUser> confirmPersonalInformationChange({
+    required AuthUser user,
+    required String code,
+  }) async {
+    await Future<void>.delayed(_latency);
+    final pending = _pendingPersonalInformation.remove(user.id);
+    if (pending == null || code != _mockCode) {
+      throw const AuthException("Invalid or expired code.");
+    }
+    final updated = AuthUser(
+      id: user.id,
+      email: pending.email.isEmpty ? user.email : pending.email,
+      fullName: pending.name.isEmpty ? user.fullName : pending.name,
+      role: user.role,
+      isVerified: user.isVerified,
+    );
+    updateMockAccount(
+      updated,
+      password: pending.password.isEmpty ? null : pending.password,
+    );
+    return updated;
   }
 
   @override

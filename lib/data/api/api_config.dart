@@ -5,12 +5,12 @@
 /// boots and attempts real calls even when no config file is passed.
 const String apiBaseUrl = String.fromEnvironment(
   'API_BASE_URL',
-  defaultValue: 'http://10.0.2.2:8000/api/v1',
+  defaultValue: "https://api.sabil-life.com/api/v1",
 );
 
 const String mapTileUrlTemplate = String.fromEnvironment(
   'MAP_TILE_URL_TEMPLATE',
-  defaultValue: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  defaultValue: "https://api.sabil-life.com/maps/styles/light/{z}/{x}/{y}.png",
 );
 
 String resolveMediaUrl(String url) {

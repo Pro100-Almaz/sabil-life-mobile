@@ -187,7 +187,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       }
 
-      if (location == '/change-password' && !auth.isAuthenticated) {
+      if (location == '/edit-personal-information' && !auth.isAuthenticated) {
         return '/login';
       }
 
@@ -214,7 +214,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
-        path: '/change-password',
+        path: '/edit-personal-information',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ChangePasswordScreen(),
       ),

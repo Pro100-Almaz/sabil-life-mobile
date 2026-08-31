@@ -117,6 +117,45 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> requestPersonalInformationChange({
+    required AuthUser user,
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    try {
+      await _dio.post(
+        "/auth/edit-profile/",
+        data: {
+          "new_name": newName,
+          "new_email": newEmail,
+          "new_password": newPassword,
+          "new_password2": newPassword2,
+        },
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<AuthUser> confirmPersonalInformationChange({
+    required AuthUser user,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post(
+        "/auth/edit-profile/verify/",
+        data: {"code": code.trim()},
+      );
+      return _parseUser(response.data["user"]);
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<AuthUser> me(String token) async {
     try {
       // Pass token explicitly: restore() calls me() before the store is

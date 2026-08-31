@@ -1188,4 +1188,24 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get duplicateContact => 'Бір байланысты бірнеше рет қосуға болмайды';
+
+  @override
+  String get deleteAccount => 'Аккаунтты жою';
+
+  @override
+  String get deleteAccountTitle => 'Аккаунтты жою керек пе?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Аккаунтыңыз бен жеке деректеріңіз біржола жойылады. Бұл әрекетті кері қайтару мүмкін емес.';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'Растау үшін ағымдағы құпиясөзді енгізіңіз';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Ағымдағы құпиясөзді енгізіңіз.';
+
+  @override
+  String get deleteAccountConfirm => 'Біржола жою';
 }

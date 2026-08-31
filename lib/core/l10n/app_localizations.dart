@@ -2301,6 +2301,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The same contact cannot be added more than once'**
   String get duplicateContact;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccount;
+
+  /// No description provided for @deleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountTitle;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your account and personal information. This action cannot be undone.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAccountPasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password to confirm'**
+  String get deleteAccountPasswordHint;
+
+  /// No description provided for @deleteAccountPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password.'**
+  String get deleteAccountPasswordRequired;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently delete'**
+  String get deleteAccountConfirm;
 }
 
 class _AppLocalizationsDelegate

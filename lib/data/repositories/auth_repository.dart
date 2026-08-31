@@ -37,6 +37,8 @@ abstract class AuthRepository {
     required String newPassword2,
   });
 
+  Future<void> deleteAccount({required String password});
+
   Future<AuthUser> me(String token);
   Future<void> logout();
 }
@@ -139,6 +141,14 @@ class MockAuthRepository implements AuthRepository {
     }
     if (newPassword.length < 8) {
       throw const AuthException('Password must be at least 8 characters.');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount({required String password}) async {
+    await Future<void>.delayed(_latency);
+    if (password != 'demo1234') {
+      throw const AuthException('Current password is incorrect.');
     }
   }
 

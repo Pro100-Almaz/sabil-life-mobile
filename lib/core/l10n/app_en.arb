@@ -389,5 +389,11 @@
   "contactTelegram": "Telegram",
   "contactInvalidPhone": "Enter a valid phone number",
   "contactOpenError": "Couldn’t open this contact",
-  "duplicateContact": "The same contact cannot be added more than once"
+  "duplicateContact": "The same contact cannot be added more than once",
+  "deleteAccount": "Delete account",
+  "deleteAccountTitle": "Delete your account?",
+  "deleteAccountWarning": "This permanently deletes your account and personal information. This action cannot be undone.",
+  "deleteAccountPasswordHint": "Enter your current password to confirm",
+  "deleteAccountPasswordRequired": "Enter your current password.",
+  "deleteAccountConfirm": "Permanently delete"
 }

@@ -369,5 +369,11 @@
   "contactTelegram": "Telegram",
   "contactInvalidPhone": "Жарамды телефон нөмірін енгізіңіз",
   "contactOpenError": "Бұл байланысты ашу мүмкін болмады",
-  "duplicateContact": "Бір байланысты бірнеше рет қосуға болмайды"
+  "duplicateContact": "Бір байланысты бірнеше рет қосуға болмайды",
+  "deleteAccount": "Аккаунтты жою",
+  "deleteAccountTitle": "Аккаунтты жою керек пе?",
+  "deleteAccountWarning": "Аккаунтыңыз бен жеке деректеріңіз біржола жойылады. Бұл әрекетті кері қайтару мүмкін емес.",
+  "deleteAccountPasswordHint": "Растау үшін ағымдағы құпиясөзді енгізіңіз",
+  "deleteAccountPasswordRequired": "Ағымдағы құпиясөзді енгізіңіз.",
+  "deleteAccountConfirm": "Біржола жою"
 }

@@ -1564,6 +1564,18 @@ abstract class AppLocalizations {
   /// **'Review deleted'**
   String get reviewDeleted;
 
+  /// No description provided for @reportReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Report review'**
+  String get reportReview;
+
+  /// No description provided for @reviewReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Review reported. Thank you.'**
+  String get reviewReported;
+
   /// No description provided for @shareExperience.
   ///
   /// In en, this message translates to:

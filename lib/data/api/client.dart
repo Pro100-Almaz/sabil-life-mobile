@@ -188,16 +188,7 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   AuthUser _parseUser(dynamic data) {
-    return AuthUser(
-      id: data['id'].toString(),
-      email: data['email'] as String,
-      fullName: (data['full_name'] ?? data['fullName'] ?? '') as String,
-      role: UserRole.values.firstWhere(
-        (r) => r.name.toUpperCase() == data['role'].toString().toUpperCase(),
-        orElse: () => UserRole.family,
-      ),
-      isVerified: (data['is_verified'] ?? data['isVerified'] ?? false) as bool,
-    );
+    return AuthUser.fromJson(Map<String, dynamic>.from(data as Map));
   }
 
   String _extractError(DioException e) {

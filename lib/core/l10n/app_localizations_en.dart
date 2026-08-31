@@ -797,6 +797,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviewDeleted => 'Review deleted';
 
   @override
+  String get reportReview => 'Report review';
+
+  @override
+  String get reviewReported => 'Review reported. Thank you.';
+
+  @override
   String get shareExperience => 'Share your experience…';
 
   @override

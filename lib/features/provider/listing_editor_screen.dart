@@ -56,7 +56,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   DateTime? _startsAt;
   bool _saving = false;
   bool _showErrors = false;
-  LatLng _pickedLocation = mockHome;
+  LatLng _pickedLocation = defaultDohaCenter;
 
   Listing? _existing;
 

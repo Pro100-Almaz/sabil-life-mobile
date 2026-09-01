@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/listing.dart';
 import '../../data/repositories/catalog_repository.dart';
-import '../../data/mock/mock_home.dart';
+import 'auth_provider.dart';
 import 'provider_providers.dart';
 
 enum SortMode { distance, rating, priceLow }
+
+enum DistanceOrigin { home, currentLocation }
 
 const double kMaxDistanceCeilingKm = 30;
 const int kPriceCeilingQar = 50000;
@@ -23,11 +28,13 @@ class FilterState {
     this.ageGroup,
     this.sortMode = SortMode.distance,
     this.tags = const {},
-    this.userPosition = mockHome,
+    this.userPosition,
+    this.distanceOrigin = DistanceOrigin.home,
     this.page = 1,
   });
 
-  final LatLng userPosition;
+  final LatLng? userPosition;
+  final DistanceOrigin distanceOrigin;
   final String query;
   final CategoryType? selectedCategory;
   final double maxDistanceKm;
@@ -50,7 +57,8 @@ class FilterState {
     String? Function()? ageGroup,
     SortMode? sortMode,
     Set<String>? tags,
-    LatLng? userPosition,
+    LatLng? Function()? userPosition,
+    DistanceOrigin? distanceOrigin,
     int? page,
   }) {
     return FilterState(
@@ -63,14 +71,34 @@ class FilterState {
       ageGroup: ageGroup != null ? ageGroup() : this.ageGroup,
       sortMode: sortMode ?? this.sortMode,
       tags: tags ?? this.tags,
-      userPosition: userPosition ?? this.userPosition,
+      userPosition: userPosition != null ? userPosition() : this.userPosition,
+      distanceOrigin: distanceOrigin ?? this.distanceOrigin,
       page: page ?? this.page,
     );
   }
 }
 
 class FilterNotifier extends StateNotifier<FilterState> {
-  FilterNotifier() : super(const FilterState());
+  FilterNotifier() : super(const FilterState()) {
+    unawaited(_restoreDistanceOrigin());
+  }
+
+  static const _distanceOriginKey = 'sabil.distance-origin';
+
+  Future<void> _restoreDistanceOrigin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (state.distanceOrigin == DistanceOrigin.home &&
+        state.userPosition == null &&
+        prefs.getString(_distanceOriginKey) ==
+            DistanceOrigin.currentLocation.name) {
+      state = state.copyWith(distanceOrigin: DistanceOrigin.currentLocation);
+    }
+  }
+
+  Future<void> _persistDistanceOrigin(DistanceOrigin value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_distanceOriginKey, value.name);
+  }
 
   void setPage(int page) => state = state.copyWith(page: page);
 
@@ -109,19 +137,28 @@ class FilterNotifier extends StateNotifier<FilterState> {
     required double maxDistanceKm,
     required int priceMax,
     required String? ageGroup,
-    required LatLng userPosition,
+    required LatLng? userPosition,
+    required DistanceOrigin distanceOrigin,
   }) {
     state = state.copyWith(
       maxDistanceKm: maxDistanceKm,
       priceMax: priceMax,
       ageGroup: () => ageGroup,
-      userPosition: userPosition,
+      userPosition: () => userPosition,
+      distanceOrigin: distanceOrigin,
       page: 1,
     );
+    unawaited(_persistDistanceOrigin(distanceOrigin));
   }
 
-  void updateOrigin(LatLng? userPosition) =>
-      state = state.copyWith(userPosition: userPosition);
+  void updateOrigin(LatLng? userPosition, DistanceOrigin distanceOrigin) {
+    state = state.copyWith(
+      userPosition: () => userPosition,
+      distanceOrigin: distanceOrigin,
+      page: 1,
+    );
+    unawaited(_persistDistanceOrigin(distanceOrigin));
+  }
 
   void resetFilters() {
     state = state.copyWith(
@@ -137,6 +174,16 @@ final filterProvider = StateNotifierProvider<FilterNotifier, FilterState>(
   (ref) => FilterNotifier(),
 );
 
+/// The single coordinate used by queries and distance labels. Saved home comes
+/// from the account; a current-location coordinate remains device-local.
+final effectiveDistanceOriginProvider = Provider<LatLng?>((ref) {
+  final filter = ref.watch(filterProvider);
+  return switch (filter.distanceOrigin) {
+    DistanceOrigin.home => ref.watch(authProvider).user?.homeLocation,
+    DistanceOrigin.currentLocation => filter.userPosition,
+  };
+});
+
 ListingSort _toListingSort(SortMode mode) => switch (mode) {
   SortMode.distance => ListingSort.distance,
   SortMode.rating => ListingSort.rating,
@@ -150,8 +197,9 @@ ListingSort _toListingSort(SortMode mode) => switch (mode) {
 /// so screens can await a real refresh of `catalogListingsProvider(thisFilter)`.
 final listingsFilterProvider = Provider<ListingsFilter>((ref) {
   final filter = ref.watch(filterProvider);
-  final latitude = filter.userPosition.latitude;
-  final longitude = filter.userPosition.longitude;
+  final origin = ref.watch(effectiveDistanceOriginProvider);
+  final latitude = origin?.latitude;
+  final longitude = origin?.longitude;
   return ListingsFilter(
     category: filter.selectedCategory,
     query: filter.query.isEmpty ? null : filter.query,

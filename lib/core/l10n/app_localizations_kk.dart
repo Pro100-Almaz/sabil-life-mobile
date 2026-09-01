@@ -1188,4 +1188,50 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get duplicateContact => 'Бір байланысты бірнеше рет қосуға болмайды';
+
+  @override
+  String get homeLocation => 'Үй мекенжайы';
+
+  @override
+  String get homeLocationSubtitle =>
+      'Үйден қашықтық есептелетін орынды таңдаңыз';
+
+  @override
+  String get setHomeLocation => 'Үй мекенжайын орнату';
+
+  @override
+  String get changeHomeLocation => 'Үй мекенжайын өзгерту';
+
+  @override
+  String get tapMapToSelectHome => 'Үй орнын таңдау үшін картаны түртіңіз.';
+
+  @override
+  String get useCurrentLocation => 'Ағымдағы орынды пайдалану';
+
+  @override
+  String get saveHomeLocation => 'Үй мекенжайын сақтау';
+
+  @override
+  String get homeLocationSaved => 'Үй мекенжайы сақталды.';
+
+  @override
+  String get distanceFrom => 'Қашықтықты есептеу орны';
+
+  @override
+  String get home => 'Үй';
+
+  @override
+  String get currentLocation => 'Ағымдағы орын';
+
+  @override
+  String get homeLocationRequired => 'Алдымен үй мекенжайын орнатыңыз.';
+
+  @override
+  String get locationPermissionDenied => 'Орналасу рұқсаты берілмеді.';
+
+  @override
+  String get locationServicesDisabled => 'Орналасу қызметтері өшірулі.';
+
+  @override
+  String get locationUnavailable => 'Ағымдағы орынды анықтау мүмкін болмады.';
 }

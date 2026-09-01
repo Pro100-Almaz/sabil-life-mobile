@@ -75,6 +75,31 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
+
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(
+                Icons.home_outlined,
+                color: AppColors.textPrimary,
+              ),
+              title: Text(
+                user.homeLocation == null
+                    ? l10n.setHomeLocation
+                    : l10n.changeHomeLocation,
+                style: AppTypography.body,
+              ),
+              subtitle: Text(
+                l10n.homeLocationSubtitle,
+                style: AppTypography.small,
+              ),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: AppColors.textSecondary,
+              ),
+              onTap: () => context.push('/settings/home-location'),
+            ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,

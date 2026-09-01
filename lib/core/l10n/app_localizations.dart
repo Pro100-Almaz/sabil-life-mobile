@@ -2301,6 +2301,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The same contact cannot be added more than once'**
   String get duplicateContact;
+
+  /// No description provided for @homeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Home location'**
+  String get homeLocation;
+
+  /// No description provided for @homeLocationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose where distance from home is measured'**
+  String get homeLocationSubtitle;
+
+  /// No description provided for @setHomeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Set home location'**
+  String get setHomeLocation;
+
+  /// No description provided for @changeHomeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Change home location'**
+  String get changeHomeLocation;
+
+  /// No description provided for @tapMapToSelectHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the map to select your home location.'**
+  String get tapMapToSelectHome;
+
+  /// No description provided for @useCurrentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Use current location'**
+  String get useCurrentLocation;
+
+  /// No description provided for @saveHomeLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Save home location'**
+  String get saveHomeLocation;
+
+  /// No description provided for @homeLocationSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Home location saved.'**
+  String get homeLocationSaved;
+
+  /// No description provided for @distanceFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculate distance from'**
+  String get distanceFrom;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @currentLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Current location'**
+  String get currentLocation;
+
+  /// No description provided for @homeLocationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a home location before using distance from home.'**
+  String get homeLocationRequired;
+
+  /// No description provided for @locationPermissionDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission was denied.'**
+  String get locationPermissionDenied;
+
+  /// No description provided for @locationServicesDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Location services are disabled.'**
+  String get locationServicesDisabled;
+
+  /// No description provided for @locationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current location could not be determined.'**
+  String get locationUnavailable;
 }
 
 class _AppLocalizationsDelegate

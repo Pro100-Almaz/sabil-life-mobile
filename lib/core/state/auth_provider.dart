@@ -194,6 +194,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Saves the account's home coordinates and keeps the active session.
+  /// Returns null on success, otherwise the backend validation message.
+  Future<String?> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final token = state.token;
+    if (token == null || !state.isAuthenticated) {
+      return 'Please sign in to save a home location.';
+    }
+    try {
+      final user = await _repo.updateHomeLocation(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      if (state.token == token && state.isAuthenticated) {
+        state = AuthState.authenticated(user: user, token: token);
+      }
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
   /// Returns null on success, otherwise the backend validation message.
   Future<String?> changePassword({
     required String oldPassword,

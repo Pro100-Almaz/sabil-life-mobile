@@ -899,50 +899,48 @@ class _ReviewTile extends ConsumerWidget {
                     _reportReview(context, ref);
                   }
                 },
-                itemBuilder: (_) => isOwner
-                    ? [
-                        PopupMenuItem(
-                          value: 'edit',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.edit_outlined, size: 18),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(l10n.editReview),
-                            ],
+                itemBuilder: (_) => [
+                  if (isOwner) ...[
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.editReview),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.delete_outline,
+                            size: 18,
+                            color: AppColors.primary,
                           ),
-                        ),
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.delete_outline,
-                                size: 18,
-                                color: AppColors.primary,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(
-                                l10n.deleteReview,
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            l10n.deleteReview,
+                            style: const TextStyle(color: AppColors.primary),
                           ),
-                        ),
-                      ]
-                    : [
-                        PopupMenuItem(
-                          value: 'report',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.flag_outlined, size: 18),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(l10n.reportReview),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (!isOwner)
+                    PopupMenuItem(
+                      value: 'report',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.flag_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.reportReview),
+                        ],
+                      ),
+                    ),
+                ],
               ),
           ],
         ),

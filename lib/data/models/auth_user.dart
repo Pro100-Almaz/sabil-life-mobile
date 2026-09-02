@@ -30,7 +30,9 @@ class AuthUser {
         : UserRole.family;
 
     return AuthUser(
-      id: data['id'].toString(),
+      // Reviews expose their author's public UUID, so use the same identifier
+      // for ownership checks. Older/mock responses may only contain `id`.
+      id: (data['uuid'] ?? data['id']).toString(),
       email: data['email'] as String,
       fullName: (data['full_name'] ?? data['fullName'] ?? '') as String,
       role: primaryRole,

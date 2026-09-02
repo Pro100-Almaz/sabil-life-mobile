@@ -296,7 +296,11 @@ class _TutorReviewTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final auth = ref.watch(authProvider);
-    final canReport = auth.isAuthenticated && review.authorId != auth.user?.id;
+    final isOwner =
+        auth.isAuthenticated &&
+        review.authorId != null &&
+        review.authorId == auth.user!.id;
+    final canReport = auth.isAuthenticated && !isOwner;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

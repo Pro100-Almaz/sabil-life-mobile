@@ -369,5 +369,20 @@
   "contactTelegram": "Telegram",
   "contactInvalidPhone": "Введите корректный номер телефона",
   "contactOpenError": "Не удалось открыть контакт",
-  "duplicateContact": "Один и тот же контакт нельзя добавлять несколько раз"
+  "duplicateContact": "Один и тот же контакт нельзя добавлять несколько раз",
+  "homeLocation": "Домашний адрес",
+  "homeLocationSubtitle": "Выберите точку, от которой измеряется расстояние от дома",
+  "setHomeLocation": "Указать домашний адрес",
+  "changeHomeLocation": "Изменить домашний адрес",
+  "tapMapToSelectHome": "Нажмите на карту, чтобы выбрать домашний адрес.",
+  "useCurrentLocation": "Использовать текущее местоположение",
+  "saveHomeLocation": "Сохранить домашний адрес",
+  "homeLocationSaved": "Домашний адрес сохранён.",
+  "distanceFrom": "Рассчитывать расстояние от",
+  "home": "Дома",
+  "currentLocation": "Текущего местоположения",
+  "homeLocationRequired": "Сначала укажите домашний адрес.",
+  "locationPermissionDenied": "Доступ к местоположению запрещён.",
+  "locationServicesDisabled": "Службы геолокации отключены.",
+  "locationUnavailable": "Не удалось определить текущее местоположение."
 }

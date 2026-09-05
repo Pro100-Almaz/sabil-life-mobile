@@ -91,7 +91,7 @@ class _DetailBody extends ConsumerWidget {
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
     final asyncReviews = ref.watch(listingReviewsProvider(listing.id));
     final reviews = asyncReviews.valueOrNull ?? const <Review>[];
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
 
     return Scaffold(
       body: CustomScrollView(
@@ -138,13 +138,13 @@ class _DetailBody extends ConsumerWidget {
                       ),
                       const SizedBox(width: AppSpacing.xs),
                       Text(listing.neighborhood, style: AppTypography.caption),
-                      Text(' · ', style: AppTypography.caption),
-                      Text(
-                        l10n.distanceAway(
-                          listing.distanceFromHomeLabel(origin),
+                      if (origin != null) ...[
+                        Text(' · ', style: AppTypography.caption),
+                        Text(
+                          l10n.distanceAway(listing.distanceFromLabel(origin)),
+                          style: AppTypography.caption,
                         ),
-                        style: AppTypography.caption,
-                      ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: AppSpacing.sm),

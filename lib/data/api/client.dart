@@ -141,6 +141,22 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<AuthUser> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/auth/me/',
+        data: {'home_lat': latitude, 'home_lng': longitude},
+      );
+      return _parseUser(response.data);
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<void> logout() async {
     try {
       await _dio.post('/auth/logout/');

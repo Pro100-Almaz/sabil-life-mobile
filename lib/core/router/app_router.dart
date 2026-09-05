@@ -32,6 +32,7 @@ import '../../features/provider/tutor_gate_screen.dart';
 import '../../features/provider/tutor_profile_edit_screen.dart';
 import '../../features/settings/settings_screen.dart';
 import '../../features/settings/change_password_screen.dart';
+import '../../features/settings/home_location_screen.dart';
 import '../../features/shell/shell_screen.dart';
 import '../../features/tutoring/tutoring_screen.dart';
 import '../state/auth_provider.dart';
@@ -261,6 +262,13 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/settings',
                 builder: (context, state) => const SettingsScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'home-location',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const HomeLocationScreen(),
+                  ),
+                ],
               ),
             ],
           ),

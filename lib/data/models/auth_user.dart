@@ -1,3 +1,5 @@
+import 'package:latlong2/latlong.dart';
+
 enum UserRole { family, tutor, masterclass }
 
 extension UserRoleX on UserRole {
@@ -12,6 +14,8 @@ class AuthUser {
     required this.role,
     required this.isVerified,
     this.roles = const {},
+    this.homeLat,
+    this.homeLng,
   });
 
   factory AuthUser.fromJson(Map<String, dynamic> data) {
@@ -36,6 +40,8 @@ class AuthUser {
       role: primaryRole,
       isVerified: (data['is_verified'] ?? data['isVerified'] ?? false) as bool,
       roles: roles,
+      homeLat: (data['home_lat'] as num?)?.toDouble(),
+      homeLng: (data['home_lng'] as num?)?.toDouble(),
     );
   }
 
@@ -45,6 +51,22 @@ class AuthUser {
   final UserRole role;
   final bool isVerified;
   final Set<String> roles;
+  final double? homeLat;
+  final double? homeLng;
+
+  LatLng? get homeLocation =>
+      homeLat != null && homeLng != null ? LatLng(homeLat!, homeLng!) : null;
+
+  AuthUser copyWith({double? homeLat, double? homeLng}) => AuthUser(
+    id: id,
+    email: email,
+    fullName: fullName,
+    role: role,
+    isVerified: isVerified,
+    roles: roles,
+    homeLat: homeLat ?? this.homeLat,
+    homeLng: homeLng ?? this.homeLng,
+  );
 
   bool get isProvider => role.isProvider;
   bool get isFamily => roles.isEmpty

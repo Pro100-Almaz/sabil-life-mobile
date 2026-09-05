@@ -39,4 +39,34 @@ void main() {
 
     expect(user.isFamily, isFalse);
   });
+
+  test('parses a complete saved home location', () {
+    final user = AuthUser.fromJson({
+      'id': '4',
+      'email': 'home@example.com',
+      'full_name': 'Home User',
+      'roles': ['FAMILY'],
+      'is_verified': true,
+      'home_lat': 25.369,
+      'home_lng': 51.551,
+    });
+
+    expect(user.homeLocation, isNotNull);
+    expect(user.homeLocation!.latitude, 25.369);
+    expect(user.homeLocation!.longitude, 51.551);
+  });
+
+  test('does not construct a home from incomplete coordinates', () {
+    final user = AuthUser.fromJson({
+      'id': '5',
+      'email': 'no-home@example.com',
+      'full_name': 'No Home User',
+      'roles': ['FAMILY'],
+      'is_verified': true,
+      'home_lat': 25.369,
+      'home_lng': null,
+    });
+
+    expect(user.homeLocation, isNull);
+  });
 }

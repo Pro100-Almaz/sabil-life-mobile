@@ -24,7 +24,7 @@ class ListingCardWide extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final imageUrl = listing.primaryImageUrl;
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
 
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
@@ -85,11 +85,13 @@ class ListingCardWide extends ConsumerWidget {
                   rating: listing.rating,
                   suffix: l10n.reviews(listing.reviewCount),
                 ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
-                  style: AppTypography.small,
-                ),
+                if (origin != null) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    l10n.distanceAway(listing.distanceFromLabel(origin)),
+                    style: AppTypography.small,
+                  ),
+                ],
               ],
             ),
           ),

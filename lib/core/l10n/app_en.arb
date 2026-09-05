@@ -396,4 +396,19 @@
   "deleteAccountPasswordHint": "Enter your current password to confirm",
   "deleteAccountPasswordRequired": "Enter your current password.",
   "deleteAccountConfirm": "Permanently delete"
+  "homeLocation": "Home location",
+  "homeLocationSubtitle": "Choose where distance from home is measured",
+  "setHomeLocation": "Set home location",
+  "changeHomeLocation": "Change home location",
+  "tapMapToSelectHome": "Tap the map to select your home location.",
+  "useCurrentLocation": "Use current location",
+  "saveHomeLocation": "Save home location",
+  "homeLocationSaved": "Home location saved.",
+  "distanceFrom": "Calculate distance from",
+  "home": "Home",
+  "currentLocation": "Current location",
+  "homeLocationRequired": "Set a home location before using distance from home.",
+  "locationPermissionDenied": "Location permission was denied.",
+  "locationServicesDisabled": "Location services are disabled.",
+  "locationUnavailable": "Your current location could not be determined."
 }

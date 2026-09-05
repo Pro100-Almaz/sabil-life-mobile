@@ -376,4 +376,19 @@
   "deleteAccountPasswordHint": "Растау үшін ағымдағы құпиясөзді енгізіңіз",
   "deleteAccountPasswordRequired": "Ағымдағы құпиясөзді енгізіңіз.",
   "deleteAccountConfirm": "Біржола жою"
+  "homeLocation": "Үй мекенжайы",
+  "homeLocationSubtitle": "Үйден қашықтық есептелетін орынды таңдаңыз",
+  "setHomeLocation": "Үй мекенжайын орнату",
+  "changeHomeLocation": "Үй мекенжайын өзгерту",
+  "tapMapToSelectHome": "Үй орнын таңдау үшін картаны түртіңіз.",
+  "useCurrentLocation": "Ағымдағы орынды пайдалану",
+  "saveHomeLocation": "Үй мекенжайын сақтау",
+  "homeLocationSaved": "Үй мекенжайы сақталды.",
+  "distanceFrom": "Қашықтықты есептеу орны",
+  "home": "Үй",
+  "currentLocation": "Ағымдағы орын",
+  "homeLocationRequired": "Алдымен үй мекенжайын орнатыңыз.",
+  "locationPermissionDenied": "Орналасу рұқсаты берілмеді.",
+  "locationServicesDisabled": "Орналасу қызметтері өшірулі.",
+  "locationUnavailable": "Ағымдағы орынды анықтау мүмкін болмады."
 }

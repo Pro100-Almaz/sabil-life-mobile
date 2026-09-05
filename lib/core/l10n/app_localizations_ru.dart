@@ -1188,6 +1188,24 @@ class AppLocalizationsRu extends AppLocalizations {
       'Один и тот же контакт нельзя добавлять несколько раз';
 
   @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountTitle => 'Удалить аккаунт?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Ваш аккаунт и личные данные будут удалены навсегда. Это действие нельзя отменить.';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'Введите текущий пароль для подтверждения';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Введите текущий пароль.';
+
+  @override
+  String get deleteAccountConfirm => 'Удалить навсегда';
   String get homeLocation => 'Домашний адрес';
 
   @override

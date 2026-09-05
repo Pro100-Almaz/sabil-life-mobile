@@ -239,6 +239,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Deletes the server account and ends the local session on success.
+  /// Returns null on success, otherwise the backend validation message.
+  Future<String?> deleteAccount({required String password}) async {
+    try {
+      await _repo.deleteAccount(password: password);
+      await authTokenStore.clear();
+      onLogout?.call();
+      state = const AuthState.unauthenticated();
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _push.unregister().timeout(const Duration(seconds: 5));

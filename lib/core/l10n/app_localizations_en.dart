@@ -1189,6 +1189,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'The same contact cannot be added more than once';
 
   @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your account and personal information. This action cannot be undone.';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'Enter your current password to confirm';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Enter your current password.';
+
+  @override
+  String get deleteAccountConfirm => 'Permanently delete';
   String get homeLocation => 'Home location';
 
   @override

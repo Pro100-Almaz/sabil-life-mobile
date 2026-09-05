@@ -370,6 +370,12 @@
   "contactInvalidPhone": "Введите корректный номер телефона",
   "contactOpenError": "Не удалось открыть контакт",
   "duplicateContact": "Один и тот же контакт нельзя добавлять несколько раз",
+  "deleteAccount": "Удалить аккаунт",
+  "deleteAccountTitle": "Удалить аккаунт?",
+  "deleteAccountWarning": "Ваш аккаунт и личные данные будут удалены навсегда. Это действие нельзя отменить.",
+  "deleteAccountPasswordHint": "Введите текущий пароль для подтверждения",
+  "deleteAccountPasswordRequired": "Введите текущий пароль.",
+  "deleteAccountConfirm": "Удалить навсегда"
   "homeLocation": "Домашний адрес",
   "homeLocationSubtitle": "Выберите точку, от которой измеряется расстояние от дома",
   "setHomeLocation": "Указать домашний адрес",

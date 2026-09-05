@@ -8,6 +8,7 @@ import '../../core/state/locale_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import 'delete_account_dialog.dart';
 
 const _languages = [
   (locale: Locale('en'), label: 'English'),
@@ -243,6 +244,30 @@ class SettingsScreen extends ConsumerWidget {
               ),
               onTap: () async {
                 await ref.read(authProvider.notifier).logout();
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(
+                Icons.delete_forever_outlined,
+                color: AppColors.primaryPressed,
+              ),
+              title: Text(
+                l10n.deleteAccount,
+                style: AppTypography.body.copyWith(
+                  color: AppColors.primaryPressed,
+                ),
+              ),
+              onTap: () async {
+                final deleted = await showDeleteAccountDialog(
+                  context: context,
+                  onDelete: (password) => ref
+                      .read(authProvider.notifier)
+                      .deleteAccount(password: password),
+                );
+                if (deleted == true && context.mounted) context.go('/');
               },
             ),
           ],

@@ -117,6 +117,15 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> deleteAccount({required String password}) async {
+    try {
+      await _dio.delete('/auth/delete-me/', data: {'password': password});
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<AuthUser> me(String token) async {
     try {
       // Pass token explicitly: restore() calls me() before the store is

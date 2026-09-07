@@ -2337,6 +2337,7 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Permanently delete'**
   String get deleteAccountConfirm;
+
   /// No description provided for @homeLocation.
   ///
   /// In en, this message translates to:

@@ -78,6 +78,18 @@ void registerMockAccount(AuthUser user, String password) {
   _mockAccounts.add(_MockAccount(user: user, password: password));
 }
 
+void updateMockAccount(AuthUser user, {String? password}) {
+  final index = _mockAccounts.indexWhere(
+    (account) => account.user.id == user.id,
+  );
+  if (index == -1) return;
+  final existing = _mockAccounts[index];
+  _mockAccounts[index] = _MockAccount(
+    user: user,
+    password: password ?? existing.password,
+  );
+}
+
 /// Stable ids referenced from mock_listings.dart and mock_inquiries.dart so
 /// ownership wiring stays declarative.
 const String kDemoFamilyId = 'user-family-demo';

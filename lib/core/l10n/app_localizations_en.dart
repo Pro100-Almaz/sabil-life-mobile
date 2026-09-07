@@ -1207,6 +1207,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm => 'Permanently delete';
+
+  @override
   String get homeLocation => 'Home location';
 
   @override

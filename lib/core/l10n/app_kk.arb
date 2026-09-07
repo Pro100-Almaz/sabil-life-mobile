@@ -375,7 +375,7 @@
   "deleteAccountWarning": "Аккаунтыңыз бен жеке деректеріңіз біржола жойылады. Бұл әрекетті кері қайтару мүмкін емес.",
   "deleteAccountPasswordHint": "Растау үшін ағымдағы құпиясөзді енгізіңіз",
   "deleteAccountPasswordRequired": "Ағымдағы құпиясөзді енгізіңіз.",
-  "deleteAccountConfirm": "Біржола жою"
+  "deleteAccountConfirm": "Біржола жою",
   "homeLocation": "Үй мекенжайы",
   "homeLocationSubtitle": "Үйден қашықтық есептелетін орынды таңдаңыз",
   "setHomeLocation": "Үй мекенжайын орнату",

@@ -1206,6 +1206,8 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm => 'Удалить навсегда';
+
+  @override
   String get homeLocation => 'Домашний адрес';
 
   @override

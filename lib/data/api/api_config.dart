@@ -5,7 +5,7 @@
 /// boots and attempts real calls even when no config file is passed.
 const String apiBaseUrl = String.fromEnvironment(
   'API_BASE_URL',
-  defaultValue: 'http://10.0.2.2:8000/api/v1',
+  defaultValue: 'http://localhost:8000/api/v1',
 );
 
 const String mapTileUrlTemplate = String.fromEnvironment(

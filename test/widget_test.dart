@@ -85,7 +85,7 @@ void main() {
   test('every listing is within 30 km of the mock home', () {
     for (final listing in mockListings) {
       expect(
-        listing.distanceFromHomeKm(mockHome),
+        listing.distanceFromKm(mockHome),
         lessThan(30),
         reason: '${listing.id} is too far from home',
       );

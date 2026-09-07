@@ -24,9 +24,16 @@ double _degToRad(double deg) => deg * math.pi / 180;
 String formatKm(double km) => km.toStringAsFixed(1);
 
 extension ListingDistance on Listing {
-  double distanceFromHomeKm(LatLng origin) =>
+  double distanceFromKm(LatLng origin) =>
       haversineKm(origin.latitude, origin.longitude, lat, lng);
 
-  String distanceFromHomeLabel(LatLng origin) =>
-      formatKm(distanceFromHomeKm(origin));
+  String distanceFromLabel(LatLng origin) => formatKm(distanceFromKm(origin));
+
+  @Deprecated('Use distanceFromKm; the origin may be home or current location.')
+  double distanceFromHomeKm(LatLng origin) => distanceFromKm(origin);
+
+  @Deprecated(
+    'Use distanceFromLabel; the origin may be home or current location.',
+  )
+  String distanceFromHomeLabel(LatLng origin) => distanceFromLabel(origin);
 }

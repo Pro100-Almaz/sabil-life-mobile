@@ -16,6 +16,9 @@ dependencies {
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+
+    //Enable material components
+    implementation("com.google.android.material:material:1.13.0")
 }
 
 android {

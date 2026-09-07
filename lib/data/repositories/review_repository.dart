@@ -21,4 +21,5 @@ abstract class ReviewRepository {
   });
   Future<Review> update({required String reviewId, int? rating, String? text});
   Future<void> delete(String reviewId);
+  Future<void> report(String reviewId);
 }

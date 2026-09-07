@@ -8,6 +8,7 @@ import '../../core/state/locale_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import 'delete_account_dialog.dart';
 
 const _languages = [
   (locale: Locale('en'), label: 'English'),
@@ -75,20 +76,48 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
             ),
+
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,
               ),
               leading: const Icon(
-                Icons.lock_outline,
+                Icons.home_outlined,
                 color: AppColors.textPrimary,
               ),
-              title: Text(l10n.changePassword, style: AppTypography.body),
+              title: Text(
+                user.homeLocation == null
+                    ? l10n.setHomeLocation
+                    : l10n.changeHomeLocation,
+                style: AppTypography.body,
+              ),
+              subtitle: Text(
+                l10n.homeLocationSubtitle,
+                style: AppTypography.small,
+              ),
               trailing: const Icon(
                 Icons.chevron_right,
                 color: AppColors.textSecondary,
               ),
-              onTap: () => context.push('/change-password'),
+              onTap: () => context.push('/settings/home-location'),
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(
+                Icons.person_outline,
+                color: AppColors.textPrimary,
+              ),
+              title: Text(
+                "Edit personal information",
+                style: AppTypography.body,
+              ),
+              trailing: const Icon(
+                Icons.chevron_right,
+                color: AppColors.textSecondary,
+              ),
+              onTap: () => context.push('/edit-personal-information'),
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -218,6 +247,30 @@ class SettingsScreen extends ConsumerWidget {
               ),
               onTap: () async {
                 await ref.read(authProvider.notifier).logout();
+              },
+            ),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+              ),
+              leading: const Icon(
+                Icons.delete_forever_outlined,
+                color: AppColors.primaryPressed,
+              ),
+              title: Text(
+                l10n.deleteAccount,
+                style: AppTypography.body.copyWith(
+                  color: AppColors.primaryPressed,
+                ),
+              ),
+              onTap: () async {
+                final deleted = await showDeleteAccountDialog(
+                  context: context,
+                  onDelete: (password) => ref
+                      .read(authProvider.notifier)
+                      .deleteAccount(password: password),
+                );
+                if (deleted == true && context.mounted) context.go('/');
               },
             ),
           ],

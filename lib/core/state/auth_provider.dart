@@ -51,6 +51,7 @@ class AuthState {
   bool get isAuthenticated =>
       status == AuthStatus.authenticated && user != null;
   bool get isProvider => user?.isProvider ?? false;
+  bool get isFamily => user?.isFamily ?? false;
 }
 
 /// Singleton repository — swap [MockAuthRepository] for an HTTP implementation
@@ -193,6 +194,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Saves the account's home coordinates and keeps the active session.
+  /// Returns null on success, otherwise the backend validation message.
+  Future<String?> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    final token = state.token;
+    if (token == null || !state.isAuthenticated) {
+      return 'Please sign in to save a home location.';
+    }
+    try {
+      final user = await _repo.updateHomeLocation(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      if (state.token == token && state.isAuthenticated) {
+        state = AuthState.authenticated(user: user, token: token);
+      }
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
   /// Returns null on success, otherwise the backend validation message.
   Future<String?> changePassword({
     required String oldPassword,
@@ -205,6 +230,67 @@ class AuthNotifier extends StateNotifier<AuthState> {
         newPassword: newPassword,
         newPassword2: newPassword2,
       );
+      await authTokenStore.clear();
+      onLogout?.call();
+      state = const AuthState.unauthenticated();
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<String?> requestPersonalInformationChange({
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    final user = state.user;
+    if (user == null) return "Please sign in again.";
+    try {
+      await _repo.requestPersonalInformationChange(
+        user: user,
+        newName: newName,
+        newEmail: newEmail,
+        newPassword: newPassword,
+        newPassword2: newPassword2,
+      );
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<String?> confirmPersonalInformationChange({
+    required String code,
+    required bool passwordChanged,
+  }) async {
+    final user = state.user;
+    final token = state.token;
+    if (user == null || token == null) return "Please sign in again.";
+    try {
+      final updatedUser = await _repo.confirmPersonalInformationChange(
+        user: user,
+        code: code,
+      );
+      if (passwordChanged) {
+        await authTokenStore.clear();
+        onLogout?.call();
+        state = const AuthState.unauthenticated();
+      } else {
+        state = AuthState.authenticated(user: updatedUser, token: token);
+      }
+      return null;
+    } on AuthException catch (e) {
+      return e.message;
+    }
+  }
+
+  /// Deletes the server account and ends the local session on success.
+  /// Returns null on success, otherwise the backend validation message.
+  Future<String?> deleteAccount({required String password}) async {
+    try {
+      await _repo.deleteAccount(password: password);
       await authTokenStore.clear();
       onLogout?.call();
       state = const AuthState.unauthenticated();

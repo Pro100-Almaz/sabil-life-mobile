@@ -32,6 +32,7 @@ import '../../data/models/review.dart';
 import '../../data/repositories/favorites_repository.dart';
 import '../../data/repositories/review_repository.dart';
 import '../../shared/widgets/app_button.dart';
+import '../../shared/widgets/saved_confirmation.dart';
 import '../../shared/widgets/star_rating.dart';
 import '../family/widgets/listing_enroll_cta.dart';
 import '../family/widgets/request_cta.dart';
@@ -90,7 +91,7 @@ class _DetailBody extends ConsumerWidget {
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
     final asyncReviews = ref.watch(listingReviewsProvider(listing.id));
     final reviews = asyncReviews.valueOrNull ?? const <Review>[];
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
 
     return Scaffold(
       body: CustomScrollView(
@@ -137,13 +138,13 @@ class _DetailBody extends ConsumerWidget {
                       ),
                       const SizedBox(width: AppSpacing.xs),
                       Text(listing.neighborhood, style: AppTypography.caption),
-                      Text(' · ', style: AppTypography.caption),
-                      Text(
-                        l10n.distanceAway(
-                          listing.distanceFromHomeLabel(origin),
+                      if (origin != null) ...[
+                        Text(' · ', style: AppTypography.caption),
+                        Text(
+                          l10n.distanceAway(listing.distanceFromLabel(origin)),
+                          style: AppTypography.caption,
                         ),
-                        style: AppTypography.caption,
-                      ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -420,10 +421,15 @@ class _DetailBody extends ConsumerWidget {
                     label: isSaved ? l10n.saved : l10n.save,
                     icon: isSaved ? Icons.favorite : Icons.favorite_border,
                     onPressed: () async {
+                      final wasSaved = ref
+                          .read(favoritesProvider)
+                          .contains(listing.id);
                       try {
                         await ref
                             .read(favoritesProvider.notifier)
                             .toggle(listing.id);
+                        if (!context.mounted) return;
+                        if (!wasSaved) showSavedConfirmation(context);
                       } on FavoritesException catch (e) {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -819,6 +825,25 @@ class _ReviewTile extends ConsumerWidget {
     }
   }
 
+  Future<void> _reportReview(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await ref.read(reviewRepositoryProvider).report(review.id);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.reviewReported),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } on ReviewException catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message), behavior: SnackBarBehavior.floating),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -852,7 +877,7 @@ class _ReviewTile extends ConsumerWidget {
               ),
             ),
             StarRating(rating: review.rating.toDouble()),
-            if (isOwner)
+            if (auth.isAuthenticated)
               PopupMenuButton<String>(
                 icon: const Icon(
                   Icons.more_vert,
@@ -870,36 +895,51 @@ class _ReviewTile extends ConsumerWidget {
                     );
                   } else if (value == 'delete') {
                     _deleteReview(context, ref);
+                  } else if (value == 'report') {
+                    _reportReview(context, ref);
                   }
                 },
                 itemBuilder: (_) => [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.edit_outlined, size: 18),
-                        const SizedBox(width: AppSpacing.sm),
-                        Text(l10n.editReview),
-                      ],
+                  if (isOwner) ...[
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.editReview),
+                        ],
+                      ),
                     ),
-                  ),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.delete_outline,
-                          size: 18,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(width: AppSpacing.sm),
-                        Text(
-                          l10n.deleteReview,
-                          style: const TextStyle(color: AppColors.primary),
-                        ),
-                      ],
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.delete_outline,
+                            size: 18,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            l10n.deleteReview,
+                            style: const TextStyle(color: AppColors.primary),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
+                  if (!isOwner)
+                    PopupMenuItem(
+                      value: 'report',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.flag_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.reportReview),
+                        ],
+                      ),
+                    ),
                 ],
               ),
           ],

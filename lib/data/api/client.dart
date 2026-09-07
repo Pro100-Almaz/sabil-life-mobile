@@ -117,6 +117,54 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> requestPersonalInformationChange({
+    required AuthUser user,
+    required String newName,
+    required String newEmail,
+    required String newPassword,
+    required String newPassword2,
+  }) async {
+    try {
+      await _dio.post(
+        "/auth/edit-profile/",
+        data: {
+          "new_name": newName,
+          "new_email": newEmail,
+          "new_password": newPassword,
+          "new_password2": newPassword2,
+        },
+      );
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<AuthUser> confirmPersonalInformationChange({
+    required AuthUser user,
+    required String code,
+  }) async {
+    try {
+      final response = await _dio.post(
+        "/auth/edit-profile/verify/",
+        data: {"code": code.trim()},
+      );
+      return _parseUser(response.data["user"]);
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<void> deleteAccount({required String password}) async {
+    try {
+      await _dio.delete('/auth/delete-me/', data: {'password': password});
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<AuthUser> me(String token) async {
     try {
       // Pass token explicitly: restore() calls me() before the store is
@@ -124,6 +172,22 @@ class HttpAuthRepository implements AuthRepository {
       final response = await _dio.get(
         '/auth/me/',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      return _parseUser(response.data);
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<AuthUser> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/auth/me/',
+        data: {'home_lat': latitude, 'home_lng': longitude},
       );
       return _parseUser(response.data);
     } on DioException catch (e) {
@@ -149,16 +213,7 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   AuthUser _parseUser(dynamic data) {
-    return AuthUser(
-      id: data['id'].toString(),
-      email: data['email'] as String,
-      fullName: (data['full_name'] ?? data['fullName'] ?? '') as String,
-      role: UserRole.values.firstWhere(
-        (r) => r.name.toUpperCase() == data['role'].toString().toUpperCase(),
-        orElse: () => UserRole.family,
-      ),
-      isVerified: (data['is_verified'] ?? data['isVerified'] ?? false) as bool,
-    );
+    return AuthUser.fromJson(Map<String, dynamic>.from(data as Map));
   }
 
   String _extractError(DioException e) {

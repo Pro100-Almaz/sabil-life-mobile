@@ -16,7 +16,7 @@ FLUTTER := fvm flutter
 DEFINE  := --dart-define-from-file=config
 
 .PHONY: run run-dev run-staging build-staging build-prod \
-        apk-dev appbundle-prod analyze format check
+        apk-dev appbundle-prod analyze format check test
 
 # --- run (debug) ---------------------------------------------------------
 run: config/local.json
@@ -42,3 +42,4 @@ appbundle-prod:  ; $(FLUTTER) build appbundle $(DEFINE)/prod.json
 analyze: ; $(FLUTTER) analyze
 format:  ; fvm dart format .
 check: analyze format
+test:    ; $(FLUTTER) test

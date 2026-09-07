@@ -1,7 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import '../../data/mock/mock_home.dart';
+
+enum LocationFailureReason { servicesDisabled, permissionDenied, unavailable }
+
+class LocationFailure implements Exception {
+  const LocationFailure(this.reason);
+  final LocationFailureReason reason;
+}
 
 class LocationService {
   Future<LatLng?> _lastKnownLocation() async {
@@ -14,19 +20,13 @@ class LocationService {
     }
   }
 
-  Future<bool> _checkGeolocationEnabled() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  Future<void> _ensureLocationAvailable() async {
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error("Geolocation disabled");
+      throw const LocationFailure(LocationFailureReason.servicesDisabled);
     }
 
-    permission = await Geolocator.checkPermission();
+    var permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -35,21 +35,19 @@ class LocationService {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error("Permission for geolocation denied");
+        throw const LocationFailure(LocationFailureReason.permissionDenied);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error("Permission for geolocation denied");
+      throw const LocationFailure(LocationFailureReason.permissionDenied);
     }
-
-    return true;
   }
 
   Future<LatLng> getUserLocation() async {
-    LatLng position;
-    if (await _checkGeolocationEnabled()) {
+    await _ensureLocationAvailable();
+    try {
       final LocationSettings locationSettings = LocationSettings(
         accuracy: LocationAccuracy.high,
         distanceFilter: 100,
@@ -58,17 +56,17 @@ class LocationService {
       Position positionValue = await Geolocator.getCurrentPosition(
         locationSettings: locationSettings,
       );
-      position = LatLng(positionValue.latitude, positionValue.longitude);
-    } else {
-      LatLng? lastLocation = await _lastKnownLocation();
-      if (lastLocation != null) {
-        position = lastLocation;
-      } else {
-        position = mockHome;
-      }
+      return LatLng(positionValue.latitude, positionValue.longitude);
+    } catch (_) {
+      final lastLocation = await _lastKnownLocation();
+      if (lastLocation != null) return lastLocation;
+      throw const LocationFailure(LocationFailureReason.unavailable);
     }
-    return position;
   }
+
+  Future<bool> openLocationSettings() => Geolocator.openLocationSettings();
+
+  Future<bool> openAppSettings() => Geolocator.openAppSettings();
 }
 
 final locationServiceProvider = Provider((ref) => LocationService());

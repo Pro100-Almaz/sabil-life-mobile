@@ -107,16 +107,16 @@ class _HomeContentState extends ConsumerState<_HomeContent> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
     final featured = widget.listings.where((l) => l.isFeatured).toList();
     final popular = List.of(widget.listings)
       ..sort((a, b) => b.reviewCount.compareTo(a.reviewCount));
-    final nearYou = List.of(widget.listings)
-      ..sort(
-        (a, b) => a
-            .distanceFromHomeKm(origin)
-            .compareTo(b.distanceFromHomeKm(origin)),
+    final nearYou = List.of(widget.listings);
+    if (origin != null) {
+      nearYou.sort(
+        (a, b) => a.distanceFromKm(origin).compareTo(b.distanceFromKm(origin)),
       );
+    }
 
     return Stack(
       children: [

@@ -29,7 +29,7 @@ class _ListingLocationMapState extends ConsumerState<ListingLocationMap>
     with TickerProviderStateMixin {
   final MapController _mapController = MapController();
   late LatLng _picked = widget.initialLocation;
-  LatLng userLocation = mockHome;
+  LatLng userLocation = defaultDohaCenter;
 
   void _onTap(LatLng point) {
     setState(() => _picked = point);

@@ -156,6 +156,15 @@ class HttpAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<void> deleteAccount({required String password}) async {
+    try {
+      await _dio.delete('/auth/delete-me/', data: {'password': password});
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
   Future<AuthUser> me(String token) async {
     try {
       // Pass token explicitly: restore() calls me() before the store is
@@ -163,6 +172,22 @@ class HttpAuthRepository implements AuthRepository {
       final response = await _dio.get(
         '/auth/me/',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      return _parseUser(response.data);
+    } on DioException catch (e) {
+      throw AuthException(_extractError(e));
+    }
+  }
+
+  @override
+  Future<AuthUser> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final response = await _dio.patch(
+        '/auth/me/',
+        data: {'home_lat': latitude, 'home_lng': longitude},
       );
       return _parseUser(response.data);
     } on DioException catch (e) {

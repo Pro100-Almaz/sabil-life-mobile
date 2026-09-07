@@ -34,8 +34,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
   static const double _categoryLogoMinZoom = 16;
 
   final MapController _mapController = MapController();
-  LatLng userLocation = mockHome;
-  LatLng pickLocaton = mockHome;
+  LatLng? userLocation;
+  LatLng pickLocaton = defaultDohaCenter;
 
   String? _selectedId;
   bool _showCategory = false;
@@ -124,7 +124,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
           .getUserLocation();
       if (!mounted) return;
       setState(() => userLocation = position);
-      _mapController.move(userLocation, 14);
+      _mapController.move(position, 14);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Could not get your location')),
@@ -162,6 +162,8 @@ class _MapScreenState extends ConsumerState<MapScreen>
     final selectedCategory = ref.watch(
       filterProvider.select((f) => f.selectedCategory),
     );
+    final filter = ref.watch(filterProvider);
+    final distanceOrigin = ref.watch(effectiveDistanceOriginProvider);
 
     // Resolve the focused listing from the catalog detail provider when set.
     final focusedAsync = _selectedId != null
@@ -171,7 +173,7 @@ class _MapScreenState extends ConsumerState<MapScreen>
 
     final initialCenter = focused != null
         ? LatLng(focused.lat, focused.lng)
-        : mockHome;
+        : distanceOrigin ?? defaultDohaCenter;
 
     // When a focus listing loads for the first time, move the map.
     if (focused != null && focusedAsync?.isLoading == false) {
@@ -236,40 +238,45 @@ class _MapScreenState extends ConsumerState<MapScreen>
                       color: Colors.purple,
                     ),
                   ),
-                  Marker(
-                    point: mockHome,
-                    width: 40,
-                    height: 40,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.textPrimary,
-                        shape: BoxShape.circle,
-                        boxShadow: AppShadow.soft,
-                      ),
-                      child: const Icon(
-                        Icons.home,
-                        size: 22,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Marker(
-                    point: userLocation,
-                    width: 40,
-                    height: 40,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.textPrimary,
-                        shape: BoxShape.circle,
-                        boxShadow: AppShadow.soft,
-                      ),
-                      child: const Icon(
-                        Icons.beenhere_rounded,
-                        size: 22,
-                        color: Colors.white,
+                  if (distanceOrigin != null)
+                    Marker(
+                      point: distanceOrigin,
+                      width: 40,
+                      height: 40,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppColors.textPrimary,
+                          shape: BoxShape.circle,
+                          boxShadow: AppShadow.soft,
+                        ),
+                        child: Icon(
+                          filter.distanceOrigin == DistanceOrigin.home
+                              ? Icons.home
+                              : Icons.my_location,
+                          size: 22,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
+                  if (userLocation != null &&
+                      filter.distanceOrigin != DistanceOrigin.currentLocation)
+                    Marker(
+                      point: userLocation!,
+                      width: 40,
+                      height: 40,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                          boxShadow: AppShadow.soft,
+                        ),
+                        child: const Icon(
+                          Icons.my_location,
+                          size: 22,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                 ],
               ),
               // A category search always shows classic pins. In the default

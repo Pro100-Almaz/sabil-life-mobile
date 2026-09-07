@@ -50,7 +50,13 @@ abstract class AuthRepository {
     required String newPassword2,
   });
 
+  Future<void> deleteAccount({required String password});
+
   Future<AuthUser> me(String token);
+  Future<AuthUser> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  });
   Future<void> logout();
 }
 
@@ -63,6 +69,7 @@ class MockAuthRepository implements AuthRepository {
   /// Pending registrations awaiting code confirmation, keyed by email.
   final Map<String, ({String password, String fullName})> _pending = {};
   final Set<String> _pendingPasswordResets = {};
+  AuthUser? _currentUser;
   final Map<String, ({String name, String email, String password})>
   _pendingPersonalInformation = {};
 
@@ -73,6 +80,7 @@ class MockAuthRepository implements AuthRepository {
     if (user == null) {
       throw const AuthException('Invalid email or password');
     }
+    _currentUser = user;
     return AuthSession(user: user, token: 'mock-${user.id}');
   }
 
@@ -117,6 +125,7 @@ class MockAuthRepository implements AuthRepository {
       isVerified: true,
     );
     registerMockAccount(user, pending.password);
+    _currentUser = user;
     _pending.remove(normalized);
     return AuthSession(user: user, token: 'mock-${user.id}');
   }
@@ -131,7 +140,21 @@ class MockAuthRepository implements AuthRepository {
     if (user == null) {
       throw const AuthException('Session expired');
     }
+    _currentUser = user;
     return user;
+  }
+
+  @override
+  Future<AuthUser> updateHomeLocation({
+    required double latitude,
+    required double longitude,
+  }) async {
+    await Future<void>.delayed(_latency);
+    final user = _currentUser;
+    if (user == null) throw const AuthException('Session expired');
+    final updated = user.copyWith(homeLat: latitude, homeLng: longitude);
+    _currentUser = updated;
+    return updated;
   }
 
   @override
@@ -197,6 +220,14 @@ class MockAuthRepository implements AuthRepository {
     }
     if (newPassword.length < 8) {
       throw const AuthException('Password must be at least 8 characters.');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount({required String password}) async {
+    await Future<void>.delayed(_latency);
+    if (password != 'demo1234') {
+      throw const AuthException('Current password is incorrect.');
     }
   }
 

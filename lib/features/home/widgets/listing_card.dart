@@ -24,7 +24,7 @@ class ListingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
     final l10n = AppLocalizations.of(context)!;
     final imageUrl = listing.primaryImageUrl;
     return GestureDetector(
@@ -90,11 +90,13 @@ class ListingCard extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
-            Text(
-              l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
-              style: AppTypography.small,
-            ),
-            const SizedBox(height: 2),
+            if (origin != null) ...[
+              Text(
+                l10n.distanceAway(listing.distanceFromLabel(origin)),
+                style: AppTypography.small,
+              ),
+              const SizedBox(height: 2),
+            ],
             Text(
               listing.priceFromQar == 0
                   ? l10n.free

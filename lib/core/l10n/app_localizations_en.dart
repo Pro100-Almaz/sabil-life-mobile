@@ -1187,4 +1187,70 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get duplicateContact =>
       'The same contact cannot be added more than once';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get deleteAccountTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your account and personal information. This action cannot be undone.';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'Enter your current password to confirm';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Enter your current password.';
+
+  @override
+  String get deleteAccountConfirm => 'Permanently delete';
+  String get homeLocation => 'Home location';
+
+  @override
+  String get homeLocationSubtitle =>
+      'Choose where distance from home is measured';
+
+  @override
+  String get setHomeLocation => 'Set home location';
+
+  @override
+  String get changeHomeLocation => 'Change home location';
+
+  @override
+  String get tapMapToSelectHome => 'Tap the map to select your home location.';
+
+  @override
+  String get useCurrentLocation => 'Use current location';
+
+  @override
+  String get saveHomeLocation => 'Save home location';
+
+  @override
+  String get homeLocationSaved => 'Home location saved.';
+
+  @override
+  String get distanceFrom => 'Calculate distance from';
+
+  @override
+  String get home => 'Home';
+
+  @override
+  String get currentLocation => 'Current location';
+
+  @override
+  String get homeLocationRequired =>
+      'Set a home location before using distance from home.';
+
+  @override
+  String get locationPermissionDenied => 'Location permission was denied.';
+
+  @override
+  String get locationServicesDisabled => 'Location services are disabled.';
+
+  @override
+  String get locationUnavailable =>
+      'Your current location could not be determined.';
 }

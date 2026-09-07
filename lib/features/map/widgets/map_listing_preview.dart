@@ -29,7 +29,7 @@ class MapListingPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
       child: Container(
@@ -86,11 +86,13 @@ class MapListingPreview extends ConsumerWidget {
                     rating: listing.rating,
                     suffix: '${listing.reviewCount}',
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    l10n.distanceAway(listing.distanceFromHomeLabel(origin)),
-                    style: AppTypography.small,
-                  ),
+                  if (origin != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.distanceAway(listing.distanceFromLabel(origin)),
+                      style: AppTypography.small,
+                    ),
+                  ],
                 ],
               ),
             ),

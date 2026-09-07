@@ -1186,4 +1186,70 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get duplicateContact =>
       'Один и тот же контакт нельзя добавлять несколько раз';
+
+  @override
+  String get deleteAccount => 'Удалить аккаунт';
+
+  @override
+  String get deleteAccountTitle => 'Удалить аккаунт?';
+
+  @override
+  String get deleteAccountWarning =>
+      'Ваш аккаунт и личные данные будут удалены навсегда. Это действие нельзя отменить.';
+
+  @override
+  String get deleteAccountPasswordHint =>
+      'Введите текущий пароль для подтверждения';
+
+  @override
+  String get deleteAccountPasswordRequired => 'Введите текущий пароль.';
+
+  @override
+  String get deleteAccountConfirm => 'Удалить навсегда';
+  String get homeLocation => 'Домашний адрес';
+
+  @override
+  String get homeLocationSubtitle =>
+      'Выберите точку, от которой измеряется расстояние от дома';
+
+  @override
+  String get setHomeLocation => 'Указать домашний адрес';
+
+  @override
+  String get changeHomeLocation => 'Изменить домашний адрес';
+
+  @override
+  String get tapMapToSelectHome =>
+      'Нажмите на карту, чтобы выбрать домашний адрес.';
+
+  @override
+  String get useCurrentLocation => 'Использовать текущее местоположение';
+
+  @override
+  String get saveHomeLocation => 'Сохранить домашний адрес';
+
+  @override
+  String get homeLocationSaved => 'Домашний адрес сохранён.';
+
+  @override
+  String get distanceFrom => 'Рассчитывать расстояние от';
+
+  @override
+  String get home => 'Дома';
+
+  @override
+  String get currentLocation => 'Текущего местоположения';
+
+  @override
+  String get homeLocationRequired => 'Сначала укажите домашний адрес.';
+
+  @override
+  String get locationPermissionDenied => 'Доступ к местоположению запрещён.';
+
+  @override
+  String get locationServicesDisabled => 'Службы геолокации отключены.';
+
+  @override
+  String get locationUnavailable =>
+      'Не удалось определить текущее местоположение.';
 }

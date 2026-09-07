@@ -91,7 +91,7 @@ class _DetailBody extends ConsumerWidget {
     final isSaved = ref.watch(favoritesProvider).contains(listing.id);
     final asyncReviews = ref.watch(listingReviewsProvider(listing.id));
     final reviews = asyncReviews.valueOrNull ?? const <Review>[];
-    final origin = ref.watch(filterProvider.select((f) => f.userPosition));
+    final origin = ref.watch(effectiveDistanceOriginProvider);
 
     return Scaffold(
       body: CustomScrollView(
@@ -138,13 +138,13 @@ class _DetailBody extends ConsumerWidget {
                       ),
                       const SizedBox(width: AppSpacing.xs),
                       Text(listing.neighborhood, style: AppTypography.caption),
-                      Text(' · ', style: AppTypography.caption),
-                      Text(
-                        l10n.distanceAway(
-                          listing.distanceFromHomeLabel(origin),
+                      if (origin != null) ...[
+                        Text(' · ', style: AppTypography.caption),
+                        Text(
+                          l10n.distanceAway(listing.distanceFromLabel(origin)),
+                          style: AppTypography.caption,
                         ),
-                        style: AppTypography.caption,
-                      ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -899,50 +899,48 @@ class _ReviewTile extends ConsumerWidget {
                     _reportReview(context, ref);
                   }
                 },
-                itemBuilder: (_) => isOwner
-                    ? [
-                        PopupMenuItem(
-                          value: 'edit',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.edit_outlined, size: 18),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(l10n.editReview),
-                            ],
+                itemBuilder: (_) => [
+                  if (isOwner) ...[
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.editReview),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.delete_outline,
+                            size: 18,
+                            color: AppColors.primary,
                           ),
-                        ),
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.delete_outline,
-                                size: 18,
-                                color: AppColors.primary,
-                              ),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(
-                                l10n.deleteReview,
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ],
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(
+                            l10n.deleteReview,
+                            style: const TextStyle(color: AppColors.primary),
                           ),
-                        ),
-                      ]
-                    : [
-                        PopupMenuItem(
-                          value: 'report',
-                          child: Row(
-                            children: [
-                              const Icon(Icons.flag_outlined, size: 18),
-                              const SizedBox(width: AppSpacing.sm),
-                              Text(l10n.reportReview),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (!isOwner)
+                    PopupMenuItem(
+                      value: 'report',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.flag_outlined, size: 18),
+                          const SizedBox(width: AppSpacing.sm),
+                          Text(l10n.reportReview),
+                        ],
+                      ),
+                    ),
+                ],
               ),
           ],
         ),

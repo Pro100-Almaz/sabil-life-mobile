@@ -65,9 +65,15 @@ class HttpCatalogRepository implements CatalogRepository {
   }
 
   @override
-  Future<Listing> listing(String id) async {
+  Future<Listing> listing(String id, {double? lat, double? lng}) async {
     try {
-      final response = await _dio.get('/listings/$id/');
+      final params = <String, dynamic>{};
+      if (lat != null) params['lat'] = lat;
+      if (lng != null) params['lng'] = lng;
+      final response = await _dio.get(
+        '/listings/$id/',
+        queryParameters: params,
+      );
       return ListingParser.fromDetail(
         Map<String, dynamic>.from(response.data as Map),
       );

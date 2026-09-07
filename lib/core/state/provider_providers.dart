@@ -14,6 +14,7 @@ import 'package:sabil_life/data/api/device.dart';
 import 'package:sabil_life/data/api/push_notifications.dart';
 
 import 'package:sabil_life/data/repositories/device_repository.dart';
+import 'filter_provider.dart';
 import '../../data/models/auth_user.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
@@ -237,9 +238,15 @@ final allCatalogListingsProvider = FutureProvider.family
     });
 
 final catalogDetailProvider = FutureProvider.family
-    .autoDispose<Listing, String>(
-      (ref, id) => ref.watch(catalogRepositoryProvider).listing(id),
-    );
+    .autoDispose<Listing, String>((ref, id) {
+      // The origin drives the backend's driving-distance lookup; without it
+      // the detail response carries no `driving_distance_km` and callers
+      // fall back to the client-side straight-line distance.
+      final origin = ref.watch(effectiveDistanceOriginProvider);
+      return ref
+          .watch(catalogRepositoryProvider)
+          .listing(id, lat: origin?.latitude, lng: origin?.longitude);
+    });
 
 final catalogCategoriesProvider =
     FutureProvider.autoDispose<List<CategoryCount>>(

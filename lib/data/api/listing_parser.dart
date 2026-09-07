@@ -63,6 +63,7 @@ class ListingParser {
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
       startsAt: parseDate(data['starts_at']),
+      drivingDistanceKm: toDoubleOrNull(data['driving_distance_km']),
     );
   }
 
@@ -203,5 +204,14 @@ class ListingParser {
     if (value is double) return value;
     if (value is int) return value.toDouble();
     return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  /// Like [toDouble] but preserves absence — used for fields where null means
+  /// "not available" rather than 0 (e.g. `driving_distance_km`).
+  static double? toDoubleOrNull(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    return double.tryParse(value.toString());
   }
 }

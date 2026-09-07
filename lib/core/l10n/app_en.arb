@@ -395,7 +395,7 @@
   "deleteAccountWarning": "This permanently deletes your account and personal information. This action cannot be undone.",
   "deleteAccountPasswordHint": "Enter your current password to confirm",
   "deleteAccountPasswordRequired": "Enter your current password.",
-  "deleteAccountConfirm": "Permanently delete"
+  "deleteAccountConfirm": "Permanently delete",
   "homeLocation": "Home location",
   "homeLocationSubtitle": "Choose where distance from home is measured",
   "setHomeLocation": "Set home location",

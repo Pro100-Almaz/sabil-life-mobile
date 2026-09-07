@@ -1208,6 +1208,8 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm => 'Біржола жою';
+
+  @override
   String get homeLocation => 'Үй мекенжайы';
 
   @override

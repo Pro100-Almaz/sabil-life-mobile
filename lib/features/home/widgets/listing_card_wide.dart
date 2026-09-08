@@ -85,13 +85,13 @@ class ListingCardWide extends ConsumerWidget {
                   rating: listing.rating,
                   suffix: l10n.reviews(listing.reviewCount),
                 ),
-                if (origin != null) ...[
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    l10n.distanceAway(listing.distanceFromLabel(origin)),
-                    style: AppTypography.small,
-                  ),
-                ],
+                // if (origin != null) ...[
+                //   const SizedBox(height: AppSpacing.xs),
+                //   Text(
+                //     l10n.distanceAway(listing.distanceFromLabel(origin)),
+                //     style: AppTypography.small,
+                //   ),
+                // ],
               ],
             ),
           ),

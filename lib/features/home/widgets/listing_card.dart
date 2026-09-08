@@ -90,13 +90,13 @@ class ListingCard extends ConsumerWidget {
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 2),
-            if (origin != null) ...[
-              Text(
-                l10n.distanceAway(listing.distanceFromLabel(origin)),
-                style: AppTypography.small,
-              ),
-              const SizedBox(height: 2),
-            ],
+            // if (origin != null) ...[
+            //   Text(
+            //     l10n.distanceAway(listing.distanceFromLabel(origin)),
+            //     style: AppTypography.small,
+            //   ),
+            //   const SizedBox(height: 2),
+            // ],
             Text(
               listing.priceFromQar == 0
                   ? l10n.free

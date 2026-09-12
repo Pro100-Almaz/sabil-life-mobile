@@ -90,6 +90,7 @@ class Listing {
     this.contacts = const [],
     this.ownerId,
     this.status = ListingStatus.active,
+    this.drivingDistanceKm,
   });
 
   final String id;
@@ -138,6 +139,13 @@ class Listing {
   final String? ownerId;
   final ListingStatus status;
 
+  /// Real road-network distance (km) from the query's `lat`/`lng` origin,
+  /// returned only by the detail endpoint. Null when the request carried no
+  /// origin, the listing has no coordinates, or the ORS lookup failed —
+  /// callers should fall back to [ListingDistance.distanceFromKm] (straight
+  /// line) in that case rather than hiding the distance entirely.
+  final double? drivingDistanceKm;
+
   Listing copyWith({
     String? id,
     String? title,
@@ -164,6 +172,7 @@ class Listing {
     String? registrationUrl,
     MasterclassEventType? eventType,
     DateTime? Function()? startsAt,
+    double? Function()? drivingDistanceKm,
   }) {
     return Listing(
       id: id ?? this.id,
@@ -191,6 +200,9 @@ class Listing {
       registrationUrl: registrationUrl ?? this.registrationUrl,
       eventType: eventType ?? this.eventType,
       startsAt: startsAt != null ? startsAt() : this.startsAt,
+      drivingDistanceKm: drivingDistanceKm != null
+          ? drivingDistanceKm()
+          : this.drivingDistanceKm,
     );
   }
 }

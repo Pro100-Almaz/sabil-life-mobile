@@ -68,7 +68,8 @@ class _PagedCatalogRepository implements CatalogRepository {
   Future<List<CategoryCount>> categories() => throw UnimplementedError();
 
   @override
-  Future<Listing> listing(String id) => throw UnimplementedError();
+  Future<Listing> listing(String id, {double? lat, double? lng}) =>
+      throw UnimplementedError();
 
   @override
   Future<List<String>> tags(String category) => throw UnimplementedError();

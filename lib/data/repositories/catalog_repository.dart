@@ -114,7 +114,10 @@ abstract class CatalogRepository {
     int page = 1,
   });
 
-  Future<Listing> listing(String id);
+  /// [lat]/[lng] are the caller's distance origin (home or current location).
+  /// When present, the backend attempts a real driving-distance lookup and
+  /// returns it as `Listing.drivingDistanceKm`; omit them to skip that call.
+  Future<Listing> listing(String id, {double? lat, double? lng});
 
   Future<List<CategoryCount>> categories();
 

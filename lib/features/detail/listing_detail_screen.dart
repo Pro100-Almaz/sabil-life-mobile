@@ -141,7 +141,9 @@ class _DetailBody extends ConsumerWidget {
                       if (origin != null) ...[
                         Text(' · ', style: AppTypography.caption),
                         Text(
-                          l10n.distanceAway(listing.distanceFromLabel(origin)),
+                          l10n.distanceAway(
+                            listing.displayDistanceLabel(origin),
+                          ),
                           style: AppTypography.caption,
                         ),
                       ],

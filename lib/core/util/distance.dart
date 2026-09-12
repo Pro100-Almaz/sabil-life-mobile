@@ -29,6 +29,16 @@ extension ListingDistance on Listing {
 
   String distanceFromLabel(LatLng origin) => formatKm(distanceFromKm(origin));
 
+  /// Real driving distance when the backend could compute one for this
+  /// listing (ORS lookup succeeded); otherwise the straight-line distance,
+  /// so a distance is always shown even when the driving lookup is
+  /// unavailable (missing key, no route, rate limited, etc).
+  double displayDistanceKm(LatLng origin) =>
+      drivingDistanceKm ?? distanceFromKm(origin);
+
+  String displayDistanceLabel(LatLng origin) =>
+      formatKm(displayDistanceKm(origin));
+
   @Deprecated('Use distanceFromKm; the origin may be home or current location.')
   double distanceFromHomeKm(LatLng origin) => distanceFromKm(origin);
 

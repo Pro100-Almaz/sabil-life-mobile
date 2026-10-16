@@ -7,8 +7,6 @@ import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/util/distance.dart';
-import '../../../core/state/filter_provider.dart';
 import '../../../data/models/listing.dart';
 import '../../../shared/widgets/heart_button.dart';
 import '../../../shared/widgets/star_rating.dart';
@@ -24,7 +22,6 @@ class ListingCardWide extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final imageUrl = listing.primaryImageUrl;
-    final origin = ref.watch(effectiveDistanceOriginProvider);
 
     return GestureDetector(
       onTap: () => context.push('/listing/${listing.id}'),
@@ -85,13 +82,6 @@ class ListingCardWide extends ConsumerWidget {
                   rating: listing.rating,
                   suffix: l10n.reviews(listing.reviewCount),
                 ),
-                // if (origin != null) ...[
-                //   const SizedBox(height: AppSpacing.xs),
-                //   Text(
-                //     l10n.distanceAway(listing.distanceFromLabel(origin)),
-                //     style: AppTypography.small,
-                //   ),
-                // ],
               ],
             ),
           ),

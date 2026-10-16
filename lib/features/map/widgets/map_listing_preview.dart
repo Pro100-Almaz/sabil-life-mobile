@@ -89,7 +89,7 @@ class MapListingPreview extends ConsumerWidget {
                   if (origin != null) ...[
                     const SizedBox(height: 2),
                     Text(
-                      l10n.distanceAway(listing.distanceFromLabel(origin)),
+                      l10n.distanceAway(listing.displayDistanceLabel(origin)),
                       style: AppTypography.small,
                     ),
                   ],

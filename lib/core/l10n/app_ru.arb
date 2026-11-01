@@ -179,7 +179,7 @@
   "switchToFamily": "Перейти в семейный режим",
   "switchToProvider": "Вернуться в кабинет провайдера",
   "switchToTutor": "Перейти в кабинет репетитора",
-  "switchToMasterclass": "Перейти в кабинет мастер-классов",
+  "switchToMasterclass": "Перейти в кабинет провайдера",
   "genericLoadError": "Что-то пошло не так. Попробуйте ещё раз.",
   "retry": "Повторить",
   "loading": "Загрузка…",
@@ -390,5 +390,13 @@
   "homeLocationRequired": "Сначала укажите домашний адрес.",
   "locationPermissionDenied": "Доступ к местоположению запрещён.",
   "locationServicesDisabled": "Службы геолокации отключены.",
-  "locationUnavailable": "Не удалось определить текущее местоположение."
+  "locationUnavailable": "Не удалось определить текущее местоположение.",
+  "providerDashboard": "Панель провайдера",
+  "regularListings": "Объявления",
+  "noRegularListingsYet": "У вас пока нет принадлежащих вам объявлений",
+  "noMasterclassesYet": "Вы ещё не создали мастер-классы",
+  "claimListing": "Запросить владение объявлением",
+  "requestOwnership": "Запросить владение",
+  "ownershipRequestSent": "Запрос владения отправлен на проверку.",
+  "createMasterclass": "Создать мастер-класс"
 }

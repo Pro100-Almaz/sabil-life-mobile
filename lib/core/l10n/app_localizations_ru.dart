@@ -597,7 +597,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get switchToTutor => 'Перейти в кабинет репетитора';
 
   @override
-  String get switchToMasterclass => 'Перейти в кабинет мастер-классов';
+  String get switchToMasterclass => 'Перейти в кабинет провайдера';
 
   @override
   String get genericLoadError => 'Что-то пошло не так. Попробуйте ещё раз.';
@@ -1254,4 +1254,29 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get locationUnavailable =>
       'Не удалось определить текущее местоположение.';
+
+  @override
+  String get providerDashboard => 'Панель провайдера';
+
+  @override
+  String get regularListings => 'Объявления';
+
+  @override
+  String get noRegularListingsYet =>
+      'У вас пока нет принадлежащих вам объявлений';
+
+  @override
+  String get noMasterclassesYet => 'Вы ещё не создали мастер-классы';
+
+  @override
+  String get claimListing => 'Запросить владение объявлением';
+
+  @override
+  String get requestOwnership => 'Запросить владение';
+
+  @override
+  String get ownershipRequestSent => 'Запрос владения отправлен на проверку.';
+
+  @override
+  String get createMasterclass => 'Создать мастер-класс';
 }

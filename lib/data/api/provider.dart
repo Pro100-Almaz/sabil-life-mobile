@@ -5,6 +5,7 @@ import '../models/inquiry.dart';
 import '../models/listing.dart';
 import '../models/provider_profile.dart';
 import '../models/provider_verification.dart';
+import '../models/ownership_request.dart';
 import '../models/subscription.dart';
 import '../repositories/provider_repository.dart';
 import 'api_client.dart';
@@ -330,6 +331,55 @@ class HttpProviderRepository implements ProviderRepository {
     }
   }
 
+  @override
+  Future<OwnershipRequest> requestListingOwnership(
+    String listingId, {
+    String? message,
+  }) async {
+    try {
+      final response = await _dio.post(
+        '/provider/ownership-requests/',
+        data: {
+          'listing_id': listingId,
+          if (message != null && message.trim().isNotEmpty)
+            'message': message.trim(),
+        },
+      );
+      return OwnershipRequest.fromJson(
+        Map<String, dynamic>.from(response.data as Map),
+      );
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<List<OwnershipRequest>> myOwnershipRequests() async {
+    try {
+      final response = await _dio.get('/provider/ownership-requests/');
+      final data = response.data;
+      if (data is! List) return const [];
+      return data
+          .whereType<Map>()
+          .map(
+            (item) =>
+                OwnershipRequest.fromJson(Map<String, dynamic>.from(item)),
+          )
+          .toList();
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
+  @override
+  Future<void> cancelOwnershipRequest(int requestId) async {
+    try {
+      await _dio.delete('/provider/ownership-requests/$requestId/');
+    } on DioException catch (e) {
+      throw StateError(_extractError(e));
+    }
+  }
+
   // POST /provider/listings/<listing_id>/images/
   @override
   Future<List<ListingImage>> uploadListingImages(
@@ -528,6 +578,7 @@ class HttpProviderRepository implements ProviderRepository {
       'lng': listing.lng,
       'price_from_qar': listing.priceFromQar,
       'age_groups': listing.ageGroups,
+      'tags': listing.tags,
       'description': listing.description,
       'highlights': listing.highlights,
       'is_featured': listing.isFeatured,

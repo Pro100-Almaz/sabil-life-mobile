@@ -19,6 +19,8 @@ import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
+import '../../features/provider/claim_listing_screen.dart';
+import '../../features/provider/ownership_requests_screen.dart';
 // import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_clients_screen.dart';
@@ -62,18 +64,26 @@ StatefulShellRoute _providerShellRoute({
     ],
   );
 
-  // Listings are tutor-less: only the masterclass interface manages listings.
+  // Regular listings are claim-only. Providers can edit their approved owned
+  // listings but cannot create directory listings from this section.
   final listingsBranch = StatefulShellBranch(
     routes: [
       GoRoute(
         path: '$base/listings',
-        builder: (context, state) => MyListingsScreen(interface: interface),
+        builder: (context, state) => MyListingsScreen(
+          interface: interface,
+          section: ProviderListingsSection.regular,
+        ),
         routes: [
           GoRoute(
-            path: 'new',
+            path: 'claim',
             parentNavigatorKey: _rootNavigatorKey,
-            builder: (context, state) =>
-                const ListingEditorScreen(listingId: null),
+            builder: (context, state) => const ClaimListingScreen(),
+          ),
+          GoRoute(
+            path: 'requests',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => const OwnershipRequestsScreen(),
           ),
           GoRoute(
             path: 'edit/:id',
@@ -100,7 +110,37 @@ StatefulShellRoute _providerShellRoute({
     ],
   );
 
-  // Inquiries are only surfaced on the tutor interface.
+  final masterclassesBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/masterclasses',
+        builder: (context, state) => MyListingsScreen(
+          interface: interface,
+          section: ProviderListingsSection.masterclasses,
+        ),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) =>
+                const ListingEditorScreen(listingId: null),
+          ),
+          GoRoute(
+            path: 'edit/:id',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ListingEditorScreen(
+              listingId: state.pathParameters['id'],
+              initialListing: state.extra is Listing
+                  ? state.extra as Listing
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+
+  // Any provider can receive inquiries for an owned listing.
   final inquiriesBranch = StatefulShellBranch(
     routes: [
       GoRoute(
@@ -140,7 +180,8 @@ StatefulShellRoute _providerShellRoute({
   final branches = <StatefulShellBranch>[
     dashboardBranch,
     if (interface == ActiveInterface.masterclass) listingsBranch,
-    if (interface == ActiveInterface.tutor) inquiriesBranch,
+    if (interface == ActiveInterface.masterclass) masterclassesBranch,
+    inquiriesBranch,
     settingsBranch,
   ];
 

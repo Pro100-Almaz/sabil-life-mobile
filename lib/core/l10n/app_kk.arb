@@ -179,7 +179,7 @@
   "switchToFamily": "Отбасы режиміне өту",
   "switchToProvider": "Провайдер кабинетіне қайту",
   "switchToTutor": "Репетитор кабинетіне өту",
-  "switchToMasterclass": "Шеберлік сыныбы кабинетіне өту",
+  "switchToMasterclass": "Провайдер кабинетіне өту",
   "genericLoadError": "Бірдеңе дұрыс болмады. Қайталап көріңіз.",
   "retry": "Қайталау",
   "loading": "Жүктелуде…",
@@ -390,5 +390,13 @@
   "homeLocationRequired": "Алдымен үй мекенжайын орнатыңыз.",
   "locationPermissionDenied": "Орналасу рұқсаты берілмеді.",
   "locationServicesDisabled": "Орналасу қызметтері өшірулі.",
-  "locationUnavailable": "Ағымдағы орынды анықтау мүмкін болмады."
+  "locationUnavailable": "Ағымдағы орынды анықтау мүмкін болмады.",
+  "providerDashboard": "Провайдер панелі",
+  "regularListings": "Хабарландырулар",
+  "noRegularListingsYet": "Сізге тиесілі хабарландырулар әлі жоқ",
+  "noMasterclassesYet": "Сіз әлі шеберлік сыныптарын жасамадыңыз",
+  "claimListing": "Хабарландыруға иелік етуді сұрау",
+  "requestOwnership": "Иелік етуді сұрау",
+  "ownershipRequestSent": "Иелік ету сұрауы тексеруге жіберілді.",
+  "createMasterclass": "Шеберлік сыныбын жасау"
 }

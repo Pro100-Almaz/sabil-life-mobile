@@ -27,7 +27,7 @@ class ListingEditorScreen extends ConsumerStatefulWidget {
     this.initialListing,
   });
 
-  /// Null = create a new listing.
+  /// Null = create a new masterclass. Regular listings are claim-only.
   final String? listingId;
   final Listing? initialListing;
 
@@ -42,6 +42,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   final _neighborhood = TextEditingController(text: 'West Bay, Doha');
   final _price = TextEditingController(text: '0');
   final _description = TextEditingController();
+  final _tags = TextEditingController();
   final _highlights = <TextEditingController>[];
   final Set<String> _ageGroups = {};
   final _pickedImages = <XFile>[];
@@ -59,6 +60,10 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
   LatLng _pickedLocation = defaultDohaCenter;
 
   Listing? _existing;
+
+  bool get _isMasterclass =>
+      _existing?.category == CategoryType.masterclasses ||
+      widget.listingId == null;
 
   /// Rebuild so inline errors clear as the user fills required fields.
   void _onRequiredChanged() {
@@ -82,6 +87,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       _neighborhood.text = l.neighborhood;
       _price.text = '${l.priceFromQar}';
       _description.text = l.description;
+      _tags.text = l.tags.join(', ');
       for (final h in l.highlights) {
         _highlights.add(TextEditingController(text: h));
       }
@@ -113,6 +119,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     _neighborhood.dispose();
     _price.dispose();
     _description.dispose();
+    _tags.dispose();
     _url.dispose();
     _registrationUrl.dispose();
     for (final contact in _contacts) {
@@ -250,9 +257,10 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       (contact) =>
           validateListingContact(contact.type, contact.value.text) != null,
     );
-    final missingEventType = _eventType == null;
+    final missingEventType = _isMasterclass && _eventType == null;
     final invalidStartsAt =
-        _startsAt == null || !_startsAt!.isAfter(DateTime.now());
+        _isMasterclass &&
+        (_startsAt == null || !_startsAt!.isAfter(DateTime.now()));
 
     if (user == null) return;
     if (missingCore ||
@@ -277,6 +285,12 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       final highlights = _highlights
           .map((c) => c.text.trim())
           .where((h) => h.isNotEmpty)
+          .toList();
+      final tags = _tags.text
+          .split(',')
+          .map((tag) => tag.trim())
+          .where((tag) => tag.isNotEmpty)
+          .toSet()
           .toList();
 
       final base =
@@ -312,6 +326,7 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         priceFromQar: price,
         description: _description.text.trim(),
         highlights: highlights,
+        tags: tags,
         ageGroups: _ageGroups.toList(),
         status: ListingStatus.draft,
         isOnline: _isOnline,
@@ -326,8 +341,8 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
               position: index,
             ),
         ],
-        eventType: _eventType!,
-        startsAt: () => _startsAt,
+        eventType: _eventType ?? MasterclassEventType.ongoing,
+        startsAt: () => _isMasterclass ? _startsAt : null,
       );
 
       // 1. Save the listing fields (images are managed separately). Create
@@ -373,67 +388,71 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.xxl),
           children: [
-            Text(l10n.eventScheduleTitle, style: AppTypography.h3),
-            const SizedBox(height: AppSpacing.xs),
-            Text(l10n.eventTypePrompt, style: AppTypography.body),
-            const SizedBox(height: AppSpacing.md),
-            SegmentedButton<MasterclassEventType>(
-              style: SegmentedButton.styleFrom(
-                foregroundColor: AppColors.primary,
-                selectedForegroundColor: Colors.white,
-                selectedBackgroundColor: AppColors.primary,
-              ),
-              segments: [
-                ButtonSegment(
-                  value: MasterclassEventType.oneTime,
-                  icon: const Icon(Icons.event_outlined),
-                  label: Text(l10n.eventOneTime),
-                ),
-                ButtonSegment(
-                  value: MasterclassEventType.ongoing,
-                  icon: const Icon(Icons.event_repeat_outlined),
-                  label: Text(l10n.eventOngoing),
-                ),
-              ],
-              selected: _eventType == null ? {} : {_eventType!},
-              emptySelectionAllowed: true,
-              onSelectionChanged: (selection) {
-                if (selection.isNotEmpty) {
-                  _chooseEventType(selection.first);
-                }
-              },
-            ),
-            if (_showErrors && _eventType == null) ...[
+            if (_isMasterclass) ...[
+              Text(l10n.eventScheduleTitle, style: AppTypography.h3),
               const SizedBox(height: AppSpacing.xs),
-              Text(
-                l10n.eventTypeRequired,
-                style: AppTypography.caption.copyWith(color: AppColors.primary),
-              ),
-            ],
-            if (_eventType != null) ...[
+              Text(l10n.eventTypePrompt, style: AppTypography.body),
               const SizedBox(height: AppSpacing.md),
-              OutlinedButton.icon(
-                onPressed: _chooseStartDateTime,
-                icon: const Icon(Icons.schedule_outlined),
-                label: Text(
-                  _startsAt == null
-                      ? l10n.chooseEventDateTime
-                      : '${MaterialLocalizations.of(context).formatFullDate(_startsAt!)} · ${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_startsAt!))}',
+              SegmentedButton<MasterclassEventType>(
+                style: SegmentedButton.styleFrom(
+                  foregroundColor: AppColors.primary,
+                  selectedForegroundColor: Colors.white,
+                  selectedBackgroundColor: AppColors.primary,
                 ),
+                segments: [
+                  ButtonSegment(
+                    value: MasterclassEventType.oneTime,
+                    icon: const Icon(Icons.event_outlined),
+                    label: Text(l10n.eventOneTime),
+                  ),
+                  ButtonSegment(
+                    value: MasterclassEventType.ongoing,
+                    icon: const Icon(Icons.event_repeat_outlined),
+                    label: Text(l10n.eventOngoing),
+                  ),
+                ],
+                selected: _eventType == null ? {} : {_eventType!},
+                emptySelectionAllowed: true,
+                onSelectionChanged: (selection) {
+                  if (selection.isNotEmpty) {
+                    _chooseEventType(selection.first);
+                  }
+                },
               ),
-              if (_showErrors &&
-                  (_startsAt == null ||
-                      !_startsAt!.isAfter(DateTime.now()))) ...[
+              if (_showErrors && _eventType == null) ...[
                 const SizedBox(height: AppSpacing.xs),
                 Text(
-                  l10n.futureEventDateRequired,
+                  l10n.eventTypeRequired,
                   style: AppTypography.caption.copyWith(
                     color: AppColors.primary,
                   ),
                 ),
               ],
+              if (_eventType != null) ...[
+                const SizedBox(height: AppSpacing.md),
+                OutlinedButton.icon(
+                  onPressed: _chooseStartDateTime,
+                  icon: const Icon(Icons.schedule_outlined),
+                  label: Text(
+                    _startsAt == null
+                        ? l10n.chooseEventDateTime
+                        : '${MaterialLocalizations.of(context).formatFullDate(_startsAt!)} · ${MaterialLocalizations.of(context).formatTimeOfDay(TimeOfDay.fromDateTime(_startsAt!))}',
+                  ),
+                ),
+                if (_showErrors &&
+                    (_startsAt == null ||
+                        !_startsAt!.isAfter(DateTime.now()))) ...[
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    l10n.futureEventDateRequired,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ],
+              const SizedBox(height: AppSpacing.xxl),
             ],
-            const SizedBox(height: AppSpacing.xxl),
             //Title
             TextField(
               controller: _title,
@@ -667,6 +686,14 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
               controller: _description,
               maxLines: 5,
               decoration: InputDecoration(labelText: l10n.fieldDescription),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            TextField(
+              controller: _tags,
+              decoration: const InputDecoration(
+                labelText: 'Tags',
+                hintText: 'Separate tags with commas',
+              ),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(l10n.ageGroup, style: AppTypography.label),

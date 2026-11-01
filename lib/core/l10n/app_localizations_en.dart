@@ -595,7 +595,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchToTutor => 'Switch to Tutor dashboard';
 
   @override
-  String get switchToMasterclass => 'Switch to Masterclass dashboard';
+  String get switchToMasterclass => 'Switch to Provider dashboard';
 
   @override
   String get genericLoadError => 'Something went wrong. Please try again.';
@@ -1255,4 +1255,28 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get locationUnavailable =>
       'Your current location could not be determined.';
+
+  @override
+  String get providerDashboard => 'Provider dashboard';
+
+  @override
+  String get regularListings => 'Listings';
+
+  @override
+  String get noRegularListingsYet => 'You don\'t own any listings yet';
+
+  @override
+  String get noMasterclassesYet => 'You haven\'t created any masterclasses yet';
+
+  @override
+  String get claimListing => 'Claim a listing';
+
+  @override
+  String get requestOwnership => 'Request ownership';
+
+  @override
+  String get ownershipRequestSent => 'Ownership request sent for review.';
+
+  @override
+  String get createMasterclass => 'Create masterclass';
 }

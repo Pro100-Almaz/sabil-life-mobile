@@ -1177,7 +1177,7 @@ abstract class AppLocalizations {
   /// No description provided for @switchToMasterclass.
   ///
   /// In en, this message translates to:
-  /// **'Switch to Masterclass dashboard'**
+  /// **'Switch to Provider dashboard'**
   String get switchToMasterclass;
 
   /// No description provided for @genericLoadError.
@@ -2427,6 +2427,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your current location could not be determined.'**
   String get locationUnavailable;
+
+  /// No description provided for @providerDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider dashboard'**
+  String get providerDashboard;
+
+  /// No description provided for @regularListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get regularListings;
+
+  /// No description provided for @noRegularListingsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t own any listings yet'**
+  String get noRegularListingsYet;
+
+  /// No description provided for @noMasterclassesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t created any masterclasses yet'**
+  String get noMasterclassesYet;
+
+  /// No description provided for @claimListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim a listing'**
+  String get claimListing;
+
+  /// No description provided for @requestOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Request ownership'**
+  String get requestOwnership;
+
+  /// No description provided for @ownershipRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership request sent for review.'**
+  String get ownershipRequestSent;
+
+  /// No description provided for @createMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Create masterclass'**
+  String get createMasterclass;
 }
 
 class _AppLocalizationsDelegate

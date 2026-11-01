@@ -19,6 +19,11 @@ class AppNotification {
   final bool isRead;
   final DateTime createdAt;
 
+  bool get isOwnershipDecision =>
+      type == 'OWNERSHIP_APPROVED' || type == 'OWNERSHIP_REJECTED';
+
+  bool get isOwnershipApproved => type == 'OWNERSHIP_APPROVED';
+
   factory AppNotification.fromJson(Map<String, dynamic> json) {
     return AppNotification(
       id: json['id'] as int,

@@ -595,7 +595,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get switchToTutor => 'Репетитор кабинетіне өту';
 
   @override
-  String get switchToMasterclass => 'Шеберлік сыныбы кабинетіне өту';
+  String get switchToMasterclass => 'Провайдер кабинетіне өту';
 
   @override
   String get genericLoadError => 'Бірдеңе дұрыс болмады. Қайталап көріңіз.';
@@ -1254,4 +1254,28 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get locationUnavailable => 'Ағымдағы орынды анықтау мүмкін болмады.';
+
+  @override
+  String get providerDashboard => 'Провайдер панелі';
+
+  @override
+  String get regularListings => 'Хабарландырулар';
+
+  @override
+  String get noRegularListingsYet => 'Сізге тиесілі хабарландырулар әлі жоқ';
+
+  @override
+  String get noMasterclassesYet => 'Сіз әлі шеберлік сыныптарын жасамадыңыз';
+
+  @override
+  String get claimListing => 'Хабарландыруға иелік етуді сұрау';
+
+  @override
+  String get requestOwnership => 'Иелік етуді сұрау';
+
+  @override
+  String get ownershipRequestSent => 'Иелік ету сұрауы тексеруге жіберілді.';
+
+  @override
+  String get createMasterclass => 'Шеберлік сыныбын жасау';
 }

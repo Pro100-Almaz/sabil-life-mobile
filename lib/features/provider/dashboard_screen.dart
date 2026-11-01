@@ -34,13 +34,14 @@ class DashboardScreen extends ConsumerWidget {
     //   incomingSubscriptionsProvider(const SubscriptionsFilter()),
     // );
 
-    final totalListings = listingsAsync.maybeWhen(
-      data: (items) => items.length,
+    final regularListings = listingsAsync.maybeWhen(
+      data: (items) =>
+          items.where((l) => l.category != CategoryType.masterclasses).length,
       orElse: () => 0,
     );
-    final activeListings = listingsAsync.maybeWhen(
+    final masterclasses = listingsAsync.maybeWhen(
       data: (items) =>
-          items.where((l) => l.status == ListingStatus.active).length,
+          items.where((l) => l.category == CategoryType.masterclasses).length,
       orElse: () => 0,
     );
     final newInquiries = inquiriesAsync.maybeWhen(
@@ -61,7 +62,11 @@ class DashboardScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.welcomeBack(user.fullName)),
+        title: Text(
+          interface == ActiveInterface.masterclass
+              ? l10n.providerDashboard
+              : l10n.welcomeBack(user.fullName),
+        ),
         toolbarHeight: 72,
         actions: const [_NotificationBell()],
       ),
@@ -87,18 +92,24 @@ class DashboardScreen extends ConsumerWidget {
               _UnverifiedBanner(message: l10n.providerUnverifiedBanner),
               const SizedBox(height: AppSpacing.lg),
             ],
-            // Listings live only on the masterclass interface.
+            // The masterclass interface is the general provider workspace.
             if (interface == ActiveInterface.masterclass) ...[
               _MetricCard(
-                label: l10n.metricActiveListings,
-                value: '$activeListings / $totalListings',
+                label: l10n.regularListings,
+                value: '$regularListings',
                 icon: Icons.list_alt_outlined,
                 onTap: () => context.go('${interface.basePath}/listings'),
               ),
               const SizedBox(height: AppSpacing.md),
+              _MetricCard(
+                label: l10n.catMasterclasses,
+                value: '$masterclasses',
+                icon: Icons.event_outlined,
+                onTap: () => context.go('${interface.basePath}/masterclasses'),
+              ),
+              const SizedBox(height: AppSpacing.md),
             ],
-            // Inquiries live only on the tutor interface.
-            if (interface == ActiveInterface.tutor) ...[
+            if (interface.isProvider) ...[
               _MetricCard(
                 label: l10n.metricNewInquiries,
                 value: '$newInquiries',

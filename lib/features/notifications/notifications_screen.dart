@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sabil_life/core/state/notifications_provider.dart';
 import 'package:sabil_life/data/models/app_notification.dart';
 
 import '../../core/l10n/app_localizations.dart';
+import '../../core/state/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
@@ -53,6 +55,11 @@ class NotificaionsScreen extends ConsumerWidget {
                             .postNotificationRead(items[i].id);
                         ref.invalidate(notificationsFeedProvider);
                         ref.invalidate(unreadCountProvider);
+                        if (items[i].isOwnershipDecision && context.mounted) {
+                          ref.read(activeInterfaceProvider.notifier).state =
+                              ActiveInterface.masterclass;
+                          context.go('/provider/masterclass/listings');
+                        }
                       },
                     ),
                   ),
@@ -84,10 +91,14 @@ class _NotificationTileState extends State<_NotificationTile> {
     return ListTile(
       onTap: () {
         setState(() => _expanded = !_expanded);
-        widget.onTap;
+        widget.onTap();
       },
       leading: Icon(
-        Icons.notifications,
+        notification.isOwnershipDecision
+            ? notification.isOwnershipApproved
+                  ? Icons.verified_outlined
+                  : Icons.error_outline
+            : Icons.notifications,
         color: unread ? AppColors.primary : AppColors.textSecondary,
       ),
       title: Text(

@@ -13,10 +13,17 @@ import '../../shared/widgets/app_button.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
 import 'widgets/listing_status_chip.dart';
 
+enum ProviderListingsSection { regular, masterclasses }
+
 class MyListingsScreen extends ConsumerWidget {
-  const MyListingsScreen({super.key, required this.interface});
+  const MyListingsScreen({
+    super.key,
+    required this.interface,
+    required this.section,
+  });
 
   final ActiveInterface interface;
+  final ProviderListingsSection section;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,15 +32,28 @@ class MyListingsScreen extends ConsumerWidget {
     if (user == null) return const SizedBox.shrink();
 
     final listingsAsync = ref.watch(myListingsProvider(user.id));
+    final isMasterclasses = section == ProviderListingsSection.masterclasses;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.myListings),
+        title: Text(
+          isMasterclasses ? l10n.catMasterclasses : l10n.regularListings,
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => context.push('${interface.basePath}/listings/new'),
-          ),
+          if (isMasterclasses)
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: l10n.createMasterclass,
+              onPressed: () =>
+                  context.push('${interface.basePath}/masterclasses/new'),
+            )
+          else
+            IconButton(
+              icon: const Icon(Icons.add_business_outlined),
+              tooltip: l10n.claimListing,
+              onPressed: () =>
+                  context.push('${interface.basePath}/listings/claim'),
+            ),
         ],
       ),
       body: AppRefreshIndicator(
@@ -43,37 +63,61 @@ class MyListingsScreen extends ConsumerWidget {
             child: CircularProgressIndicator(color: AppColors.primary),
           ),
           error: (e, _) => RefreshableMessage(child: Text(e.toString())),
-          data: (items) => items.isEmpty
-              ? RefreshableMessage(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.inbox_outlined,
-                        size: 48,
-                        color: AppColors.textTertiary,
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      Text(l10n.noListingsYet, style: AppTypography.h3),
-                      const SizedBox(height: AppSpacing.lg),
-                      AppButton(
-                        label: l10n.createFirstListing,
-                        icon: Icons.add,
-                        onPressed: () =>
-                            context.push('${interface.basePath}/listings/new'),
-                      ),
-                    ],
-                  ),
+          data: (items) {
+            final filtered = items
+                .where(
+                  (listing) => isMasterclasses
+                      ? listing.category == CategoryType.masterclasses
+                      : listing.category != CategoryType.masterclasses,
                 )
-              : ListView.separated(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  itemCount: items.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: AppSpacing.md),
-                  itemBuilder: (context, i) =>
-                      _ListingRow(listing: items[i], interface: interface),
-                ),
+                .toList();
+            return filtered.isEmpty
+                ? RefreshableMessage(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.inbox_outlined,
+                          size: 48,
+                          color: AppColors.textTertiary,
+                        ),
+                        const SizedBox(height: AppSpacing.md),
+                        Text(
+                          isMasterclasses
+                              ? l10n.noMasterclassesYet
+                              : l10n.noRegularListingsYet,
+                          style: AppTypography.h3,
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
+                        AppButton(
+                          label: isMasterclasses
+                              ? l10n.createMasterclass
+                              : l10n.claimListing,
+                          icon: isMasterclasses
+                              ? Icons.add
+                              : Icons.add_business_outlined,
+                          onPressed: () => context.push(
+                            isMasterclasses
+                                ? '${interface.basePath}/masterclasses/new'
+                                : '${interface.basePath}/listings/claim',
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.separated(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
+                    itemCount: filtered.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: AppSpacing.md),
+                    itemBuilder: (context, i) => _ListingRow(
+                      listing: filtered[i],
+                      interface: interface,
+                      section: section,
+                    ),
+                  );
+          },
         ),
       ),
     );
@@ -81,17 +125,22 @@ class MyListingsScreen extends ConsumerWidget {
 }
 
 class _ListingRow extends StatelessWidget {
-  const _ListingRow({required this.listing, required this.interface});
+  const _ListingRow({
+    required this.listing,
+    required this.interface,
+    required this.section,
+  });
 
   final Listing listing;
   final ActiveInterface interface;
+  final ProviderListingsSection section;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () => context.push(
-        '${interface.basePath}/listings/edit/${listing.id}',
+        '${interface.basePath}/${section == ProviderListingsSection.masterclasses ? 'masterclasses' : 'listings'}/edit/${listing.id}',
         extra: listing,
       ),
       child: Container(

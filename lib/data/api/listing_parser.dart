@@ -22,7 +22,7 @@ class ListingParser {
       contacts: parseContacts(data['contacts']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
-      tags: toStringList(data['tags']),
+      tags: toStringList(data['tag_names'] ?? data['tags']),
       // Not present on list cards — defaults.
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
@@ -55,7 +55,7 @@ class ListingParser {
       contacts: parseContacts(data['contacts']),
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
-      tags: toStringList(data['tags']),
+      tags: toStringList(data['tag_names'] ?? data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
       isOnline: (data['is_online'] ?? false) as bool,

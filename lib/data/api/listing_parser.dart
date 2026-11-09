@@ -1,4 +1,5 @@
 import '../models/listing.dart';
+import '../models/listing_event.dart';
 
 /// Shared helpers for parsing raw JSON maps into [Listing] objects.
 /// Used by both [HttpCatalogRepository] and [HttpProviderRepository].
@@ -63,6 +64,11 @@ class ListingParser {
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
       startsAt: parseDate(data['starts_at']),
+      events: (data['events'] as List? ?? [])
+          .map(
+            (e) => ListingEvent.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
       drivingDistanceKm: toDoubleOrNull(data['driving_distance_km']),
     );
   }

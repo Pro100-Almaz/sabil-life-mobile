@@ -37,7 +37,9 @@ class ApiClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           // Only set Authorization if the caller has not already set one.
-          if (!options.headers.containsKey('Authorization')) {
+          if (options.extra['anonymous'] == true) {
+            options.headers.remove('Authorization');
+          } else if (!options.headers.containsKey('Authorization')) {
             final token = await authTokenStore.read();
             if (token != null) {
               options.headers['Authorization'] = 'Bearer $token';

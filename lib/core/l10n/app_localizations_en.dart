@@ -1279,4 +1279,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createMasterclass => 'Create masterclass';
+
+  @override
+  String get listingEvents => 'Events';
+
+  @override
+  String get createListingEvent => 'Create event';
+
+  @override
+  String get publishListingEvent => 'Publish event';
+
+  @override
+  String get eventPublishNotice =>
+      'Publishing makes this event public immediately. Unfinished forms are saved on this device.';
+
+  @override
+  String get eventTitle => 'Event title';
+
+  @override
+  String get eventDescription => 'Description';
+
+  @override
+  String get eventStart => 'Start date and time';
+
+  @override
+  String get eventEnd => 'End date and time (optional)';
+
+  @override
+  String get eventLocation => 'Location (optional)';
+
+  @override
+  String get eventRegistrationUrl => 'Registration URL (optional)';
+
+  @override
+  String get eventRegister => 'Register';
+
+  @override
+  String get eventRequired => 'This field is required.';
+
+  @override
+  String get eventEndInvalid => 'End must be later than start.';
+
+  @override
+  String get eventNoEvents => 'No events yet.';
+
+  @override
+  String get eventViewAll => 'View all events';
+
+  @override
+  String get eventLoadMore => 'Load more';
+
+  @override
+  String get eventPublished => 'Event published.';
+
+  @override
+  String get eventPublishFailed => 'Could not publish. Please try again.';
+
+  @override
+  String get eventUncertain =>
+      'The connection failed. Check the refreshed events before retrying: your event may already be published.';
+
+  @override
+  String get eventAccessDenied =>
+      'You do not have access to publish events for this listing.';
+
+  @override
+  String get eventSignIn => 'Please sign in again to publish events.';
+
+  @override
+  String get eventLocalTime =>
+      'Dates and times use your device’s local timezone.';
+
+  @override
+  String get eventClearEnd => 'Remove end time';
 }

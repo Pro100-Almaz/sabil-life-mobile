@@ -1278,4 +1278,78 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get createMasterclass => 'Шеберлік сыныбын жасау';
+
+  @override
+  String get listingEvents => 'Іс-шаралар';
+
+  @override
+  String get createListingEvent => 'Іс-шара жасау';
+
+  @override
+  String get publishListingEvent => 'Іс-шараны жариялау';
+
+  @override
+  String get eventPublishNotice =>
+      'Жарияланған іс-шара бірден барлығына көрінеді. Аяқталмаған форма осы құрылғыда сақталады.';
+
+  @override
+  String get eventTitle => 'Іс-шара атауы';
+
+  @override
+  String get eventDescription => 'Сипаттама';
+
+  @override
+  String get eventStart => 'Басталу күні мен уақыты';
+
+  @override
+  String get eventEnd => 'Аяқталу күні мен уақыты (міндетті емес)';
+
+  @override
+  String get eventLocation => 'Өтетін орны (міндетті емес)';
+
+  @override
+  String get eventRegistrationUrl => 'Тіркелу сілтемесі (міндетті емес)';
+
+  @override
+  String get eventRegister => 'Тіркелу';
+
+  @override
+  String get eventRequired => 'Міндетті өріс.';
+
+  @override
+  String get eventEndInvalid =>
+      'Аяқталу уақыты басталу уақытынан кейін болуы керек.';
+
+  @override
+  String get eventNoEvents => 'Әзірге іс-шаралар жоқ.';
+
+  @override
+  String get eventViewAll => 'Барлық іс-шаралар';
+
+  @override
+  String get eventLoadMore => 'Тағы жүктеу';
+
+  @override
+  String get eventPublished => 'Іс-шара жарияланды.';
+
+  @override
+  String get eventPublishFailed => 'Жариялау мүмкін болмады. Қайталап көріңіз.';
+
+  @override
+  String get eventUncertain =>
+      'Байланыс үзілді. Қайталаудан бұрын жаңартылған тізімді тексеріңіз: іс-шара жарияланған болуы мүмкін.';
+
+  @override
+  String get eventAccessDenied =>
+      'Бұл хабарландыру үшін іс-шара жариялауға рұқсатыңыз жоқ.';
+
+  @override
+  String get eventSignIn => 'Іс-шара жариялау үшін қайта кіріңіз.';
+
+  @override
+  String get eventLocalTime =>
+      'Күн мен уақыт құрылғының жергілікті уақыт белдеуінде көрсетіледі.';
+
+  @override
+  String get eventClearEnd => 'Аяқталу уақытын алып тастау';
 }

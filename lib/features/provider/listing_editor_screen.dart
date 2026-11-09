@@ -383,6 +383,16 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_existing == null ? l10n.newListing : l10n.editListing),
+        actions: [
+          if (_existing != null)
+            IconButton(
+              tooltip: l10n.listingEvents,
+              icon: const Icon(Icons.event_outlined),
+              onPressed: () => context.push(
+                '${ref.read(activeInterfaceProvider).basePath}/events/${_existing!.id}',
+              ),
+            ),
+        ],
       ),
       body: SafeArea(
         child: ListView(

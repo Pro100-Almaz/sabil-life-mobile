@@ -10,6 +10,8 @@ import '../../features/auth/register_screen.dart';
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/category/category_list_screen.dart';
 import '../../features/detail/listing_detail_screen.dart';
+import '../../features/events/listing_events_screen.dart';
+import '../../features/events/event_editor_screen.dart';
 import '../../features/family/listing_client_composer_screen.dart';
 import '../../features/family/my_enrollments_screen.dart';
 import '../../features/family/suggestion_screen.dart';
@@ -399,6 +401,33 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const TutorProfileEditScreen(),
       ),
+
+      GoRoute(
+        path: '/listing/:id/events',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            ListingEventsScreen(listingId: state.pathParameters['id']!),
+      ),
+      for (final interface in [
+        ActiveInterface.tutor,
+        ActiveInterface.masterclass,
+      ])
+        GoRoute(
+          path: '${interface.basePath}/events/:id',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => ListingEventsScreen(
+            listingId: state.pathParameters['id']!,
+            owned: true,
+          ),
+          routes: [
+            GoRoute(
+              path: 'new',
+              parentNavigatorKey: _rootNavigatorKey,
+              builder: (context, state) =>
+                  EventEditorScreen(listingId: state.pathParameters['id']!),
+            ),
+          ],
+        ),
 
       // ── Provider shells (one tree per interface) ─────────────────────────
       _providerShellRoute(

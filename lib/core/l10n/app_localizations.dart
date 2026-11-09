@@ -2475,6 +2475,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create masterclass'**
   String get createMasterclass;
+
+  /// No description provided for @listingEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get listingEvents;
+
+  /// No description provided for @createListingEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Create event'**
+  String get createListingEvent;
+
+  /// No description provided for @publishListingEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish event'**
+  String get publishListingEvent;
+
+  /// No description provided for @eventPublishNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishing makes this event public immediately. Unfinished forms are saved on this device.'**
+  String get eventPublishNotice;
+
+  /// No description provided for @eventTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event title'**
+  String get eventTitle;
+
+  /// No description provided for @eventDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get eventDescription;
+
+  /// No description provided for @eventStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date and time'**
+  String get eventStart;
+
+  /// No description provided for @eventEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End date and time (optional)'**
+  String get eventEnd;
+
+  /// No description provided for @eventLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location (optional)'**
+  String get eventLocation;
+
+  /// No description provided for @eventRegistrationUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration URL (optional)'**
+  String get eventRegistrationUrl;
+
+  /// No description provided for @eventRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get eventRegister;
+
+  /// No description provided for @eventRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required.'**
+  String get eventRequired;
+
+  /// No description provided for @eventEndInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'End must be later than start.'**
+  String get eventEndInvalid;
+
+  /// No description provided for @eventNoEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No events yet.'**
+  String get eventNoEvents;
+
+  /// No description provided for @eventViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all events'**
+  String get eventViewAll;
+
+  /// No description provided for @eventLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get eventLoadMore;
+
+  /// No description provided for @eventPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Event published.'**
+  String get eventPublished;
+
+  /// No description provided for @eventPublishFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not publish. Please try again.'**
+  String get eventPublishFailed;
+
+  /// No description provided for @eventUncertain.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection failed. Check the refreshed events before retrying: your event may already be published.'**
+  String get eventUncertain;
+
+  /// No description provided for @eventAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to publish events for this listing.'**
+  String get eventAccessDenied;
+
+  /// No description provided for @eventSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to publish events.'**
+  String get eventSignIn;
+
+  /// No description provided for @eventLocalTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates and times use your device’s local timezone.'**
+  String get eventLocalTime;
+
+  /// No description provided for @eventClearEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove end time'**
+  String get eventClearEnd;
 }
 
 class _AppLocalizationsDelegate

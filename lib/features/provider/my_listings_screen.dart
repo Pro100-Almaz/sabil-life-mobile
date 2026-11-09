@@ -173,6 +173,15 @@ class _ListingRow extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                icon: const Icon(Icons.event_outlined),
+                label: Text(l10n.listingEvents),
+                onPressed: () =>
+                    context.push('${interface.basePath}/events/${listing.id}'),
+              ),
+            ),
             const SizedBox(height: AppSpacing.sm),
             Row(
               children: [

@@ -1,3 +1,4 @@
+import '../../core/util/provider_event_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,12 +51,26 @@ class NotificaionsScreen extends ConsumerWidget {
                     itemBuilder: (context, i) => _NotificationTile(
                       notification: items[i],
                       onTap: () async {
-                        await ref
-                            .read(notificationRepositoryProvider)
-                            .postNotificationRead(items[i].id);
+                        try {
+                          await ref
+                              .read(notificationRepositoryProvider)
+                              .postNotificationRead(items[i].id);
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.genericLoadError)),
+                            );
+                          }
+                        }
+                        if (!context.mounted) return;
                         ref.invalidate(notificationsFeedProvider);
                         ref.invalidate(unreadCountProvider);
-                        if (items[i].isOwnershipDecision && context.mounted) {
+                        final eventLocation = items[i].type == 'PROVIDER_EVENT'
+                            ? providerEventLocation(items[i].data)
+                            : null;
+                        if (eventLocation != null) {
+                          context.push(eventLocation);
+                        } else if (items[i].isOwnershipDecision) {
                           ref.read(activeInterfaceProvider.notifier).state =
                               ActiveInterface.masterclass;
                           context.go('/provider/masterclass/listings');
@@ -98,6 +113,8 @@ class _NotificationTileState extends State<_NotificationTile> {
             ? notification.isOwnershipApproved
                   ? Icons.verified_outlined
                   : Icons.error_outline
+            : notification.type == 'PROVIDER_EVENT'
+            ? Icons.event_outlined
             : Icons.notifications,
         color: unread ? AppColors.primary : AppColors.textSecondary,
       ),

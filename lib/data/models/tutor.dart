@@ -20,6 +20,7 @@ enum TutorFormat {
 class Tutor {
   const Tutor({
     required this.id,
+    this.userId,
     required this.name,
     required this.avatarUrl,
     required this.affiliationListingId,
@@ -39,6 +40,9 @@ class Tutor {
   });
 
   final String id;
+
+  /// Public provider user UUID; distinct from this tutor profile ID.
+  final String? userId;
   final String name;
   final String avatarUrl;
 

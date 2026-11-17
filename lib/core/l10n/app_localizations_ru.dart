@@ -1353,4 +1353,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get eventClearEnd => 'Убрать время окончания';
+
+  @override
+  String get followProvider => 'Подписаться на организатора';
+
+  @override
+  String get unfollowProvider => 'Отписаться';
+
+  @override
+  String get followedProviders => 'Мои подписки';
+
+  @override
+  String get noFollowedProviders =>
+      'Вы пока не подписаны ни на одного организатора.';
+
+  @override
+  String get followUpdateError =>
+      'Не удалось изменить подписку. Попробуйте ещё раз.';
 }

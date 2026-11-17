@@ -2613,6 +2613,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove end time'**
   String get eventClearEnd;
+
+  /// No description provided for @followProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow provider'**
+  String get followProvider;
+
+  /// No description provided for @unfollowProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfollow'**
+  String get unfollowProvider;
+
+  /// No description provided for @followedProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Followed providers'**
+  String get followedProviders;
+
+  /// No description provided for @noFollowedProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any providers yet.'**
+  String get noFollowedProviders;
+
+  /// No description provided for @followUpdateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update your subscription. Please try again.'**
+  String get followUpdateError;
 }
 
 class _AppLocalizationsDelegate

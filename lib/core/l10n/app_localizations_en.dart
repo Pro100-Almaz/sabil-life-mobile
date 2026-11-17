@@ -1352,4 +1352,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventClearEnd => 'Remove end time';
+
+  @override
+  String get followProvider => 'Follow provider';
+
+  @override
+  String get unfollowProvider => 'Unfollow';
+
+  @override
+  String get followedProviders => 'Followed providers';
+
+  @override
+  String get noFollowedProviders => 'You are not following any providers yet.';
+
+  @override
+  String get followUpdateError =>
+      'Could not update your subscription. Please try again.';
 }

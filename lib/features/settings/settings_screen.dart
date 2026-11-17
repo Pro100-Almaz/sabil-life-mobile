@@ -107,6 +107,13 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
 
+            if (user.isFamily)
+              ListTile(
+                leading: const Icon(Icons.notifications_active_outlined),
+                title: Text(l10n.followedProviders),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/followed-providers'),
+              ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,

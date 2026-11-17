@@ -441,5 +441,10 @@
   "eventAccessDenied": "You do not have access to publish events for this listing.",
   "eventSignIn": "Please sign in again to publish events.",
   "eventLocalTime": "Dates and times use your device’s local timezone.",
-  "eventClearEnd": "Remove end time"
+  "eventClearEnd": "Remove end time",
+  "followProvider": "Follow provider",
+  "unfollowProvider": "Unfollow",
+  "followedProviders": "Followed providers",
+  "noFollowedProviders": "You are not following any providers yet.",
+  "followUpdateError": "Could not update your subscription. Please try again."
 }

@@ -1,3 +1,4 @@
+import '../provider_subscriptions/provider_follow_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -125,6 +126,10 @@ class _DetailBody extends ConsumerWidget {
                   Text(listing.title, style: AppTypography.display),
                   const SizedBox(height: AppSpacing.xs),
                   Text(listing.subtitle, style: AppTypography.caption),
+                  if (listing.ownerId != null) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    ProviderFollowButton(providerId: listing.ownerId!),
+                  ],
                   const SizedBox(height: AppSpacing.md),
                   RatingRow(
                     rating: listing.rating,

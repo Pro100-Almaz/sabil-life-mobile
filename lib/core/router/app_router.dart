@@ -1,3 +1,4 @@
+import '../../features/provider_subscriptions/followed_providers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -231,6 +232,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       }
 
+      if (location == '/followed-providers') {
+        if (!auth.isAuthenticated) return '/login';
+        if (!auth.isFamily) return '/';
+      }
+
       if (location == '/edit-personal-information' && !auth.isAuthenticated) {
         return '/login';
       }
@@ -261,6 +267,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/edit-personal-information',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/followed-providers',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const FollowedProvidersScreen(),
       ),
       GoRoute(
         path: '/notifications',

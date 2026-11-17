@@ -1,3 +1,5 @@
+import 'core/util/provider_event_location.dart';
+import 'core/state/notifications_provider.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class SabilLifeApp extends ConsumerStatefulWidget {
 class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
   StreamSubscription<void>? _unauthorizedSub;
   StreamSubscription<RateLimitedEvent>? _rateLimitedSub;
-  StreamSubscription<void>? _tapSub;
+  StreamSubscription<Map<String, dynamic>>? _tapSub;
 
   @override
   void initState() {
@@ -57,7 +59,12 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
       data,
     ) {
       final router = ref.read(routerProvider);
-      if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED') {
+      ref.invalidate(notificationsFeedProvider);
+      ref.invalidate(unreadCountProvider);
+      final eventLocation = providerEventLocation(data);
+      if (eventLocation != null) {
+        router.push(eventLocation);
+      } else if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED') {
         router.go('/provider/tutor/settings');
       } else {
         router.go('/notifications');

@@ -1352,4 +1352,21 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get eventClearEnd => 'Аяқталу уақытын алып тастау';
+
+  @override
+  String get followProvider => 'Ұйымдастырушыға жазылу';
+
+  @override
+  String get unfollowProvider => 'Жазылымнан бас тарту';
+
+  @override
+  String get followedProviders => 'Менің жазылымдарым';
+
+  @override
+  String get noFollowedProviders =>
+      'Сіз әлі ешбір ұйымдастырушыға жазылмадыңыз.';
+
+  @override
+  String get followUpdateError =>
+      'Жазылымды өзгерту мүмкін болмады. Қайталап көріңіз.';
 }

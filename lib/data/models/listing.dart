@@ -1,4 +1,5 @@
 import '../api/api_config.dart';
+import 'listing_event.dart';
 
 const kListingFallbackAsset = 'assets/placeholder_1200x800.png';
 
@@ -88,6 +89,7 @@ class Listing {
     this.tags = const [],
     this.images = const [],
     this.contacts = const [],
+    this.events = const [],
     this.ownerId,
     this.status = ListingStatus.active,
     this.drivingDistanceKm,
@@ -133,6 +135,7 @@ class Listing {
 
   /// Optional public contact methods, ordered by [ListingContact.position].
   final List<ListingContact> contacts;
+  final List<ListingEvent> events;
 
   /// `AuthUser.id` of the provider that owns this listing. `null` = platform-
   /// seeded content (schools, partner offers etc.) that no provider manages.
@@ -165,6 +168,7 @@ class Listing {
     List<String>? tags,
     List<ListingImage>? images,
     List<ListingContact>? contacts,
+    List<ListingEvent>? events,
     String? Function()? ownerId,
     ListingStatus? status,
     bool? isOnline,
@@ -193,6 +197,7 @@ class Listing {
       tags: tags ?? this.tags,
       images: images ?? this.images,
       contacts: contacts ?? this.contacts,
+      events: events ?? this.events,
       ownerId: ownerId != null ? ownerId() : this.ownerId,
       status: status ?? this.status,
       isOnline: isOnline ?? this.isOnline,

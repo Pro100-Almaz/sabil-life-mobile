@@ -8,6 +8,7 @@ import '../../core/state/locale_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../data/models/auth_user.dart';
 import 'delete_account_dialog.dart';
 
 const _languages = [
@@ -18,6 +19,33 @@ const _languages = [
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
+
+  void _openProviderArea(
+    BuildContext context,
+    WidgetRef ref,
+    AuthUser user,
+    ActiveInterface interface,
+  ) {
+    final hasRole = switch (interface) {
+      ActiveInterface.tutor => user.hasTutorRole,
+      ActiveInterface.masterclass => user.hasMasterclassRole,
+      ActiveInterface.family => true,
+    };
+
+    // Existing provider accounts can access their workspace immediately. The
+    // dashboard itself keeps unverified providers in draft-only mode. Families
+    // still go through the appropriate provider application flow.
+    if (hasRole) {
+      ref.read(activeInterfaceProvider.notifier).state = interface;
+      context.go(interface.basePath);
+      return;
+    }
+    context.push(
+      interface == ActiveInterface.tutor
+          ? '/switch-to-tutor'
+          : '/switch-to-masterclass',
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,6 +105,13 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
 
+            if (user.isFamily)
+              ListTile(
+                leading: const Icon(Icons.notifications_active_outlined),
+                title: Text(l10n.followedProviders),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/followed-providers'),
+              ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.lg,
@@ -147,7 +182,8 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.chevron_right,
                 color: AppColors.textSecondary,
               ),
-              onTap: () => context.push('/switch-to-tutor'),
+              onTap: () =>
+                  _openProviderArea(context, ref, user, ActiveInterface.tutor),
             ),
             ListTile(
               contentPadding: const EdgeInsets.symmetric(
@@ -162,7 +198,12 @@ class SettingsScreen extends ConsumerWidget {
                 Icons.chevron_right,
                 color: AppColors.textSecondary,
               ),
-              onTap: () => context.push('/switch-to-masterclass'),
+              onTap: () => _openProviderArea(
+                context,
+                ref,
+                user,
+                ActiveInterface.masterclass,
+              ),
             ),
             const Divider(),
           ],

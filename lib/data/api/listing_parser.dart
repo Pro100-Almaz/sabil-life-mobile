@@ -1,4 +1,5 @@
 import '../models/listing.dart';
+import '../models/listing_event.dart';
 
 /// Shared helpers for parsing raw JSON maps into [Listing] objects.
 /// Used by both [HttpCatalogRepository] and [HttpProviderRepository].
@@ -22,7 +23,7 @@ class ListingParser {
       contacts: parseContacts(data['contacts']),
       ageGroups: toStringList(data['age_groups']),
       isFeatured: (data['is_featured'] ?? false) as bool,
-      tags: toStringList(data['tags']),
+      tags: toStringList(data['tag_names'] ?? data['tags']),
       // Not present on list cards — defaults.
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
@@ -55,7 +56,7 @@ class ListingParser {
       contacts: parseContacts(data['contacts']),
       description: (data['description'] ?? '') as String,
       highlights: toStringList(data['highlights']),
-      tags: toStringList(data['tags']),
+      tags: toStringList(data['tag_names'] ?? data['tags']),
       ownerId: data['owner_id']?.toString(),
       status: parseStatus(data['status']?.toString()),
       isOnline: (data['is_online'] ?? false) as bool,
@@ -63,6 +64,11 @@ class ListingParser {
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
       startsAt: parseDate(data['starts_at']),
+      events: (data['events'] as List? ?? [])
+          .map(
+            (e) => ListingEvent.fromJson(Map<String, dynamic>.from(e as Map)),
+          )
+          .toList(),
       drivingDistanceKm: toDoubleOrNull(data['driving_distance_km']),
     );
   }

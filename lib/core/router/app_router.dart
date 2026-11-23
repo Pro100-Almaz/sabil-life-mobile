@@ -1,3 +1,4 @@
+import '../../features/provider_subscriptions/followed_providers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,6 +11,8 @@ import '../../features/auth/register_screen.dart';
 import '../../features/auth/forgot_password_screen.dart';
 import '../../features/category/category_list_screen.dart';
 import '../../features/detail/listing_detail_screen.dart';
+import '../../features/events/listing_events_screen.dart';
+import '../../features/events/event_editor_screen.dart';
 import '../../features/family/listing_client_composer_screen.dart';
 import '../../features/family/my_enrollments_screen.dart';
 import '../../features/family/suggestion_screen.dart';
@@ -19,6 +22,8 @@ import '../../features/home/home_screen.dart';
 import '../../features/map/map_screen.dart';
 import '../../features/notifications/notifications_screen.dart';
 import '../../features/provider/dashboard_screen.dart';
+import '../../features/provider/claim_listing_screen.dart';
+import '../../features/provider/ownership_requests_screen.dart';
 // import '../../features/provider/earnings_screen.dart';
 import '../../features/provider/inquiries_screen.dart';
 import '../../features/provider/listing_clients_screen.dart';
@@ -62,18 +67,26 @@ StatefulShellRoute _providerShellRoute({
     ],
   );
 
-  // Listings are tutor-less: only the masterclass interface manages listings.
+  // Regular listings are claim-only. Providers can edit their approved owned
+  // listings but cannot create directory listings from this section.
   final listingsBranch = StatefulShellBranch(
     routes: [
       GoRoute(
         path: '$base/listings',
-        builder: (context, state) => MyListingsScreen(interface: interface),
+        builder: (context, state) => MyListingsScreen(
+          interface: interface,
+          section: ProviderListingsSection.regular,
+        ),
         routes: [
           GoRoute(
-            path: 'new',
+            path: 'claim',
             parentNavigatorKey: _rootNavigatorKey,
-            builder: (context, state) =>
-                const ListingEditorScreen(listingId: null),
+            builder: (context, state) => const ClaimListingScreen(),
+          ),
+          GoRoute(
+            path: 'requests',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => const OwnershipRequestsScreen(),
           ),
           GoRoute(
             path: 'edit/:id',
@@ -100,7 +113,37 @@ StatefulShellRoute _providerShellRoute({
     ],
   );
 
-  // Inquiries are only surfaced on the tutor interface.
+  final masterclassesBranch = StatefulShellBranch(
+    routes: [
+      GoRoute(
+        path: '$base/masterclasses',
+        builder: (context, state) => MyListingsScreen(
+          interface: interface,
+          section: ProviderListingsSection.masterclasses,
+        ),
+        routes: [
+          GoRoute(
+            path: 'new',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) =>
+                const ListingEditorScreen(listingId: null),
+          ),
+          GoRoute(
+            path: 'edit/:id',
+            parentNavigatorKey: _rootNavigatorKey,
+            builder: (context, state) => ListingEditorScreen(
+              listingId: state.pathParameters['id'],
+              initialListing: state.extra is Listing
+                  ? state.extra as Listing
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+
+  // Any provider can receive inquiries for an owned listing.
   final inquiriesBranch = StatefulShellBranch(
     routes: [
       GoRoute(
@@ -140,7 +183,8 @@ StatefulShellRoute _providerShellRoute({
   final branches = <StatefulShellBranch>[
     dashboardBranch,
     if (interface == ActiveInterface.masterclass) listingsBranch,
-    if (interface == ActiveInterface.tutor) inquiriesBranch,
+    if (interface == ActiveInterface.masterclass) masterclassesBranch,
+    inquiriesBranch,
     settingsBranch,
   ];
 
@@ -188,6 +232,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         }
       }
 
+      if (location == '/followed-providers') {
+        if (!auth.isAuthenticated) return '/login';
+        if (!auth.isFamily) return '/';
+      }
+
       if (location == '/edit-personal-information' && !auth.isAuthenticated) {
         return '/login';
       }
@@ -218,6 +267,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/edit-personal-information',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const ChangePasswordScreen(),
+      ),
+      GoRoute(
+        path: '/followed-providers',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const FollowedProvidersScreen(),
       ),
       GoRoute(
         path: '/notifications',
@@ -358,6 +412,33 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const TutorProfileEditScreen(),
       ),
+
+      GoRoute(
+        path: '/listing/:id/events',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) =>
+            ListingEventsScreen(listingId: state.pathParameters['id']!),
+      ),
+      for (final interface in [
+        ActiveInterface.tutor,
+        ActiveInterface.masterclass,
+      ])
+        GoRoute(
+          path: '${interface.basePath}/events/:id',
+          parentNavigatorKey: _rootNavigatorKey,
+          builder: (context, state) => ListingEventsScreen(
+            listingId: state.pathParameters['id']!,
+            owned: true,
+          ),
+          routes: [
+            GoRoute(
+              path: 'new',
+              parentNavigatorKey: _rootNavigatorKey,
+              builder: (context, state) =>
+                  EventEditorScreen(listingId: state.pathParameters['id']!),
+            ),
+          ],
+        ),
 
       // ── Provider shells (one tree per interface) ─────────────────────────
       _providerShellRoute(

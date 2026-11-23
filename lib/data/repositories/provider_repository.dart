@@ -3,6 +3,7 @@ import '../models/inquiry.dart';
 import '../models/listing.dart';
 import '../models/provider_profile.dart';
 import '../models/provider_verification.dart';
+import '../models/ownership_request.dart';
 import '../models/auth_user.dart';
 import '../models/subscription.dart';
 
@@ -22,6 +23,17 @@ class EarningsSummary {
 
 abstract class ProviderRepository {
   Future<List<Listing>> myListings(String providerId);
+
+  /// Ask an administrator to transfer an existing directory listing to the
+  /// current provider. Claimed listings can be edited once approved.
+  Future<OwnershipRequest> requestListingOwnership(
+    String listingId, {
+    String? message,
+  });
+
+  Future<List<OwnershipRequest>> myOwnershipRequests();
+
+  Future<void> cancelOwnershipRequest(int requestId);
 
   Future<Listing> upsertListing(
     Listing listing, {

@@ -85,6 +85,7 @@ class HttpTutorRepository implements TutorRepository {
   static Tutor _parseTutor(Map<String, dynamic> data) {
     return Tutor(
       id: data['id']?.toString() ?? '',
+      userId: data['user_id']?.toString(),
       name: (data['full_name'] ?? '') as String,
       avatarUrl: (data['avatar_url'] ?? '') as String,
       affiliationListingId: (data['affiliation_listing_id'] ?? '') as String,

@@ -1177,7 +1177,7 @@ abstract class AppLocalizations {
   /// No description provided for @switchToMasterclass.
   ///
   /// In en, this message translates to:
-  /// **'Switch to Masterclass dashboard'**
+  /// **'Switch to Provider dashboard'**
   String get switchToMasterclass;
 
   /// No description provided for @genericLoadError.
@@ -2427,6 +2427,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your current location could not be determined.'**
   String get locationUnavailable;
+
+  /// No description provided for @providerDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider dashboard'**
+  String get providerDashboard;
+
+  /// No description provided for @regularListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get regularListings;
+
+  /// No description provided for @noRegularListingsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t own any listings yet'**
+  String get noRegularListingsYet;
+
+  /// No description provided for @noMasterclassesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t created any masterclasses yet'**
+  String get noMasterclassesYet;
+
+  /// No description provided for @claimListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim a listing'**
+  String get claimListing;
+
+  /// No description provided for @requestOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Request ownership'**
+  String get requestOwnership;
+
+  /// No description provided for @ownershipRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership request sent for review.'**
+  String get ownershipRequestSent;
+
+  /// No description provided for @createMasterclass.
+  ///
+  /// In en, this message translates to:
+  /// **'Create masterclass'**
+  String get createMasterclass;
+
+  /// No description provided for @listingEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Events'**
+  String get listingEvents;
+
+  /// No description provided for @createListingEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Create event'**
+  String get createListingEvent;
+
+  /// No description provided for @publishListingEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish event'**
+  String get publishListingEvent;
+
+  /// No description provided for @eventPublishNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishing makes this event public immediately. Unfinished forms are saved on this device.'**
+  String get eventPublishNotice;
+
+  /// No description provided for @eventTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Event title'**
+  String get eventTitle;
+
+  /// No description provided for @eventDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get eventDescription;
+
+  /// No description provided for @eventStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date and time'**
+  String get eventStart;
+
+  /// No description provided for @eventEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End date and time (optional)'**
+  String get eventEnd;
+
+  /// No description provided for @eventLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location (optional)'**
+  String get eventLocation;
+
+  /// No description provided for @eventRegistrationUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration URL (optional)'**
+  String get eventRegistrationUrl;
+
+  /// No description provided for @eventRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get eventRegister;
+
+  /// No description provided for @eventRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required.'**
+  String get eventRequired;
+
+  /// No description provided for @eventEndInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'End must be later than start.'**
+  String get eventEndInvalid;
+
+  /// No description provided for @eventNoEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No events yet.'**
+  String get eventNoEvents;
+
+  /// No description provided for @eventViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View all events'**
+  String get eventViewAll;
+
+  /// No description provided for @eventLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get eventLoadMore;
+
+  /// No description provided for @eventPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Event published.'**
+  String get eventPublished;
+
+  /// No description provided for @eventPublishFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not publish. Please try again.'**
+  String get eventPublishFailed;
+
+  /// No description provided for @eventUncertain.
+  ///
+  /// In en, this message translates to:
+  /// **'The connection failed. Check the refreshed events before retrying: your event may already be published.'**
+  String get eventUncertain;
+
+  /// No description provided for @eventAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have access to publish events for this listing.'**
+  String get eventAccessDenied;
+
+  /// No description provided for @eventSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in again to publish events.'**
+  String get eventSignIn;
+
+  /// No description provided for @eventLocalTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates and times use your device’s local timezone.'**
+  String get eventLocalTime;
+
+  /// No description provided for @eventClearEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove end time'**
+  String get eventClearEnd;
+
+  /// No description provided for @followProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow provider'**
+  String get followProvider;
+
+  /// No description provided for @unfollowProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfollow'**
+  String get unfollowProvider;
+
+  /// No description provided for @followedProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'Followed providers'**
+  String get followedProviders;
+
+  /// No description provided for @noFollowedProviders.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any providers yet.'**
+  String get noFollowedProviders;
+
+  /// No description provided for @followUpdateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update your subscription. Please try again.'**
+  String get followUpdateError;
+
+  /// No description provided for @ownershipRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership requests'**
+  String get ownershipRequests;
+
+  /// No description provided for @noOwnershipRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No ownership requests yet'**
+  String get noOwnershipRequests;
+
+  /// No description provided for @ownershipReviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Review note: {comment}'**
+  String ownershipReviewNote(String comment);
+
+  /// No description provided for @cancelOwnershipRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get cancelOwnershipRequest;
+
+  /// No description provided for @ownershipStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get ownershipStatusPending;
+
+  /// No description provided for @ownershipStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get ownershipStatusApproved;
+
+  /// No description provided for @ownershipStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get ownershipStatusRejected;
+
+  /// No description provided for @ownershipStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get ownershipStatusCancelled;
+
+  /// No description provided for @ownershipRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get ownershipRequested;
+
+  /// No description provided for @searchListingsToClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Search listings by name'**
+  String get searchListingsToClaim;
+
+  /// No description provided for @listingTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get listingTags;
+
+  /// No description provided for @listingTagsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate tags with commas'**
+  String get listingTagsHint;
+
+  /// No description provided for @unpublishListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take this listing offline?'**
+  String get unpublishListingTitle;
+
+  /// No description provided for @unpublishListingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is live. Saving changes removes it from the directory until it is approved again.'**
+  String get unpublishListingBody;
 }
 
 class _AppLocalizationsDelegate

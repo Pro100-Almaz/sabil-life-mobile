@@ -597,7 +597,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get switchToTutor => 'Перейти в кабинет репетитора';
 
   @override
-  String get switchToMasterclass => 'Перейти в кабинет мастер-классов';
+  String get switchToMasterclass => 'Перейти в кабинет провайдера';
 
   @override
   String get genericLoadError => 'Что-то пошло не так. Попробуйте ещё раз.';
@@ -1254,4 +1254,165 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get locationUnavailable =>
       'Не удалось определить текущее местоположение.';
+
+  @override
+  String get providerDashboard => 'Панель провайдера';
+
+  @override
+  String get regularListings => 'Объявления';
+
+  @override
+  String get noRegularListingsYet =>
+      'У вас пока нет принадлежащих вам объявлений';
+
+  @override
+  String get noMasterclassesYet => 'Вы ещё не создали мастер-классы';
+
+  @override
+  String get claimListing => 'Запросить владение объявлением';
+
+  @override
+  String get requestOwnership => 'Запросить владение';
+
+  @override
+  String get ownershipRequestSent => 'Запрос владения отправлен на проверку.';
+
+  @override
+  String get createMasterclass => 'Создать мастер-класс';
+
+  @override
+  String get listingEvents => 'События';
+
+  @override
+  String get createListingEvent => 'Создать событие';
+
+  @override
+  String get publishListingEvent => 'Опубликовать событие';
+
+  @override
+  String get eventPublishNotice =>
+      'После публикации событие сразу станет общедоступным. Незавершённая форма сохраняется на устройстве.';
+
+  @override
+  String get eventTitle => 'Название события';
+
+  @override
+  String get eventDescription => 'Описание';
+
+  @override
+  String get eventStart => 'Дата и время начала';
+
+  @override
+  String get eventEnd => 'Дата и время окончания (необязательно)';
+
+  @override
+  String get eventLocation => 'Место (необязательно)';
+
+  @override
+  String get eventRegistrationUrl => 'Ссылка для регистрации (необязательно)';
+
+  @override
+  String get eventRegister => 'Зарегистрироваться';
+
+  @override
+  String get eventRequired => 'Обязательное поле.';
+
+  @override
+  String get eventEndInvalid => 'Окончание должно быть позже начала.';
+
+  @override
+  String get eventNoEvents => 'Событий пока нет.';
+
+  @override
+  String get eventViewAll => 'Все события';
+
+  @override
+  String get eventLoadMore => 'Загрузить ещё';
+
+  @override
+  String get eventPublished => 'Событие опубликовано.';
+
+  @override
+  String get eventPublishFailed =>
+      'Не удалось опубликовать. Попробуйте ещё раз.';
+
+  @override
+  String get eventUncertain =>
+      'Соединение прервано. Проверьте обновлённый список перед повторной попыткой: событие могло быть опубликовано.';
+
+  @override
+  String get eventAccessDenied =>
+      'У вас нет доступа к публикации событий для этого объявления.';
+
+  @override
+  String get eventSignIn => 'Войдите снова, чтобы публиковать события.';
+
+  @override
+  String get eventLocalTime =>
+      'Дата и время указаны в часовом поясе устройства.';
+
+  @override
+  String get eventClearEnd => 'Убрать время окончания';
+
+  @override
+  String get followProvider => 'Подписаться на организатора';
+
+  @override
+  String get unfollowProvider => 'Отписаться';
+
+  @override
+  String get followedProviders => 'Мои подписки';
+
+  @override
+  String get noFollowedProviders =>
+      'Вы пока не подписаны ни на одного организатора.';
+
+  @override
+  String get followUpdateError =>
+      'Не удалось изменить подписку. Попробуйте ещё раз.';
+
+  @override
+  String get ownershipRequests => 'Запросы на владение';
+
+  @override
+  String get noOwnershipRequests => 'Запросов на владение пока нет';
+
+  @override
+  String ownershipReviewNote(String comment) {
+    return 'Комментарий проверки: $comment';
+  }
+
+  @override
+  String get cancelOwnershipRequest => 'Отменить запрос';
+
+  @override
+  String get ownershipStatusPending => 'На рассмотрении';
+
+  @override
+  String get ownershipStatusApproved => 'Одобрено';
+
+  @override
+  String get ownershipStatusRejected => 'Отклонено';
+
+  @override
+  String get ownershipStatusCancelled => 'Отменено';
+
+  @override
+  String get ownershipRequested => 'Запрос отправлен';
+
+  @override
+  String get searchListingsToClaim => 'Поиск по названию';
+
+  @override
+  String get listingTags => 'Теги';
+
+  @override
+  String get listingTagsHint => 'Разделяйте теги запятыми';
+
+  @override
+  String get unpublishListingTitle => 'Снять объявление с публикации?';
+
+  @override
+  String get unpublishListingBody =>
+      'Это объявление опубликовано. После сохранения изменений оно пропадёт из каталога до повторного одобрения.';
 }

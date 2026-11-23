@@ -33,8 +33,7 @@ class ProviderShell extends StatelessWidget {
             index,
             initialLocation: index == navigationShell.currentIndex,
           ),
-          // Item order must match the branch order in app_router.dart:
-          // tutor drops "listings", masterclass drops "inquiries".
+          // Item order must match the branch order in app_router.dart.
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.dashboard_outlined),
@@ -43,9 +42,14 @@ class ProviderShell extends StatelessWidget {
             if (interface == ActiveInterface.masterclass)
               BottomNavigationBarItem(
                 icon: const Icon(Icons.list_alt_outlined),
-                label: l10n.myListings,
+                label: l10n.regularListings,
               ),
-            if (interface == ActiveInterface.tutor)
+            if (interface == ActiveInterface.masterclass)
+              BottomNavigationBarItem(
+                icon: const Icon(Icons.event_outlined),
+                label: l10n.catMasterclasses,
+              ),
+            if (interface.isProvider)
               BottomNavigationBarItem(
                 icon: const Icon(Icons.inbox_outlined),
                 label: l10n.inquiries,

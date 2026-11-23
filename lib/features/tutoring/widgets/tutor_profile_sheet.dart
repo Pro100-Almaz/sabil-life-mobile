@@ -19,6 +19,7 @@ import '../../../data/repositories/review_repository.dart' show ReviewException;
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/star_rating.dart';
 import 'tutor_inquire_cta.dart';
+import '../../provider_subscriptions/provider_follow_button.dart';
 
 Future<void> showTutorProfileSheet(BuildContext context, Tutor tutor) {
   return showModalBottomSheet<void>(
@@ -140,6 +141,11 @@ class TutorProfileSheet extends ConsumerWidget {
                 ),
               ],
             ),
+
+            if (tutor.userId != null) ...[
+              const SizedBox(height: AppSpacing.md),
+              ProviderFollowButton(providerId: tutor.userId!),
+            ],
 
             // Subjects + formats chips.
             if (hasTags) ...[

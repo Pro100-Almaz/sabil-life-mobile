@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -39,7 +40,14 @@ class PushNotifications {
         iOS: DarwinInitializationSettings(),
       ),
       onDidReceiveNotificationResponse: (resp) {
-        // Tap on a locally-shown (foreground) notification.
+        final payload = resp.payload;
+        if (payload == null) return;
+        try {
+          final data = jsonDecode(payload);
+          if (data is Map<String, dynamic>) _tapController.add(data);
+        } on FormatException {
+          // Ignore payloads from older notifications.
+        }
       },
     );
 
@@ -56,6 +64,7 @@ class PushNotifications {
       final n = m.notification;
       if (n != null) {
         _local.show(
+          payload: jsonEncode(m.data),
           id: n.hashCode,
           title: n.title,
           body: n.body,

@@ -1,3 +1,4 @@
+import '../../core/state/provider_subscriptions_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -30,17 +31,16 @@ class DashboardScreen extends ConsumerWidget {
     final profileAsync = ref.watch(providerProfileProvider);
     final listingsAsync = ref.watch(myListingsProvider(user.id));
     final inquiriesAsync = ref.watch(incomingInquiriesProvider(user.id));
-    // final subscribersAsync = ref.watch(
-    //   incomingSubscriptionsProvider(const SubscriptionsFilter()),
-    // );
+    final subscriberCount = ref.watch(mySubscriberCountProvider);
 
-    final totalListings = listingsAsync.maybeWhen(
-      data: (items) => items.length,
+    final regularListings = listingsAsync.maybeWhen(
+      data: (items) =>
+          items.where((l) => l.category != CategoryType.masterclasses).length,
       orElse: () => 0,
     );
-    final activeListings = listingsAsync.maybeWhen(
+    final masterclasses = listingsAsync.maybeWhen(
       data: (items) =>
-          items.where((l) => l.status == ListingStatus.active).length,
+          items.where((l) => l.category == CategoryType.masterclasses).length,
       orElse: () => 0,
     );
     final newInquiries = inquiriesAsync.maybeWhen(
@@ -53,15 +53,14 @@ class DashboardScreen extends ConsumerWidget {
           .length,
       orElse: () => 0,
     );
-    // final subscriberCount = subscribersAsync.maybeWhen(
-    //   data: (items) =>
-    //       items.where((s) => s.status == SubscriptionStatus.confirmed).length,
-    //   orElse: () => 0,
-    // );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.welcomeBack(user.fullName)),
+        title: Text(
+          interface == ActiveInterface.masterclass
+              ? l10n.providerDashboard
+              : l10n.welcomeBack(user.fullName),
+        ),
         toolbarHeight: 72,
         actions: const [_NotificationBell()],
       ),
@@ -71,9 +70,7 @@ class DashboardScreen extends ConsumerWidget {
           await Future.wait([
             ref.refresh(myListingsProvider(user.id).future),
             ref.refresh(incomingInquiriesProvider(user.id).future),
-            ref.refresh(
-              incomingSubscriptionsProvider(const SubscriptionsFilter()).future,
-            ),
+            ref.refresh(mySubscriberCountProvider.future),
           ]);
         },
         child: ListView(
@@ -87,18 +84,24 @@ class DashboardScreen extends ConsumerWidget {
               _UnverifiedBanner(message: l10n.providerUnverifiedBanner),
               const SizedBox(height: AppSpacing.lg),
             ],
-            // Listings live only on the masterclass interface.
+            // The masterclass interface is the general provider workspace.
             if (interface == ActiveInterface.masterclass) ...[
               _MetricCard(
-                label: l10n.metricActiveListings,
-                value: '$activeListings / $totalListings',
+                label: l10n.regularListings,
+                value: '$regularListings',
                 icon: Icons.list_alt_outlined,
                 onTap: () => context.go('${interface.basePath}/listings'),
               ),
               const SizedBox(height: AppSpacing.md),
+              _MetricCard(
+                label: l10n.catMasterclasses,
+                value: '$masterclasses',
+                icon: Icons.event_outlined,
+                onTap: () => context.go('${interface.basePath}/masterclasses'),
+              ),
+              const SizedBox(height: AppSpacing.md),
             ],
-            // Inquiries live only on the tutor interface.
-            if (interface == ActiveInterface.tutor) ...[
+            if (interface.isProvider) ...[
               _MetricCard(
                 label: l10n.metricNewInquiries,
                 value: '$newInquiries',
@@ -107,39 +110,23 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSpacing.md),
             ],
-            // _MetricCard(
-            //   label: l10n.providerSubscribers,
-            //   value: '$subscriberCount',
-            //   icon: Icons.people_outline,
-            //   onTap: () => context.go(
-            //     interface == ActiveInterface.tutor
-            //         ? '${interface.basePath}/inquiries'
-            //         : '${interface.basePath}/listings',
-            //   ),
-            // ),
-            // const SizedBox(height: AppSpacing.lg),
-            // // Subscribers mini-roster
-            // subscribersAsync.when(
-            //   loading: () => const SizedBox.shrink(),
-            //   error: (e, _) => const SizedBox.shrink(),
-            //   data: (subs) {
-            //     final confirmed = subs
-            //         .where((s) => s.status == SubscriptionStatus.confirmed)
-            //         .toList();
-            //     if (confirmed.isEmpty) return const SizedBox.shrink();
-            //     return Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         Text(l10n.providerSubscribers, style: AppTypography.h3),
-            //         const SizedBox(height: AppSpacing.sm),
-            //         for (final sub in confirmed.take(3)) ...[
-            //           _SubscriberRow(subscription: sub),
-            //           const SizedBox(height: AppSpacing.sm),
-            //         ],
-            //       ],
-            //     );
-            //   },
-            // ),
+            subscriberCount.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, _) => Column(
+                children: [
+                  Text(l10n.genericLoadError),
+                  TextButton(
+                    onPressed: () => ref.invalidate(mySubscriberCountProvider),
+                    child: Text(l10n.retry),
+                  ),
+                ],
+              ),
+              data: (count) => _MetricCard(
+                label: l10n.providerSubscribers,
+                value: '$count',
+                icon: Icons.people_outline,
+              ),
+            ),
           ],
         ),
       ),
@@ -180,59 +167,18 @@ class _UnverifiedBanner extends StatelessWidget {
   }
 }
 
-// class _SubscriberRow extends StatelessWidget {
-//   const _SubscriberRow({required this.subscription});
-
-//   final Subscription subscription;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final locale = Localizations.localeOf(context).toString();
-//     final dateLabel = DateFormat(
-//       'd MMM yyyy',
-//       locale,
-//     ).format(subscription.createdAt);
-//     return Container(
-//       padding: const EdgeInsets.symmetric(
-//         horizontal: AppSpacing.lg,
-//         vertical: AppSpacing.md,
-//       ),
-//       decoration: BoxDecoration(
-//         color: AppColors.surface,
-//         borderRadius: BorderRadius.circular(AppRadius.card),
-//         border: Border.all(color: AppColors.divider),
-//       ),
-//       child: Row(
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(subscription.familyName ?? '—', style: AppTypography.body),
-//                 if (subscription.listingTitle != null)
-//                   Text(subscription.listingTitle!, style: AppTypography.small),
-//               ],
-//             ),
-//           ),
-//           Text(dateLabel, style: AppTypography.small),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class _MetricCard extends StatelessWidget {
   const _MetricCard({
     required this.label,
     required this.value,
     required this.icon,
-    required this.onTap,
+    this.onTap,
   });
 
   final String label;
   final String value;
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -267,7 +213,8 @@ class _MetricCard extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+            if (onTap != null)
+              const Icon(Icons.chevron_right, color: AppColors.textSecondary),
           ],
         ),
       ),

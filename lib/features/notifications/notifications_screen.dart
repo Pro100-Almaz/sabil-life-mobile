@@ -1,9 +1,11 @@
+import '../../core/util/notification_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sabil_life/core/state/notifications_provider.dart';
 import 'package:sabil_life/data/models/app_notification.dart';
 
 import '../../core/l10n/app_localizations.dart';
+import '../../core/state/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../shared/widgets/app_refresh_indicator.dart';
@@ -48,11 +50,26 @@ class NotificaionsScreen extends ConsumerWidget {
                     itemBuilder: (context, i) => _NotificationTile(
                       notification: items[i],
                       onTap: () async {
-                        await ref
-                            .read(notificationRepositoryProvider)
-                            .postNotificationRead(items[i].id);
+                        try {
+                          await ref
+                              .read(notificationRepositoryProvider)
+                              .postNotificationRead(items[i].id);
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.genericLoadError)),
+                            );
+                          }
+                        }
+                        if (!context.mounted) return;
                         ref.invalidate(notificationsFeedProvider);
                         ref.invalidate(unreadCountProvider);
+                        final target = notificationTarget(
+                          items[i].type,
+                          items[i].data,
+                          ref.read(authProvider).user,
+                        );
+                        if (target != null) openNotificationTarget(ref, target);
                       },
                     ),
                   ),
@@ -84,10 +101,16 @@ class _NotificationTileState extends State<_NotificationTile> {
     return ListTile(
       onTap: () {
         setState(() => _expanded = !_expanded);
-        widget.onTap;
+        widget.onTap();
       },
       leading: Icon(
-        Icons.notifications,
+        notification.isOwnershipDecision
+            ? notification.isOwnershipApproved
+                  ? Icons.verified_outlined
+                  : Icons.error_outline
+            : notification.type == 'PROVIDER_EVENT'
+            ? Icons.event_outlined
+            : Icons.notifications,
         color: unread ? AppColors.primary : AppColors.textSecondary,
       ),
       title: Text(

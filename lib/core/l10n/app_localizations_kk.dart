@@ -595,7 +595,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get switchToTutor => 'Репетитор кабинетіне өту';
 
   @override
-  String get switchToMasterclass => 'Шеберлік сыныбы кабинетіне өту';
+  String get switchToMasterclass => 'Провайдер кабинетіне өту';
 
   @override
   String get genericLoadError => 'Бірдеңе дұрыс болмады. Қайталап көріңіз.';
@@ -1254,4 +1254,165 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get locationUnavailable => 'Ағымдағы орынды анықтау мүмкін болмады.';
+
+  @override
+  String get providerDashboard => 'Провайдер панелі';
+
+  @override
+  String get regularListings => 'Хабарландырулар';
+
+  @override
+  String get noRegularListingsYet => 'Сізге тиесілі хабарландырулар әлі жоқ';
+
+  @override
+  String get noMasterclassesYet => 'Сіз әлі шеберлік сыныптарын жасамадыңыз';
+
+  @override
+  String get claimListing => 'Хабарландыруға иелік етуді сұрау';
+
+  @override
+  String get requestOwnership => 'Иелік етуді сұрау';
+
+  @override
+  String get ownershipRequestSent => 'Иелік ету сұрауы тексеруге жіберілді.';
+
+  @override
+  String get createMasterclass => 'Шеберлік сыныбын жасау';
+
+  @override
+  String get listingEvents => 'Іс-шаралар';
+
+  @override
+  String get createListingEvent => 'Іс-шара жасау';
+
+  @override
+  String get publishListingEvent => 'Іс-шараны жариялау';
+
+  @override
+  String get eventPublishNotice =>
+      'Жарияланған іс-шара бірден барлығына көрінеді. Аяқталмаған форма осы құрылғыда сақталады.';
+
+  @override
+  String get eventTitle => 'Іс-шара атауы';
+
+  @override
+  String get eventDescription => 'Сипаттама';
+
+  @override
+  String get eventStart => 'Басталу күні мен уақыты';
+
+  @override
+  String get eventEnd => 'Аяқталу күні мен уақыты (міндетті емес)';
+
+  @override
+  String get eventLocation => 'Өтетін орны (міндетті емес)';
+
+  @override
+  String get eventRegistrationUrl => 'Тіркелу сілтемесі (міндетті емес)';
+
+  @override
+  String get eventRegister => 'Тіркелу';
+
+  @override
+  String get eventRequired => 'Міндетті өріс.';
+
+  @override
+  String get eventEndInvalid =>
+      'Аяқталу уақыты басталу уақытынан кейін болуы керек.';
+
+  @override
+  String get eventNoEvents => 'Әзірге іс-шаралар жоқ.';
+
+  @override
+  String get eventViewAll => 'Барлық іс-шаралар';
+
+  @override
+  String get eventLoadMore => 'Тағы жүктеу';
+
+  @override
+  String get eventPublished => 'Іс-шара жарияланды.';
+
+  @override
+  String get eventPublishFailed => 'Жариялау мүмкін болмады. Қайталап көріңіз.';
+
+  @override
+  String get eventUncertain =>
+      'Байланыс үзілді. Қайталаудан бұрын жаңартылған тізімді тексеріңіз: іс-шара жарияланған болуы мүмкін.';
+
+  @override
+  String get eventAccessDenied =>
+      'Бұл хабарландыру үшін іс-шара жариялауға рұқсатыңыз жоқ.';
+
+  @override
+  String get eventSignIn => 'Іс-шара жариялау үшін қайта кіріңіз.';
+
+  @override
+  String get eventLocalTime =>
+      'Күн мен уақыт құрылғының жергілікті уақыт белдеуінде көрсетіледі.';
+
+  @override
+  String get eventClearEnd => 'Аяқталу уақытын алып тастау';
+
+  @override
+  String get followProvider => 'Ұйымдастырушыға жазылу';
+
+  @override
+  String get unfollowProvider => 'Жазылымнан бас тарту';
+
+  @override
+  String get followedProviders => 'Менің жазылымдарым';
+
+  @override
+  String get noFollowedProviders =>
+      'Сіз әлі ешбір ұйымдастырушыға жазылмадыңыз.';
+
+  @override
+  String get followUpdateError =>
+      'Жазылымды өзгерту мүмкін болмады. Қайталап көріңіз.';
+
+  @override
+  String get ownershipRequests => 'Иелік сұраулары';
+
+  @override
+  String get noOwnershipRequests => 'Әзірге иелік сұраулары жоқ';
+
+  @override
+  String ownershipReviewNote(String comment) {
+    return 'Тексеру ескертпесі: $comment';
+  }
+
+  @override
+  String get cancelOwnershipRequest => 'Сұрауды болдырмау';
+
+  @override
+  String get ownershipStatusPending => 'Қаралуда';
+
+  @override
+  String get ownershipStatusApproved => 'Мақұлданды';
+
+  @override
+  String get ownershipStatusRejected => 'Қабылданбады';
+
+  @override
+  String get ownershipStatusCancelled => 'Болдырылмады';
+
+  @override
+  String get ownershipRequested => 'Сұрау жіберілді';
+
+  @override
+  String get searchListingsToClaim => 'Атауы бойынша іздеу';
+
+  @override
+  String get listingTags => 'Тегтер';
+
+  @override
+  String get listingTagsHint => 'Тегтерді үтірмен бөліңіз';
+
+  @override
+  String get unpublishListingTitle =>
+      'Хабарландыруды жариялаудан алу керек пе?';
+
+  @override
+  String get unpublishListingBody =>
+      'Бұл хабарландыру жарияланған. Өзгерістерді сақтағаннан кейін ол қайта мақұлданғанша каталогтан жойылады.';
 }

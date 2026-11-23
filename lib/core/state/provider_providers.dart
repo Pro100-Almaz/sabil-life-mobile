@@ -19,6 +19,7 @@ import '../../data/models/auth_user.dart';
 import '../../data/models/inquiry.dart';
 import '../../data/models/listing.dart';
 import '../../data/models/listing_enroll.dart';
+import '../../data/models/ownership_request.dart';
 import '../../data/models/provider_profile.dart';
 import '../../data/models/provider_verification.dart';
 import '../../data/models/review.dart';
@@ -106,6 +107,11 @@ final myListingsProvider = FutureProvider.family
     .autoDispose<List<Listing>, String>(
       (ref, providerId) =>
           ref.watch(providerRepositoryProvider).myListings(providerId),
+    );
+
+final myOwnershipRequestsProvider =
+    FutureProvider.autoDispose<List<OwnershipRequest>>(
+      (ref) => ref.watch(providerRepositoryProvider).myOwnershipRequests(),
     );
 
 final incomingInquiriesProvider = FutureProvider.family

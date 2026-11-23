@@ -1,3 +1,4 @@
+import '../provider_subscriptions/provider_follow_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,6 +39,8 @@ import '../family/widgets/listing_enroll_cta.dart';
 import '../family/widgets/request_cta.dart';
 import '../tutoring/widgets/tutor_profile_sheet.dart';
 import 'widgets/image_carousel.dart';
+import '../events/listing_event_card.dart';
+import '../../data/models/listing_event.dart';
 import 'widgets/info_tile.dart';
 import 'widgets/rating_row.dart';
 
@@ -123,6 +126,10 @@ class _DetailBody extends ConsumerWidget {
                   Text(listing.title, style: AppTypography.display),
                   const SizedBox(height: AppSpacing.xs),
                   Text(listing.subtitle, style: AppTypography.caption),
+                  if (listing.ownerId != null) ...[
+                    const SizedBox(height: AppSpacing.md),
+                    ProviderFollowButton(providerId: listing.ownerId!),
+                  ],
                   const SizedBox(height: AppSpacing.md),
                   RatingRow(
                     rating: listing.rating,
@@ -394,6 +401,21 @@ class _DetailBody extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.xl),
                     ],
                   _WriteReviewCta(listingId: listing.id),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
+                    child: Divider(),
+                  ),
+                  Text(l10n.listingEvents, style: AppTypography.h2),
+                  const SizedBox(height: AppSpacing.md),
+                  if (listing.events.isEmpty) Text(l10n.eventNoEvents),
+                  for (final event in latestListingEvents(listing.events))
+                    ListingEventCard(event: event),
+                  if (listing.events.length > 2)
+                    TextButton(
+                      onPressed: () =>
+                          context.push('/listing/${listing.id}/events'),
+                      child: Text(l10n.eventViewAll),
+                    ),
                   const SizedBox(height: 80),
                 ],
               ),

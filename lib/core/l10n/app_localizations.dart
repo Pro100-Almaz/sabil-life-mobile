@@ -2643,6 +2643,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not update your subscription. Please try again.'**
   String get followUpdateError;
+
+  /// No description provided for @ownershipRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership requests'**
+  String get ownershipRequests;
+
+  /// No description provided for @noOwnershipRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No ownership requests yet'**
+  String get noOwnershipRequests;
+
+  /// No description provided for @ownershipReviewNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Review note: {comment}'**
+  String ownershipReviewNote(String comment);
+
+  /// No description provided for @cancelOwnershipRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel request'**
+  String get cancelOwnershipRequest;
+
+  /// No description provided for @ownershipStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get ownershipStatusPending;
+
+  /// No description provided for @ownershipStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get ownershipStatusApproved;
+
+  /// No description provided for @ownershipStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get ownershipStatusRejected;
+
+  /// No description provided for @ownershipStatusCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get ownershipStatusCancelled;
+
+  /// No description provided for @ownershipRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested'**
+  String get ownershipRequested;
+
+  /// No description provided for @searchListingsToClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Search listings by name'**
+  String get searchListingsToClaim;
+
+  /// No description provided for @listingTags.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get listingTags;
+
+  /// No description provided for @listingTagsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate tags with commas'**
+  String get listingTagsHint;
+
+  /// No description provided for @unpublishListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Take this listing offline?'**
+  String get unpublishListingTitle;
+
+  /// No description provided for @unpublishListingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is live. Saving changes removes it from the directory until it is approved again.'**
+  String get unpublishListingBody;
 }
 
 class _AppLocalizationsDelegate

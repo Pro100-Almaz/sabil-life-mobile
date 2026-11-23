@@ -426,5 +426,19 @@
   "unfollowProvider": "Жазылымнан бас тарту",
   "followedProviders": "Менің жазылымдарым",
   "noFollowedProviders": "Сіз әлі ешбір ұйымдастырушыға жазылмадыңыз.",
-  "followUpdateError": "Жазылымды өзгерту мүмкін болмады. Қайталап көріңіз."
+  "followUpdateError": "Жазылымды өзгерту мүмкін болмады. Қайталап көріңіз.",
+  "ownershipRequests": "Иелік сұраулары",
+  "noOwnershipRequests": "Әзірге иелік сұраулары жоқ",
+  "ownershipReviewNote": "Тексеру ескертпесі: {comment}",
+  "cancelOwnershipRequest": "Сұрауды болдырмау",
+  "ownershipStatusPending": "Қаралуда",
+  "ownershipStatusApproved": "Мақұлданды",
+  "ownershipStatusRejected": "Қабылданбады",
+  "ownershipStatusCancelled": "Болдырылмады",
+  "ownershipRequested": "Сұрау жіберілді",
+  "searchListingsToClaim": "Атауы бойынша іздеу",
+  "listingTags": "Тегтер",
+  "listingTagsHint": "Тегтерді үтірмен бөліңіз",
+  "unpublishListingTitle": "Хабарландыруды жариялаудан алу керек пе?",
+  "unpublishListingBody": "Бұл хабарландыру жарияланған. Өзгерістерді сақтағаннан кейін ол қайта мақұлданғанша каталогтан жойылады."
 }

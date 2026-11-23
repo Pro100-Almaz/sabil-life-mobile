@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/api/provider_subscriptions.dart';
 import '../../data/models/provider_subscription.dart';
-import '../../data/models/auth_user.dart';
 import '../../data/repositories/provider_subscription_repository.dart';
 import 'auth_provider.dart';
 
@@ -17,21 +16,46 @@ final _subscriptionSessionProvider = Provider(
       ref.watch(authProvider.select((s) => (id: s.user?.id, token: s.token))),
 );
 
-final followedProvidersProvider = FutureProvider<List<FollowedProvider>>((ref) {
-  ref.watch(_subscriptionSessionProvider);
-  if (!ref.watch(authProvider.select((s) => s.isFamily))) return const [];
-  return ref.watch(providerSubscriptionRepositoryProvider).mine();
-});
+final followedProvidersProvider =
+    AsyncNotifierProvider<FollowedProviders, List<FollowedProvider>>(
+      FollowedProviders.new,
+    );
+
+/// The authenticated family's follows. Follow / unfollow patch the cached list
+/// in place instead of re-downloading every page.
+class FollowedProviders extends AsyncNotifier<List<FollowedProvider>> {
+  @override
+  Future<List<FollowedProvider>> build() async {
+    ref.watch(_subscriptionSessionProvider);
+    if (!ref.watch(authProvider.select((s) => s.isFamily))) return const [];
+    return ref.watch(providerSubscriptionRepositoryProvider).mine();
+  }
+
+  void _patch(List<FollowedProvider> Function(List<FollowedProvider>) apply) {
+    final current = state.valueOrNull;
+    if (current == null) {
+      ref.invalidateSelf();
+      return;
+    }
+    state = AsyncData(List.unmodifiable(apply(current)));
+  }
+
+  void added(FollowedProvider provider) => _patch(
+    (items) => [
+      ...items.where((p) => p.providerId != provider.providerId),
+      provider,
+    ],
+  );
+
+  void removed(String providerId) => _patch(
+    (items) => items.where((p) => p.providerId != providerId).toList(),
+  );
+}
 
 final mySubscriberCountProvider = FutureProvider.autoDispose<int>((ref) {
   ref.watch(_subscriptionSessionProvider);
   final user = ref.watch(authProvider.select((s) => s.user));
-  if (user == null ||
-      !(user.role.isProvider ||
-          user.roles.contains('TUTOR') ||
-          user.roles.contains('MASTERCLASS'))) {
-    return 0;
-  }
+  if (user == null || !user.hasProviderRole) return 0;
   return ref.watch(providerSubscriptionRepositoryProvider).mySubscriberCount();
 });
 
@@ -61,11 +85,16 @@ class ProviderFollowActions extends StateNotifier<Set<String>> {
     state = {...state, providerId};
     try {
       if (following) {
-        await _repository.subscribe(providerId);
+        final provider = await _repository.subscribe(providerId);
+        if (mounted) {
+          _ref.read(followedProvidersProvider.notifier).added(provider);
+        }
       } else {
         await _repository.unsubscribe(providerId);
+        if (mounted) {
+          _ref.read(followedProvidersProvider.notifier).removed(providerId);
+        }
       }
-      if (mounted) _ref.invalidate(followedProvidersProvider);
     } finally {
       if (mounted) state = {...state}..remove(providerId);
     }

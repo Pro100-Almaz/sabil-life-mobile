@@ -1,7 +1,6 @@
-import '../../core/util/provider_event_location.dart';
+import '../../core/util/notification_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sabil_life/core/state/notifications_provider.dart';
 import 'package:sabil_life/data/models/app_notification.dart';
 
@@ -65,16 +64,12 @@ class NotificaionsScreen extends ConsumerWidget {
                         if (!context.mounted) return;
                         ref.invalidate(notificationsFeedProvider);
                         ref.invalidate(unreadCountProvider);
-                        final eventLocation = items[i].type == 'PROVIDER_EVENT'
-                            ? providerEventLocation(items[i].data)
-                            : null;
-                        if (eventLocation != null) {
-                          context.push(eventLocation);
-                        } else if (items[i].isOwnershipDecision) {
-                          ref.read(activeInterfaceProvider.notifier).state =
-                              ActiveInterface.masterclass;
-                          context.go('/provider/masterclass/listings');
-                        }
+                        final target = notificationTarget(
+                          items[i].type,
+                          items[i].data,
+                          ref.read(authProvider).user,
+                        );
+                        if (target != null) openNotificationTarget(ref, target);
                       },
                     ),
                   ),

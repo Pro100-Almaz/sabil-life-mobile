@@ -1368,4 +1368,49 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get followUpdateError =>
       'Could not update your subscription. Please try again.';
+
+  @override
+  String get ownershipRequests => 'Ownership requests';
+
+  @override
+  String get noOwnershipRequests => 'No ownership requests yet';
+
+  @override
+  String ownershipReviewNote(String comment) {
+    return 'Review note: $comment';
+  }
+
+  @override
+  String get cancelOwnershipRequest => 'Cancel request';
+
+  @override
+  String get ownershipStatusPending => 'Pending';
+
+  @override
+  String get ownershipStatusApproved => 'Approved';
+
+  @override
+  String get ownershipStatusRejected => 'Rejected';
+
+  @override
+  String get ownershipStatusCancelled => 'Cancelled';
+
+  @override
+  String get ownershipRequested => 'Requested';
+
+  @override
+  String get searchListingsToClaim => 'Search listings by name';
+
+  @override
+  String get listingTags => 'Tags';
+
+  @override
+  String get listingTagsHint => 'Separate tags with commas';
+
+  @override
+  String get unpublishListingTitle => 'Take this listing offline?';
+
+  @override
+  String get unpublishListingBody =>
+      'This listing is live. Saving changes removes it from the directory until it is approved again.';
 }

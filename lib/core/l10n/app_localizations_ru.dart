@@ -1370,4 +1370,49 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get followUpdateError =>
       'Не удалось изменить подписку. Попробуйте ещё раз.';
+
+  @override
+  String get ownershipRequests => 'Запросы на владение';
+
+  @override
+  String get noOwnershipRequests => 'Запросов на владение пока нет';
+
+  @override
+  String ownershipReviewNote(String comment) {
+    return 'Комментарий проверки: $comment';
+  }
+
+  @override
+  String get cancelOwnershipRequest => 'Отменить запрос';
+
+  @override
+  String get ownershipStatusPending => 'На рассмотрении';
+
+  @override
+  String get ownershipStatusApproved => 'Одобрено';
+
+  @override
+  String get ownershipStatusRejected => 'Отклонено';
+
+  @override
+  String get ownershipStatusCancelled => 'Отменено';
+
+  @override
+  String get ownershipRequested => 'Запрос отправлен';
+
+  @override
+  String get searchListingsToClaim => 'Поиск по названию';
+
+  @override
+  String get listingTags => 'Теги';
+
+  @override
+  String get listingTagsHint => 'Разделяйте теги запятыми';
+
+  @override
+  String get unpublishListingTitle => 'Снять объявление с публикации?';
+
+  @override
+  String get unpublishListingBody =>
+      'Это объявление опубликовано. После сохранения изменений оно пропадёт из каталога до повторного одобрения.';
 }

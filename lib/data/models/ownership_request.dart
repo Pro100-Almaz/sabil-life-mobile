@@ -7,13 +7,6 @@ extension OwnershipRequestStatusX on OwnershipRequestStatus {
     'CANCELLED' => OwnershipRequestStatus.cancelled,
     _ => OwnershipRequestStatus.pending,
   };
-
-  String get label => switch (this) {
-    OwnershipRequestStatus.pending => 'Pending',
-    OwnershipRequestStatus.approved => 'Approved',
-    OwnershipRequestStatus.rejected => 'Rejected',
-    OwnershipRequestStatus.cancelled => 'Cancelled',
-  };
 }
 
 class OwnershipRequest {

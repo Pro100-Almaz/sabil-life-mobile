@@ -1369,4 +1369,50 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String get followUpdateError =>
       'Жазылымды өзгерту мүмкін болмады. Қайталап көріңіз.';
+
+  @override
+  String get ownershipRequests => 'Иелік сұраулары';
+
+  @override
+  String get noOwnershipRequests => 'Әзірге иелік сұраулары жоқ';
+
+  @override
+  String ownershipReviewNote(String comment) {
+    return 'Тексеру ескертпесі: $comment';
+  }
+
+  @override
+  String get cancelOwnershipRequest => 'Сұрауды болдырмау';
+
+  @override
+  String get ownershipStatusPending => 'Қаралуда';
+
+  @override
+  String get ownershipStatusApproved => 'Мақұлданды';
+
+  @override
+  String get ownershipStatusRejected => 'Қабылданбады';
+
+  @override
+  String get ownershipStatusCancelled => 'Болдырылмады';
+
+  @override
+  String get ownershipRequested => 'Сұрау жіберілді';
+
+  @override
+  String get searchListingsToClaim => 'Атауы бойынша іздеу';
+
+  @override
+  String get listingTags => 'Тегтер';
+
+  @override
+  String get listingTagsHint => 'Тегтерді үтірмен бөліңіз';
+
+  @override
+  String get unpublishListingTitle =>
+      'Хабарландыруды жариялаудан алу керек пе?';
+
+  @override
+  String get unpublishListingBody =>
+      'Бұл хабарландыру жарияланған. Өзгерістерді сақтағаннан кейін ол қайта мақұлданғанша каталогтан жойылады.';
 }

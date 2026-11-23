@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/l10n/app_localizations.dart';
 import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -17,17 +18,24 @@ class OwnershipRequestsScreen extends ConsumerWidget {
       ref.invalidate(myOwnershipRequestsProvider);
     } catch (error) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('$error')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            error is StateError
+                ? error.message
+                : AppLocalizations.of(context)!.genericLoadError,
+          ),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final requests = ref.watch(myOwnershipRequestsProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Ownership requests')),
+      appBar: AppBar(title: Text(l10n.ownershipRequests)),
       body: AppRefreshIndicator(
         onRefresh: () => ref.refresh(myOwnershipRequestsProvider.future),
         child: requests.when(
@@ -37,9 +45,7 @@ class OwnershipRequestsScreen extends ConsumerWidget {
           error: (error, _) =>
               RefreshableMessage(child: Text(error.toString())),
           data: (items) => items.isEmpty
-              ? const RefreshableMessage(
-                  child: Text('No ownership requests yet'),
-                )
+              ? RefreshableMessage(child: Text(l10n.noOwnershipRequests))
               : ListView.separated(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(AppSpacing.lg),
@@ -65,6 +71,13 @@ class _RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final label = switch (request.status) {
+      OwnershipRequestStatus.pending => l10n.ownershipStatusPending,
+      OwnershipRequestStatus.approved => l10n.ownershipStatusApproved,
+      OwnershipRequestStatus.rejected => l10n.ownershipStatusRejected,
+      OwnershipRequestStatus.cancelled => l10n.ownershipStatusCancelled,
+    };
     final color = switch (request.status) {
       OwnershipRequestStatus.pending => AppColors.primary,
       OwnershipRequestStatus.approved => AppColors.success,
@@ -86,10 +99,7 @@ class _RequestCard extends StatelessWidget {
               Expanded(
                 child: Text(request.listingTitle, style: AppTypography.h3),
               ),
-              Text(
-                request.status.label,
-                style: AppTypography.label.copyWith(color: color),
-              ),
+              Text(label, style: AppTypography.label.copyWith(color: color)),
             ],
           ),
           if (request.message.isNotEmpty) ...[
@@ -100,7 +110,7 @@ class _RequestCard extends StatelessWidget {
               request.comment.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Review note: ${request.comment}',
+              l10n.ownershipReviewNote(request.comment),
               style: AppTypography.caption,
             ),
           ],
@@ -110,7 +120,7 @@ class _RequestCard extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: onCancel,
-                child: const Text('Cancel request'),
+                child: Text(l10n.cancelOwnershipRequest),
               ),
             ),
           ],

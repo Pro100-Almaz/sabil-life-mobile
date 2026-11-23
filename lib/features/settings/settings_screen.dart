@@ -27,10 +27,8 @@ class SettingsScreen extends ConsumerWidget {
     ActiveInterface interface,
   ) {
     final hasRole = switch (interface) {
-      ActiveInterface.tutor =>
-        user.role == UserRole.tutor || user.roles.contains('TUTOR'),
-      ActiveInterface.masterclass =>
-        user.role == UserRole.masterclass || user.roles.contains('MASTERCLASS'),
+      ActiveInterface.tutor => user.hasTutorRole,
+      ActiveInterface.masterclass => user.hasMasterclassRole,
       ActiveInterface.family => true,
     };
 

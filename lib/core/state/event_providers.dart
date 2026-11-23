@@ -9,7 +9,10 @@ final eventRepositoryProvider = Provider<EventRepository>(
 );
 final listingEventsProvider = FutureProvider.autoDispose
     .family<EventPage, ({String listingId, int page, bool owned})>((ref, key) {
-      if (key.owned) ref.watch(authProvider);
+      // Owned results are per-account: refetch on account/token change only.
+      if (key.owned) {
+        ref.watch(authProvider.select((s) => (id: s.user?.id, token: s.token)));
+      }
       return ref
           .watch(eventRepositoryProvider)
           .forListing(key.listingId, page: key.page, owned: key.owned);

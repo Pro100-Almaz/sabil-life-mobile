@@ -426,5 +426,19 @@
   "unfollowProvider": "Отписаться",
   "followedProviders": "Мои подписки",
   "noFollowedProviders": "Вы пока не подписаны ни на одного организатора.",
-  "followUpdateError": "Не удалось изменить подписку. Попробуйте ещё раз."
+  "followUpdateError": "Не удалось изменить подписку. Попробуйте ещё раз.",
+  "ownershipRequests": "Запросы на владение",
+  "noOwnershipRequests": "Запросов на владение пока нет",
+  "ownershipReviewNote": "Комментарий проверки: {comment}",
+  "cancelOwnershipRequest": "Отменить запрос",
+  "ownershipStatusPending": "На рассмотрении",
+  "ownershipStatusApproved": "Одобрено",
+  "ownershipStatusRejected": "Отклонено",
+  "ownershipStatusCancelled": "Отменено",
+  "ownershipRequested": "Запрос отправлен",
+  "searchListingsToClaim": "Поиск по названию",
+  "listingTags": "Теги",
+  "listingTagsHint": "Разделяйте теги запятыми",
+  "unpublishListingTitle": "Снять объявление с публикации?",
+  "unpublishListingBody": "Это объявление опубликовано. После сохранения изменений оно пропадёт из каталога до повторного одобрения."
 }

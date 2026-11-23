@@ -246,6 +246,28 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
     });
   }
 
+  Future<bool> _confirmUnpublish() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.unpublishListingTitle),
+        content: Text(l10n.unpublishListingBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.save),
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<void> _save({required bool submitForReview}) async {
     final user = ref.read(authProvider).user;
     final missingCore =
@@ -278,6 +300,14 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
       ).showSnackBar(SnackBar(content: Text(l10n.fillRequiredFields)));
       return;
     }
+
+    // The backend forces every provider edit to DRAFT / PENDING, so saving a
+    // live listing takes it out of the public directory until re-approval.
+    if (_existing?.status == ListingStatus.active &&
+        !await _confirmUnpublish()) {
+      return;
+    }
+    if (!mounted) return;
 
     setState(() => _saving = true);
     try {
@@ -700,9 +730,9 @@ class _ListingEditorScreenState extends ConsumerState<ListingEditorScreen> {
             const SizedBox(height: AppSpacing.lg),
             TextField(
               controller: _tags,
-              decoration: const InputDecoration(
-                labelText: 'Tags',
-                hintText: 'Separate tags with commas',
+              decoration: InputDecoration(
+                labelText: l10n.listingTags,
+                hintText: l10n.listingTagsHint,
               ),
             ),
             const SizedBox(height: AppSpacing.lg),

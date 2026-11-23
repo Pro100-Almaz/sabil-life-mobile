@@ -71,6 +71,13 @@ class AuthUser {
   );
 
   bool get isProvider => role.isProvider;
+
+  /// Primary or secondary role grants. Use these instead of checking
+  /// [role] / [roles] separately.
+  bool get hasTutorRole => role == UserRole.tutor || roles.contains('TUTOR');
+  bool get hasMasterclassRole =>
+      role == UserRole.masterclass || roles.contains('MASTERCLASS');
+  bool get hasProviderRole => hasTutorRole || hasMasterclassRole;
   bool get isFamily => roles.isEmpty
       ? role == UserRole.family
       : roles.contains(UserRole.family.name.toUpperCase());

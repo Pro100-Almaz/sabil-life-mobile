@@ -206,6 +206,14 @@ class _EventEditorScreenState extends ConsumerState<EventEditorScreen> {
       }
       if (mounted) setState(() => _busy = false);
       return;
+    } catch (_) {
+      // A non-HTTP failure (e.g. an unexpected 2xx body that fails to parse)
+      // means the event may already exist: verify instead of locking the form.
+      if (!mounted) return;
+      setState(() => _message = l10n.eventUncertain);
+      await _checkEvents();
+      if (mounted) setState(() => _busy = false);
+      return;
     }
     // Success is final even if local storage cleanup fails.
     await _writes;

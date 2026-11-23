@@ -1,4 +1,4 @@
-import 'core/util/provider_event_location.dart';
+import 'core/util/notification_route.dart';
 import 'core/state/notifications_provider.dart';
 import 'dart:async';
 
@@ -58,17 +58,16 @@ class _SabilLifeAppState extends ConsumerState<SabilLifeApp> {
     _tapSub = ref.read(pushNotificationsProvider).onNotificationTap.listen((
       data,
     ) {
-      final router = ref.read(routerProvider);
       ref.invalidate(notificationsFeedProvider);
       ref.invalidate(unreadCountProvider);
-      final eventLocation = providerEventLocation(data);
-      if (eventLocation != null) {
-        router.push(eventLocation);
-      } else if (data['status'] == 'APPROVED' || data['status'] == 'REJECTED') {
-        router.go('/provider/tutor/settings');
-      } else {
-        router.go('/notifications');
-      }
+      final target =
+          notificationTarget(
+            data['type']?.toString(),
+            data,
+            ref.read(authProvider).user,
+          ) ??
+          const NotificationTarget('/notifications');
+      openNotificationTarget(ref, target);
     });
   }
 

@@ -446,5 +446,20 @@
   "unfollowProvider": "Unfollow",
   "followedProviders": "Followed providers",
   "noFollowedProviders": "You are not following any providers yet.",
-  "followUpdateError": "Could not update your subscription. Please try again."
+  "followUpdateError": "Could not update your subscription. Please try again.",
+  "ownershipRequests": "Ownership requests",
+  "noOwnershipRequests": "No ownership requests yet",
+  "ownershipReviewNote": "Review note: {comment}",
+  "@ownershipReviewNote": { "placeholders": { "comment": { "type": "String" } } },
+  "cancelOwnershipRequest": "Cancel request",
+  "ownershipStatusPending": "Pending",
+  "ownershipStatusApproved": "Approved",
+  "ownershipStatusRejected": "Rejected",
+  "ownershipStatusCancelled": "Cancelled",
+  "ownershipRequested": "Requested",
+  "searchListingsToClaim": "Search listings by name",
+  "listingTags": "Tags",
+  "listingTagsHint": "Separate tags with commas",
+  "unpublishListingTitle": "Take this listing offline?",
+  "unpublishListingBody": "This listing is live. Saving changes removes it from the directory until it is approved again."
 }

@@ -1,9 +1,6 @@
 /// Public provider information returned for the authenticated client's follows.
 class FollowedProvider {
-  const FollowedProvider({
-    required this.providerId,
-    required this.displayName,
-  });
+  const FollowedProvider({required this.providerId, required this.displayName});
 
   final String providerId;
   final String displayName;

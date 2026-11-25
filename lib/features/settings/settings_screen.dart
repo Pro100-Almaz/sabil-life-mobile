@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/l10n/app_localizations.dart';
 import '../../core/state/auth_provider.dart';
@@ -19,6 +20,18 @@ const _languages = [
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
+
+  Future<void> _showAbout(BuildContext context) async {
+    final info = await PackageInfo.fromPlatform();
+    if (!context.mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    showAboutDialog(
+      context: context,
+      applicationName: l10n.appName,
+      applicationVersion: '${l10n.version} ${info.version}',
+      children: [Text(l10n.aboutAppSubtitle, style: AppTypography.body)],
+    );
+  }
 
   void _openProviderArea(
     BuildContext context,
@@ -266,14 +279,7 @@ class SettingsScreen extends ConsumerWidget {
               Icons.chevron_right,
               color: AppColors.textSecondary,
             ),
-            onTap: () => showAboutDialog(
-              context: context,
-              applicationName: l10n.appName,
-              applicationVersion: '${l10n.version} 1.0.0',
-              children: [
-                Text(l10n.aboutAppSubtitle, style: AppTypography.body),
-              ],
-            ),
+            onTap: () => _showAbout(context),
           ),
           if (user != null) ...[
             const Divider(),

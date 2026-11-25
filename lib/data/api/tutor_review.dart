@@ -107,12 +107,11 @@ class HttpTutorReviewRepository implements TutorReviewRepository {
   }
 
   static Review _parse(Map<String, dynamic> data) {
-    final rawName = data['author_name']?.toString() ?? '';
     return Review(
       id: data['id'].toString(),
       rating: _toInt(data['rating']),
       text: (data['text'] ?? '') as String,
-      authorName: rawName.isEmpty ? 'Anonymous' : rawName,
+      authorName: data['author_name']?.toString().trim() ?? '',
       authorId: data['author_id']?.toString(),
       createdAt:
           DateTime.tryParse(data['created_at']?.toString() ?? '') ??

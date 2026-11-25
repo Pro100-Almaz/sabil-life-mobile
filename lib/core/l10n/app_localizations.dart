@@ -2727,6 +2727,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This listing is live. Saving changes removes it from the directory until it is approved again.'**
   String get unpublishListingBody;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @support.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get support;
+
+  /// No description provided for @linkOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the link. Please try again.'**
+  String get linkOpenFailed;
+
+  /// No description provided for @privacyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'See how we handle your personal data:'**
+  String get privacyNotice;
 }
 
 class _AppLocalizationsDelegate

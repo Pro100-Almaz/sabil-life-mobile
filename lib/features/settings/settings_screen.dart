@@ -10,6 +10,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../data/models/auth_user.dart';
+import '../../shared/widgets/legal_link_tiles.dart';
 import 'delete_account_dialog.dart';
 
 const _languages = [
@@ -281,6 +282,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             onTap: () => _showAbout(context),
           ),
+          const LegalLinkTiles(),
           if (user != null) ...[
             const Divider(),
             ListTile(

@@ -8,6 +8,7 @@ import '../../core/state/auth_provider.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../core/util/legal_links.dart';
 import '../../shared/widgets/app_button.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -168,6 +169,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         error: error,
         label: l10n.continueLabel,
         onPressed: _requestCode,
+      ),
+      const SizedBox(height: AppSpacing.md),
+      Text(
+        l10n.privacyNotice,
+        style: AppTypography.caption,
+        textAlign: TextAlign.center,
+      ),
+      TextButton(
+        onPressed: () => openLegalLink(context, privacyPolicyUri),
+        child: Text(l10n.privacyPolicy),
       ),
       const SizedBox(height: AppSpacing.lg),
       Row(

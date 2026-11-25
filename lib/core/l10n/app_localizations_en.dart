@@ -1413,4 +1413,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get unpublishListingBody =>
       'This listing is live. Saving changes removes it from the directory until it is approved again.';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get support => 'Support';
+
+  @override
+  String get linkOpenFailed => 'Could not open the link. Please try again.';
+
+  @override
+  String get privacyNotice => 'See how we handle your personal data:';
 }

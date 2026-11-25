@@ -64,13 +64,25 @@ class ListingParser {
       registrationUrl: (data['registration_url'] ?? '') as String,
       eventType: parseEventType(data['event_type']?.toString()),
       startsAt: parseDate(data['starts_at']),
-      events: (data['events'] as List? ?? [])
-          .map(
-            (e) => ListingEvent.fromJson(Map<String, dynamic>.from(e as Map)),
-          )
-          .toList(),
+      events: parseEvents(data['events']),
       drivingDistanceKm: toDoubleOrNull(data['driving_distance_km']),
     );
+  }
+
+  /// Skips malformed events so they never prevent the listing from loading.
+  static List<ListingEvent> parseEvents(dynamic value) {
+    if (value is! List) return const [];
+    final events = <ListingEvent>[];
+    for (final item in value.whereType<Map>()) {
+      try {
+        events.add(ListingEvent.fromJson(Map<String, dynamic>.from(item)));
+      } on FormatException {
+        continue;
+      } on TypeError {
+        continue;
+      }
+    }
+    return events;
   }
 
   static List<ListingImage> parseImages(dynamic value) {

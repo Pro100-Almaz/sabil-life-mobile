@@ -9,6 +9,7 @@ import '../../core/state/provider_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
+import '../../shared/widgets/legal_link_tiles.dart';
 import '../settings/delete_account_dialog.dart';
 
 const _appLanguages = [
@@ -180,6 +181,7 @@ class ProviderSettingsScreen extends ConsumerWidget {
             ),
             child: Divider(),
           ),
+          const LegalLinkTiles(),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,

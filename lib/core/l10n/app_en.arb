@@ -461,5 +461,9 @@
   "listingTags": "Tags",
   "listingTagsHint": "Separate tags with commas",
   "unpublishListingTitle": "Take this listing offline?",
-  "unpublishListingBody": "This listing is live. Saving changes removes it from the directory until it is approved again."
+  "unpublishListingBody": "This listing is live. Saving changes removes it from the directory until it is approved again.",
+  "privacyPolicy": "Privacy Policy",
+  "support": "Support",
+  "linkOpenFailed": "Could not open the link. Please try again.",
+  "privacyNotice": "See how we handle your personal data:"
 }

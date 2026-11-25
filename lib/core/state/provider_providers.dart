@@ -272,16 +272,21 @@ final subscriptionDetailProvider = FutureProvider.family
 
 // ── Review providers ─────────────────────────────────────────────────────────
 
+Future<List<Review>> _publicReviews(Future<List<Review>> reviews) async =>
+    (await reviews).where((review) => review.hasKnownAuthor).toList();
+
 final listingReviewsProvider = FutureProvider.family
     .autoDispose<List<Review>, String>(
-      (ref, listingId) =>
-          ref.watch(reviewRepositoryProvider).forListing(listingId),
+      (ref, listingId) => _publicReviews(
+        ref.watch(reviewRepositoryProvider).forListing(listingId),
+      ),
     );
 
 final tutorReviewsProvider = FutureProvider.family
     .autoDispose<List<Review>, String>(
-      (ref, tutorId) =>
-          ref.watch(tutorReviewRepositoryProvider).forTutor(tutorId),
+      (ref, tutorId) => _publicReviews(
+        ref.watch(tutorReviewRepositoryProvider).forTutor(tutorId),
+      ),
     );
 
 // ── Suggestion providers ─────────────────────────────────────────────────────

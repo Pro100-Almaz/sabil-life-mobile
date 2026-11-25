@@ -1415,4 +1415,17 @@ class AppLocalizationsKk extends AppLocalizations {
   @override
   String get unpublishListingBody =>
       'Бұл хабарландыру жарияланған. Өзгерістерді сақтағаннан кейін ол қайта мақұлданғанша каталогтан жойылады.';
+
+  @override
+  String get privacyPolicy => 'Құпиялылық саясаты';
+
+  @override
+  String get support => 'Қолдау';
+
+  @override
+  String get linkOpenFailed =>
+      'Сілтемені ашу мүмкін болмады. Қайталап көріңіз.';
+
+  @override
+  String get privacyNotice => 'Жеке деректеріңізді қалай өңдейтініміз:';
 }

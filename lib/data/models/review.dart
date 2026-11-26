@@ -19,6 +19,9 @@ class Review {
   final String? authorId;
   final int? _monthsAgo;
 
+  /// Reviews without an identifiable author must not be shown publicly.
+  bool get hasKnownAuthor => authorName.trim().isNotEmpty;
+
   /// Backwards-compat getter used by mock-driven widgets.
   String get author => authorName.isEmpty ? 'Anonymous' : authorName;
 

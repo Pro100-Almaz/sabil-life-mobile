@@ -1415,4 +1415,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get unpublishListingBody =>
       'Это объявление опубликовано. После сохранения изменений оно пропадёт из каталога до повторного одобрения.';
+
+  @override
+  String get privacyPolicy => 'Политика конфиденциальности';
+
+  @override
+  String get support => 'Поддержка';
+
+  @override
+  String get linkOpenFailed => 'Не удалось открыть ссылку. Попробуйте ещё раз.';
+
+  @override
+  String get privacyNotice => 'Как мы обрабатываем ваши персональные данные:';
 }
